@@ -3,6 +3,8 @@ import fetch from "node-fetch";
 import multer from "multer";
 import puppeteer from "puppeteer";
 import { v2 as cloudinary } from "cloudinary";
+import { spawn } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 import customerRoutes from "./routes/customer.routes.js";
 import packRoutes from "./routes/pack.routes.js";
@@ -36,6 +38,120 @@ import crypto from "crypto";
 import admin from "firebase-admin";
 
 import { createClient } from "redis";
+
+const SHOPIFY_TOKEN_BOOTSTRAPPED = process.env.SHOPIFY_TOKEN_BOOTSTRAPPED === "1";
+const SERVER_ENTRY = fileURLToPath(new URL("./server.js", import.meta.url));
+const SERVER_DIR = fileURLToPath(new URL(".", import.meta.url));
+
+async function issueShopifyAccessToken() {
+  const shop = String(process.env.SHOPIFY_SHOP || "0pprf1-jj.myshopify.com")
+    .trim()
+    .toLowerCase();
+  const clientId = String(process.env.SHOPIFY_CLIENT_ID || "").trim();
+  const clientSecret = String(process.env.SHOPIFY_CLIENT_SECRET || "").trim();
+
+  if (!/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(shop)) {
+    throw new Error("SHOPIFY_SHOP must be a valid *.myshopify.com domain");
+  }
+  if (!clientId || !clientSecret) {
+    throw new Error("SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET are required when SHOPIFY_ADMIN_TOKEN is not set");
+  }
+
+  const response = await fetch(`https://${shop}/admin/oauth/access_token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: clientId,
+      client_secret: clientSecret
+    }),
+    signal: AbortSignal.timeout(30_000)
+  });
+
+  const text = await response.text();
+  let payload = null;
+  try {
+    payload = JSON.parse(text);
+  } catch {
+    payload = null;
+  }
+
+  if (!response.ok || !payload?.access_token) {
+    const detail = payload?.error_description || payload?.error || text.slice(0, 300);
+    throw new Error(`Shopify token request failed (${response.status}): ${detail}`);
+  }
+
+  return {
+    shop,
+    accessToken: payload.access_token,
+    expiresIn: Math.max(Number(payload.expires_in) || 86_400, 600)
+  };
+}
+
+async function runWithIssuedShopifyToken() {
+  const restartBufferSeconds = 5 * 60;
+  let stopping = false;
+
+  const shutdown = (child, signal) => {
+    stopping = true;
+    if (child) child.kill(signal);
+    setTimeout(() => process.exit(1), 15_000).unref();
+  };
+
+  while (!stopping) {
+    const { shop, accessToken, expiresIn } = await issueShopifyAccessToken();
+    console.log(`Shopify credentials accepted for ${shop}; starting server with a temporary Admin API token.`);
+
+    const child = spawn(process.execPath, [SERVER_ENTRY], {
+      cwd: SERVER_DIR,
+      env: {
+        ...process.env,
+        SHOPIFY_SHOP: shop,
+        SHOPIFY_ADMIN_TOKEN: accessToken,
+        SHOPIFY_TOKEN_BOOTSTRAPPED: "1"
+      },
+      stdio: "inherit"
+    });
+
+    process.once("SIGTERM", () => shutdown(child, "SIGTERM"));
+    process.once("SIGINT", () => shutdown(child, "SIGINT"));
+
+    const restartAfterMs = Math.max(
+      (expiresIn - restartBufferSeconds) * 1000,
+      5 * 60 * 1000
+    );
+
+    const code = await new Promise((resolve) => {
+      const refreshTimer = setTimeout(() => {
+        if (!stopping) {
+          console.log("Refreshing Shopify credentials with a controlled restart.");
+          child.kill("SIGTERM");
+        }
+      }, restartAfterMs);
+      refreshTimer.unref();
+
+      child.once("exit", (exitCode) => {
+        clearTimeout(refreshTimer);
+        resolve(exitCode);
+      });
+    });
+
+    if (stopping) process.exit(code ?? 0);
+    if (code && code !== 0) {
+      console.error(`Server exited with code ${code}; retrying in 5 seconds.`);
+      await new Promise((resolve) => setTimeout(resolve, 5_000));
+    }
+  }
+}
+
+if (!process.env.SHOPIFY_ADMIN_TOKEN && !SHOPIFY_TOKEN_BOOTSTRAPPED) {
+  try {
+    await runWithIssuedShopifyToken();
+  } catch (error) {
+    console.error(error?.stack || error);
+    process.exit(1);
+  }
+}
 
 const app = express();
 cloudinary.config({
