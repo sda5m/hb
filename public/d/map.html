@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تحويل الموقع إلى إحداثية</title>
+
+<style>
+body{
+  font-family:sans-serif;
+  max-width:600px;
+  margin:40px auto;
+  padding:20px;
+  background:#f5f5f5;
+}
+.box{
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+textarea,button,input{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:16px;
+}
+button{
+  background:#111827;
+  color:#fff;
+  cursor:pointer;
+}
+.result{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:#f3f4f6;
+  white-space:pre-wrap;
+}
+.ok{color:green}
+.err{color:red}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+<h3>تحويل الموقع إلى إحداثية</h3>
+
+<textarea id="input" placeholder="رابط / إحداثية / Plus Code"></textarea>
+
+<input id="area" placeholder="المدينة (اختياري - مهم للـ Plus Code المختصر)">
+
+<button onclick="convert()">تحويل</button>
+
+<div id="result" class="result">النتيجة هنا</div>
+</div>
+
+<script>
+async function convert(){
+  const input = document.getElementById("input").value.trim();
+  const area = document.getElementById("area").value.trim();
+  const result = document.getElementById("result");
+
+  result.className = "result";
+  result.textContent = "جاري التحويل...";
+
+  try{
+    const res = await fetch("/api/location/extract", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        input,
+        fallbackArea: area // 👈 مهم
+      })
+    });
+
+    const data = await res.json();
+
+    if(!data.ok){
+      throw new Error(data.error);
+    }
+
+    result.classList.add("ok");
+    result.textContent =
+`تم بنجاح ✅
+
+lat: ${data.lat}
+lng: ${data.lng}
+
+source: ${data.source}
+
+Google Maps:
+${data.googleMaps}
+
+fullCode: ${data.fullCode || "-"}
+reference: ${data.reference || "-"}
+`;
+
+  }catch(e){
+    result.classList.add("err");
+    result.textContent = "❌ خطأ: " + e.message;
+  }
+}
+</script>
+
+</body>
+</html>

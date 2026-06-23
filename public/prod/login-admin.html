@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | دخول الإدارة</title>
+ 
+  <link rel="manifest" href="/prod/manifest.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="منتجات - إدارة">
+  <link rel="apple-touch-icon" href="/prod/ico1.png">
+  <link rel="icon" href="/prod/ico2.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+      --r18:18px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.62), rgba(241,198,177,.35)),
+        url("/prod/bg.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+    .wrap{ max-width:520px; margin:0 auto; padding:18px 14px 28px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow2); border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandMark{
+      width:44px; height:44px; border-radius:14px; display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      flex:0 0 auto;
+    }
+    .brandText{ min-width:0; }
+    .brandName{ margin:0; font-size:18px; font-weight:900; line-height:1.2; }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px;
+      padding:14px;
+      border-radius:var(--r18);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+
+    .label{ font-size:13px; color:var(--muted); font-weight:900; margin:0 0 10px 0; }
+
+    .box{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+    }
+    .box input{
+      border:none; outline:none; background:transparent; width:100%;
+      font-size:16px; font-weight:900; color:var(--ink);
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+
+    .btn{
+      width:100%;
+      border:none; border-radius:14px;
+      padding:13px 12px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:15px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none;
+    }
+    .btn:active{ transform:scale(.985); }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff;
+      box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .btnGhost{
+      background:#f2f4f7;
+      color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+    .errLine{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(239,68,68,.10);
+      border:1px solid rgba(239,68,68,.18);
+      color:#991b1b;
+      font-weight:950;
+      font-size:12.5px;
+      display:none;
+    }
+
+    .svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .svg.sm{ width:18px; height:18px; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <svg class="svg" viewBox="0 0 24 24" style="stroke:var(--purple);">
+            <path d="M12 7v6l4 2"></path>
+            <circle cx="12" cy="13" r="2.4" style="stroke:var(--peach)"></circle>
+            <path d="M12 3c1.6 0 2.6 1.4 2.1 2.8-.3.8-1.1 1.2-2.1 1.2s-1.8-.4-2.1-1.2C9.4 4.4 10.4 3 12 3Z"></path>
+          </svg>
+        </div>
+        <div class="brandText">
+          <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+          <div class="brandSub">لوحة الإدارة • إدارة المنتجات</div>
+        </div>
+      </div>
+
+      <div class="badge">
+        <svg class="svg sm" viewBox="0 0 24 24">
+          <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+          <path d="M6 11h12v10H6z"></path>
+        </svg>
+        دخول
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">أدخل كلمة مرور الإدارة</p>
+
+      <div class="box">
+        <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+          <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+          <path d="M6 11h12v10H6z"></path>
+        </svg>
+        <input id="pw" type="password" placeholder="كلمة المرور" autocomplete="current-password">
+      </div>
+
+      <div id="err" class="errLine">كلمة المرور غير صحيحة</div>
+
+      <button class="btn btnPrimary" style="margin-top:12px" onclick="login()">
+        <svg class="svg" viewBox="0 0 24 24">
+          <path d="M10 17l5-5-5-5"></path>
+          <path d="M15 12H3"></path>
+          <path d="M21 3v18"></path>
+        </svg>
+        دخول
+      </button>
+
+      <button class="btn btnGhost" style="margin-top:10px" onclick="clearKey()">
+        <svg class="svg" viewBox="0 0 24 24">
+          <path d="M6 6l12 12"></path>
+          <path d="M18 6L6 18"></path>
+        </svg>
+        مسح
+      </button>
+    </div>
+  </div>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/prod/sw.js", { scope: "/prod/" });
+  }
+
+  function showErr(msg){
+    const e = document.getElementById("err");
+    e.textContent = msg || "كلمة المرور غير صحيحة";
+    e.style.display = "block";
+  }
+
+  function clearKey(){
+    localStorage.removeItem("ADMIN_KEY");
+    document.getElementById("pw").value = "";
+    document.getElementById("err").style.display = "none";
+  }
+
+  async function login(){
+    const pw = (document.getElementById("pw").value || "").trim();
+    if(!pw) return showErr("اكتب كلمة المرور");
+
+    localStorage.setItem("ADMIN_KEY", pw);
+
+    try{
+const r = await fetch("/api/products/admin/dashboard", {
+  headers: { "x-admin-key": pw }
+});
+      if(!r.ok){
+        localStorage.removeItem("ADMIN_KEY");
+        return showErr("كلمة المرور غير صحيحة");
+      }
+      window.location.href = "/prod/admin.html";
+    }catch(_){
+      localStorage.removeItem("ADMIN_KEY");
+      showErr("تعذر الاتصال بالسيرفر");
+    }
+  }
+
+  document.getElementById("pw").addEventListener("keydown",(e)=>{
+    if(e.key==="Enter") login();
+  });
+  setTimeout(()=> document.getElementById("pw")?.focus(), 50);
+</script>
+</body>
+</html>

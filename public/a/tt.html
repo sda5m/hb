@@ -1,0 +1,1192 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | قائمة شراء المنتجات</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+
+      --r16:16px;
+      --r18:18px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+    .wrap{
+      max-width:760px;
+      margin:0 auto;
+      padding:18px 14px 26px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 14px;
+      border-radius:var(--r18);
+      background:var(--card);
+      box-shadow:var(--shadow2);
+      border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brandMark{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      flex:0 0 auto;
+    }
+
+    .brandText{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+
+    .brandName{
+      font-size:18px;
+      font-weight:900;
+      margin:0;
+      line-height:1.2;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+
+    .brandSub{
+      font-size:12.5px;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.2;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px;
+      padding:14px;
+      border-radius:var(--r18);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+
+    .label{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:900;
+      margin:0 0 10px 0;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap:12px;
+    }
+
+    .box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+      min-width:0;
+    }
+    .box input{
+      border:none;
+      outline:none;
+      background:transparent;
+      width:100%;
+      font-size:15px;
+      font-weight:900;
+      color:var(--ink);
+      min-width:0;
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+    .box input::placeholder{ color: rgba(102,112,133,.9); font-weight:800; }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 12px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:15px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      transition:.15s;
+      user-select:none;
+      width:100%;
+    }
+    .btn:active{ transform:scale(.985); }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff;
+      box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .btnGhost{
+      background:#f2f4f7;
+      color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .hint{
+      margin-top:10px;
+      font-size:12.5px;
+      font-weight:900;
+      color:rgba(16,24,40,.62);
+      line-height:1.55;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    .stat{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      border-radius:14px;
+      padding:10px 12px;
+    }
+    .statLbl{ font-size:12px; font-weight:950; color:rgba(16,24,40,.55); }
+    .statVal{ margin-top:3px; font-weight:980; color:var(--purpleDark); font-size:16px; }
+
+    .grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (min-width: 720px){
+      .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .controls{ grid-template-columns: 1.5fr 1fr; }
+    }
+    @media (max-width:420px){
+      .controls{ grid-template-columns:1fr; }
+      .row2{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns:1fr; }
+      .stats{ grid-template-columns:1fr; }
+    }
+
+    .item{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+      border-radius:18px;
+      overflow:hidden;
+      position:relative;
+      transition:.15s;
+    }
+    .item:active{ transform:scale(.99); }
+
+    .imgWrap{
+      position:relative;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, rgba(107,15,166,.08), rgba(241,198,177,.18));
+      overflow:hidden;
+    }
+    .imgWrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition: .18s;
+    }
+
+    .meta{
+      padding:10px 12px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .name{
+      font-weight:980;
+      font-size:13.5px;
+      line-height:1.45;
+      color:var(--ink);
+      min-height: 42px;
+    }
+
+    .bottom{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .qty{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      background: rgba(241,198,177,.35);
+      color: var(--purpleDark);
+      border:1px solid rgba(241,198,177,.65);
+      white-space:nowrap;
+    }
+
+    .chk{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    /* ✅ حالة خلص (المتبقي = 0) */
+    .item.done{
+      opacity:.78;
+      border-color: rgba(16,24,40,.12);
+    }
+    .item.done .imgWrap img{
+      filter: grayscale(1) contrast(1) brightness(.95);
+      opacity:.9;
+    }
+    .item.done .name{
+      text-decoration: line-through;
+      color: rgba(16,24,40,.55);
+    }
+
+    /* Toasts */
+    .toasts{
+      position:fixed;
+      bottom:14px;
+      left:14px;
+      right:14px;
+      z-index:9999;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px 12px;
+      border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px);
+      opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+    .toast .icon{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      color:#fff;
+    }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{
+      border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px;
+      border-radius:10px; color:rgba(16,24,40,.55);
+    }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+
+    .bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+    .bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+    @keyframes shrink{ to{ transform:scaleX(0); } }
+
+    /* ===== Orders overlay on image ===== */
+    .imgWrap{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .ordersOverlay{
+      position:absolute;
+      top:10px;
+      left:10px;
+      right:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      z-index:2;
+      pointer-events:none;
+    }
+
+    .orderPill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 9px;
+      border-radius:999px;
+      font-weight:950;
+      font-size:12px;
+      color:#111827;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 8px 18px rgba(16,24,40,.12);
+      backdrop-filter: blur(6px);
+      max-width:100%;
+    }
+
+    .orderPill b{
+      color: var(--purpleDark, #3C0A63);
+      font-weight:980;
+    }
+
+    .orderPill .dot{
+      width:7px;height:7px;border-radius:99px;
+      background: rgba(107,15,166,.65);
+      flex:0 0 auto;
+    }
+/* ===== Copy Image button (top-right) ===== */
+.copyBtn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:3;
+
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+
+  display:grid;
+  place-items:center;
+
+  background: rgba(255,255,255,.92);
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 10px 22px rgba(16,24,40,.14);
+  backdrop-filter: blur(6px);
+}
+.copyBtn:active{ transform:scale(.98); }
+.copyBtn svg{ width:18px;height:18px; stroke:#111827; fill:none; stroke-width:2.2; }
+
+    /* ===== Zoom button ===== */
+    .zoomBtn{
+      position:absolute;
+      bottom:10px;
+      left:10px;
+      z-index:3;
+      width:40px;
+      height:40px;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 10px 22px rgba(16,24,40,.14);
+      backdrop-filter: blur(6px);
+    }
+    .zoomBtn:active{ transform:scale(.98); }
+    .zoomBtn svg{ width:18px;height:18px; stroke:#111827; fill:none; stroke-width:2.2; }
+
+    /* ===== Image modal ===== */
+    .imgModal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:99999;
+    }
+    .imgModal.open{ display:flex; }
+
+    .imgModalCard{
+      width:min(720px, 100%);
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.18);
+    }
+
+    .imgModalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 12px;
+      border-bottom:1px solid rgba(16,24,40,.10);
+    }
+    .imgModalTitle{
+      font-weight:980;
+      font-size:14px;
+      color:#111827;
+      line-height:1.4;
+    }
+    .imgModalClose{
+      border:none;
+      background:rgba(16,24,40,.06);
+      border:1px solid rgba(16,24,40,.10);
+      width:40px;height:40px;
+      border-radius:14px;
+      cursor:pointer;
+      display:grid;place-items:center;
+    }
+    .imgModalClose svg{ width:18px;height:18px; stroke:#111827; fill:none; stroke-width:2.2; }
+
+    .imgModalBody{
+      padding:12px;
+      background: #0b0b0b;
+    }
+    .imgModalBody img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:14px;
+      background:#111;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" style="fill:none;stroke:var(--purple);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M12 7v6l4 2"></path>
+            <circle cx="12" cy="12" r="9" style="stroke:var(--peach)"></circle>
+          </svg>
+        </div>
+        <div class="brandText">
+          <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+          <div class="brandSub">قائمة شراء المنتجات • حسب تاقات الطلبات</div>
+        </div>
+      </div>
+
+      <div class="badge" title="التاقات الحالية">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M20 13V7a2 2 0 0 0-2-2h-6l-8 8 6 6 8-8Z"></path>
+          <circle cx="15" cy="9" r="1.5"></circle>
+        </svg>
+        <span id="tagsBadge">مسقط, تاكيد, مكتب</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">التاقات + البحث + عرض المتبقي</p>
+
+      <div class="controls">
+        <div class="box">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(60,10,99,.65);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M20 13V7a2 2 0 0 0-2-2h-6l-8 8 6 6 8-8Z"></path>
+            <circle cx="15" cy="9" r="1.5"></circle>
+          </svg>
+          <input id="tagsInput" placeholder="اكتب التاقات مفصولة بفاصلة مثال: مسقط,تاكيد,مكتب" value="مسقط,تاكيد,مكتب">
+        </div>
+
+        <button class="btn btnPrimary" onclick="loadProducts()">
+          <svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M21 21H3"></path>
+            <path d="M12 3v10"></path>
+            <path d="M8 11l4 4 4-4"></path>
+          </svg>
+          جلب القائمة
+        </button>
+      </div>
+
+      <div class="row2">
+        <div class="box">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(60,10,99,.65);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3-3"></path>
+          </svg>
+          <input id="searchInput" placeholder="ابحث باسم المنتج..." oninput="render()">
+        </div>
+
+        <button class="btn btnGhost" onclick="toggleOnlyRemaining()">
+          <span id="onlyRemainingTxt">عرض المتبقي فقط</span>
+        </button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="statLbl">إجمالي المنتجات</div>
+          <div class="statVal" id="statTotal">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">خلصت</div>
+          <div class="statVal" id="statDone">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">المتبقي (فيها كمية)</div>
+          <div class="statVal" id="statLeft">0</div>
+        </div>
+      </div>
+
+      <div class="hint">
+        ✅ كل ضغطة على الكرت = شراء 1 (خصم 1 من المتبقي).<br>
+        ↩️ زر "تراجع 1" يرجّع قطعة لو انضغط بالغلط.<br>
+        💾 يتم الحفظ تلقائيًا على نفس الجهاز حسب التاقات.
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">المنتجات</p>
+      <div id="grid" class="grid"></div>
+    </div>
+  </div>
+
+  <!-- ✅ Image Modal -->
+  <div id="imgModal" class="imgModal" onclick="closeImgModal(event)">
+    <div class="imgModalCard">
+      <div class="imgModalTop">
+        <div id="imgModalTitle" class="imgModalTitle"></div>
+        <button class="imgModalClose" onclick="closeImgModal()" aria-label="إغلاق">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="imgModalBody">
+        <img id="imgModalImg" src="" alt="">
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+  import { requirePackLogin, authFetch } from "./auth.js";
+
+  // ✅ نفس فكرة صفحة pack: لازم دخول
+  requirePackLogin();
+
+  // (اختياري) تسجيل SW مثل صفحة pack (لو تحتاج)
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/a/sw.js", { scope: "/a/" });
+  }
+
+  // =========================
+  // State
+  // =========================
+  let products = [];          // { name, quantity, image, sources }
+  let onlyRemaining = false;  // filter
+  let boughtMap = {};         // key => number
+
+  // Storage key depends on tags
+  function storageKey(tags){
+    return "bt_reports_bought__" + (tags || "").trim();
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function toast(type, title, msg, ms = 2200){
+    const wrap = document.getElementById("toasts");
+    if (!wrap) return;
+
+    const el = document.createElement("div");
+    el.className = `toast ${type}`;
+
+    const iconSvg = {
+      ok:   `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 7l-11 11-5-5"/></svg>`,
+      err:  `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>`,
+      warn: `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3h3.4L22 20H2z"/></svg>`,
+      info: `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/></svg>`
+    }[type] || "";
+
+    el.innerHTML = `
+      <div class="icon">${iconSvg}</div>
+      <div class="body">
+        <p class="title">${escapeHtml(title || "")}</p>
+        <p class="msg">${escapeHtml(msg || "")}</p>
+        <div class="bar"><i style="animation-duration:${ms}ms"></i></div>
+      </div>
+      <button class="x" aria-label="إغلاق" title="إغلاق">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(16,24,40,.55);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M6 6l12 12"/><path d="M18 6L6 18"/>
+        </svg>
+      </button>
+    `;
+
+    const close = () => {
+      el.classList.add("out");
+      setTimeout(()=> el.remove(), 170);
+    };
+    el.querySelector(".x").onclick = close;
+
+    wrap.prepend(el);
+    setTimeout(close, ms);
+  }
+
+  function getTags(){
+    const t = document.getElementById("tagsInput")?.value || "";
+    return t.split(",").map(x => x.trim()).filter(Boolean).join(",");
+  }
+
+function loadDoneState(tags){
+  try{
+    const raw = JSON.parse(localStorage.getItem(storageKey(tags)) || "{}") || {};
+    // ترحيل: لو كان قديم (رقم) نحوله لشكل جديد
+    boughtMap = {};
+    for (const k in raw){
+      const v = raw[k];
+      if (typeof v === "number"){
+        boughtMap[k] = { b: v, sig: "" };
+      } else if (v && typeof v === "object"){
+        boughtMap[k] = { b: Number(v.b||0)||0, sig: String(v.sig||"") };
+      }
+    }
+  }catch(e){
+    boughtMap = {};
+  }
+}
+
+  function saveDoneState(tags){
+    localStorage.setItem(storageKey(tags), JSON.stringify(boughtMap || {}));
+  }
+
+  function keyOf(p){
+    return (p?.name || "").toString().trim().toLowerCase();
+  }
+function sigOf(p){
+  const sources = Array.isArray(p.sources) ? p.sources : [];
+  // بصمة ثابتة: order:qty مرتبة
+  return sources
+    .map(s => `${String(s.order||"").replace("#","")}:${Number(s.qty||0)||0}`)
+    .sort()
+    .join("|");
+}
+
+function parseSig(sig){
+  if(!sig) return new Set();
+  return new Set(sig.split("|").filter(Boolean));
+}
+
+function isSuperset(newSig, oldSig){
+  const A = parseSig(newSig);
+  const B = parseSig(oldSig);
+  for (const x of B) if (!A.has(x)) return false;
+  return true;
+}
+
+  function totalQty(p){
+    return Math.max(0, Number(p?.quantity || 0) || 0);
+  }
+
+function boughtQtyByKey(k){
+  const v = boughtMap?.[k];
+  const n = (typeof v === "number") ? v : (v?.b ?? 0);
+  return Math.max(0, Number(n) || 0);
+}
+
+  function remainingQty(p){
+    const k = keyOf(p);
+    return Math.max(0, totalQty(p) - boughtQtyByKey(k));
+  }
+
+function buyOne(tags, p){
+  const k = keyOf(p);
+  const total = totalQty(p);
+  if(total <= 0) return;
+
+  const cur = boughtQtyByKey(k);
+  if(cur >= total){
+    toast("warn","تنبيه","المنتج خلص (المتبقي 0).", 1600);
+    return;
+  }
+
+  const entry = boughtMap[k] && typeof boughtMap[k] === "object" ? boughtMap[k] : { b: 0, sig: "" };
+  entry.b = cur + 1;
+  // نخلي sig محفوظ (مهم للمزامنة)
+  entry.sig = entry.sig || sigOf(p);
+  boughtMap[k] = entry;
+
+  saveDoneState(tags);
+}
+function undoOne(tags, p){
+  const k = keyOf(p);
+  const cur = boughtQtyByKey(k);
+  if(cur <= 0){
+    toast("info","معلومة","ما فيه شيء للتراجع عنه.", 1400);
+    return;
+  }
+
+  const entry = boughtMap[k] && typeof boughtMap[k] === "object" ? boughtMap[k] : { b: cur, sig: "" };
+  const next = cur - 1;
+
+  if(next <= 0){
+    // لا نحذف السجل بالكامل عشان sig يبقى للمزامنة (اختياري)
+    entry.b = 0;
+    boughtMap[k] = entry;
+  }else{
+    entry.b = next;
+    boughtMap[k] = entry;
+  }
+
+  saveDoneState(tags);
+}
+
+  // ✅ مهم: نخليها متاحة للـ onclick في الـ HTML
+  window.toggleOnlyRemaining = function(){
+    onlyRemaining = !onlyRemaining;
+    document.getElementById("onlyRemainingTxt").textContent = onlyRemaining ? "عرض الكل" : "عرض المتبقي فقط";
+    render();
+  };
+
+  // =========================
+  // Load Products (باستخدام authFetch)
+  // =========================
+  window.loadProducts = async function(){
+    const tags = getTags();
+    document.getElementById("tagsBadge").textContent = tags || "-";
+    loadDoneState(tags);
+
+    // ✅ خله ثابت مثل سكربتك، أو غيّره حسب حاجتك
+    const FROM_DATE = "2026-01-25";
+
+    const url =
+      "/api/reports/unshipped-products?tags=" +
+      encodeURIComponent(tags || "مسقط,تاكيد,مكتب") +
+      "&from=" + encodeURIComponent(FROM_DATE) +
+      "&limit=250";
+
+    toast("info","جاري","جلب المنتجات...", 1200);
+
+    try{
+      // ✅ نفس فكرة صفحة pack: authFetch بدل fetch
+      const r = await authFetch(url, { cache: "no-store" });
+      const d = await r.json().catch(()=> ({}));
+
+      if(!r.ok){
+        toast("err","فشل", d?.error || "تعذر جلب البيانات", 3200);
+        return;
+      }
+
+      products = Array.isArray(d.products) ? d.products.map(p => ({
+        name: p.name || "",
+        quantity: Number(p.quantity || 0) || 0,
+        image: p.image || "",
+        sources: Array.isArray(p.sources) ? p.sources : []
+      })) : [];
+// ✅ مزامنة حالة الشراء مع الطلبات الحالية
+for (const p of products){
+  const k = keyOf(p);
+  const newSig = sigOf(p);
+
+  const old = boughtMap[k];
+  if (!old){
+    // أول مرة نشوف المنتج
+    boughtMap[k] = { b: 0, sig: newSig };
+    continue;
+  }
+
+  // لو القديم كان رقم (احتياط)
+  const oldEntry = (typeof old === "number") ? { b: old, sig: "" } : old;
+
+  // إذا الطلبات تغيّرت بشكل "مو إضافة" (يعني قديم اختفى/تبدل) => دورة جديدة => صفر
+  if (oldEntry.sig && !isSuperset(newSig, oldEntry.sig)){
+    oldEntry.b = 0;
+  }
+
+  // حدث البصمة وخلي b لا يتجاوز الكمية الحالية
+  oldEntry.sig = newSig;
+  oldEntry.b = Math.min(oldEntry.b || 0, totalQty(p));
+
+  boughtMap[k] = oldEntry;
+}
+
+saveDoneState(tags);
+
+      products.sort((a,b) => (b.quantity||0) - (a.quantity||0));
+
+      toast("ok","تم","تم جلب " + products.length + " منتج", 1200);
+      render();
+    }catch(e){
+      toast("err","فشل", e?.message || String(e), 3200);
+    }
+  };
+
+  // =========================
+  // Render
+  // =========================
+  window.render = function(){
+    const q = (document.getElementById("searchInput")?.value || "").trim().toLowerCase();
+    const grid = document.getElementById("grid");
+    if(!grid) return;
+
+    let list = products.slice();
+
+    if(q){
+      list = list.filter(p => (p.name || "").toString().toLowerCase().includes(q));
+    }
+
+    if(onlyRemaining){
+      list = list.filter(p => remainingQty(p) > 0);
+    }
+
+    const total = products.length;
+    const done = products.filter(p => remainingQty(p) === 0 && totalQty(p) > 0).length;
+    const left = products.filter(p => remainingQty(p) > 0).length;
+
+    document.getElementById("statTotal").textContent = String(total);
+    document.getElementById("statDone").textContent = String(done);
+    document.getElementById("statLeft").textContent = String(left);
+
+    if(!list.length){
+      grid.innerHTML = `<div style="grid-column:1/-1;background:#fff;border:1px dashed rgba(16,24,40,.18);border-radius:16px;padding:14px;text-align:center;font-weight:900;color:rgba(16,24,40,.62)">لا توجد منتجات مطابقة</div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(p => {
+      const name = (p.name || "").toString();
+      const qty = totalQty(p);
+      const img = (p.image || "").toString();
+
+      const k = keyOf(p);
+      const rem = remainingQty(p);
+      const checked = (qty > 0 && rem === 0);
+
+      const sources = Array.isArray(p.sources) ? p.sources : [];
+      const pills = sources.slice(0, 6).map(s => {
+        const ord = (s.order || "").toString().replace("#","");
+        const qy  = Number(s.qty || 0) || 0;
+        return `<span class="orderPill"><span class="dot"></span>طلب <b>:${escapeHtml(ord)}</b> × <b>${qy}</b></span>`;
+      }).join("");
+
+      const more = sources.length > 6
+        ? `<span class="orderPill"><span class="dot"></span>+${sources.length - 6} طلب</span>`
+        : "";
+
+      const overlay = (pills || more)
+        ? `<div class="ordersOverlay">${pills}${more}</div>`
+        : "";
+
+      const zoomBtn = img
+        ? `<button class="zoomBtn"
+             onclick="openImgModal(event,'${escapeHtml(img)}','${escapeHtml(name)}')"
+             title="تكبير الصورة" aria-label="تكبير الصورة">
+             <svg viewBox="0 0 24 24">
+               <circle cx="11" cy="11" r="7"></circle>
+               <path d="M20 20l-3-3"></path>
+               <path d="M11 8v6"></path>
+               <path d="M8 11h6"></path>
+             </svg>
+           </button>`
+        : "";
+const copyBtn = img
+  ? `<button class="copyBtn"
+       onclick="copyImage(event,'${escapeHtml(img)}')"
+       title="نسخ الصورة"
+       aria-label="نسخ الصورة">
+       <svg viewBox="0 0 24 24">
+         <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+       </svg>
+     </button>`
+  : "";
+const dlBtn = img
+  ? `<button class="copyBtn" style="right:56px"
+       onclick="downloadImage(event,'${escapeHtml(img)}','${escapeHtml(name)}')"
+       title="تحميل الصورة" aria-label="تحميل الصورة">
+       <svg viewBox="0 0 24 24">
+         <path d="M12 3v10"></path>
+         <path d="M8 11l4 4 4-4"></path>
+         <path d="M21 21H3"></path>
+       </svg>
+     </button>`
+  : "";
+
+const shareBtn = img
+  ? `<button class="copyBtn" style="right:102px"
+       onclick="shareImage(event,'${escapeHtml(img)}','${escapeHtml(name)}')"
+       title="مشاركة" aria-label="مشاركة">
+       <svg viewBox="0 0 24 24">
+         <circle cx="18" cy="5" r="2"></circle>
+         <circle cx="6" cy="12" r="2"></circle>
+         <circle cx="18" cy="19" r="2"></circle>
+         <path d="M8 12l8-6"></path>
+         <path d="M8 12l8 6"></path>
+       </svg>
+     </button>`
+  : "";
+
+      const imgTag = img
+        ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" loading="lazy">`
+        : `<div style="width:100%;height:100%;display:grid;place-items:center;color:rgba(60,10,99,.65);font-weight:950">لا توجد صورة</div>`;
+
+      return `
+        <div class="item ${checked ? "done":""}" onclick="onCardClick(event,'${escapeHtml(k)}')">
+          <div class="imgWrap">
+          
+            ${imgTag}
+            ${overlay}
+            ${copyBtn}
+${dlBtn}
+${shareBtn}
+
+            ${zoomBtn}
+          </div>
+
+          <div class="meta">
+            <div class="name">${escapeHtml(name)}</div>
+
+            <div class="bottom">
+              <div class="qty">المتبقي: <b>${rem}</b> / ${qty}</div>
+
+              <div style="display:flex; gap:8px;">
+                <button class="chk" onclick="event.stopPropagation(); onBuyOne('${escapeHtml(k)}')">شراء 1</button>
+                <button class="chk"
+                        style="background:rgba(16,24,40,.06); border-color:rgba(16,24,40,.14);"
+                        onclick="event.stopPropagation(); onUndoOne('${escapeHtml(k)}')">تراجع 1</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  };
+
+  // =========================
+  // Actions (لازم على window بسبب onclick)
+  // =========================
+  window.onBuyOne = function(k){
+    const tags = getTags();
+    const p = products.find(x => keyOf(x) === k);
+    if(!p) return;
+    buyOne(tags, p);
+    window.render();
+  };
+
+  window.onUndoOne = function(k){
+    const tags = getTags();
+    const p = products.find(x => keyOf(x) === k);
+    if(!p) return;
+    undoOne(tags, p);
+    window.render();
+  };
+
+window.onCardClick = function(ev, k){
+  const t = ev?.target;
+  if(t && (t.closest("button.chk") || t.closest("button.zoomBtn") || t.closest("button.copyBtn"))) return;
+  window.onBuyOne(k);
+};
+
+  // =========================
+  // Image Modal (على window لأن فيه onclick)
+  // =========================
+  window.openImgModal = function(ev, src, title){
+    if(ev) ev.stopPropagation();
+    const modal = document.getElementById("imgModal");
+    const img = document.getElementById("imgModalImg");
+    const ttl = document.getElementById("imgModalTitle");
+    if(!modal || !img || !ttl) return;
+
+    ttl.textContent = title || "";
+    img.src = src || "";
+    img.alt = title || "";
+    modal.classList.add("open");
+  };
+
+  window.closeImgModal = function(ev){
+    if(ev && ev.target && ev.target.closest(".imgModalCard")) return;
+    const modal = document.getElementById("imgModal");
+    const img = document.getElementById("imgModalImg");
+    if(modal) modal.classList.remove("open");
+    if(img) img.src = "";
+  };
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape") window.closeImgModal();
+  });
+window.copyImage = async function (ev, imageUrl) {
+  ev.stopPropagation();
+
+  try {
+    // لازم HTTPS + الصورة تسمح CORS
+    const res = await fetch(imageUrl, { mode: "cors", cache: "no-store" });
+    if (!res.ok) throw new Error("Fetch failed: " + res.status);
+
+    const blob = await res.blob();
+    if (!blob || !blob.type.startsWith("image/")) {
+      throw new Error("Not an image blob");
+    }
+
+    await navigator.clipboard.write([
+      new ClipboardItem({ [blob.type]: blob })
+    ]);
+
+    toast("ok", "تم النسخ", "الصورة جاهزة للصق في واتساب 📸", 2200);
+
+  } catch (e) {
+    toast("err", "تعذر النسخ", "المتصفح/المصدر لا يسمح بنسخ الصورة مباشرة", 3200);
+    console.error(e);
+  }
+};
+window.downloadImage = async function(ev, imageUrl, name){
+  ev.stopPropagation();
+  try{
+    const res = await fetch(imageUrl, { mode:"cors", cache:"no-store" });
+    if(!res.ok) throw new Error("Fetch failed: " + res.status);
+
+    const blob = await res.blob();
+    const ext = (blob.type.split("/")[1] || "png").replace("jpeg","jpg");
+    const safeName = (name || "image").toString().slice(0,40).replace(/[^\w\u0600-\u06FF]+/g,"_");
+    const fileName = `${safeName}.${ext}`;
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=> URL.revokeObjectURL(a.href), 2000);
+
+    toast("ok","تم","تم تحميل الصورة ✅", 2000);
+  }catch(e){
+    toast("err","فشل","تعذر تحميل الصورة", 2600);
+    console.error(e);
+  }
+};
+
+window.shareImage = async function(ev, imageUrl, name){
+  ev.stopPropagation();
+
+  if(!navigator.share){
+    toast("warn","غير مدعوم","المشاركة غير مدعومة في هذا المتصفح", 2400);
+    return;
+  }
+
+  try{
+    const res = await fetch(imageUrl, { mode:"cors", cache:"no-store" });
+    if(!res.ok) throw new Error("Fetch failed: " + res.status);
+
+    const blob = await res.blob();
+    const ext = (blob.type.split("/")[1] || "png").replace("jpeg","jpg");
+    const safeName = (name || "image").toString().slice(0,40).replace(/[^\w\u0600-\u06FF]+/g,"_");
+    const file = new File([blob], `${safeName}.${ext}`, { type: blob.type });
+
+    await navigator.share({
+      title: name || "صورة",
+      files: [file]
+    });
+
+  }catch(e){
+    toast("err","فشل","تعذر مشاركة الصورة", 2600);
+    console.error(e);
+  }
+};
+
+  // =========================
+  // Auto-load once
+  // =========================
+  window.addEventListener("load", () => {
+    const u = new URL(location.href);
+    const qp = u.searchParams.get("tags");
+    if(qp){
+      document.getElementById("tagsInput").value = qp;
+      document.getElementById("tagsBadge").textContent = qp;
+    }
+    window.loadProducts();
+  });
+</script>
+
+
+</body>
+</html>

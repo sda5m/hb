@@ -1,0 +1,1796 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | لوحة الإدارة</title>
+ 
+  <link rel="manifest" href="/prod/manifest.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="منتجات - إدارة">
+  <link rel="apple-touch-icon" href="/prod/ico1.png">
+  <link rel="icon" href="/prod/ico2.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+      --r18:18px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("/prod/d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+    .wrap{ max-width:1100px; margin:0 auto; padding:18px 14px 26px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow2); border:1px solid var(--line);
+      backdrop-filter: blur(6px); flex-wrap:wrap;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandMark{
+      width:44px; height:44px; border-radius:14px; display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      flex:0 0 auto;
+    }
+    .brandName{ margin:0; font-size:18px; font-weight:900; line-height:1.2; }
+    .brandName .b1{ color:var(--purple); } .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px; padding:14px;
+      border-radius:var(--r18);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 12px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:14px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none; white-space:nowrap;
+    }
+    .btn:active{ transform:scale(.985); }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff;
+      box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .btnGhost{
+      background:#f2f4f7;
+      color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+    .btn[disabled]{ opacity:.65; cursor:not-allowed; }
+
+    .miniGrid{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .miniCell{
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+    }
+    .miniLbl{ font-size:12px; font-weight:950; color:rgba(16,24,40,.55); }
+    .miniVal{ margin-top:3px; font-weight:980; color:var(--purpleDark); font-size:16px; }
+    @media (max-width:900px){ .miniGrid{ grid-template-columns:1fr 1fr; } }
+    @media (max-width:520px){ .miniGrid{ grid-template-columns:1fr; } }
+
+    .dashSeg{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:16px;
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .dashSegTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+      background:#fafafa;
+    }
+    .dashSegName{ font-weight:950; color:var(--purpleDark); display:flex; align-items:center; gap:8px; }
+    .dashCount{
+      min-width:34px; height:30px; padding:0 10px;
+      border-radius:999px;
+      font-weight:950;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      display:grid; place-items:center;
+    }
+    .dashSegRight{ display:flex; align-items:center; gap:10px; }
+    .dashSegBody{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.28s ease;
+      background:#fff;
+      border-top:1px solid rgba(16,24,40,.08);
+    }
+    .dashSegTop.active .segArrow{ transform: rotate(180deg); }
+
+    .segArrow{
+      width:18px; height:18px;
+      stroke:#666; fill:none; stroke-width:2;
+      transition: transform 0.25s ease;
+    }
+    .segIcon{
+      width:18px; height:18px;
+      stroke: currentColor; fill:none; stroke-width:2;
+      stroke-linecap:round; stroke-linejoin:round;
+    }
+
+    .list{ padding:10px 12px; display:flex; flex-direction:column; gap:10px; }
+    .empty{
+      padding:12px;
+      border:1px dashed rgba(16,24,40,.18);
+      border-radius:12px;
+      color:rgba(16,24,40,.55);
+      font-weight:900;
+      font-size:12.5px;
+      text-align:center;
+    }
+
+    .item{
+      padding:12px; border-radius:18px;
+      background:rgba(255,255,255,.98);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+    }
+    .itemTop{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .itemTitle{ margin:0; font-weight:950; font-size:14px; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(241,198,177,.35);
+      color: var(--purpleDark);
+      border:1px solid rgba(241,198,177,.65);
+      white-space:nowrap;
+    }
+    .metaGrid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:8px 10px;
+    }
+    .metaCell{
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+    }
+    .lbl{ font-size:12px; font-weight:950; color:rgba(16,24,40,.55); }
+    .val{ margin-top:3px; font-weight:980; color:var(--purpleDark); font-size:13px; word-break:break-word; }
+
+    .thumbs{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .thumb{
+      width:72px; height:72px;
+      border-radius:14px;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+      overflow:hidden; background:#fff;
+    }
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .uploader{
+      margin-top:10px;
+      padding:12px;
+      border-radius:18px;
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(242,244,247,.55);
+      display:grid;
+      gap:10px;
+    }
+    .uRow{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media (max-width:640px){ .uRow{ grid-template-columns:1fr; } }
+
+    .file{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+    }
+    .file input{ width:100%; font-weight:900; font-family:"Cairo"; }
+
+    .svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .svg.sm{ width:18px; height:18px; }
+
+    .toasts{
+      position:fixed; bottom:14px; left:14px; right:14px;
+      z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px 12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px);
+      opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+    .toast .icon{
+      width:34px; height:34px; border-radius:12px; display:grid; place-items:center;
+      flex:0 0 auto; color:#fff;
+    }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{ border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px; border-radius:10px; color:rgba(16,24,40,.55); }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+    .bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+    .bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+    @keyframes shrink{ to{ transform:scaleX(0); } }
+    /* ---- تحسين رفع الملفات (عربي + شكل أفضل) ---- */
+.file input[type="file"]{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+.filePick{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%;
+  border-radius:14px;
+  padding:12px 12px;
+  cursor:pointer;
+  font-weight:950;
+  background:#fff;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.06);
+  color:rgba(60,10,99,.85);
+  user-select:none;
+}
+.filePick:active{ transform:scale(.99); }
+.fileHint{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(16,24,40,.55);
+}
+.fileName{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(16,24,40,.72);
+  word-break:break-word;
+}
+
+/* زر أيقونة صغير */
+.iconBtn{
+  width:54px; border:none; border-radius:14px;
+  background: rgba(107,15,166,.10);
+  border:1px solid rgba(107,15,166,.20);
+  box-shadow:0 6px 14px rgba(107,15,166,.14);
+  cursor:pointer; display:grid; place-items:center;
+  transition:.15s; flex:0 0 auto;
+}
+.iconBtn:active{ transform:scale(.98); }
+
+/* مكان الكاميرا */
+.videoWrap{
+  margin-top:12px; padding:12px; border-radius:18px;
+  border:1px solid rgba(16,24,40,.12);
+  background:#fff;
+  box-shadow:0 8px 18px rgba(16,24,40,.10);
+}
+video{ width:100%; border-radius:14px; }
+/* ===== Delete overlay buttons on thumbnails ===== */
+.thumbWrap{
+  position:relative;
+  width:72px; 
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.thumb{
+  position:relative;
+  width:72px; height:72px;
+  border-radius:14px;
+  border:1px solid rgba(16,24,40,.10);
+  box-shadow:0 6px 14px rgba(16,24,40,.08);
+  overflow:hidden; background:#fff;
+}
+.thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.thumbBtn{
+  position:absolute;
+  top:6px;
+  left:6px; /* RTL: خليها يسار عشان تكون ثابتة */
+  width:30px;height:30px;
+  border-radius:12px;
+  border:1px solid rgba(239,68,68,.25);
+  background:rgba(255,255,255,.92);
+  box-shadow:0 10px 22px rgba(16,24,40,.12);
+  display:grid;place-items:center;
+  cursor:pointer;
+}
+.thumbBtn svg{ width:16px;height:16px; stroke:#ef4444; fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+.thumbBtn:active{ transform:scale(.98); }
+
+.thumbBtn.secondary{
+  left:auto;
+  right:6px;
+  border-color: rgba(107,15,166,.22);
+}
+.thumbBtn.secondary svg{ stroke: rgba(60,10,99,.85); }
+
+/* ===== Confirm Modal (Professional) ===== */
+#confirmModal{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.62);
+  display:none;
+  align-items:center; justify-content:center;
+  padding:16px;
+  z-index:100000;
+}
+#confirmModal .box{
+  width:min(520px,100%);
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 26px 60px rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.18);
+}
+#confirmModal .head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px;
+  border-bottom:1px solid rgba(16,24,40,.10);
+}
+#confirmModal .title{
+  font-weight:980; font-size:14px; color:#111827;
+  display:flex; align-items:center; gap:10px;
+}
+#confirmModal .icon{
+  width:40px;height:40px;border-radius:14px;
+  display:grid;place-items:center;
+  background:rgba(239,68,68,.10);
+  border:1px solid rgba(239,68,68,.18);
+}
+#confirmModal .close{
+  border:none;
+  background:rgba(16,24,40,.06);
+  border:1px solid rgba(16,24,40,.10);
+  width:40px;height:40px;border-radius:14px;
+  cursor:pointer;
+}
+#confirmModal .body{
+  padding:14px;
+}
+#confirmModal .msg{
+  margin:0;
+  font-weight:900;
+  font-size:13px;
+  color:rgba(16,24,40,.78);
+  line-height:1.8;
+}
+#confirmModal .sub{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(241,198,177,.28);
+  border:1px solid rgba(241,198,177,.65);
+  font-weight:900;
+  font-size:12.5px;
+  color:rgba(60,10,99,.92);
+  line-height:1.7;
+}
+#confirmModal .actions{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+}
+#confirmModal .danger{
+  flex:1;
+  border:none;
+  border-radius:14px;
+  padding:12px 12px;
+  cursor:pointer;
+  font-weight:950;
+  background:linear-gradient(135deg,#f87171,#ef4444);
+  color:#fff;
+  box-shadow:0 10px 22px rgba(239,68,68,.22);
+  font-family:"Cairo",system-ui,sans-serif;
+}
+#confirmModal .ghost{
+  flex:1;
+  border:none;
+  border-radius:14px;
+  padding:12px 12px;
+  cursor:pointer;
+  font-weight:950;
+  background:#f2f4f7;
+  border:1px dashed rgba(60,10,99,.30);
+  color:var(--purpleDark);
+  font-family:"Cairo",system-ui,sans-serif;
+}
+#confirmModal .danger:active, #confirmModal .ghost:active{ transform:scale(.985); }
+
+/* ===== Barcode row polished ===== */
+.bcRow{
+  display:grid;
+  grid-template-columns: 54px 1fr auto;
+  gap:10px;
+  align-items:center;
+}
+@media (max-width:640px){
+  .bcRow{ grid-template-columns: 54px 1fr; }
+  .bcRow .bcPills{ grid-column:1 / -1; }
+}
+.bcPills{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-start;
+}
+.pillToggle{
+  border:none;
+  cursor:pointer;
+  padding:10px 12px;
+  border-radius:999px;
+  font-weight:950;
+  font-size:12.5px;
+  background:rgba(255,255,255,.90);
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.06);
+  color:rgba(16,24,40,.75);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.pillToggle.active{
+  background: rgba(107,15,166,.12);
+  border-color: rgba(107,15,166,.22);
+  color: var(--purpleDark);
+}
+.pillToggle svg{ width:18px;height:18px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+/* زر تكبير (مكان ثالث حتى لا يتراكب مع الحذف/الاستبدال) */
+.thumbBtn.zoom{
+  left:42px;              /* يكون في الوسط أعلى الصورة */
+  border-color: rgba(107,15,166,.22);
+}
+.thumbBtn.zoom svg{
+  stroke: rgba(60,10,99,.85);
+}
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" class="svg" style="stroke:var(--purple);">
+            <path d="M12 7v6l4 2"></path>
+            <circle cx="12" cy="13" r="2.4" style="stroke:var(--peach)"></circle>
+            <path d="M12 3c1.6 0 2.6 1.4 2.1 2.8-.3.8-1.1 1.2-2.1 1.2s-1.8-.4-2.1-1.2C9.4 4.4 10.4 3 12 3Z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+          <div class="brandSub">لوحة الإدارة • تقارير المنتجات</div>
+        </div>
+      </div>
+
+      <div class="badge">
+        <svg class="svg sm" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M21 3v18"></path></svg>
+        <button style="border:none;background:transparent;font:inherit;color:inherit;cursor:pointer;padding:0" onclick="logout()">خروج</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+        <div>
+          <div style="font-weight:980">ملخص</div>
+          <div style="margin-top:2px;font-weight:900;font-size:12px;color:rgba(16,24,40,.55)">آخر تحديث يظهر بعد التحميل</div>
+        </div>
+        <button class="btn btnPrimary" style="width:auto" onclick="loadDash()">
+          <svg class="svg" viewBox="0 0 24 24"><path d="M21 21H3"></path><path d="M12 3v10"></path><path d="M8 11l4 4 4-4"></path></svg>
+          تحديث
+        </button>
+      </div>
+
+      <div class="miniGrid">
+        <div class="miniCell">
+          <div class="miniLbl">بانتظار الإضافة</div>
+          <div class="miniVal" id="c_waiting">0</div>
+        </div>
+        <div class="miniCell">
+          <div class="miniLbl">بانتظار التصوير</div>
+          <div class="miniVal" id="c_needphoto">0</div>
+        </div>
+        <div class="miniCell">
+          <div class="miniLbl">تم رفع الصور</div>
+          <div class="miniVal" id="c_photoup">0</div>
+        </div>
+        <div class="miniCell">
+          <div class="miniLbl">تمت الإضافة</div>
+          <div class="miniVal" id="c_added">0</div>
+        </div>
+      </div>
+
+      <div id="meta" style="margin-top:10px;color:rgba(16,24,40,.62);font-weight:900;font-size:12.5px;min-height:18px"></div>
+    </div>
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+    <div>
+      <div style="font-weight:980">طلب إضافة منتج</div>
+      <div style="margin-top:2px;font-weight:900;font-size:12px;color:rgba(16,24,40,.55)">
+        ارفع صور المنتج + (باركود أو اختر لا يوجد باركود) + السعر
+      </div>
+    </div>
+    <button class="btn btnPrimary" style="width:auto" onclick="submitNewRequest()">
+      <svg class="svg" viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+      إرسال الطلب
+    </button>
+  </div>
+
+<div class="uploader" style="margin-top:12px">
+
+  <!-- رفع صور المنتج -->
+  <div class="file" style="position:relative">
+    <label class="filePick" for="new_prod_photos">
+      <svg class="svg sm" viewBox="0 0 24 24">
+        <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+        <circle cx="12" cy="13" r="3.2"></circle>
+      </svg>
+      اختر صور المنتج (أو صوّر)
+    </label>
+    <input id="new_prod_photos" type="file" accept="image/*" multiple>
+    <div class="fileHint">يمكن اختيار أكثر من صورة</div>
+    <div id="new_prod_photos_name" class="fileName"></div>
+  </div>
+
+  <!-- رفع صورة الباركود -->
+  <div class="file" style="position:relative">
+    <label class="filePick" for="new_barcode_photo">
+      <!-- أيقونة باركود حسب طلبك -->
+      <svg viewBox="0 0 13 13" aria-hidden="true" style="width:20px;height:20px;fill:currentColor">
+        <path d="M1 1.5v13h1v-13H1zm2 0v13h2v-13H3zm3 0v13h1v-13H6zm2 0v13h2v-13H8zm3 0v13h1v-13h-1zm2 0v13h1v-13h-1z"></path>
+      </svg>
+      رفع صورة الباركود (اختياري)
+    </label>
+    <input id="new_barcode_photo" type="file" accept="image/*">
+    <div id="new_barcode_photo_name" class="fileName"></div>
+  </div>
+
+  <!-- الباركود + زر المسح بالكاميرا -->
+<!-- Barcode Row (Pro) -->
+<div class="bcRow">
+
+  <!-- زر مسح -->
+  <button class="iconBtn" onclick="toggleAdminScan()" title="مسح الباركود بالكاميرا" aria-label="مسح الباركود بالكاميرا">
+    <svg viewBox="0 0 24 24" class="svg sm">
+      <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+      <circle cx="12" cy="13" r="3.2"></circle>
+    </svg>
+  </button>
+
+  <!-- حقل الباركود -->
+  <div class="file">
+    <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+      <path d="M4 7h16"></path>
+      <path d="M4 12h16"></path>
+      <path d="M4 17h10"></path>
+    </svg>
+    <input id="new_barcode" inputmode="numeric" placeholder="اكتب الباركود أو امسحه بالكاميرا">
+  </div>
+
+  <!-- Pills -->
+  <div class="bcPills">
+    <button type="button" class="pillToggle" id="pillNoBarcode" onclick="setNoBarcode(true)">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
+      لا يوجد باركود
+    </button>
+
+    <button type="button" class="pillToggle" id="pillHasBarcode" onclick="setNoBarcode(false)">
+      <svg viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"></path></svg>
+      يوجد باركود
+    </button>
+  </div>
+
+</div>
+
+<!-- السعر -->
+<div class="uRow">
+  <div class="file">
+    <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+      <path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+    </svg>
+    <input id="new_price" inputmode="decimal" placeholder="السعر (اختياري)">
+  </div>
+</div>
+
+  <!-- منطقة الكاميرا -->
+  <div id="adminScanArea" class="videoWrap" style="display:none">
+    <div class="fileHint" style="margin-bottom:10px">وجّه الكاميرا نحو الباركود</div>
+    <video id="adminVideo" playsinline></video>
+
+    <button class="btn btnGhost" style="margin-top:10px" onclick="stopAdminScan()">
+      إيقاف المسح
+    </button>
+  </div>
+</div>
+  </div>
+
+    
+    <div class="card">
+      <div style="font-weight:980">القوائم</div>
+      <div style="margin-top:2px;font-weight:900;font-size:12px;color:rgba(16,24,40,.55)">اضغط على القسم لفتح/إغلاق</div>
+<!-- EDIT_REQUESTS -->
+<div class="dashSeg">
+  <div class="dashSegTop" onclick="toggleSeg('segEdit', this)">
+    <div class="dashSegName">
+      <svg class="segIcon" viewBox="0 0 24 24">
+        <path d="M12 20h9"></path>
+        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+      </svg>
+      قائمة انتظار التعديل
+    </div>
+    <div class="dashSegRight">
+      <div class="dashCount" id="cntEdit">0</div>
+      <svg class="segArrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+    </div>
+  </div>
+
+  <div class="dashSegBody" id="segEdit">
+    <div class="list" id="listEdit"><div class="empty">لا توجد بيانات</div></div>
+  </div>
+</div>
+
+      <!-- WAITING_ADD -->
+      <div class="dashSeg">
+        <div class="dashSegTop" onclick="toggleSeg('segWaiting', this)">
+          <div class="dashSegName">
+            <svg class="segIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6l4 2"></path></svg>
+            منتجات بانتظار الإضافة
+          </div>
+          <div class="dashSegRight">
+            <div class="dashCount" id="cntWaiting">0</div>
+            <svg class="segArrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+          </div>
+        </div>
+        <div class="dashSegBody" id="segWaiting">
+          <div class="list" id="listWaiting"><div class="empty">لا توجد بيانات</div></div>
+        </div>
+      </div>
+
+      <!-- NEED_PHOTO -->
+      <div class="dashSeg">
+        <div class="dashSegTop" onclick="toggleSeg('segNeed', this)">
+          <div class="dashSegName">
+            <svg class="segIcon" viewBox="0 0 24 24"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 4.3h3.4L22 20H2z"></path></svg>
+            منتجات بانتظار التصوير
+          </div>
+          <div class="dashSegRight">
+            <div class="dashCount" id="cntNeed">0</div>
+            <svg class="segArrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+          </div>
+        </div>
+        <div class="dashSegBody" id="segNeed">
+          <div class="list" id="listNeed"><div class="empty">لا توجد بيانات</div></div>
+        </div>
+      </div>
+
+      <!-- PHOTO_UPLOADED -->
+      <div class="dashSeg">
+        <div class="dashSegTop" onclick="toggleSeg('segPhoto', this)">
+          <div class="dashSegName">
+            <svg class="segIcon" viewBox="0 0 24 24"><path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path><circle cx="12" cy="13" r="3.2"></circle></svg>
+            منتجات تم رفع صورها
+          </div>
+          <div class="dashSegRight">
+            <div class="dashCount" id="cntPhoto">0</div>
+            <svg class="segArrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+          </div>
+        </div>
+        <div class="dashSegBody" id="segPhoto">
+          <div class="list" id="listPhoto"><div class="empty">لا توجد بيانات</div></div>
+        </div>
+      </div>
+
+      <!-- ADDED -->
+      <div class="dashSeg">
+        <div class="dashSegTop" onclick="toggleSeg('segAdded', this)">
+          <div class="dashSegName">
+            <svg class="segIcon" viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"></path></svg>
+            تمت الإضافة
+          </div>
+          <div class="dashSegRight">
+            <div class="dashCount" id="cntAdded">0</div>
+            <svg class="segArrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+          </div>
+        </div>
+        <div class="dashSegBody" id="segAdded">
+          <div class="list" id="listAdded"><div class="empty">لا توجد بيانات</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div id="confirmModal" aria-hidden="true">
+  <div class="box">
+    <div class="head">
+      <div class="title">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#ef4444;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M3 6h18"></path>
+            <path d="M8 6V4h8v2"></path>
+            <path d="M10 11v6"></path>
+            <path d="M14 11v6"></path>
+            <path d="M6 6l1 16h10l1-16"></path>
+          </svg>
+        </div>
+        <span id="cmTitle">تأكيد</span>
+      </div>
+      <button class="close" type="button" id="cmClose">✕</button>
+    </div>
+
+    <div class="body">
+      <p class="msg" id="cmMsg">—</p>
+      <div class="sub" id="cmSub" style="display:none"></div>
+
+      <div class="actions">
+        <button class="danger" type="button" id="cmOk">نعم، احذف</button>
+        <button class="ghost" type="button" id="cmCancel">إلغاء</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Image Modal -->
+<div id="imgModal" class="imgModal" onclick="closeImgModal(event)" aria-hidden="true">
+  <div class="imgModalCard">
+    <div class="imgModalTop">
+      <div id="imgModalTitle" class="imgModalTitle"></div>
+      <button class="imgModalClose" onclick="closeImgModal(event)" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18"></path><path d="M6 6l12 12"></path></svg>
+      </button>
+    </div>
+    <div class="imgModalBody">
+      <img id="imgModalImg" alt="">
+    </div>
+  </div>
+</div>
+<script>
+  (function guard(){
+    const k = (localStorage.getItem("ADMIN_KEY") || "").trim();
+    if(!k) window.location.href = "/prod/login-admin.html";
+  })();
+
+  function adminKey(){
+    return (localStorage.getItem("ADMIN_KEY") || "").trim();
+  }
+  function adminHeaders(extra = {}){
+    return { "x-admin-key": adminKey(), ...extra };
+  }
+  function logout(){
+    localStorage.removeItem("ADMIN_KEY");
+    window.location.href = "/prod/login-admin.html";
+  }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/prod/sw.js", { scope: "/prod/" });
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function toast(type, title, msg, ms = 2400){
+    const wrap = document.getElementById("toasts");
+    if (!wrap) return;
+
+    const el = document.createElement("div");
+    el.className = `toast ${type}`;
+
+    const iconSvg = {
+      ok:   `<svg class="svg" viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"/></svg>`,
+      err:  `<svg class="svg" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>`,
+      warn: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3h3.4L22 20H2z"/></svg>`,
+      info: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/></svg>`
+    }[type] || `<svg class="svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>`;
+
+    el.innerHTML = `
+      <div class="icon">${iconSvg}</div>
+      <div class="body">
+        <p class="title">${escapeHtml(title || "")}</p>
+        <p class="msg">${escapeHtml(msg || "")}</p>
+        <div class="bar"><i style="animation-duration:${ms}ms"></i></div>
+      </div>
+      <button class="x" aria-label="إغلاق" title="إغلاق">
+        <svg class="svg sm" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+      </button>
+    `;
+
+    const close = () => {
+      el.classList.add("out");
+      setTimeout(()=> el.remove(), 170);
+    };
+    el.querySelector(".x").onclick = close;
+    wrap.prepend(el);
+    setTimeout(close, ms);
+  }
+
+  function fmtDT(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return "—";
+    return d.toLocaleString("ar-OM", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+  }
+  const STATUS_AR = {
+    WAITING_ADD: "بانتظار الإضافة",
+    NEED_PHOTO: "بانتظار التصوير",
+    PHOTO_UPLOADED: "تم رفع الصور",
+    ADDED: "تمت الإضافة",
+  };
+
+  function statusAr(s){
+    return STATUS_AR[s] || (s || "—");
+  }
+
+function toggleSeg(id, headerEl){
+  const body = document.getElementById(id);
+  if(!body) return;
+
+  const isOpen = body.classList.contains("open");
+
+  if(isOpen){
+    // ✅ لازم نثبّت ارتفاع فعلي قبل ما ننزل للصفر (حتى لو كانت "" أو "none")
+    body.style.maxHeight = body.scrollHeight + "px";
+    requestAnimationFrame(()=> body.style.maxHeight = "0px");
+    body.classList.remove("open");
+  }else{
+    body.classList.add("open");
+
+    // ✅ reset مهم
+    body.style.maxHeight = "0px";
+    requestAnimationFrame(()=>{
+      body.style.maxHeight = body.scrollHeight + "px";
+    });
+
+    body.addEventListener("transitionend", function onEnd(e){
+      if(e.propertyName !== "max-height") return;
+      body.removeEventListener("transitionend", onEnd);
+      if(body.classList.contains("open")) body.style.maxHeight = "none";
+    });
+  }
+
+  if(headerEl) headerEl.classList.toggle("active", !isOpen);
+}
+
+function renderList(elId, cntId, rows, mode){
+  const wrap = document.getElementById(elId);
+  const cnt  = document.getElementById(cntId);
+  const list = Array.isArray(rows) ? rows : [];
+
+  if (cnt) cnt.textContent = String(list.length || 0);
+  if (!wrap) return;
+
+  if (!list.length){
+    wrap.innerHTML = `<div class="empty">لا توجد بيانات</div>`;
+    return;
+  }
+
+  wrap.innerHTML = list.map((p, i) => {
+    const prodUrls = Array.isArray(p.photoProductUrls) ? p.photoProductUrls : [];
+    const hasBarcodeImg = !!p.photoBarcodeUrl;
+
+    const minutes = (typeof p.minutesToAdd === "number" && isFinite(p.minutesToAdd))
+      ? `${p.minutesToAdd} دقيقة` : "—";
+
+    const bcText = p.noBarcode ? "لا يوجد باركود" : (p.barcode || "—");
+
+    const isEdit = String(p.notes || "").includes("EDIT_REQUEST||");
+    const cleanNote = String(p.notes || "").replace("EDIT_REQUEST||", "").trim();
+
+    const safeId = String(p.id ?? "");
+    const uid = `${elId}_${safeId}_${i}`; // (ممكن لاحقاً نخليه بدون i)
+
+    return `
+      <div class="item">
+        <div class="itemTop">
+          <p class="itemTitle">باركود: <b>${escapeHtml(bcText)}</b></p>
+          <span class="pill">
+            <svg class="svg sm" viewBox="0 0 24 24">
+              <path d="M12 6v6l4 2"></path>
+              <circle cx="12" cy="12" r="9"></circle>
+            </svg>
+            ${escapeHtml(isEdit ? "طلب تعديل" : statusAr(p.status))}
+          </span>
+        </div>
+
+        <div class="metaGrid">
+          <div class="metaCell">
+            <div class="lbl">وقت الإنشاء</div>
+            <div class="val">${escapeHtml(fmtDT(p.createdAt))}</div>
+          </div>
+
+          <div class="metaCell">
+            <div class="lbl">وقت الإضافة</div>
+            <div class="val">${escapeHtml(fmtDT(p.addedAt))}</div>
+          </div>
+
+          <div class="metaCell">
+            <div class="lbl">طلب تصوير</div>
+            <div class="val">${escapeHtml(fmtDT(p.needPhotoAt))}</div>
+          </div>
+
+          <div class="metaCell">
+            <div class="lbl">السعر</div>
+            <div class="val">${escapeHtml(p.price || "—")}</div>
+          </div>
+
+          <div class="metaCell">
+            <div class="lbl">المدة</div>
+            <div class="val">${escapeHtml(minutes)}</div>
+          </div>
+        </div>
+
+        ${cleanNote ? `
+          <div style="margin-top:10px;padding:10px 12px;border-radius:14px;background:#fff;
+                      border:1px dashed rgba(16,24,40,.18);font-weight:900;font-size:13px;line-height:1.7">
+            <b style="color:var(--purpleDark)">ملاحظة:</b> ${escapeHtml(cleanNote)}
+          </div>
+        ` : ``}
+
+        ${(hasBarcodeImg || prodUrls.length) ? `
+          <div class="thumbs">
+
+            ${hasBarcodeImg ? `
+              <div class="thumbWrap">
+<a class="thumb"
+   href="${escapeHtml(p.photoBarcodeUrl)}"
+   onclick="event.preventDefault(); zoomImage('${escapeHtml(p.photoBarcodeUrl)}')"
+   rel="noopener">
+  <img src="${escapeHtml(p.photoBarcodeUrl)}" alt="">
+</a>
+<button class="thumbBtn zoom" title="تكبير"
+        onclick="zoomImage('${escapeHtml(p.photoBarcodeUrl)}')">
+  <svg viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+  </svg>
+</button>
+<button class="thumbBtn" title="حذف" onclick="deleteBarcodePhoto('${escapeHtml(p.id)}')">
+<svg viewBox="0 0 24 24">
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4h8v2"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M6 6l1 16h10l1-16"></path>
+                  </svg>
+                </button>
+
+                <label class="thumbBtn secondary" title="استبدال" style="cursor:pointer">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 5v14"></path>
+                    <path d="M5 12h14"></path>
+                  </svg>
+                  <input id="replace_bar_${uid}" type="file" accept="image/*" capture="environment"
+                         style="display:none"
+                         onchange="replaceBarcodePhoto('${escapeHtml(p.id)}','replace_bar_${uid}')">
+                </label>
+              </div>
+            ` : ``}
+
+${prodUrls.map((u, idx) => `
+  <div class="thumbWrap">
+
+    <a class="thumb" href="${escapeHtml(u)}"
+       onclick="event.preventDefault(); zoomImage('${escapeHtml(u)}')"
+       rel="noopener">
+      <img src="${escapeHtml(u)}" alt="">
+    </a>
+
+    <button class="thumbBtn zoom" title="تكبير"
+      onclick="zoomImage('${escapeHtml(u)}')">
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+      </svg>
+    </button>
+                <button class="thumbBtn" title="حذف" onclick="deleteProductPhoto('${escapeHtml(p.id)}', ${idx})">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4h8v2"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M6 6l1 16h10l1-16"></path>
+                  </svg>
+                </button>
+              </div>
+            `).join("")}
+
+          </div>
+        ` : ``}
+
+        ${(mode === "upload") ? `
+          <div class="uploader">
+            <div style="font-weight:950;color:rgba(16,24,40,.72);font-size:12.5px">
+              رفع صور المنتج وصورة الباركود
+            </div>
+
+            <div class="uRow">
+              <div class="file" style="position:relative">
+                <label class="filePick" for="prod_${uid}">
+                  <svg class="svg sm" viewBox="0 0 24 24">
+                    <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+                    <circle cx="12" cy="13" r="3.2"></circle>
+                  </svg>
+                  اختر صور المنتج (أو صوّر)
+                </label>
+                <input type="file" accept="image/*" multiple id="prod_${uid}">
+                <div class="fileHint">يمكن اختيار أكثر من صورة</div>
+                <div id="prod_${uid}_name" class="fileName"></div>
+              </div>
+
+              <div class="file" style="position:relative">
+                <label class="filePick" for="bar_${uid}">
+                  <svg viewBox="0 0 13 13" aria-hidden="true" style="width:20px;height:20px;fill:currentColor">
+                    <path d="M1 1.5v13h1v-13H1zm2 0v13h2v-13H3zm3 0v13h1v-13H6zm2 0v13h2v-13H8zm3 0v13h1v-13h-1zm2 0v13h1v-13h-1z"></path>
+                  </svg>
+                  رفع صورة الباركود
+                </label>
+                <input type="file" accept="image/*" id="bar_${uid}">
+                <div id="bar_${uid}_name" class="fileName"></div>
+              </div>
+            </div>
+
+            <button class="btn btnPrimary" onclick="uploadPhotosByUid('${escapeHtml(p.id)}','prod_${uid}','bar_${uid}')">
+              <svg class="svg" viewBox="0 0 24 24">
+                <path d="M12 3v12"></path>
+                <path d="M8 7l4-4 4 4"></path>
+                <path d="M4 21h16"></path>
+              </svg>
+              رفع الصور
+            </button>
+          </div>
+        ` : ``}
+
+        <div class="uploader" style="margin-top:12px">
+          <div style="font-weight:950;color:rgba(16,24,40,.72);font-size:12.5px">
+            تحكم كامل بالطلب
+          </div>
+
+          <div class="uRow">
+            <div class="file">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path>
+              </svg>
+              <input id="edit_bc_${uid}" inputmode="numeric"
+                     placeholder="تعديل الباركود"
+                     value="${escapeHtml(p.noBarcode ? "" : (p.barcode || ""))}">
+            </div>
+
+            <div class="file">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              <input id="edit_price_${uid}" inputmode="decimal"
+                     placeholder="تعديل السعر"
+                     value="${escapeHtml(p.price || "")}">
+            </div>
+          </div>
+
+          <div class="uRow">
+            <div class="file" style="grid-column:1 / -1">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <path d="M4 4h16v16H4z"></path><path d="M8 9h8"></path><path d="M8 13h8"></path>
+              </svg>
+              <input id="edit_note_${uid}" placeholder="ملاحظة (اختياري)"
+                     value="${escapeHtml(p.note || cleanNote || "")}">
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn btnPrimary" onclick="saveEdits('${escapeHtml(p.id)}','${uid}')">حفظ التعديلات</button>
+            <button class="btn btnGhost" onclick="markNoBarcode('${escapeHtml(p.id)}','${uid}')">لا يوجد باركود</button>
+          </div>
+
+          <div class="uRow" style="margin-top:10px">
+            <div class="file">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="9"></circle>
+              </svg>
+              <select id="edit_status_${uid}" style="width:100%;border:none;outline:none;font-weight:900;font-family:Cairo">
+                <option value="WAITING_ADD">بانتظار الإضافة</option>
+                <option value="NEED_PHOTO">بانتظار التصوير</option>
+                <option value="PHOTO_UPLOADED">تم رفع الصور</option>
+                <option value="ADDED">تمت الإضافة</option>
+              </select>
+            </div>
+
+            <button class="btn btnPrimary" onclick="changeStatus('${escapeHtml(p.id)}','${uid}')">نقل الحالة</button>
+          </div>
+
+          <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btnGhost" onclick="deleteRequest('${escapeHtml(p.id)}')">حذف الطلب بالكامل</button>
+          </div>
+        </div>
+
+      </div>
+    `;
+  }).join("");
+
+  // ضبط قيمة select بعد الرسم
+  list.forEach((p,i)=>{
+    const safeId = String(p.id ?? "");
+    const uid = `${elId}_${safeId}_${i}`;
+    const sel = document.getElementById("edit_status_" + uid);
+    if(sel && p.status) sel.value = p.status;
+  });
+}
+function setNoBarcode(flag){
+  const inp = document.getElementById("new_barcode");
+  const pillNo = document.getElementById("pillNoBarcode");
+  const pillYes = document.getElementById("pillHasBarcode");
+
+  if(flag){
+    if(inp){ inp.value=""; inp.disabled=true; }
+    pillNo?.classList.add("active");
+    pillYes?.classList.remove("active");
+  }else{
+    if(inp){ inp.disabled=false; inp.focus(); }
+    pillYes?.classList.add("active");
+    pillNo?.classList.remove("active");
+  }
+}
+function isNoBarcodeSelected(){
+  return document.getElementById("pillNoBarcode")?.classList.contains("active");
+}
+
+function setBarcodeValue(v){
+  const inp = document.getElementById("new_barcode");
+  if(!inp) return;
+  inp.disabled = false;
+  inp.value = String(v || "").trim();
+  // إذا دخل باركود: فعّل "يوجد باركود"
+  setNoBarcode(false);
+}
+
+// default: يوجد باركود (عشان الحقل فعال)
+window.addEventListener("load", ()=> setNoBarcode(false));
+
+async function submitNewRequest(){
+  const prodInput = document.getElementById("new_prod_photos");
+  const barPhoto  = document.getElementById("new_barcode_photo");
+  const barcodeEl = document.getElementById("new_barcode");
+  const priceEl   = document.getElementById("new_price");
+
+  const prodFiles = prodInput?.files ? Array.from(prodInput.files) : [];
+  const barFile = (barPhoto?.files && barPhoto.files[0]) ? barPhoto.files[0] : null;
+
+  const noBarcode = isNoBarcodeSelected();          // ✅ من الـ pills
+  const barcode = (barcodeEl?.value || "").trim();
+  const price = (priceEl?.value || "").trim();
+
+  // ✅ يكفي واحد: (لا يوجد باركود) OR رقم باركود OR صورة باركود
+  if(!noBarcode && !barcode && !barFile){
+    toast("warn","مطلوب","أدخل/امسح الباركود أو ارفع صورة الباركود أو اختر (لا يوجد باركود)");
+    return;
+  }
+
+  // الصور (حسب نظامك) — خليها نفس شرطك الحالي
+  if(!prodFiles.length && !barFile){
+    toast("warn","مطلوب","ارفق صور المنتج أو صورة الباركود");
+    return;
+  }
+
+  const fd = new FormData();
+  prodFiles.forEach(f => fd.append("productPhotos", f, f.name || "product.jpg"));
+  if(barFile) fd.append("barcodePhoto", barFile, barFile.name || "barcode.jpg");
+
+  fd.append("adminName", "admin");
+  fd.append("noBarcode", noBarcode ? "1" : "0");
+  fd.append("barcode", barcode);
+  fd.append("price", price);
+
+  try{
+    const r = await fetch("/api/products/admin/new", {
+      method:"POST",
+      headers: adminHeaders(),
+      body: fd
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر إرسال الطلب");
+
+    toast("ok","تم","تم إرسال الطلب لوديع");
+
+    // ✅ تفريغ النموذج
+    if(prodInput) prodInput.value = "";
+    if(barPhoto) barPhoto.value = "";
+    if(barcodeEl){ barcodeEl.value = ""; barcodeEl.disabled = false; }
+    if(priceEl) priceEl.value = "";
+
+    document.getElementById("new_prod_photos_name").textContent = "";
+    document.getElementById("new_barcode_photo_name").textContent = "";
+
+    // رجّع الوضع الافتراضي: يوجد باركود
+    setNoBarcode(false);
+
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+
+  async function uploadPhotos(id){
+    const prod = document.getElementById("prod_" + id);
+    const bar = document.getElementById("bar_" + id);
+
+    const prodFiles = prod?.files ? Array.from(prod.files) : [];
+    const barFile = (bar?.files && bar.files[0]) ? bar.files[0] : null;
+
+    if(!prodFiles.length && !barFile){
+      toast("warn","مطلوب","ارفق صور المنتج أو صورة الباركود");
+      return;
+    }
+
+    const fd = new FormData();
+    prodFiles.forEach(f => fd.append("productPhotos", f, f.name || "product.jpg"));
+    if(barFile) fd.append("barcodePhoto", barFile, barFile.name || "barcode.jpg");
+    fd.append("adminName", "admin");
+
+    try{
+const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/upload-photos`,{
+        method:"POST",
+        headers: adminHeaders(),
+        body: fd
+      });
+      const d = await r.json();
+      if(!r.ok) return toast("err","فشل", d.error || "تعذر رفع الصور");
+
+      toast("ok","تم","تم رفع الصور");
+      await loadDash();
+    }catch(e){
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+  async function loadDash(){
+    try{
+const r = await fetch("/api/products/admin/dashboard", { headers: adminHeaders(), cache:"no-store" });
+      const d = await r.json();
+
+      if(!r.ok){
+        if(String(d.error||"").includes("غير مصرح")){
+          logout(); return;
+        }
+        toast("err","فشل", d.error || "تعذر جلب البيانات");
+        return;
+      }
+
+      const c = d.counts || {};
+      document.getElementById("c_waiting").textContent = String(c.WAITING_ADD || 0);
+      document.getElementById("c_needphoto").textContent = String(c.NEED_PHOTO || 0);
+      document.getElementById("c_photoup").textContent = String(c.PHOTO_UPLOADED || 0);
+      document.getElementById("c_added").textContent = String(c.ADDED || 0);
+
+      document.getElementById("meta").textContent =
+        `آخر تحديث: ${new Date().toLocaleString("ar-OM")}`;
+
+const lists = d.lists || {};
+
+// ✅ استخراج طلبات التعديل من كل القوائم
+const all = []
+  .concat(lists.waiting || [], lists.needPhoto || [], lists.photoUploaded || [], lists.added || []);
+
+const edits = all.filter(p => String(p.notes || "").includes("EDIT_REQUEST||"));
+const normalWaiting = (lists.waiting || []).filter(p => !String(p.notes || "").includes("EDIT_REQUEST||"));
+
+// ✅ عرض القوائم
+renderList("listEdit", "cntEdit", edits, "upload");
+renderList("listWaiting","cntWaiting", normalWaiting, "upload");
+renderList("listNeed","cntNeed", lists.needPhoto || [], "upload");
+renderList("listPhoto","cntPhoto", lists.photoUploaded || [], "upload");
+renderList("listAdded","cntAdded", lists.added || [], "none");
+
+      // ✅ تحديث ارتفاع الأقسام المفتوحة بعد رسم القوائم
+["segEdit","segWaiting","segNeed","segPhoto","segAdded"].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el && el.classList.contains("open")){
+    el.style.maxHeight = el.scrollHeight + "px";
+    setTimeout(()=>{
+      if(el.classList.contains("open")) el.style.maxHeight = "none";
+    }, 300);
+  }
+});
+
+    }catch(e){
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+function confirmPro({ title="تأكيد", msg="هل أنت متأكد؟", sub="", okText="نعم", cancelText="إلغاء" } = {}){
+  return new Promise((resolve) => {
+    const m = document.getElementById("confirmModal");
+    const t = document.getElementById("cmTitle");
+    const p = document.getElementById("cmMsg");
+    const s = document.getElementById("cmSub");
+    const ok = document.getElementById("cmOk");
+    const cc = document.getElementById("cmCancel");
+    const xx = document.getElementById("cmClose");
+
+    if(!m) return resolve(false);
+
+    t.textContent = title;
+    p.textContent = msg;
+
+    if(sub){
+      s.style.display = "block";
+      s.textContent = sub;
+    }else{
+      s.style.display = "none";
+      s.textContent = "";
+    }
+
+    ok.textContent = okText;
+    cc.textContent = cancelText;
+
+    const close = (val) => {
+      m.style.display = "none";
+      m.setAttribute("aria-hidden","true");
+      cleanup();
+      resolve(val);
+    };
+
+    const onBg = (e) => { if(e.target === m) close(false); };
+    const onOk = () => close(true);
+    const onNo = () => close(false);
+
+    function cleanup(){
+      m.removeEventListener("click", onBg);
+      ok.removeEventListener("click", onOk);
+      cc.removeEventListener("click", onNo);
+      xx.removeEventListener("click", onNo);
+    }
+
+    m.addEventListener("click", onBg);
+    ok.addEventListener("click", onOk);
+    cc.addEventListener("click", onNo);
+    xx.addEventListener("click", onNo);
+
+    m.style.display = "flex";
+    m.setAttribute("aria-hidden","false");
+  });
+}
+// ---- عرض أسماء الملفات (عربي) ----
+(function bindFileNames(){
+  const p = document.getElementById("new_prod_photos");
+  const b = document.getElementById("new_barcode_photo");
+  const pName = document.getElementById("new_prod_photos_name");
+  const bName = document.getElementById("new_barcode_photo_name");
+
+  if(p){
+    p.addEventListener("change", () => {
+      const files = p.files ? Array.from(p.files) : [];
+      pName.textContent = files.length ? `تم اختيار: ${files.length} صورة` : "";
+    });
+  }
+if(b){
+  b.addEventListener("change", () => {
+    const f = (b.files && b.files[0]) ? b.files[0] : null;
+    bName.textContent = f ? `تم اختيار: ${f.name}` : "";
+
+    const inp = document.getElementById("new_barcode");
+
+    if(f){
+      // ✅ إذا رفع صورة باركود: نعتبر "يوجد باركود" ونقفل الإدخال
+      setNoBarcode(false);
+      if(inp){ inp.value = ""; inp.disabled = true; }
+    }else{
+      // ✅ إذا حذفت صورة الباركود: رجّع الإدخال (إلا لو مختار لا يوجد باركود)
+      if(inp){
+        inp.disabled = isNoBarcodeSelected();
+        if(!inp.disabled) inp.focus({preventScroll:true});
+      }
+    }
+  });
+}
+
+})();
+// ---- مسح الباركود بالكاميرا (لوحة الإدارة) ----
+let adminStream = null;
+let adminScanning = false;
+
+async function toggleAdminScan(){
+  if(adminScanning) return stopAdminScan();
+  await startAdminScan();
+}
+
+async function startAdminScan(){
+  if(!navigator.mediaDevices?.getUserMedia){
+    toast("err","غير مدعوم","المتصفح لا يدعم الكاميرا");
+    return;
+  }
+  if(!("BarcodeDetector" in window)){
+    toast("warn","غير مدعوم","المسح غير مدعوم على هذا المتصفح. استخدم إدخال الباركود يدويًا أو ارفع صورة الباركود.");
+    return;
+  }
+
+  const detector = new BarcodeDetector({
+    formats:["code_128","ean_13","ean_8","upc_a","upc_e","qr_code"]
+  });
+
+  const area = document.getElementById("adminScanArea");
+  const video = document.getElementById("adminVideo");
+  area.style.display = "block";
+
+  try{
+    adminStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" }});
+    video.setAttribute("playsinline","");
+    video.srcObject = adminStream;
+    await video.play();
+    adminScanning = true;
+    toast("info","الكاميرا","تم تشغيل الكاميرا");
+  }catch(_){
+    area.style.display = "none";
+    toast("err","مرفوض","فعّل إذن الكاميرا");
+    return;
+  }
+
+  const loop = async () => {
+    if(!adminScanning) return;
+    try{
+      const codes = await detector.detect(video);
+      if(codes && codes.length){
+        const raw = (codes[0].rawValue || "").trim();
+        if(raw){
+          stopAdminScan();
+setBarcodeValue(raw);
+          toast("ok","تم","تمت قراءة الباركود");
+        }
+      }
+    }catch(_){}
+    requestAnimationFrame(loop);
+  };
+  loop();
+}
+
+function stopAdminScan(){
+  adminScanning = false;
+  const area = document.getElementById("adminScanArea");
+  const video = document.getElementById("adminVideo");
+  if(area) area.style.display = "none";
+  if(video){ try{ video.pause(); }catch(_){} video.srcObject = null; }
+  if(adminStream){ adminStream.getTracks().forEach(t=>t.stop()); adminStream=null; }
+}
+// تحديث أسماء الملفات للمدخلات الديناميكية داخل القوائم
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if(!(t instanceof HTMLInputElement)) return;
+  if(t.type !== "file") return;
+
+  // prod_<id>
+  if(t.id.startsWith("prod_")){
+    const id = t.id + "_name";
+    const el = document.getElementById(id);
+    const files = t.files ? Array.from(t.files) : [];
+    if(el) el.textContent = files.length ? `تم اختيار: ${files.length} صورة` : "";
+  }
+
+  // bar_<id>
+  if(t.id.startsWith("bar_")){
+    const id = t.id + "_name";
+    const el = document.getElementById(id);
+    const f = (t.files && t.files[0]) ? t.files[0] : null;
+    if(el) el.textContent = f ? `تم اختيار: ${f.name}` : "";
+  }
+});
+async function deleteRequest(id){
+  const ok = await confirmPro({
+    title: "تأكيد حذف الطلب",
+    msg: "هل تريد حذف الطلب بالكامل؟ سيتم حذف الصور أيضاً.",
+    sub: `رقم الطلب: ${id}`,
+    okText: "نعم، احذف الطلب",
+    cancelText: "إلغاء"
+  });
+  if(!ok) return toast("info","تم الإلغاء","لم يتم حذف الطلب", 1200);
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}`, {
+      method:"DELETE",
+      headers: adminHeaders(),
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر حذف الطلب");
+    toast("ok","تم","تم حذف الطلب");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+async function deleteBarcodePhoto(id){
+  const ok = await confirmPro({
+    title:"تأكيد حذف صورة الباركود",
+    msg:"هل تريد حذف صورة الباركود؟",
+    sub:`رقم الطلب: ${id}`,
+    okText:"نعم، احذف الصورة",
+    cancelText:"إلغاء"
+  });
+  if(!ok) return;
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/barcode-photo`, {
+      method:"DELETE",
+      headers: adminHeaders(),
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر حذف صورة الباركود");
+    toast("ok","تم","تم حذف صورة الباركود");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+
+async function deleteProductPhoto(id, idx){
+  const ok = await confirmPro({
+    title:"تأكيد حذف صورة المنتج",
+    msg:"هل تريد حذف هذه الصورة؟",
+    sub:`رقم الطلب: ${id} • الصورة رقم: ${idx+1}`,
+    okText:"نعم، احذف الصورة",
+    cancelText:"إلغاء"
+  });
+  if(!ok) return;
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/product-photo/${encodeURIComponent(idx)}`, {
+      method:"DELETE",
+      headers: adminHeaders(),
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر حذف صورة المنتج");
+    toast("ok","تم","تم حذف الصورة");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+
+
+  async function uploadPhotosByUid(id, prodInputId, barInputId){
+  const prod = document.getElementById(prodInputId);
+  const bar  = document.getElementById(barInputId);
+
+  const prodFiles = prod?.files ? Array.from(prod.files) : [];
+  const barFile = (bar?.files && bar.files[0]) ? bar.files[0] : null;
+
+  if(!prodFiles.length && !barFile){
+    toast("warn","مطلوب","ارفق صور المنتج أو صورة الباركود");
+    return;
+  }
+
+  const fd = new FormData();
+  prodFiles.forEach(f => fd.append("productPhotos", f, f.name || "product.jpg"));
+  if(barFile) fd.append("barcodePhoto", barFile, barFile.name || "barcode.jpg");
+  fd.append("adminName", "admin");
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/upload-photos`,{
+      method:"POST",
+      headers: adminHeaders(),
+      body: fd
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر رفع الصور");
+
+    toast("ok","تم","تم رفع الصور");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+function zoomImage(url){
+  url = String(url || "").trim();
+  if(!url) return;
+
+  // احذف القديم لو موجود
+  const old = document.getElementById("zoomBox");
+  if(old) old.remove();
+
+  const box = document.createElement("div");
+  box.id = "zoomBox";
+  box.style.position = "fixed";
+  box.style.inset = "0";
+  box.style.background = "rgba(0,0,0,.85)";
+  box.style.display = "flex";
+  box.style.alignItems = "center";
+  box.style.justifyContent = "center";
+  box.style.zIndex = "1000000";
+  box.style.padding = "16px";
+
+  const img = document.createElement("img");
+  img.src = url;
+  img.style.maxWidth = "95%";
+  img.style.maxHeight = "95%";
+  img.style.borderRadius = "14px";
+  img.style.boxShadow = "0 20px 60px rgba(0,0,0,.55)";
+
+  box.appendChild(img);
+
+  // إغلاق عند الضغط على الخلفية (ليس على الصورة)
+  box.addEventListener("click", (e) => {
+    if(e.target === box) box.remove();
+  });
+
+  // إغلاق بزر ESC
+  const onEsc = (e) => {
+    if(e.key === "Escape"){
+      box.remove();
+      document.removeEventListener("keydown", onEsc);
+    }
+  };
+  document.addEventListener("keydown", onEsc);
+
+  document.body.appendChild(box);
+}
+  
+  async function replaceBarcodePhoto(id, inputId){
+  const inp = document.getElementById(inputId || ("replace_bar_" + id));
+  const f = (inp?.files && inp.files[0]) ? inp.files[0] : null;
+  if(!f){
+    toast("warn","مطلوب","اختر صورة باركود للاستبدال");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append("barcodePhoto", f, f.name || "barcode.jpg");
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/replace-barcode-photo`, {
+      method:"POST",
+      headers: adminHeaders(),
+      body: fd
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر استبدال صورة الباركود");
+    toast("ok","تم","تم استبدال صورة الباركود");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+async function markNoBarcode(id, uid){
+  const ok = await confirmPro({
+    title:"تأكيد",
+    msg:"هل تريد تحويل الطلب إلى (لا يوجد باركود)؟ سيتم مسح رقم الباركود.",
+    sub:`رقم الطلب: ${id}`,
+    okText:"نعم",
+    cancelText:"إلغاء"
+  });
+  if(!ok) return;
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/edit`,{
+      method:"PATCH",
+      headers: adminHeaders({ "Content-Type":"application/json" }),
+      body: JSON.stringify({ noBarcode:true, barcode:"" })
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر التحديث");
+
+    // ✅ تحديث واجهة نفس البطاقة فورًا (اختياري)
+    const bcInp = document.getElementById("edit_bc_" + uid);
+    if(bcInp) bcInp.value = "";
+
+    toast("ok","تم","تم تحويله إلى (لا يوجد باركود)");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+async function changeStatus(id, uid){
+  const sel = document.getElementById("edit_status_" + uid);
+  const status = (sel?.value || "").trim();
+  if(!status) return toast("warn","مطلوب","اختر حالة");
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/status`,{
+      method:"PATCH",
+      headers: adminHeaders({ "Content-Type":"application/json" }),
+      body: JSON.stringify({ status })
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر نقل الحالة");
+
+    toast("ok","تم","تم نقل الحالة");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+async function saveEdits(id, uid){
+  const bc    = (document.getElementById("edit_bc_" + uid)?.value || "").trim();
+  const price = (document.getElementById("edit_price_" + uid)?.value || "").trim();
+  const note  = (document.getElementById("edit_note_" + uid)?.value || "").trim();
+
+  try{
+    const r = await fetch(`/api/products/admin/${encodeURIComponent(id)}/edit`,{
+      method:"PATCH",
+      headers: adminHeaders({ "Content-Type":"application/json" }),
+      body: JSON.stringify({ barcode: bc, price, note })
+    });
+    const d = await r.json();
+    if(!r.ok) return toast("err","فشل", d.error || "تعذر حفظ التعديلات");
+
+    toast("ok","تم","تم حفظ التعديلات");
+    await loadDash();
+  }catch(e){
+    toast("err","خطأ", e.message || "تعذر الاتصال");
+  }
+}
+
+  window.addEventListener("load", loadDash);
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) loadDash(); });
+</script>
+</body>
+</html>

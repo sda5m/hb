@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Hala Beauty | Rewards</title>
+  <link rel="manifest" href="/a/promaxa.json">
+  <meta name="theme-color" content="#6B0083">
+  <link rel="apple-touch-icon" href="/a/ico1.png">
+  <link rel="icon" href="/a/ico2.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--brand:#6B0083;--brand2:#9824ad;--peach:#FDD8C2;--ink:#25102d;--muted:#7d6a82;--bg:#fbf7fb;--card:#fff;--line:#eadff0;--ok:#15865a;--danger:#c9385a;--soft:#fff2f7;--shadow:0 14px 34px rgba(107,0,131,.08);--r:22px}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink)}
+    body{font-family:Cairo,system-ui,sans-serif;background:radial-gradient(circle at 0 0,rgba(253,216,194,.72),transparent 28%),linear-gradient(180deg,#fff,var(--bg))}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}
+    .page{width:min(1080px,calc(100% - 18px));margin:10px auto 28px}
+    .top{position:sticky;top:8px;z-index:5;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);backdrop-filter:blur(14px);padding:12px}
+    .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:46px;height:46px;border-radius:16px;background:#fff;border:1px solid var(--line);overflow:hidden}.logo img{width:100%;height:100%;object-fit:cover}
+    h1{margin:0;font-size:20px;font-weight:950;line-height:1.1}.sub{margin-top:4px;color:var(--muted);font-size:12px;font-weight:800}
+    .status{min-height:38px;padding:0 12px;border-radius:999px;background:#f6e7f9;color:var(--brand);border:1px solid #ead1ef;font-size:12px;font-weight:950;display:inline-flex;align-items:center;white-space:nowrap}
+    .search{display:grid;grid-template-columns:1fr 160px 112px;gap:8px;margin-top:12px}.field{min-height:50px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:0 12px;display:flex;align-items:center}.field input{border:0;outline:0;background:transparent;width:100%;font-weight:850;color:var(--ink)}
+    .btn{min-height:50px;border:0;border-radius:16px;padding:0 14px;background:#f3e8f7;color:var(--brand);font-weight:950;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff}.btn.danger{background:#fff0f4;color:var(--danger)}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px;margin-top:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:14px}.empty{min-height:260px;display:grid;place-items:center;text-align:center;color:var(--muted);font-weight:850}
+    .list{display:grid;gap:10px}.customer{border:1px solid var(--line);border-radius:18px;padding:12px;background:#fff;text-align:inherit;color:inherit}.customer.selected{border-color:var(--brand);box-shadow:0 0 0 3px rgba(107,0,131,.12)}
+    .customerTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.name{font-size:16px;font-weight:950}.points{font-size:20px;font-weight:950;color:var(--brand);white-space:nowrap}.meta{display:flex;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:12px;font-weight:800}.pill{padding:5px 8px;border-radius:999px;background:#fbf4fd;border:1px solid var(--line)}
+    .small{font-size:12px;color:var(--muted);font-weight:800}.ledger{border-top:1px solid var(--line);padding-top:8px;margin-top:8px;display:grid;gap:6px}.tx{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:12px;color:var(--muted);font-weight:850}.tx b{color:var(--brand);font-size:13px}.pos{color:var(--ok)!important}.neg{color:var(--danger)!important}
+    .formTitle{margin:0 0 10px;font-size:17px;font-weight:950}.formGrid{display:grid;gap:10px}label{display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:900}label input,label select,label textarea{min-height:48px;border:1px solid var(--line);border-radius:15px;padding:0 12px;background:#fff;color:var(--ink);font-weight:850}textarea{padding-top:10px;min-height:72px;resize:vertical}
+    .msg{display:none;margin-top:10px;border-radius:16px;padding:10px 12px;font-size:13px;font-weight:850}.msg.ok{display:block;background:#ecfbf5;color:var(--ok);border:1px solid #beebd9}.msg.err{display:block;background:#fff1f4;color:var(--danger);border:1px solid #ffd1da}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}.search{grid-template-columns:1fr}.status{display:none}.customerTop{align-items:center}.tx{grid-template-columns:1fr auto}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="top">
+      <div class="head">
+        <div class="brand">
+          <div class="logo"><img src="/a/ico1.png" alt=""></div>
+          <div>
+            <h1>&#1606;&#1602;&#1575;&#1591; &#1575;&#1604;&#1593;&#1605;&#1604;&#1575;&#1569;</h1>
+            <div class="sub">&#1575;&#1604;&#1571;&#1608;&#1604;&#1608;&#1610;&#1577; &#1604;&#1571;&#1603;&#1579;&#1585; &#1575;&#1604;&#1593;&#1605;&#1604;&#1575;&#1569; &#1606;&#1602;&#1575;&#1591;&#1575;&#1611; &#1608;&#1578;&#1601;&#1575;&#1593;&#1604;&#1575;&#1611;</div>
+          </div>
+        </div>
+        <div class="status" id="status">&#1580;&#1575;&#1607;&#1586;</div>
+      </div>
+      <div class="search">
+        <div class="field"><input id="q" type="search" placeholder="&#1575;&#1576;&#1581;&#1579; &#1576;&#1575;&#1604;&#1575;&#1587;&#1605; &#1571;&#1608; &#1575;&#1604;&#1573;&#1610;&#1605;&#1610;&#1604; &#1571;&#1608; &#1575;&#1604;&#1607;&#1575;&#1578;&#1601; &#1571;&#1608; &#1585;&#1602;&#1605; &#1575;&#1604;&#1591;&#1604;&#1576;"></div>
+        <div class="field"><select id="appFilter" style="border:0;outline:0;background:transparent;width:100%;font-weight:850;color:var(--ink)"><option value="">كل العملاء</option><option value="1">مستخدم التطبيق</option><option value="0">ليس من التطبيق</option></select></div>
+        <button class="btn primary" id="searchBtn" type="button">&#1576;&#1581;&#1579;</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div id="results" class="empty">&#1580;&#1575;&#1585;&#1610; &#1578;&#1581;&#1605;&#1610;&#1604; &#1571;&#1589;&#1581;&#1575;&#1576; &#1575;&#1604;&#1606;&#1602;&#1575;&#1591;</div>
+      </div>
+      <aside class="card">
+        <h2 class="formTitle">&#1578;&#1593;&#1583;&#1610;&#1604; &#1606;&#1602;&#1575;&#1591; &#1575;&#1604;&#1593;&#1605;&#1610;&#1604;</h2>
+        <div id="selectedHint" class="small">&#1575;&#1582;&#1578;&#1585; &#1593;&#1605;&#1610;&#1604;&#1575;&#1611; &#1571;&#1608;&#1604;&#1575;&#1611;.</div>
+        <div class="formGrid" style="margin-top:12px">
+          <label>&#1575;&#1604;&#1606;&#1602;&#1575;&#1591;<input id="points" type="number" inputmode="numeric" placeholder="100 &#1571;&#1608; -50"></label>
+          <label>&#1575;&#1604;&#1606;&#1608;&#1593;<select id="adjustType"><option value="manual_adjustment">&#1578;&#1593;&#1583;&#1610;&#1604; &#1610;&#1583;&#1608;&#1610;</option><option value="order_reward">&#1605;&#1603;&#1575;&#1601;&#1571;&#1577; &#1591;&#1604;&#1576;</option><option value="admin_deduct">&#1582;&#1589;&#1605; &#1610;&#1583;&#1608;&#1610;</option></select></label>
+          <label>&#1585;&#1602;&#1605; &#1575;&#1604;&#1591;&#1604;&#1576;<input id="orderId" placeholder="&#1575;&#1582;&#1578;&#1610;&#1575;&#1585;&#1610;"></label>
+          <label>&#1605;&#1604;&#1575;&#1581;&#1592;&#1577;<textarea id="note" placeholder="&#1575;&#1582;&#1578;&#1610;&#1575;&#1585;&#1610;"></textarea></label>
+          <button class="btn primary" id="adjustBtn" type="button" disabled>&#1581;&#1601;&#1592; &#1575;&#1604;&#1581;&#1585;&#1603;&#1577;</button>
+          <div id="msg" class="msg"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module">
+    import { requirePackLogin, authFetch } from "./auth.js";
+    if (!requirePackLogin()) throw new Error("login required");
+    const $ = (id) => document.getElementById(id);
+    const state = { selected: null, customers: [] };
+    function esc(v){return String(v || "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+    function setStatus(v){$("status").textContent = v;}
+    function msg(t, ok=false){const el=$("msg");el.className="msg "+(ok?"ok":"err");el.textContent=t;}
+    function clearMsg(){const el=$("msg");el.className="msg";el.textContent="";}
+    function dateText(v){const d=new Date(v);return Number.isNaN(d.getTime())?"":d.toLocaleDateString("ar-OM");}
+    function reasonText(v){
+      const map = {
+        delivered_order_reward: "مكافأة استلام الطلب",
+        cancelled_order_reward: "خصم نقاط طلب ملغى",
+        cancelled_order_review_reward: "خصم نقاط تقييم طلب ملغى",
+        order_reward: "مكافأة طلب",
+        order_cancelled: "إلغاء طلب",
+        manual_adjustment: "تعديل يدوي",
+        admin_add: "إضافة من الإدارة",
+        admin_deduct: "خصم من الإدارة",
+        referral_delivered_order: "مكافأة دعوة بعد استلام الطلب",
+        referral_order_cancelled: "خصم مكافأة دعوة لطلب ملغى",
+        wallet_credit_from_points: "تحويل النقاط إلى رصيد",
+        redeem: "استخدام النقاط",
+        review_reward: "مكافأة تقييم منتج",
+        verified_review_reward: "مكافأة تقييم منتج مستلم",
+        unverified_review_reward: "مكافأة تقييم منتج",
+        review_photo_reward: "مكافأة صورة مع التقييم",
+        wallet_convert: "تحويل إلى المحفظة",
+        wallet_convert_rollback: "إلغاء تحويل المحفظة"
+      };
+      const key = String(v || "").trim();
+      return map[key] || key.replace(/_/g, " ");
+    }
+    function renderLedger(c){
+      const rows = (c.ledger || []).slice(0,4);
+      if(!rows.length) return "";
+      return `<div class="ledger">${rows.map(x => `<div class="tx"><b class="${Number(x.points||0)>=0?"pos":"neg"}">${Number(x.points||0)>0?"+":""}${esc(x.points||0)}</b><span>${esc(reasonText(x.reason||x.type||""))}${x.orderName||x.orderId?` - ${esc(x.orderName||x.orderId)}`:""}</span><em>${esc(dateText(x.createdAt))}</em></div>`).join("")}</div>`;
+    }
+    function render(){
+      const root = $("results");
+      if(!state.customers.length){root.className="empty";root.textContent="لا توجد نتائج";return;}
+      root.className="list";
+      root.innerHTML = state.customers.map((c,i)=>`
+        <button class="customer ${state.selected?.customerId===c.customerId?"selected":""}" data-i="${i}" type="button">
+          <div class="customerTop">
+            <div>
+              <div class="name">${esc(c.displayName || "عميل بدون اسم")}</div>
+              <div class="meta">
+                ${c.email?`<span class="pill">${esc(c.email)}</span>`:""}
+                ${c.phone?`<span class="pill">${esc(c.phone)}</span>`:""}
+                ${c.appInstalled?`<span class="pill">مستخدم التطبيق</span>`:`<span class="pill">ليس من التطبيق</span>`}
+                <span class="pill">طلبات: ${esc(c.numberOfOrders||0)}</span>
+                <span class="pill">${esc(c.amountSpentText||"0")}</span>
+              </div>
+            </div>
+            <div class="points">${esc(c.balance||0)} نقطة</div>
+          </div>
+          <div class="small">القيمة التقريبية: ${esc(Number(c.value||0).toFixed(3))} ${esc(c.currencyCode||"OMR")}</div>
+          ${renderLedger(c)}
+        </button>`).join("");
+      root.querySelectorAll(".customer").forEach(btn => btn.onclick = () => selectCustomer(state.customers[Number(btn.dataset.i)]));
+    }
+    function selectCustomer(c){
+      state.selected = c;
+      $("selectedHint").textContent = `${c.displayName || "عميل"} · ${c.email || c.phone || c.customerId}`;
+      $("adjustBtn").disabled = false;
+      clearMsg();
+      render();
+    }
+    async function loadCustomers(){
+      const q = $("q").value.trim();
+      const appFilter = $("appFilter").value;
+      $("searchBtn").disabled = true;
+      $("adjustBtn").disabled = !state.selected;
+      setStatus(q ? "جاري البحث..." : "جاري تحميل الأعلى نقاطا...");
+      $("results").className = "empty";
+      $("results").textContent = "جاري التحميل";
+      try{
+        const url = "/pro/rewards/customers?limit=120" + (q ? "&q=" + encodeURIComponent(q) : "") + (appFilter ? "&app=" + encodeURIComponent(appFilter) : "");
+        const r = await authFetch(url,{cache:"no-store"});
+        const data = await r.json().catch(()=>({}));
+        if(!r.ok) throw new Error(data.error || "فشل تحميل النقاط");
+        state.customers = data.customers || [];
+        state.selected = null;
+        $("adjustBtn").disabled = true;
+        $("selectedHint").textContent = "اختر عميلا أولا.";
+        setStatus(`النتائج: ${state.customers.length}`);
+        render();
+      }catch(e){
+        setStatus("خطأ");
+        $("results").className = "empty";
+        $("results").textContent = "تعذر تحميل النقاط";
+        msg(e.message || "فشل تحميل النقاط", false);
+      }finally{
+        $("searchBtn").disabled = false;
+      }
+    }
+    async function adjust(){
+      if(!state.selected) return;
+      const points = Number($("points").value || 0);
+      if(!Number.isFinite(points) || !points){ msg("اكتب عدد نقاط صحيح", false); return; }
+      $("adjustBtn").disabled = true;
+      setStatus("جاري الحفظ...");
+      try{
+        const r = await authFetch("/pro/rewards/adjust",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({customerId:state.selected.customerId,points,reason:$("adjustType").value,orderId:$("orderId").value.trim(),note:$("note").value.trim()})
+        });
+        const data = await r.json().catch(()=>({}));
+        if(!r.ok) throw new Error(data.error || "فشل حفظ النقاط");
+        msg(`تم الحفظ. الرصيد الجديد: ${data.balance || 0} نقطة`, true);
+        setStatus("تم الحفظ");
+        await loadCustomers();
+      }catch(e){
+        setStatus("خطأ");
+        msg(e.message || "فشل حفظ النقاط", false);
+      }finally{
+        $("adjustBtn").disabled = !state.selected;
+      }
+    }
+    $("searchBtn").onclick = loadCustomers;
+    $("adjustBtn").onclick = adjust;
+    $("appFilter").onchange = loadCustomers;
+    $("q").addEventListener("keydown", e => { if(e.key==="Enter") loadCustomers(); });
+    loadCustomers();
+  </script>
+</body>
+</html>

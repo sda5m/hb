@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <link rel="manifest" href="/k/promaxa.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Hala Beauty Admin">
+  <link rel="apple-touch-icon" href="/k/ico1.png">
+  <link rel="icon" href="/k/ico2.png">
+
+  <meta charset="utf-8"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
+  />
+  <meta name="color-scheme" content="light">
+  <title>Hala Beauty | النظام المالي</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900;1000&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="./b.css">
+</head>
+
+<body>
+  <div id="globalLoader" aria-hidden="true">
+    <div class="glCard" role="status" aria-live="polite">
+      <img
+        class="glGif"
+        src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/icon_-3.gif"
+        alt="loading"
+      />
+      <div style="min-width:0">
+        <div id="globalLoaderText" class="glText">جاري العمل… اصبر شوي</div>
+        <div class="glSub">لا تسوي تحديث، بنرجع لك حالًا</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts"></div>
+
+  <div class="appShell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brandLogo">
+          <img src="https://halabt.com/favicon.ico" alt="Hala Beauty">
+        </div>
+        <div>
+          <h1>Hala Beauty</h1>
+          <p>النظام المالي ل هلا بيوتي</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="navBtn active" data-tab="dashboard">
+          <span class="ico" data-ico="dashboard"></span>
+          <span>
+            الملخص
+            <small>إجماليات وإحصائيات</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="ledger">
+          <span class="ico" data-ico="bank"></span>
+          <span>
+            الحسابات
+            <small>كاش مسقط / دليلي / أموال / بنك</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="orders">
+          <span class="ico" data-ico="orders"></span>
+          <span>
+            ترحيل الطلبات
+            <small>أموال / بنك / كاش مفصول</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="delivery">
+          <span class="ico" data-ico="delivery"></span>
+          <span>
+            صفحة المندوب
+            <small>توصيل مسقط / تسوية المبالغ</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="debts">
+          <span class="ico" data-ico="wallet"></span>
+          <span>
+            ديون التجار
+            <small>إضافة / سداد</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="expenses">
+          <span class="ico" data-ico="receipt"></span>
+          <span>
+            الصرفيات
+            <small>إضافة وخصم مباشر</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="purchases">
+          <span class="ico" data-ico="receipt"></span>
+          <span>
+            المشتريات
+            <small>منتجات ومشتريات من البنك او كاش</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="localStock">
+          <span class="ico" data-ico="archive"></span>
+          <span>
+            المخزون المحلي
+            <small>اطلاع / أسعار / ترحيل</small>
+          </span>
+        </button>
+
+        <button class="navBtn" data-tab="archive">
+          <span class="ico" data-ico="archive"></span>
+          <span>
+            أرشيف الترحيل
+            <small>كل الدفعات المحفوظة</small>
+          </span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topTitle">
+          <button id="btnMobileMenu" class="ghostBtn menuBtn" type="button">
+            <span class="ico" data-ico="menu"></span>
+          </button>
+          <div>
+            <h2 id="pageTitle">الملخص المالي</h2>
+            <p id="pageSub">متابعة كل ريال: كاش مسقط، دليلي، أموال، والبنك</p>
+          </div>
+        </div>
+
+        <div class="topActions">
+          <button id="btnRefresh" class="primaryBtn" type="button">
+            <span class="ico" data-ico="refresh"></span>
+            تحديث
+          </button>
+
+          <button id="btnEnablePush" class="softBtn iconBtn" type="button" title="تفعيل الإشعارات" aria-label="تفعيل الإشعارات">
+            <span class="ico" data-ico="bell"></span>
+          </button>
+
+          <button id="btnExportCurrent" class="softBtn" type="button">
+            <span class="ico" data-ico="excel"></span>
+            تحميل Excel
+          </button>
+        </div>
+      </header>
+
+      <section class="filtersPanel">
+        <div class="filterField">
+          <label>من تاريخ</label>
+          <input id="dateFrom" type="date">
+        </div>
+
+        <div class="filterField">
+          <label>إلى تاريخ</label>
+          <input id="dateTo" type="date">
+        </div>
+
+        <button id="btnTodayRange" class="softBtn" type="button">اليوم</button>
+        <button id="btnYesterdayRange" class="softBtn" type="button">أمس</button>
+        <button id="btnBeforeYesterdayRange" class="softBtn" type="button">قبل أمس</button>
+        <button id="btnWeekRange" class="softBtn" type="button">آخر 7 أيام</button>
+        <button id="btnClearDates" class="softBtn" type="button">آخر 30 يوم</button>
+
+        <button id="btnApplyDates" class="darkBtn" type="button">
+          <span class="ico" data-ico="filter"></span>
+          تطبيق التاريخ
+        </button>
+      </section>
+
+      <section class="tabPanel show" data-panel="dashboard">
+        <div class="kpiGrid">
+          <article class="kpiCard purple">
+            <div class="kpiIcon"><span class="ico" data-ico="cash"></span></div>
+            <div>
+              <p>كاش مسقط غير مرحّل</p>
+              <h3 id="kpiCash">0.000</h3>
+              <small id="kpiCashCount">0 طلب مسقط</small>
+            </div>
+          </article>
+
+          <article class="kpiCard orange">
+            <div class="kpiIcon"><span class="ico" data-ico="delivery"></span></div>
+            <div>
+              <p>كاش دليلي مستحق</p>
+              <h3 id="kpiCashDalili">0.000</h3>
+              <small id="kpiCashDaliliCount">0 طلب دليلي</small>
+            </div>
+          </article>
+
+          <article class="kpiCard blue">
+            <div class="kpiIcon"><span class="ico" data-ico="amwal"></span></div>
+            <div>
+              <p>أمـوال غير مسحوبة</p>
+              <h3 id="kpiAmwal">0.000</h3>
+              <small id="kpiAmwalCount">0 طلب</small>
+            </div>
+          </article>
+
+          <article class="kpiCard green">
+            <div class="kpiIcon"><span class="ico" data-ico="bank"></span></div>
+            <div>
+              <p>تحويل بنكي مباشر</p>
+              <h3 id="kpiBank">0.000</h3>
+              <small id="kpiBankCount">0 طلب</small>
+            </div>
+          </article>
+
+          <article class="kpiCard orange">
+            <div class="kpiIcon"><span class="ico" data-ico="delivery"></span></div>
+            <div>
+              <p>مبلغ التوصيل</p>
+              <h3 id="kpiDelivery">0.000</h3>
+              <small>يُخصم من الإجمالي</small>
+            </div>
+          </article>
+
+          <article class="kpiCard black">
+            <div class="kpiIcon"><span class="ico" data-ico="sum"></span></div>
+            <div>
+              <p>إجمالي غير مرحّل بعد خصم التوصيل</p>
+              <h3 id="kpiNet">0.000</h3>
+              <small id="kpiAllCount">0 طلب غير مرحّل</small>
+            </div>
+          </article>
+        </div>
+
+        <div class="kpiGrid opsKpiGrid">
+          <article class="kpiCard red">
+            <div class="kpiIcon"><span class="ico" data-ico="receipt"></span></div>
+            <div>
+              <p>إجمالي الصرفيات</p>
+              <h3 id="kpiExpenses">0.000</h3>
+              <small id="kpiExpensesCount">0 صرفية</small>
+            </div>
+          </article>
+
+          <article class="kpiCard blue">
+            <div class="kpiIcon"><span class="ico" data-ico="orders"></span></div>
+            <div>
+              <p>إجمالي المشتريات</p>
+              <h3 id="kpiPurchases">0.000</h3>
+              <small id="kpiPurchasesCount">0 عملية مشتريات</small>
+            </div>
+          </article>
+
+          <article class="kpiCard green">
+            <div class="kpiIcon"><span class="ico" data-ico="wallet"></span></div>
+            <div>
+              <p>إجمالي الديون الحالية</p>
+              <h3 id="kpiDebts">0.000</h3>
+              <small id="kpiDebtsCount">0 تاجر</small>
+            </div>
+          </article>
+        </div>
+
+        <section class="panelCard ledgerMiniPanel">
+          <div class="panelHead">
+            <div>
+              <h3>رصيد الحسابات الحالي</h3>
+              <p>الأرقام هذه من دفتر الحركة بعد الترحيل والتحويل والسداد.</p>
+            </div>
+            <button id="btnGoLedger" class="softBtn" type="button">فتح الحسابات</button>
+          </div>
+          <div id="ledgerBalanceCards" class="subSummary"></div>
+        </section>
+
+        <div class="dashGrid">
+          <section class="panelCard">
+            <div class="panelHead">
+              <div>
+                <h3>توزيع المبالغ</h3>
+                <p>حسب نوع التحصيل بعد خصم التوصيل</p>
+              </div>
+            </div>
+            <div id="summaryBars" class="bars"></div>
+          </section>
+
+          <section class="panelCard">
+            <div class="panelHead">
+              <div>
+                <h3>آخر الطلبات غير المرحلة</h3>
+                <p>مختصر سريع من كل الأقسام</p>
+              </div>
+              <button id="btnGoOrders" class="softBtn" type="button">عرض الكل</button>
+            </div>
+            <div id="recentOrders" class="miniList"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="localStock">
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>المخزون المحلي المالي</h3>
+              <p>عرض مشتريات الطلبات، إضافات المخزون، البيع المحلي، وترحيل مبالغ الأشخاص.</p>
+            </div>
+
+            <button id="btnLocalStockRefresh" class="primaryBtn" type="button">
+              <span class="ico" data-ico="refresh"></span>
+              تحديث
+            </button>
+          </div>
+
+          <div id="localStockSummary" class="subSummary"></div>
+        </div>
+
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>تفصيل المنتجات</h3>
+              <p>كم تم شراؤه للطلبات، أرقام الطلبات، كم دخل المخزون، كم بيع، وكم متبقي.</p>
+            </div>
+          </div>
+
+          <div id="localStockProductsTable" class="tableWrap"></div>
+        </div>
+
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>حسابات البيع المحلي</h3>
+              <p>الأشخاص الذين أخذوا منتجات محلية، مع الفاتورة والترحيل.</p>
+            </div>
+          </div>
+
+          <div id="localStockCustomersTable" class="tableWrap"></div>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="ledger">
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>الحسابات والحركات</h3>
+              <p>كاش مسقط، مستحق دليلي، مستحق أموال، والحساب البنكي.</p>
+            </div>
+
+<div class="topActions">
+  <button id="btnSettleAmwal" class="primaryBtn" type="button">
+    <span class="ico" data-ico="send"></span>
+    أموال حولتني
+  </button>
+
+  <button id="btnSettleDalili" class="softBtn" type="button">
+    <span class="ico" data-ico="send"></span>
+    دليلي حولني
+  </button>
+
+  <button id="btnManualAdd" class="softBtn" type="button">
+    <span class="ico" data-ico="plus"></span>
+    إضافة مبلغ
+  </button>
+</div>
+          </div>
+
+          <div id="ledgerSummary" class="subSummary"></div>
+
+          <div class="panelHead ledgerHeadSmall">
+            <div>
+              <h3>آخر الحركات</h3>
+              <p>كل إضافة أو خصم محفوظ بالتاريخ والمصدر.</p>
+            </div>
+            <button id="btnExportLedger" class="softBtn" type="button">
+              <span class="ico" data-ico="excel"></span>
+              تحميل Excel
+            </button>
+          </div>
+
+          <div id="ledgerTable" class="tableWrap"></div>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="orders">
+        <div class="ordersTop">
+          <div class="sectionTitle">
+            <h3>ترحيل الطلبات</h3>
+          </div>
+
+          <div class="topActions">
+            <button id="btnTransferAll" class="dangerBtn" type="button">
+              <span class="ico" data-ico="send"></span>
+              ترحيل الكل
+            </button>
+          </div>
+        </div>
+
+        <div class="ordersSearchBar">
+          <div class="orderSearchBox">
+            <span class="ico" data-ico="search"></span>
+            <input id="orderSearchInput" type="search" placeholder="ابحث برقم الطلب مثل 1234">
+          </div>
+
+          <button id="btnClearOrderSearch" class="ghostBtn" type="button">
+            مسح البحث
+          </button>
+        </div>
+
+        <div class="ordersGrid fourBuckets">
+          <section class="orderBucket amwal">
+            <div class="bucketHead">
+              <div>
+                <h3><span class="ico" data-ico="amwal"></span> أمـوال</h3>
+                <p id="amwalMeta">0 طلب</p>
+              </div>
+              <div class="bucketActions">
+                <button class="miniBtn" data-select-all="AMWAL">تحديد</button>
+                <button class="miniBtn primaryMini" data-transfer-section="AMWAL">ترحيل</button>
+              </div>
+            </div>
+            <div id="ordersAmwal" class="ordersList"></div>
+          </section>
+
+          <section class="orderBucket bank">
+            <div class="bucketHead">
+              <div>
+                <h3><span class="ico" data-ico="bank"></span> تحويل بنكي</h3>
+                <p id="bankMeta">0 طلب</p>
+              </div>
+              <div class="bucketActions">
+                <button class="miniBtn" data-select-all="BANK">تحديد</button>
+                <button class="miniBtn primaryMini" data-transfer-section="BANK">ترحيل</button>
+              </div>
+            </div>
+            <div id="ordersBank" class="ordersList"></div>
+          </section>
+
+          <section class="orderBucket cash">
+            <div class="bucketHead">
+              <div>
+                <h3><span class="ico" data-ico="cash"></span> كاش مسقط</h3>
+                <p id="cashMuscatMeta">0 طلب</p>
+              </div>
+              <div class="bucketActions">
+                <button class="miniBtn" data-select-all="CASH_MUSCAT">تحديد</button>
+                <button class="miniBtn primaryMini" data-transfer-section="CASH_MUSCAT">ترحيل</button>
+              </div>
+            </div>
+            <div id="ordersCashMuscat" class="ordersList"></div>
+          </section>
+
+          <section class="orderBucket dalili">
+            <div class="bucketHead">
+              <div>
+                <h3><span class="ico" data-ico="delivery"></span> كاش دليلي</h3>
+                <p id="cashDaliliMeta">0 طلب</p>
+              </div>
+              <div class="bucketActions">
+                <button class="miniBtn" data-select-all="CASH_DALILI">تحديد</button>
+                <button class="miniBtn primaryMini" data-transfer-section="CASH_DALILI">ترحيل</button>
+              </div>
+            </div>
+            <div id="ordersCashDalili" class="ordersList"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="delivery">
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>صفحة المندوب - خدمات التوصيل</h3>
+              <p>إدارة طلبات مسقط: تم التوصيل، خرج للتوصيل، ترحيل الدفعة، وكنسلة الطلب من مسقط.</p>
+            </div>
+
+            <div class="topActions">
+              <button id="btnDeliveryRefresh" class="primaryBtn" type="button">
+                <span class="ico" data-ico="refresh"></span>
+                تحديث
+              </button>
+
+              <button id="btnDeliverySettleAll" class="dangerBtn" type="button">
+                <span class="ico" data-ico="send"></span>
+                ترحيل دفعة المندوب
+              </button>
+
+              <button class="softBtn" type="button" onclick="window.location.href='old.html'">
+                <span class="ico" data-ico="archive"></span>
+                النظام القديم
+              </button>
+            </div>
+          </div>
+
+          <div class="ordersSearchBar">
+            <div class="orderSearchBox">
+              <span class="ico" data-ico="search"></span>
+              <input id="deliverySearchInput" type="search" placeholder="ابحث برقم الطلب مثل 1234">
+            </div>
+
+            <button id="btnDeliveryClearSearch" class="ghostBtn" type="button">
+              مسح البحث
+            </button>
+          </div>
+
+          <div class="kpiGrid opsKpiGrid">
+            <article class="kpiCard green">
+              <div class="kpiIcon"><span class="ico" data-ico="cash"></span></div>
+              <div>
+                <p>جاهز للترحيل</p>
+                <h3 id="deliveryReadyNet">0.000</h3>
+                <small id="deliveryReadyCount">0 طلب</small>
+              </div>
+            </article>
+
+            <article class="kpiCard orange">
+              <div class="kpiIcon"><span class="ico" data-ico="delivery"></span></div>
+              <div>
+                <p>مبلغ التوصيل</p>
+                <h3 id="deliveryFeeTotal">0.000</h3>
+                <small>يخصم من المستحق</small>
+              </div>
+            </article>
+
+            <article class="kpiCard blue">
+              <div class="kpiIcon"><span class="ico" data-ico="orders"></span></div>
+              <div>
+                <p>تم التوصيل</p>
+                <h3 id="deliveryDoneCount">0</h3>
+                <small>الطلبات المكتملة</small>
+              </div>
+            </article>
+
+            <article class="kpiCard purple">
+              <div class="kpiIcon"><span class="ico" data-ico="wallet"></span></div>
+              <div>
+                <p>مع المندوب</p>
+                <h3 id="deliveryDriverCount">0</h3>
+                <small>طلبات لم تكتمل</small>
+              </div>
+            </article>
+          </div>
+
+          <div class="ordersGrid fourBuckets">
+            <section class="orderBucket cash">
+              <div class="bucketHead">
+                <div>
+                  <h3><span class="ico" data-ico="cash"></span> جاهز للترحيل</h3>
+                  <p id="deliveryReadyMeta">0 طلب</p>
+                </div>
+                <div class="bucketActions">
+                  <button class="miniBtn primaryMini" id="btnDeliverySettleReady">ترحيل</button>
+                </div>
+              </div>
+              <div id="deliveryReadyList" class="ordersList"></div>
+            </section>
+
+            <section class="orderBucket bank">
+              <div class="bucketHead">
+                <div>
+                  <h3><span class="ico" data-ico="check"></span> تم التوصيل</h3>
+                  <p id="deliveryDoneMeta">0 طلب</p>
+                </div>
+              </div>
+              <div id="deliveryDoneList" class="ordersList"></div>
+            </section>
+
+            <section class="orderBucket amwal">
+              <div class="bucketHead">
+                <div>
+                  <h3><span class="ico" data-ico="delivery"></span> خرج للتوصيل</h3>
+                  <p id="deliveryOutMeta">0 طلب</p>
+                </div>
+              </div>
+              <div id="deliveryOutList" class="ordersList"></div>
+            </section>
+
+            <section class="orderBucket dalili">
+              <div class="bucketHead">
+                <div>
+                  <h3><span class="ico" data-ico="wallet"></span> مع المندوب</h3>
+                  <p id="deliveryDriverMeta">0 طلب</p>
+                </div>
+              </div>
+              <div id="deliveryDriverList" class="ordersList"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="debts">
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>ديون التجار</h3>
+              <p>سداد الدين يخصم من الحساب البنكي أو كاش مسقط حسب اختيارك.</p>
+            </div>
+
+            <div class="topActions">
+              <button id="btnDebtAdd" class="primaryBtn" type="button">
+                <span class="ico" data-ico="plus"></span>
+                إضافة دين
+              </button>
+              <button id="btnDebtPay" class="softBtn" type="button">
+                <span class="ico" data-ico="minus"></span>
+                سداد دين
+              </button>
+            </div>
+          </div>
+
+          <div id="debtsSummary" class="subSummary"></div>
+          <div id="debtsTable" class="tableWrap"></div>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="expenses">
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>الصرفيات</h3>
+              <p>إضافة صرفية مباشرة، وتُخصم تلقائياً من الحساب البنكي أو كاش مسقط حسب اختيارك.</p>
+            </div>
+
+            <div class="topActions">
+              <button id="btnAddExpense" class="primaryBtn" type="button">
+                <span class="ico" data-ico="plus"></span>
+                إضافة صرفية
+              </button>
+
+              <button id="btnExportExpenses" class="softBtn" type="button">
+                <span class="ico" data-ico="excel"></span>
+                تحميل Excel
+              </button>
+            </div>
+          </div>
+
+          <div id="expensesSummary" class="subSummary"></div>
+          <div id="expensesTable" class="tableWrap"></div>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="purchases">
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>المشتريات</h3>
+              <p>مشتريات المنتجات أو أي مشتريات أخرى، وتُخصم من الحساب المختار.</p>
+            </div>
+
+            <div class="topActions">
+              <button id="btnAddPurchase" class="primaryBtn" type="button">
+                <span class="ico" data-ico="plus"></span>
+                إضافة مشتريات
+              </button>
+              <button id="btnExportPurchases" class="softBtn" type="button">
+                <span class="ico" data-ico="excel"></span>
+                تحميل Excel
+              </button>
+            </div>
+          </div>
+
+          <div id="purchasesSummary" class="subSummary"></div>
+          <div id="purchasesTable" class="tableWrap"></div>
+        </div>
+      </section>
+
+      <section class="tabPanel" data-panel="archive">
+        <div class="panelCard">
+          <div class="panelHead">
+            <div>
+              <h3>أرشيف الترحيل</h3>
+              <p>كل عملية ترحيل محفوظة بالتفاصيل، ويمكن تنزيلها Excel.</p>
+            </div>
+
+            <button id="btnExportArchive" class="softBtn" type="button">
+              <span class="ico" data-ico="excel"></span>
+              تحميل الأرشيف
+            </button>
+          </div>
+
+          <div id="archiveList" class="archiveList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modalBackdrop" class="modalBackdrop" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true">
+      <div class="modalHead">
+        <div>
+          <h3 id="modalTitle">عنوان</h3>
+          <p id="modalSub">وصف</p>
+        </div>
+        <button id="modalClose" class="iconBtn" type="button">
+          <span class="ico" data-ico="x"></span>
+        </button>
+      </div>
+      <div id="modalBody" class="modalBody"></div>
+      <div id="modalFooter" class="modalFooter"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="./c.js"></script>
+
+  <script>
+    (function(){
+      const bellSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h11"/><path d="M9 17a3 3 0 0 0 6 0"/></svg>';
+
+      document.querySelectorAll('[data-ico="bell"]').forEach(function(el){
+        if(!String(el.innerHTML || "").trim()){
+          el.innerHTML = bellSvg;
+        }
+      });
+
+      let __btPushReg = null;
+
+      async function registerHalaBeautySW(){
+        if(!("serviceWorker" in navigator)){
+          throw new Error("Service Worker غير مدعوم");
+        }
+
+        __btPushReg = await navigator.serviceWorker.register("/k/promax.js", {
+          scope: "/k/"
+        });
+
+        return __btPushReg;
+      }
+
+      function getAdminKeyForPush(){
+        if(typeof window.adminKey === "function"){
+          return window.adminKey();
+        }
+
+        if(typeof adminKey === "function"){
+          return adminKey();
+        }
+
+        return localStorage.getItem("ADMIN_KEY") || "";
+      }
+
+      function showPushToast(kind, title, msg){
+        if(typeof window.toast === "function"){
+          try{
+            window.toast(kind, title, msg);
+            return;
+          }catch{}
+        }
+
+        if(typeof toast === "function"){
+          try{
+            toast(kind, title, msg);
+            return;
+          }catch{}
+        }
+
+        alert((title || "") + "\n" + (msg || ""));
+      }
+
+      function urlBase64ToUint8Array(base64String){
+        const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+        const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+        const rawData = atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for(let i = 0; i < rawData.length; ++i){
+          outputArray[i] = rawData.charCodeAt(i);
+        }
+
+        return outputArray;
+      }
+
+      async function enableKPushNotifications(){
+        try{
+          if(!("PushManager" in window) || !("Notification" in window)){
+            throw new Error("الإشعارات غير مدعومة على هذا الجهاز");
+          }
+
+          const adminKeyValue = getAdminKeyForPush();
+
+          if(!adminKeyValue){
+            throw new Error("ADMIN_KEY غير موجود. سجل الدخول أولًا");
+          }
+
+          const reg = __btPushReg || await registerHalaBeautySW();
+
+          let permission = Notification.permission;
+
+          if(permission !== "granted"){
+            permission = await Notification.requestPermission();
+          }
+
+          if(permission !== "granted"){
+            throw new Error("لم يتم السماح بالإشعارات");
+          }
+
+          const keyRes = await fetch("/api/money/push/public-key", {
+            headers: {
+              "x-admin-key": adminKeyValue
+            },
+            cache: "no-store"
+          });
+
+          const keyData = await keyRes.json().catch(function(){
+            return {};
+          });
+
+          if(!keyRes.ok){
+            throw new Error(keyData.error || "فشل جلب مفتاح الإشعارات");
+          }
+
+          const publicKey = String(keyData.publicKey || "").trim();
+
+          if(!publicKey){
+            throw new Error("مفتاح الإشعارات فارغ");
+          }
+
+          let sub = await reg.pushManager.getSubscription();
+
+          if(!sub){
+            sub = await reg.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: urlBase64ToUint8Array(publicKey)
+            });
+          }
+
+          const saveRes = await fetch("/api/money/push/subscribe", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-key": adminKeyValue
+            },
+            body: JSON.stringify(sub),
+            cache: "no-store"
+          });
+
+          const saveData = await saveRes.json().catch(function(){
+            return {};
+          });
+
+          if(!saveRes.ok){
+            throw new Error(saveData.error || "فشل حفظ اشتراك الإشعارات");
+          }
+
+          showPushToast("good", "تم", "تم تفعيل الإشعارات بنجاح");
+        }catch(e){
+          showPushToast("bad", "خطأ", e.message || String(e));
+        }
+      }
+
+      if(!window.enableKPushNotifications){
+        window.enableKPushNotifications = enableKPushNotifications;
+      }
+
+      const btnEnablePush = document.getElementById("btnEnablePush");
+
+      if(btnEnablePush){
+        btnEnablePush.addEventListener("click", function(){
+          window.enableKPushNotifications();
+        });
+      }
+
+      if("serviceWorker" in navigator){
+        registerHalaBeautySW().catch(function(e){
+          console.warn("Service Worker register failed", e);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

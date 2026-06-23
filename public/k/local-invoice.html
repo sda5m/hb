@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#4c1d95">
+  <title>Hala Beauty | فاتورة بيع من المخزن</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900;1000&display=swap"
+    rel="stylesheet"
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+    :root{
+      --purple:#7c3aed;
+      --purpleDark:#4c1d95;
+      --purpleSoft:#f2eafe;
+      --peach:#f1c6b1;
+      --ink:#101828;
+      --muted:#667085;
+      --line:rgba(16,24,40,.10);
+      --bg:#f7f4fb;
+      --card:#ffffff;
+      --green:#059669;
+      --greenSoft:#e7f8f1;
+      --orange:#f97316;
+      --orangeSoft:#fff1e8;
+      --red:#dc2626;
+      --redSoft:#ffe8e8;
+      --shadow:0 22px 60px rgba(17,24,39,.14);
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+      margin:0;
+      min-height:100%;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(124,58,237,.18), transparent 36%),
+        radial-gradient(circle at bottom left, rgba(241,198,177,.38), transparent 34%),
+        var(--bg);
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+    }
+
+    button{
+      font-family:inherit;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    button:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+    }
+
+    .page{
+      width:min(100%, 540px);
+      margin:0 auto;
+      padding:14px 12px 30px;
+    }
+
+    .tools{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .toolBtn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--purpleDark);
+      border-radius:17px;
+      padding:11px 10px;
+      font-size:12.5px;
+      font-weight:1000;
+      line-height:1.3;
+      box-shadow:0 10px 26px rgba(17,24,39,.07);
+    }
+
+    .toolBtn.primary{
+      border:0;
+      color:#fff;
+      background:linear-gradient(135deg,var(--purple),var(--purpleDark));
+      box-shadow:0 14px 32px rgba(124,58,237,.25);
+    }
+
+    .invoice{
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(124,58,237,.14);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      padding:20px 18px 18px;
+      color:#fff;
+      background:
+        radial-gradient(circle at top left, rgba(241,198,177,.42), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,.12), transparent 38%),
+        linear-gradient(135deg,#4c1d95,#111827);
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:999px;
+      right:-86px;
+      top:-86px;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero:after{
+      content:"";
+      position:absolute;
+      width:150px;
+      height:150px;
+      border-radius:999px;
+      left:-62px;
+      bottom:-72px;
+      background:rgba(255,255,255,.09);
+    }
+
+    .heroTop{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .brand{
+      min-width:0;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:29px;
+      line-height:1;
+      font-weight:1000;
+      letter-spacing:-.7px;
+    }
+
+    .brand p{
+      margin:9px 0 0;
+      color:rgba(255,255,255,.80);
+      font-size:13px;
+      font-weight:900;
+      line-height:1.5;
+    }
+
+    .logo{
+      width:64px;
+      height:64px;
+      flex:0 0 auto;
+      border-radius:24px;
+      background:#fff;
+      padding:8px;
+      display:grid;
+      place-items:center;
+      box-shadow:0 18px 38px rgba(0,0,0,.25);
+    }
+
+    .logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .statusLine{
+      position:relative;
+      z-index:1;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding:7px 10px;
+      background:rgba(255,255,255,.13);
+      border:1px solid rgba(255,255,255,.17);
+      color:#fff;
+      font-size:11px;
+      font-weight:1000;
+      line-height:1.4;
+      white-space:nowrap;
+    }
+
+    .meta{
+      padding:14px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      background:linear-gradient(180deg,#fff,#fbf8ff);
+      border-bottom:1px solid var(--line);
+    }
+
+    .metaBox{
+      min-width:0;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:19px;
+      padding:10px 11px;
+    }
+
+    .metaBox span{
+      display:block;
+      color:var(--muted);
+      font-size:10.5px;
+      font-weight:900;
+      margin-bottom:3px;
+    }
+
+    .metaBox b{
+      display:block;
+      font-size:13px;
+      font-weight:1000;
+      line-height:1.55;
+      overflow-wrap:anywhere;
+    }
+
+    .notice{
+      margin:12px 14px 0;
+      border-radius:18px;
+      padding:10px 12px;
+      background:var(--orangeSoft);
+      color:#9a3412;
+      border:1px solid rgba(249,115,22,.18);
+      font-size:12px;
+      font-weight:900;
+      line-height:1.75;
+    }
+
+    .items{
+      padding:14px;
+      display:grid;
+      gap:11px;
+    }
+
+    .item{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:24px;
+      padding:10px;
+      display:grid;
+      grid-template-columns:70px minmax(0,1fr);
+      gap:11px;
+      box-shadow:0 10px 26px rgba(17,24,39,.055);
+    }
+
+    .imgBox{
+      width:70px;
+      height:70px;
+      border-radius:20px;
+      overflow:hidden;
+      background:#f3f4f6;
+      border:1px solid rgba(16,24,40,.08);
+      display:grid;
+      place-items:center;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .imgBox img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+    }
+
+    .itemMain{
+      min-width:0;
+    }
+
+    .itemTitle{
+      margin:0;
+      font-size:13.5px;
+      line-height:1.55;
+      font-weight:1000;
+      overflow-wrap:anywhere;
+    }
+
+    .itemSub{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:10.5px;
+      font-weight:850;
+      line-height:1.55;
+      overflow-wrap:anywhere;
+    }
+
+    .itemAt{
+      margin-top:4px;
+      color:rgba(76,29,149,.78);
+      font-size:10.5px;
+      font-weight:900;
+    }
+
+    .amountGrid{
+      grid-column:1 / -1;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7px;
+      margin-top:2px;
+    }
+
+    .amountBox{
+      min-width:0;
+      background:#fafafe;
+      border:1px solid rgba(16,24,40,.06);
+      border-radius:17px;
+      padding:8px;
+    }
+
+    .amountBox span{
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:900;
+      line-height:1.4;
+    }
+
+    .amountBox b{
+      display:block;
+      margin-top:2px;
+      font-size:12px;
+      font-weight:1000;
+      direction:ltr;
+      unicode-bidi:isolate;
+      text-align:right;
+      line-height:1.45;
+      white-space:normal;
+      overflow-wrap:anywhere;
+    }
+
+    .summary{
+      padding:14px;
+      border-top:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#fbf8ff);
+    }
+
+    .summaryRow{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:9px 0;
+      border-bottom:1px dashed rgba(16,24,40,.12);
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .summaryRow b{
+      color:var(--ink);
+      direction:ltr;
+      unicode-bidi:isolate;
+      font-weight:1000;
+    }
+
+    .grand{
+      margin-top:12px;
+      border-radius:25px;
+      padding:15px;
+      color:#fff;
+      background:linear-gradient(135deg,var(--purpleDark),#111827);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .grand span{
+      color:rgba(255,255,255,.78);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .grand b{
+      font-size:24px;
+      line-height:1.25;
+      font-weight:1000;
+      direction:ltr;
+      unicode-bidi:isolate;
+      white-space:nowrap;
+    }
+
+    .footer{
+      padding:13px 14px 16px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      line-height:1.7;
+    }
+
+    .empty{
+      padding:28px 16px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:900;
+      line-height:1.9;
+    }
+
+    .hideTools .tools{
+      display:none;
+    }
+
+    @media(max-width:430px){
+      .page{
+        padding-inline:9px;
+      }
+
+      .tools{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .toolBtn{
+        padding:10px 8px;
+        font-size:12px;
+        border-radius:15px;
+      }
+
+      .brand h1{
+        font-size:25px;
+      }
+
+      .brand p{
+        font-size:12px;
+      }
+
+      .logo{
+        width:56px;
+        height:56px;
+        border-radius:21px;
+      }
+
+      .meta{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+        padding:12px;
+      }
+
+      .metaBox{
+        padding:9px 10px;
+        border-radius:17px;
+      }
+
+      .metaBox b{
+        font-size:12.5px;
+      }
+
+      .item{
+        grid-template-columns:66px minmax(0,1fr);
+        gap:10px;
+        border-radius:22px;
+      }
+
+      .imgBox{
+        width:66px;
+        height:66px;
+        border-radius:18px;
+      }
+
+      .amountGrid{
+        grid-template-columns:1fr;
+      }
+
+      .amountBox{
+        display:flex;
+        justify-content:space-between;
+        gap:10px;
+        align-items:center;
+        padding:8px 10px;
+      }
+
+      .amountBox b{
+        margin-top:0;
+        text-align:left;
+        max-width:64%;
+      }
+
+      .grand{
+        flex-direction:column;
+        align-items:stretch;
+        text-align:center;
+        gap:6px;
+      }
+
+      .grand b{
+        font-size:23px;
+      }
+    }
+
+    @page{
+      margin:0;
+    }
+
+    @media print{
+      html,
+      body{
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+      }
+
+      .page{
+        width:100% !important;
+        max-width:100% !important;
+        padding:0 !important;
+        margin:0 !important;
+      }
+
+      .tools{
+        display:none !important;
+      }
+
+      .invoice{
+        box-shadow:none !important;
+        border-radius:0 !important;
+        border:0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="tools">
+      <button class="toolBtn" id="btnBack" type="button">رجوع</button>
+      <button class="toolBtn primary" id="btnCapture" type="button">لقطة الفاتورة</button>
+      <button class="toolBtn" id="btnShot" type="button">إخفاء الأزرار</button>
+      <button class="toolBtn" id="btnPrint" type="button">طباعة / PDF</button>
+    </div>
+
+    <section class="invoice" id="invoice">
+      <div class="empty">جاري تجهيز الفاتورة...</div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+
+    function adminKey(){
+      let k = localStorage.getItem("ADMIN_KEY") || "";
+      if(!k){
+        k = prompt("أدخل مفتاح المدير") || "";
+        k = k.trim();
+        if(k) localStorage.setItem("ADMIN_KEY", k);
+      }
+      return k;
+    }
+
+    function esc(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function escAttr(s){
+      return esc(s).replaceAll("`","&#096;");
+    }
+
+    function n(v){
+      const x = Number(String(v ?? 0).replace(/,/g,""));
+      return Number.isFinite(x) ? x : 0;
+    }
+
+    function fmt(v){
+      return n(v).toLocaleString("en-US", {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3
+      });
+    }
+
+    function pad2(x){
+      return String(x).padStart(2, "0");
+    }
+
+    const MONEY_TZ_OFFSET_MINUTES = 240;
+
+    function displayLocalDateTime(x){
+      const s = String(x || "");
+      if(!s) return "—";
+
+      const d = new Date(s);
+      if(Number.isNaN(d.getTime())) return s;
+
+      const shifted = new Date(d.getTime() + MONEY_TZ_OFFSET_MINUTES * 60 * 1000);
+
+      const y = shifted.getUTCFullYear();
+      const m = pad2(shifted.getUTCMonth() + 1);
+      const day = pad2(shifted.getUTCDate());
+      const hh = pad2(shifted.getUTCHours());
+      const mm = pad2(shifted.getUTCMinutes());
+
+      return `${y}-${m}-${day} ${hh}:${mm}`;
+    }
+
+    function makeInvoiceNo(){
+      return "ST-" + Date.now().toString().slice(-7);
+    }
+
+    async function apiJson(url){
+      const res = await fetch(url, {
+        headers: {
+          "x-admin-key": adminKey()
+        },
+        cache: "no-store"
+      });
+
+      const text = await res.text();
+
+      let json = {};
+      try{
+        json = JSON.parse(text || "{}");
+      }catch{
+        json = { raw:text };
+      }
+
+      if(!res.ok){
+        if(res.status === 401) localStorage.removeItem("ADMIN_KEY");
+        throw new Error(json.error || json.message || text || "فشل الطلب");
+      }
+
+      return json;
+    }
+
+    async function waitForImages(root){
+      const imgs = Array.from(root.querySelectorAll("img"));
+
+      await Promise.all(
+        imgs.map((img) => {
+          if(img.complete) return Promise.resolve();
+
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        })
+      );
+    }
+
+    function renderInvoice(data){
+      const customer = data.customer || "—";
+      const allSales = Array.isArray(data.sales) ? data.sales : [];
+
+      const params = new URLSearchParams(location.search);
+      const showAll = params.get("all") === "1";
+
+      const sales = showAll
+        ? allSales
+        : allSales.filter((x) => !x.settled);
+
+      if(!sales.length){
+        $("#invoice").innerHTML = `
+          <div class="empty">
+            لا توجد منتجات غير مرحلة لهذا الشخص.<br>
+            يمكن فتح الرابط مع all=1 لعرض كل العمليات السابقة.
+          </div>
+        `;
+        return;
+      }
+
+      const totalQty = sales.reduce((sum, x) => sum + n(x.qty), 0);
+      const totalAmount = sales.reduce((sum, x) => {
+        const qty = n(x.qty);
+        const unit = n(x.unitPrice);
+        return sum + n(x.total || (qty * unit));
+      }, 0);
+
+      const missingPrice = sales.filter((x) => !(n(x.unitPrice) > 0)).length;
+
+      const statusText = showAll ? "كل العمليات" : "غير مرحلة";
+      const now = displayLocalDateTime(new Date().toISOString());
+      const invoiceNumber = makeInvoiceNo();
+
+      const itemsHtml = sales.map((s, i) => {
+        const qty = n(s.qty);
+        const unit = n(s.unitPrice);
+        const total = n(s.total || qty * unit);
+        const img = String(s.image || "").trim();
+
+        return `
+          <article class="item">
+            <div class="imgBox">
+              ${
+                img
+                  ? `<img crossorigin="anonymous" src="${escAttr(img)}" alt="" onerror="this.remove();">`
+                  : `صورة`
+              }
+            </div>
+
+            <div class="itemMain">
+              <h3 class="itemTitle">${esc(s.product_name || s.product_key || "منتج")}</h3>
+
+              <div class="itemSub">
+                ${s.sku ? `SKU: ${esc(s.sku)} ` : ""}
+                ${s.barcode ? `• باركود: ${esc(s.barcode)}` : ""}
+              </div>
+
+              <div class="itemAt">${esc(displayLocalDateTime(s.at))}</div>
+            </div>
+
+            <div class="amountGrid">
+              <div class="amountBox">
+                <span>الكمية</span>
+                <b>${qty}</b>
+              </div>
+
+              <div class="amountBox">
+                <span>سعر الحبة</span>
+                <b>${unit > 0 ? `${fmt(unit)} ر.ع` : "لم يحدد"}</b>
+              </div>
+
+              <div class="amountBox">
+                <span>المجموع</span>
+                <b>${total > 0 ? `${fmt(total)} ر.ع` : "بانتظار السعر"}</b>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      const notice = missingPrice > 0
+        ? `<div class="notice">يوجد ${missingPrice} منتج بدون سعر. عدّل الأسعار قبل إرسال الفاتورة النهائية.</div>`
+        : "";
+
+      $("#invoice").innerHTML = `
+        <header class="hero">
+          <div class="heroTop">
+            <div class="brand">
+              <h1>Hala Beauty</h1>
+              <p>فاتورة بيع من المخزن</p>
+            </div>
+
+            <div class="logo">
+              <img
+                crossorigin="anonymous"
+                src="https://halabt.com/favicon.ico"
+                alt=""
+              >
+            </div>
+          </div>
+
+          <div class="statusLine">
+            <span class="pill">${esc(statusText)}</span>
+            <span class="pill">رقم الفاتورة: ${esc(invoiceNumber)}</span>
+          </div>
+        </header>
+
+        <section class="meta">
+          <div class="metaBox">
+            <span>الاسم</span>
+            <b>${esc(customer)}</b>
+          </div>
+
+          <div class="metaBox">
+            <span>وقت إصدار الفاتورة</span>
+            <b>${esc(now)}</b>
+          </div>
+
+          <div class="metaBox">
+            <span>عدد العمليات</span>
+            <b>${sales.length}</b>
+          </div>
+
+          <div class="metaBox">
+            <span>عدد القطع</span>
+            <b>${totalQty}</b>
+          </div>
+        </section>
+
+        ${notice}
+
+        <section class="items">
+          ${itemsHtml}
+        </section>
+
+        <section class="summary">
+          <div class="summaryRow">
+            <span>إجمالي الكمية</span>
+            <b>${totalQty}</b>
+          </div>
+
+          <div class="summaryRow">
+            <span>عدد المنتجات</span>
+            <b>${sales.length}</b>
+          </div>
+
+          <div class="grand">
+            <span>الإجمالي المطلوب</span>
+            <b>${fmt(totalAmount)} ر.ع</b>
+          </div>
+        </section>
+
+        <footer class="footer">
+          شكرًا لتعاملكم مع Hala Beauty<br>
+          يرجى مراجعة المنتجات والمبلغ قبل الدفع
+        </footer>
+      `;
+    }
+
+    async function captureInvoiceImage(){
+      const invoice = document.getElementById("invoice");
+      const btn = document.getElementById("btnCapture");
+
+      if(!invoice){
+        alert("الفاتورة غير موجودة");
+        return;
+      }
+
+      const oldText = btn ? btn.textContent : "";
+
+      try{
+        if(typeof html2canvas !== "function"){
+          throw new Error("مكتبة تصوير الفاتورة لم تتحمل. تأكد من اتصال الإنترنت ثم حاول مرة ثانية.");
+        }
+
+        if(btn){
+          btn.disabled = true;
+          btn.textContent = "جاري تجهيز الصورة...";
+        }
+
+        document.body.classList.add("hideTools");
+
+        await waitForImages(invoice);
+        await new Promise((resolve) => setTimeout(resolve, 350));
+
+        const canvas = await html2canvas(invoice, {
+          backgroundColor: "#ffffff",
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+          scale: Math.min(3, window.devicePixelRatio || 2),
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: document.documentElement.scrollWidth,
+          windowHeight: document.documentElement.scrollHeight
+        });
+
+        const blob = await new Promise((resolve) => {
+          canvas.toBlob(resolve, "image/png", 1);
+        });
+
+        if(!blob){
+          throw new Error("تعذر إنشاء الصورة");
+        }
+
+        const fileName = `halabeauty-store-invoice-${Date.now()}.png`;
+        const file = new File([blob], fileName, { type:"image/png" });
+
+        if(navigator.canShare && navigator.canShare({ files:[file] })){
+          await navigator.share({
+            files:[file],
+            title:"فاتورة Hala Beauty",
+            text:"فاتورة بيع من المخزن"
+          });
+        }else{
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          setTimeout(() => URL.revokeObjectURL(url), 3000);
+        }
+      }catch(e){
+        alert(e.message || "فشل إنشاء لقطة الفاتورة");
+      }finally{
+        document.body.classList.remove("hideTools");
+
+        if(btn){
+          btn.disabled = false;
+          btn.textContent = oldText || "لقطة الفاتورة";
+        }
+      }
+    }
+
+    async function load(){
+      try{
+        const params = new URLSearchParams(location.search);
+        const customer = params.get("customer") || "";
+
+        if(!customer){
+          $("#invoice").innerHTML = `<div class="empty">اسم الشخص غير موجود في الرابط</div>`;
+          return;
+        }
+
+        const data = await apiJson(
+          "/api/money/local-stock/customer?customer=" + encodeURIComponent(customer)
+        );
+
+        renderInvoice(data);
+      }catch(e){
+        $("#invoice").innerHTML = `<div class="empty">خطأ: ${esc(e.message || String(e))}</div>`;
+      }
+    }
+
+    $("#btnBack").onclick = () => {
+      if(history.length > 1){
+        history.back();
+      }else{
+        window.close();
+      }
+    };
+
+    $("#btnPrint").onclick = () => window.print();
+
+    $("#btnCapture").onclick = () => {
+      captureInvoiceImage();
+    };
+
+    $("#btnShot").onclick = () => {
+      document.body.classList.toggle("hideTools");
+
+      $("#btnShot").textContent = document.body.classList.contains("hideTools")
+        ? "إظهار الأزرار"
+        : "إخفاء الأزرار";
+    };
+
+    load();
+  </script>
+</body>
+</html>

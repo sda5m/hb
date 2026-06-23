@@ -1,0 +1,2524 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <link rel="manifest" href="/k/promaxa.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ترحيل المبالغ">
+<link rel="apple-touch-icon" href="/k/ico1.png">
+<link rel="icon" href="/k/ico2.png">
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | لوحة الإدارة</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+  :root{
+    --purple:#6B0FA6;
+    --purpleDark:#3C0A63;
+    --purpleDeep:#2b0a49;
+    --peach:#F1C6B1;
+    --peachSoft:#f8e2d8;
+
+    --ink:#101828;
+    --muted:#667085;
+    --muted2:#98a2b3;
+
+    --card:rgba(255,255,255,.92);
+    --glass:rgba(255,255,255,.82);
+    --line:rgba(16,24,40,.10);
+    --line2:rgba(107,15,166,.14);
+
+    --bgSoft:#fbf8ff;
+    --bgSoft2:#fffaf8;
+
+    --shadow:0 12px 30px rgba(16,24,40,.12);
+    --shadow2:0 8px 18px rgba(16,24,40,.10);
+    --shadow3:0 24px 60px rgba(16,24,40,.16);
+
+    --r14:14px;
+    --r16:16px;
+    --r18:18px;
+    --r22:22px;
+    --r24:24px;
+
+    --ok:#16a34a;
+    --warn:#f59e0b;
+    --err:#ef4444;
+    --info:#2563eb;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{ height:100%; }
+
+  body{
+    margin:0;
+    font-family:"Cairo",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at top right, rgba(124,58,237,.16), transparent 24%),
+      radial-gradient(circle at bottom left, rgba(236,72,153,.10), transparent 22%),
+      linear-gradient(180deg, rgba(60,10,99,.58), rgba(241,198,177,.34)),
+      url("d.jpg");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    -webkit-text-size-adjust:100%;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  button,input{ font-family:inherit; }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:18px 14px 30px;
+  }
+
+  /* =========================
+     Shared
+  ========================= */
+  .svg{
+    width:20px;
+    height:20px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:2.1;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    flex:0 0 auto;
+  }
+  .svg.sm{
+    width:18px;
+    height:18px;
+  }
+
+  .muted{
+    color:rgba(16,24,40,.56);
+    font-weight:900;
+    font-size:12px;
+  }
+
+  .card{
+    margin-top:14px;
+    padding:16px;
+    border-radius:var(--r24);
+    background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.90));
+    border:1px solid rgba(255,255,255,.55);
+    box-shadow:var(--shadow3);
+    backdrop-filter:blur(10px);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at top right, rgba(124,58,237,.06), transparent 22%),
+      radial-gradient(circle at bottom left, rgba(241,198,177,.10), transparent 20%);
+    pointer-events:none;
+  }
+
+  .card > *{
+    position:relative;
+    z-index:1;
+  }
+
+  .box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:11px 12px;
+    border-radius:16px;
+    background:linear-gradient(180deg,#fff,#fcfcff);
+    border:1px solid rgba(16,24,40,.10);
+    box-shadow:0 8px 18px rgba(16,24,40,.06);
+  }
+
+  .box input{
+    border:none;
+    outline:none;
+    width:100%;
+    background:transparent;
+    font-weight:900;
+    color:var(--ink);
+    font-size:14px;
+  }
+
+  .box input::placeholder{
+    color:var(--muted2);
+    font-weight:800;
+  }
+
+  .btn{
+    border:none;
+    border-radius:16px;
+    padding:12px 14px;
+    min-height:48px;
+    cursor:pointer;
+    font-weight:950;
+    font-size:14px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    transition:.18s transform,.18s box-shadow,.18s opacity,.18s background;
+    user-select:none;
+    white-space:nowrap;
+  }
+  .btn:hover{
+    transform:translateY(-1px);
+  }
+  .btn:active{
+    transform:scale(.985);
+  }
+  .btn[disabled]{
+    opacity:.6;
+    cursor:not-allowed;
+    box-shadow:none;
+  }
+
+  .btnPrimary{
+    background:linear-gradient(135deg, var(--purple), var(--purpleDark));
+    color:#fff;
+    box-shadow:0 12px 24px rgba(107,15,166,.24);
+  }
+
+  .btnGhost{
+    background:linear-gradient(180deg,#fff,#f8f9fc);
+    color:var(--purpleDark);
+    border:1px solid rgba(60,10,99,.14);
+    box-shadow:0 8px 18px rgba(16,24,40,.06);
+  }
+
+  .btnDanger{
+    background:linear-gradient(135deg, #ef4444, #b91c1c);
+    color:#fff;
+    box-shadow:0 12px 24px rgba(239,68,68,.22);
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:950;
+    white-space:nowrap;
+    border:1px solid transparent;
+  }
+
+  .softBadge{
+    background:rgba(107,15,166,.08);
+    color:var(--purpleDark);
+    border-color:rgba(107,15,166,.12);
+  }
+
+  .successBadge{
+    background:rgba(22,163,74,.10);
+    color:#166534;
+    border-color:rgba(22,163,74,.14);
+  }
+
+  .infoBadge{
+    background:rgba(37,99,235,.10);
+    color:#1d4ed8;
+    border-color:rgba(37,99,235,.14);
+  }
+
+  /* =========================
+     Topbar
+  ========================= */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:15px 16px;
+    border-radius:24px;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+    box-shadow:0 16px 34px rgba(16,24,40,.14);
+    border:1px solid rgba(255,255,255,.58);
+    backdrop-filter:blur(10px);
+    position:sticky;
+    top:10px;
+    z-index:20;
+    flex-wrap:wrap;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+  }
+
+  .brandMark{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.24));
+    border:1px solid rgba(107,15,166,.16);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.65);
+    flex:0 0 auto;
+  }
+
+  .brandName{
+    font-size:19px;
+    font-weight:980;
+    margin:0;
+    line-height:1.2;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .brandName .b1{ color:var(--purple); }
+  .brandName .b2{ color:var(--peach); }
+
+  .brandSub{
+    font-size:12.5px;
+    color:var(--muted);
+    font-weight:850;
+    margin-top:3px;
+  }
+
+  .topbarActions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  /* =========================
+     Hero cards
+  ========================= */
+  .heroAdminCard{
+    display:grid;
+    grid-template-columns:1.25fr .95fr;
+    gap:14px;
+    align-items:stretch;
+  }
+
+  .heroAdminLeft{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+  }
+
+  .heroAdminIcon{
+    width:64px;
+    height:64px;
+    border-radius:20px;
+    display:grid;
+    place-items:center;
+    color:var(--purpleDark);
+    background:linear-gradient(135deg, rgba(107,15,166,.12), rgba(241,198,177,.24));
+    border:1px solid rgba(107,15,166,.12);
+    box-shadow:0 12px 24px rgba(16,24,40,.08);
+    flex:0 0 auto;
+  }
+
+  .heroAdminTitle{
+    font-size:13px;
+    color:rgba(16,24,40,.60);
+    font-weight:950;
+  }
+
+  .heroAdminValue{
+    margin-top:8px;
+    font-size:34px;
+    font-weight:990;
+    color:var(--purpleDark);
+    line-height:1.15;
+    letter-spacing:.2px;
+  }
+
+  .heroAdminSub{
+    margin-top:8px;
+    font-size:12.5px;
+    color:rgba(16,24,40,.56);
+    font-weight:900;
+    line-height:1.7;
+  }
+
+  .heroQuickStats{
+    display:grid;
+    gap:10px;
+  }
+
+  .miniStatCard{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:13px;
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(252,251,255,.92));
+    border:1px solid rgba(16,24,40,.08);
+    box-shadow:0 10px 22px rgba(16,24,40,.06);
+  }
+
+  .miniStatIcon{
+    width:44px;
+    height:44px;
+    border-radius:15px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg, rgba(107,15,166,.12), rgba(236,72,153,.08));
+    color:var(--purpleDark);
+    border:1px solid rgba(107,15,166,.10);
+    flex:0 0 auto;
+  }
+
+  .miniStatLabel{
+    font-size:12px;
+    font-weight:950;
+    color:rgba(16,24,40,.55);
+  }
+
+  .miniStatText{
+    margin-top:4px;
+    font-size:13px;
+    font-weight:950;
+    color:var(--purpleDark);
+    line-height:1.55;
+  }
+
+  /* =========================
+     Filters / Toolbar
+  ========================= */
+  .filtersCard{
+    display:grid;
+    gap:14px;
+  }
+
+  .filtersHead{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .sectionMainTitle{
+    font-size:18px;
+    font-weight:980;
+    color:var(--purpleDark);
+  }
+
+  .sectionMainSub{
+    margin-top:4px;
+    font-size:12.5px;
+    color:rgba(16,24,40,.58);
+    font-weight:900;
+    line-height:1.7;
+  }
+
+  .toolbarGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    align-items:end;
+  }
+
+  .toolField{
+    display:grid;
+    gap:8px;
+  }
+
+  .toolLabel{
+    font-size:12px;
+    color:rgba(16,24,40,.58);
+    font-weight:950;
+  }
+
+  .toolBox{
+    min-height:52px;
+  }
+
+  .dateBox{ width:100%; }
+  .searchBox{ width:100%; min-width:0; }
+
+  .toolActions{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .altBtn{
+    background:linear-gradient(135deg, #7c3aed, #4c1d95);
+  }
+
+  .metaLine{
+    min-height:18px;
+    color:rgba(16,24,40,.64);
+    font-weight:900;
+    font-size:12.5px;
+    padding-inline:2px;
+  }
+
+  /* =========================
+     Card Heads
+  ========================= */
+  .dataCard,
+  .statusCard{
+    display:grid;
+    gap:14px;
+  }
+
+  .cardHeadLine{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .cardHeadLeft{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .headIconBox{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:var(--purpleDark);
+    background:linear-gradient(135deg, rgba(107,15,166,.12), rgba(236,72,153,.08));
+    border:1px solid rgba(107,15,166,.10);
+    flex:0 0 auto;
+  }
+
+  .truckIconBox{
+    background:linear-gradient(135deg, rgba(37,99,235,.12), rgba(14,165,233,.08));
+    color:#075985;
+    border-color:rgba(37,99,235,.10);
+  }
+
+  .packageIconBox{
+    background:linear-gradient(135deg, rgba(245,158,11,.14), rgba(251,191,36,.10));
+    color:#92400e;
+    border-color:rgba(245,158,11,.12);
+  }
+
+  .cardTitle{
+    font-size:17px;
+    font-weight:980;
+    color:var(--purpleDark);
+    line-height:1.25;
+  }
+
+  .cardSub{
+    margin-top:4px;
+    font-size:12.5px;
+    font-weight:900;
+    color:rgba(16,24,40,.58);
+    line-height:1.7;
+  }
+
+  /* =========================
+     Count Cards
+  ========================= */
+  .countCard{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(252,252,255,.94));
+    border:1px solid rgba(16,24,40,.08);
+    box-shadow:0 12px 24px rgba(16,24,40,.08);
+  }
+
+  .countNum{
+    min-width:46px;
+    height:46px;
+    border-radius:15px;
+    display:grid;
+    place-items:center;
+    font-weight:990;
+    font-size:18px;
+    color:#fff;
+    background:linear-gradient(135deg, var(--purple), var(--purpleDark));
+    box-shadow:0 10px 20px rgba(107,15,166,.20);
+  }
+
+  .countMeta{
+    line-height:1.15;
+  }
+
+  .countLbl{
+    font-size:12px;
+    font-weight:950;
+    color:rgba(16,24,40,.55);
+  }
+
+  .countTitle{
+    font-size:13.5px;
+    font-weight:980;
+    color:var(--purpleDark);
+    margin-top:4px;
+  }
+
+  /* =========================
+     Table
+  ========================= */
+  .tableWrap{
+    border-radius:18px;
+    overflow:auto;
+    max-height:62vh;
+    border:1px solid rgba(16,24,40,.08);
+    background:#fff;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+  }
+
+  th,td{
+    padding:11px 10px;
+    border-bottom:1px solid rgba(16,24,40,.08);
+    text-align:right;
+    font-weight:900;
+    font-size:13px;
+    white-space:nowrap;
+  }
+
+  th{
+    position:sticky;
+    top:0;
+    z-index:2;
+    background:linear-gradient(180deg, rgba(107,15,166,.10), rgba(107,15,166,.06));
+    color:var(--purpleDark);
+    backdrop-filter:blur(8px);
+  }
+
+  tr:hover td{
+    background:rgba(241,198,177,.16);
+  }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:950;
+    background:rgba(241,198,177,.30);
+    color:var(--purpleDark);
+    border:1px solid rgba(241,198,177,.58);
+  }
+
+  /* =========================
+     Notes / Order Cards
+  ========================= */
+  .noteList{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:12px;
+  }
+
+  .noteItem{
+    padding:14px;
+    border-radius:22px;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(252,252,255,.94));
+    border:1px solid rgba(16,24,40,.08);
+    box-shadow:0 16px 28px rgba(16,24,40,.08);
+  }
+
+  .noteTop{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .noteTitle{
+    font-weight:980;
+    margin:0;
+    font-size:15px;
+    color:var(--purpleDark);
+  }
+
+  .noteText{
+    margin:8px 0 0 0;
+    font-weight:900;
+    color:rgba(16,24,40,.72);
+    white-space:pre-wrap;
+    line-height:1.7;
+  }
+
+  .miniGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+  }
+
+  .miniCell{
+    padding:11px 12px;
+    border-radius:16px;
+    background:linear-gradient(180deg,#fff,#fcfcff);
+    border:1px solid rgba(16,24,40,.08);
+    box-shadow:0 8px 18px rgba(16,24,40,.05);
+    white-space:normal;
+  }
+
+  .miniLbl{
+    font-size:12px;
+    font-weight:950;
+    color:rgba(16,24,40,.55);
+  }
+
+  .miniVal{
+    margin-top:4px;
+    font-weight:980;
+    color:var(--purpleDark);
+    line-height:1.8;
+    word-break:break-word;
+  }
+
+  .miniCell .miniVal div{
+    margin:3px 0;
+    line-height:1.75;
+    white-space:normal;
+  }
+
+  .noteItem .miniGrid{
+    align-items:stretch;
+  }
+
+  /* =========================
+     Sticky Note
+  ========================= */
+  .stickyNote{
+    position:relative;
+    max-width:420px;
+    background:rgba(241,198,177,.38);
+    border:1px solid rgba(241,198,177,.85);
+    border-radius:16px;
+    padding:10px 12px;
+    box-shadow:0 10px 22px rgba(16,24,40,.10);
+  }
+
+  .stickyNote:after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:0;
+    height:0;
+    border-top:14px solid rgba(241,198,177,.95);
+    border-right:14px solid transparent;
+    border-top-left-radius:12px;
+    filter:drop-shadow(0 2px 0 rgba(16,24,40,.08));
+  }
+
+  .stickyText{
+    margin:0;
+    font-weight:950;
+    color:rgba(16,24,40,.78);
+    white-space:pre-wrap;
+    line-height:1.7;
+  }
+
+  /* =========================
+     Toasts
+  ========================= */
+  .toasts{
+    position:fixed;
+    bottom:14px;
+    left:14px;
+    right:14px;
+    z-index:9999;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    pointer-events:none;
+  }
+
+  .toast{
+    pointer-events:auto;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:12px 12px;
+    border-radius:18px;
+    background:rgba(255,255,255,.96);
+    border:1px solid rgba(16,24,40,.10);
+    box-shadow:0 16px 36px rgba(16,24,40,.18);
+    backdrop-filter:blur(8px);
+    transform:translateY(12px);
+    opacity:0;
+    animation:toastIn .22s ease-out forwards;
+  }
+
+  @keyframes toastIn{
+    to{
+      transform:translateY(0);
+      opacity:1;
+    }
+  }
+
+  .toast.out{
+    animation:toastOut .18s ease-in forwards;
+  }
+
+  @keyframes toastOut{
+    to{
+      transform:translateY(12px);
+      opacity:0;
+    }
+  }
+
+  .toast .icon{
+    width:34px;
+    height:34px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    flex:0 0 auto;
+    color:#fff;
+  }
+
+  .toast .body{
+    min-width:0;
+    flex:1 1 auto;
+  }
+
+  .toast .title{
+    margin:0;
+    font-size:13px;
+    font-weight:950;
+  }
+
+  .toast .msg{
+    margin:3px 0 0 0;
+    font-size:12.5px;
+    font-weight:900;
+    color:rgba(16,24,40,.72);
+    line-height:1.5;
+  }
+
+  .toast .x{
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    padding:4px;
+    margin-top:-2px;
+    border-radius:10px;
+    color:rgba(16,24,40,.55);
+  }
+
+  .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+  .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+  .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+  .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+
+  .bar{
+    margin-top:10px;
+    height:3px;
+    border-radius:999px;
+    background:rgba(16,24,40,.10);
+    overflow:hidden;
+    direction:rtl;
+  }
+
+  .bar > i{
+    display:block;
+    height:100%;
+    width:100%;
+    background:rgba(16,24,40,.25);
+    transform-origin:right center;
+    animation:shrink linear forwards;
+  }
+
+  @keyframes shrink{
+    to{ transform:scaleX(0); }
+  }
+
+  /* =========================
+     Login
+  ========================= */
+  #app{ display:none; }
+
+  #loginView{
+    position:fixed;
+    inset:0;
+    z-index:20000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    background:
+      radial-gradient(circle at top right, rgba(124,58,237,.14), transparent 28%),
+      radial-gradient(circle at bottom left, rgba(236,72,153,.10), transparent 24%),
+      linear-gradient(180deg, rgba(60,10,99,.65), rgba(241,198,177,.40)),
+      url("d.jpg");
+    background-size:cover;
+    background-position:center;
+    overflow:hidden;
+  }
+
+  .loginShell{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    width:100%;
+  }
+
+  .loginGlow{
+    position:absolute;
+    border-radius:999px;
+    filter:blur(40px);
+    opacity:.18;
+    pointer-events:none;
+  }
+
+  .loginGlow1{
+    width:260px;
+    height:260px;
+    background:rgba(124,58,237,.55);
+    top:8%;
+    right:10%;
+  }
+
+  .loginGlow2{
+    width:220px;
+    height:220px;
+    background:rgba(236,72,153,.45);
+    bottom:8%;
+    left:8%;
+  }
+
+  .loginCard{
+    width:min(500px,100%);
+    background:rgba(255,255,255,.94);
+    border:1px solid rgba(16,24,40,.12);
+    border-radius:26px;
+    box-shadow:0 28px 70px rgba(16,24,40,.22);
+    backdrop-filter:blur(10px);
+    overflow:hidden;
+    position:relative;
+    z-index:1;
+  }
+
+  .loginHead{
+    padding:18px 18px 14px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    border-bottom:1px solid rgba(16,24,40,.08);
+    flex-wrap:wrap;
+    background:
+      radial-gradient(circle at top right, rgba(124,58,237,.10), transparent 42%),
+      linear-gradient(180deg, rgba(255,255,255,.98), rgba(250,247,255,.92));
+  }
+
+  .brandWrap{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .brandMarkLg{
+    width:54px;
+    height:54px;
+    border-radius:18px;
+  }
+
+  .loginTitle{
+    margin:0;
+    font-weight:980;
+    font-size:17px;
+    color:var(--purpleDark);
+  }
+
+  .loginSub{
+    margin:4px 0 0 0;
+    font-weight:900;
+    font-size:12.5px;
+    color:rgba(16,24,40,.60);
+    line-height:1.7;
+  }
+
+  .topStatusBadge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 12px;
+    border-radius:999px;
+    background:rgba(22,163,74,.10);
+    color:#166534;
+    border:1px solid rgba(22,163,74,.16);
+    font-weight:950;
+    font-size:12px;
+  }
+
+  .loginBody{
+    padding:16px 18px 18px;
+  }
+
+  .heroNote{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:14px;
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(124,58,237,.06), rgba(236,72,153,.04));
+    border:1px solid rgba(107,15,166,.10);
+    margin-bottom:14px;
+  }
+
+  .heroIcon{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:var(--purpleDark);
+    background:#fff;
+    border:1px solid rgba(16,24,40,.08);
+    box-shadow:0 8px 18px rgba(16,24,40,.06);
+    flex:0 0 auto;
+  }
+
+  .heroTitle{
+    font-weight:980;
+    color:var(--purpleDark);
+    font-size:15px;
+  }
+
+  .heroText{
+    margin-top:4px;
+    color:rgba(16,24,40,.65);
+    font-weight:900;
+    line-height:1.7;
+    font-size:12.5px;
+  }
+
+  .fieldBlock{
+    display:grid;
+    gap:8px;
+  }
+
+  .fieldLabel{
+    font-size:12px;
+    font-weight:950;
+    color:rgba(16,24,40,.60);
+  }
+
+  .proInputBox{
+    min-height:52px;
+  }
+
+  .loginActions{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+  }
+
+  .loginActions .btn{
+    flex:1;
+  }
+
+  .errLine{
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:14px;
+    background:rgba(239,68,68,.10);
+    border:1px solid rgba(239,68,68,.18);
+    color:#991b1b;
+    font-weight:950;
+    font-size:12.5px;
+    display:none;
+  }
+
+  /* =========================
+     Global Loader
+  ========================= */
+  #globalLoader{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    background:rgba(0,0,0,.38);
+    backdrop-filter:blur(3px);
+    z-index:200000;
+  }
+
+  #globalLoader.show{
+    display:flex;
+  }
+
+  #globalLoader .glCard{
+    width:min(430px,92vw);
+    background:rgba(255,255,255,.97);
+    border:1px solid rgba(16,24,40,.10);
+    box-shadow:0 28px 70px rgba(0,0,0,.24);
+    border-radius:20px;
+    padding:14px 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  #globalLoader .glGif{
+    width:54px;
+    height:54px;
+    border-radius:14px;
+    background:#fff;
+    border:1px solid rgba(16,24,40,.10);
+    object-fit:contain;
+    flex:0 0 auto;
+  }
+
+  #globalLoader .glText{
+    min-width:0;
+    font-family:"Cairo",system-ui,sans-serif;
+    font-weight:950;
+    font-size:14px;
+    color:var(--purpleDark);
+    line-height:1.6;
+  }
+
+  #globalLoader .glSub{
+    margin-top:3px;
+    font-weight:900;
+    font-size:12.5px;
+    color:rgba(16,24,40,.65);
+  }
+
+  /* =========================
+     Modal
+  ========================= */
+  .settleModalCard{
+    width:min(560px,100%);
+    background:rgba(255,255,255,.97);
+    border:1px solid rgba(16,24,40,.10);
+    border-radius:24px;
+    box-shadow:0 24px 60px rgba(16,24,40,.22);
+    overflow:hidden;
+  }
+
+  .settleModalHead{
+    padding:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    border-bottom:1px solid rgba(16,24,40,.08);
+    background:
+      radial-gradient(circle at top right, rgba(124,58,237,.10), transparent 45%),
+      linear-gradient(180deg, rgba(255,255,255,.96), rgba(249,247,255,.90));
+  }
+
+  .settleModalTitleWrap{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .settleModalIcon{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg, var(--purple), var(--purpleDark));
+    color:#fff;
+    flex:0 0 auto;
+  }
+
+  .settleModalTitle{
+    font-size:18px;
+    font-weight:980;
+    color:var(--purpleDark);
+  }
+
+  .settleModalBody{
+    padding:16px;
+    display:grid;
+    gap:12px;
+  }
+
+  .settleStatGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .settleMiniCard{
+    min-height:88px;
+  }
+
+  .settleBigValue{
+    margin-top:4px;
+    font-size:22px;
+    font-weight:990;
+    color:var(--purpleDark);
+  }
+
+  .settleWarnBox{
+    background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(252,250,255,.94));
+  }
+
+  .settleModalFooter{
+    padding:14px 16px;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    border-top:1px solid rgba(16,24,40,.08);
+    background:rgba(242,244,247,.55);
+  }
+
+  .modalCloseIcon{
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:14px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    background:#fff;
+    color:#344054;
+    border:1px solid rgba(16,24,40,.08);
+    box-shadow:0 6px 14px rgba(16,24,40,.06);
+  }
+
+  /* =========================
+     Responsive
+  ========================= */
+  @media (max-width: 900px){
+    body{ background-attachment:scroll; }
+
+    .heroAdminCard{
+      grid-template-columns:1fr;
+    }
+
+    .toolActions{
+      grid-template-columns:1fr 1fr;
+    }
+
+    .settleStatGrid{
+      grid-template-columns:1fr;
+    }
+  }
+
+  @media (max-width: 640px){
+    .wrap{
+      padding:14px 10px 22px;
+    }
+
+    .topbar{
+      padding:12px;
+      gap:10px;
+    }
+
+    .brandMark{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+    }
+
+    .brandName{
+      font-size:17px;
+    }
+
+    .brandSub{
+      font-size:12px;
+    }
+
+    .card{
+      padding:13px;
+      border-radius:22px;
+    }
+
+    .heroAdminValue{
+      font-size:28px;
+    }
+
+    .toolbarGrid{
+      grid-template-columns:1fr;
+    }
+
+    .toolActions{
+      grid-template-columns:1fr;
+    }
+
+    .miniGrid{
+      grid-template-columns:1fr;
+    }
+
+    .tableWrap{
+      max-height:66vh;
+    }
+
+    th,td{
+      font-size:12.5px;
+      padding:9px 9px;
+    }
+
+    .stickyNote{
+      max-width:100%;
+    }
+
+    .loginActions{
+      flex-direction:column;
+    }
+  }
+
+  @media (max-width: 420px){
+    .badge{
+      width:100%;
+      justify-content:center;
+    }
+
+    .topbarActions{
+      width:100%;
+    }
+
+    .countCard{
+      width:100%;
+    }
+
+    .heroAdminLeft{
+      flex-direction:column;
+    }
+  }
+
+  @media (pointer: coarse){
+    .btn{ min-height:46px; }
+    .box{ min-height:46px; }
+  }
+
+  @media (min-width: 900px){
+    #outList.noteList,
+    #shipList.noteList{
+      display:flex !important;
+      flex-direction:column !important;
+      gap:12px !important;
+      width:100% !important;
+    }
+
+    #outList .noteItem,
+    #shipList .noteItem{
+      width:100% !important;
+    }
+
+    .card{
+      width:100% !important;
+    }
+
+    .card > *{
+      align-self:stretch !important;
+    }
+  }
+</style>
+    
+
+</head>
+
+<body>
+
+  <!-- Global Loader -->
+  <div id="globalLoader" aria-hidden="true">
+    <div class="glCard" role="status" aria-live="polite">
+      <img
+        class="glGif"
+        src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/icon_-3.gif"
+        alt="loading"
+      />
+      <div style="min-width:0">
+        <div id="globalLoaderText" class="glText">جاري العمل… اصبر شوي</div>
+        <div class="glSub">لا تسوي تحديث، بنرجع لك حالًا</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- شاشة تسجيل الدخول -->
+  <div id="loginView" aria-label="تسجيل الدخول">
+    <div class="loginShell">
+      <div class="loginGlow loginGlow1"></div>
+      <div class="loginGlow loginGlow2"></div>
+
+      <div class="loginCard proLoginCard">
+        <div class="loginHead proLoginHead">
+          <div class="brandWrap">
+            <div class="brandMark brandMarkLg" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" class="svg" style="stroke:var(--purple);">
+                <path d="M12 7v6l4 2"></path>
+                <circle cx="12" cy="13" r="2.4" style="stroke:var(--peach)"></circle>
+                <path d="M12 3c1.6 0 2.6 1.4 2.1 2.8-.3.8-1.1 1.2-2.1 1.2s-1.8-.4-2.1-1.2C9.4 4.4 10.4 3 12 3Z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="loginTitle">Hala Beauty • لوحة الإدارة</p>
+              <p class="loginSub">لوحة احترافية لتسوية حسابات المندوب ومتابعة الحالات</p>
+            </div>
+          </div>
+
+          <div class="topStatusBadge">
+            <svg class="svg sm" viewBox="0 0 24 24">
+              <path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-4z"></path>
+              <path d="M9.5 12.5l1.7 1.7 3.8-4"></path>
+            </svg>
+            دخول آمن
+          </div>
+        </div>
+
+        <div class="loginBody">
+          <div class="heroNote">
+            <div class="heroIcon">
+              <svg class="svg" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                <path d="M7 9h10"></path>
+                <path d="M7 13h6"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="heroTitle">مرحبًا بك</div>
+              <div class="heroText">أدخل كلمة السر للوصول إلى لوحة التسوية والمتابعة.</div>
+            </div>
+          </div>
+
+          <div class="fieldBlock">
+            <label class="fieldLabel">كلمة السر</label>
+            <div class="box proInputBox" style="margin:0">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                <path d="M6 11h12v10H6z"></path>
+              </svg>
+              <input id="pw" type="password" placeholder="اكتب كلمة السر" autocomplete="current-password">
+            </div>
+          </div>
+
+          <div id="loginErr" class="errLine">كلمة السر غير صحيحة</div>
+
+          <div class="loginActions">
+            <button id="btnLogin" class="btn btnPrimary" type="button">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <path d="M10 17l5-5-5-5"></path>
+                <path d="M15 12H3"></path>
+              </svg>
+              دخول
+            </button>
+
+            <button class="btn btnGhost" type="button" onclick="clearSavedKey()">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M3 6h18"></path>
+                <path d="M8 6V4h8v2"></path>
+                <path d="M19 6l-1 14H6L5 6"></path>
+              </svg>
+              مسح
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- التطبيق -->
+  <div id="app">
+    <div class="wrap">
+
+      <!-- Topbar -->
+      <div class="topbar proTopbar">
+        <div class="brand">
+          <div class="brandMark" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" class="svg" style="stroke:var(--purple);">
+              <path d="M12 7v6l4 2"></path>
+              <circle cx="12" cy="13" r="2.4" style="stroke:var(--peach)"></circle>
+              <path d="M12 3c1.6 0 2.6 1.4 2.1 2.8-.3.8-1.1 1.2-2.1 1.2s-1.8-.4-2.1-1.2C9.4 4.4 10.4 3 12 3Z"></path>
+            </svg>
+          </div>
+
+          <div>
+            <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+            <div class="brandSub">لوحة الإدارة • تسوية حساب المندوب</div>
+          </div>
+        </div>
+
+        <div class="topbarActions">
+          <div class="badge softBadge" title="قائمة التسوية">
+            <svg class="svg sm" viewBox="0 0 24 24">
+              <path d="M8 6h13"></path>
+              <path d="M8 12h13"></path>
+              <path d="M8 18h13"></path>
+              <circle cx="4" cy="6" r="1"></circle>
+              <circle cx="4" cy="12" r="1"></circle>
+              <circle cx="4" cy="18" r="1"></circle>
+            </svg>
+            طلبات التسوية
+          </div>
+
+          <div class="badge successBadge" title="الحالة">
+            <svg class="svg sm" viewBox="0 0 24 24">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            إدارة نشطة
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Summary -->
+      <div class="card heroAdminCard">
+        <div class="heroAdminLeft">
+          <div class="heroAdminIcon">
+            <svg class="svg" viewBox="0 0 24 24">
+              <rect x="2.5" y="4" width="19" height="15" rx="3"></rect>
+              <path d="M16 12h3"></path>
+              <circle cx="8" cy="11.5" r="2"></circle>
+              <path d="M5.5 16c.8-1.4 2.2-2 4-2s3.2.6 4 2"></path>
+            </svg>
+          </div>
+
+          <div>
+            <div class="heroAdminTitle">إجمالي المستحق للإدارة</div>
+            <div id="totalNet" class="heroAdminValue">0 ر.ع</div>
+            <div class="heroAdminSub">يتم احتسابه من الطلبات الظاهرة في جدول التسوية الحالي</div>
+          </div>
+        </div>
+
+        <div class="heroQuickStats">
+          <div class="miniStatCard">
+            <div class="miniStatIcon">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M3 12h18"></path>
+                <path d="M3 6h18"></path>
+                <path d="M3 18h18"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="miniStatLabel">جدول التسوية</div>
+              <div class="miniStatText">عرض احترافي للطلبات والمبالغ</div>
+            </div>
+          </div>
+
+          <div class="miniStatCard">
+            <div class="miniStatIcon">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M21 8l-9-5-9 5 9 5 9-5z"></path>
+                <path d="M3 8v8l9 5 9-5V8"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="miniStatLabel">مراجعة كاملة</div>
+              <div class="miniStatText">تفاصيل المندوب والتسليم في مكان واحد</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters / Actions -->
+      <div class="card filtersCard">
+        <div class="filtersHead">
+          <div>
+            <div class="sectionMainTitle">أدوات التصفية والإدارة</div>
+            <div class="sectionMainSub">فلترة الطلبات، التحديث السريع، التحميل، وترحيل المبالغ</div>
+          </div>
+        </div>
+
+        <div class="toolbarGrid">
+          <div class="toolField">
+            <label class="toolLabel">التاريخ</label>
+            <div class="box toolBox dateBox" title="تقرير يومي">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <path d="M8 2v3"></path>
+                <path d="M16 2v3"></path>
+                <path d="M3 9h18"></path>
+                <path d="M5 5h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"></path>
+              </svg>
+              <input id="date" type="date">
+            </div>
+          </div>
+
+          <div class="toolField">
+            <label class="toolLabel">البحث</label>
+            <div class="box toolBox searchBox">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="M20 20l-3-3"></path>
+              </svg>
+              <input id="q" placeholder="بحث برقم الطلب">
+            </div>
+          </div>
+
+          <div class="toolActions">
+            <button id="btnRefresh" class="btn btnPrimary" onclick="loadAll()">
+              <svg class="svg" viewBox="0 0 24 24">
+                <path d="M21 12a9 9 0 1 1-2.64-6.36"></path>
+                <path d="M21 3v6h-6"></path>
+              </svg>
+              تحديث
+            </button>
+
+            <button id="btnFinance" class="btn btnPrimary altBtn" onclick="window.location.href='k.html'">
+              <svg class="svg" viewBox="0 0 24 24">
+                <rect x="3" y="7" width="18" height="12" rx="2"></rect>
+                <path d="M16 13h3"></path>
+                <circle cx="8" cy="13" r="2"></circle>
+              </svg>
+              الإدارة المالية
+            </button>
+
+            <button class="btn btnGhost" onclick="downloadExcel()">
+              <svg class="svg" viewBox="0 0 24 24">
+                <path d="M14 3v4a2 2 0 0 0 2 2h4"></path>
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z"></path>
+                <path d="M12 12v6"></path>
+                <path d="M9.5 15.5L12 18l2.5-2.5"></path>
+              </svg>
+              تحميل Excel
+            </button>
+
+            <button id="btnSettle" class="btn btnDanger" onclick="settle()">
+              <svg class="svg" viewBox="0 0 24 24">
+                <path d="M12 1v22"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              ترحيل المبلغ
+            </button>
+          </div>
+        </div>
+
+        <div id="meta" class="metaLine"></div>
+      </div>
+
+      <!-- Settlement Table -->
+      <div class="card dataCard">
+        <div class="cardHeadLine">
+          <div class="cardHeadLeft">
+            <div class="headIconBox">
+              <svg class="svg" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                <path d="M7 9h10"></path>
+                <path d="M7 13h10"></path>
+                <path d="M7 17h6"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="cardTitle">جدول التسوية</div>
+              <div class="cardSub">عرض المبالغ المستلمة والمتبقية والمطلوب ترحيله</div>
+            </div>
+          </div>
+
+          <div class="countCard" title="عدد الطلبات">
+            <div class="countNum" id="count">0</div>
+            <div class="countMeta">
+              <div class="countLbl">إحصائية</div>
+              <div class="countTitle">عدد الطلبات الحالية</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tableWrap proTableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>رقم الطلب</th>
+                <th>الحالة المالية</th>
+                <th>الإجمالي</th>
+                <th>التوصيل</th>
+                <th>المتبقي</th>
+                <th>الصافي</th>
+              </tr>
+            </thead>
+            <tbody id="body">
+              <tr><td colspan="6" class="muted" style="padding:14px">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Out for delivery -->
+      <div class="card statusCard">
+        <div class="cardHeadLine">
+          <div class="cardHeadLeft">
+            <div class="headIconBox truckIconBox">
+              <svg class="svg" viewBox="0 0 24 24">
+                <path d="M3 7h11v9H3z"></path>
+                <path d="M14 10h4l3 3v3h-7z"></path>
+                <circle cx="7" cy="18" r="1.8"></circle>
+                <circle cx="18" cy="18" r="1.8"></circle>
+              </svg>
+            </div>
+            <div>
+              <div class="cardTitle">طلبات خرجت للتوصيل</div>
+              <div class="cardSub">وقت خروج المندوب والحالة المالية والملاحظات</div>
+            </div>
+          </div>
+
+          <div class="badge infoBadge" title="حالة خرج للتوصيل">
+            <svg class="svg sm" viewBox="0 0 24 24">
+              <path d="M3 7h11v9H3z"></path>
+              <path d="M14 10h4l3 3v3h-7z"></path>
+            </svg>
+            <span id="outCount">0</span>
+          </div>
+        </div>
+
+        <div id="outList" class="noteList">
+          <div class="muted">لا توجد بيانات</div>
+        </div>
+      </div>
+
+      <!-- Driver pending -->
+      <div class="card statusCard">
+        <div class="cardHeadLine">
+          <div class="cardHeadLeft">
+            <div class="headIconBox packageIconBox">
+              <svg class="svg" viewBox="0 0 24 24">
+                <path d="M21 8l-9-5-9 5 9 5 9-5z"></path>
+                <path d="M3 8v8l9 5 9-5V8"></path>
+                <path d="M12 13v9"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="cardTitle">طلبات مع المندوب</div>
+              <div class="cardSub">الطلبات المعلقة التي لم تبدأ بالتوصيل بعد</div>
+            </div>
+          </div>
+
+          <div class="countCard" title="عدد الطلبات مع المندوب">
+            <div class="countNum" id="shipCount">0</div>
+            <div class="countMeta">
+              <div class="countLbl">إحصائية</div>
+              <div class="countTitle">طلبات معلقة</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="shipList" class="noteList">
+          <div class="muted">لا توجد بيانات</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Confirm Settle -->
+    <div id="m" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:10000;background:rgba(16,24,40,.55);backdrop-filter:blur(6px);padding:16px">
+      <div class="settleModalCard">
+        <div class="settleModalHead">
+          <div class="settleModalTitleWrap">
+            <div class="settleModalIcon">
+              <svg class="svg" viewBox="0 0 24 24" style="stroke:#fff">
+                <path d="M12 1v22"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="settleModalTitle">تأكيد ترحيل الدفعة</div>
+              <div id="mSub" class="muted">—</div>
+            </div>
+          </div>
+
+          <button onclick="closeModal()" class="modalCloseIcon" type="button" aria-label="إغلاق">
+            <svg class="svg sm" viewBox="0 0 24 24">
+              <path d="M6 6l12 12"></path>
+              <path d="M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="settleModalBody">
+          <div class="settleStatGrid">
+            <div class="box settleMiniCard" style="margin:0">
+              <div>
+                <div class="muted">المبلغ</div>
+                <div id="mTotal" class="settleBigValue">—</div>
+              </div>
+            </div>
+
+            <div class="box settleMiniCard" style="margin:0">
+              <div>
+                <div class="muted">عدد الطلبات</div>
+                <div id="mCount" class="settleBigValue">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box settleWarnBox" style="margin:0;align-items:flex-start">
+            <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65);margin-top:2px">
+              <path d="M12 9v4"></path>
+              <path d="M12 17h.01"></path>
+              <path d="M10.3 4.3h3.4L22 20H2z"></path>
+            </svg>
+            <div style="font-weight:900;color:rgba(16,24,40,.70);line-height:1.8">
+              سيتم ترحيل <b>كل الطلبات التي تم توصيلها</b> من القائمة الحالية.
+              <div class="muted" style="margin-top:6px">بعد الترحيل لن تظهر مرة أخرى ضمن نفس قائمة التسوية.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settleModalFooter">
+          <button class="btn btnGhost" onclick="closeModal()">إلغاء</button>
+          <button id="mOk" class="btn btnDanger" onclick="confirmSettle()">تأكيد الترحيل</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   Config / State
+========================= */
+const ADMIN_KEY_STORAGE = "bt_admin_key_v1";
+
+let cache = [];
+let outCache = [];
+let shipCache = [];
+
+/* =========================
+   Helpers
+========================= */
+function $(id){
+  return document.getElementById(id);
+}
+
+function escapeHtml(v){
+  return String(v ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;");
+}
+
+function fmt(n){
+  const x = Number(n || 0) || 0;
+  return `${x.toFixed(3)} ر.ع`;
+}
+
+function fmtMoney(n){
+  return fmt(n);
+}
+
+function fmtDT(v){
+  if(!v) return "—";
+  try{
+    const d = new Date(v);
+    if(Number.isNaN(d.getTime())) return "—";
+    return d.toLocaleString("ar-OM", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }catch{
+    return "—";
+  }
+}
+
+function getSavedKey(){
+  return localStorage.getItem(ADMIN_KEY_STORAGE) || "";
+}
+
+function saveKey(v){
+  localStorage.setItem(ADMIN_KEY_STORAGE, String(v || "").trim());
+}
+
+function clearSavedKey(){
+  localStorage.removeItem(ADMIN_KEY_STORAGE);
+  $("app").style.display = "none";
+  $("loginView").style.display = "flex";
+  $("pw").value = "";
+  const err = $("loginErr");
+  if(err) err.style.display = "none";
+}
+
+function adminHeaders(extra = {}){
+  const key = getSavedKey();
+  return {
+    "x-admin-key": key,
+    ...extra
+  };
+}
+
+function setBusy(busy){
+  const btnLogin = $("btnLogin");
+  const btnSettle = $("btnSettle");
+  const pw = $("pw");
+
+  if(btnLogin) btnLogin.disabled = !!busy;
+  if(btnSettle) btnSettle.disabled = !!busy;
+  if(pw) pw.disabled = !!busy;
+}
+
+function sumNet(rows){
+  return (rows || []).reduce((a, o) => a + (Number(o?.net || 0) || 0), 0);
+}
+
+function getDateParam(){
+  return String($("date")?.value || "").trim();
+}
+
+function getSinceParam(){
+  return String($("since")?.value || "").trim();
+}
+  
+/* =========================
+   Toasts
+========================= */
+function toast(type, title, msg, duration = 2600){
+  const host = $("toasts");
+  if(!host) return;
+
+  const iconSvg = {
+    ok: `<svg class="svg" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`,
+    err: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 8v4"></path><path d="M12 16h.01"></path><path d="M10.3 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.7 3.86a2 2 0 0 0-3.4 0z"></path></svg>`,
+    warn: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 8v4"></path><path d="M12 16h.01"></path><path d="M10.3 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.7 3.86a2 2 0 0 0-3.4 0z"></path></svg>`,
+    info: `<svg class="svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>`
+  }[type || "info"];
+
+  const el = document.createElement("div");
+  el.className = `toast ${type || "info"}`;
+  el.innerHTML = `
+    <div class="icon">${iconSvg}</div>
+    <div class="body">
+      <p class="title">${escapeHtml(title || "")}</p>
+      <p class="msg">${escapeHtml(msg || "")}</p>
+      <div class="bar"><i style="animation-duration:${duration}ms"></i></div>
+    </div>
+    <button class="x" type="button" aria-label="إغلاق">×</button>
+  `;
+
+  const close = () => {
+    el.classList.add("out");
+    setTimeout(() => el.remove(), 180);
+  };
+
+  el.querySelector(".x").addEventListener("click", close);
+  host.appendChild(el);
+  setTimeout(close, duration);
+}
+
+/* =========================
+   Global Loader
+========================= */
+const loaderEl = document.getElementById("globalLoader");
+const loaderTxt = document.getElementById("globalLoaderText");
+
+let __netPending = 0;
+let __netTimer = null;
+
+function setLoaderText(msg){
+  if(loaderTxt) loaderTxt.textContent = msg || "جاري العمل… اصبر شوي";
+}
+
+function showLoader(msg){
+  setLoaderText(msg);
+  if(!loaderEl) return;
+
+  if(__netTimer) clearTimeout(__netTimer);
+  __netTimer = setTimeout(() => {
+    if(__netPending > 0){
+      loaderEl.classList.add("show");
+    }
+  }, 180);
+}
+
+function hideLoader(){
+  if(__netTimer) clearTimeout(__netTimer);
+  if(loaderEl) loaderEl.classList.remove("show");
+}
+
+function netBegin(msg){
+  __netPending++;
+  showLoader(msg);
+}
+
+function netEnd(){
+  __netPending = Math.max(0, __netPending - 1);
+  if(__netPending === 0) hideLoader();
+}
+
+function inferLoaderText(url){
+  const u = String(url || "");
+
+  if(u.includes("/api/admin/settle")){
+    return "جاري ترحيل الطلبات… اصبر شوي";
+  }
+  if(u.includes("/api/admin/orders")){
+    return "جاري جلب طلبات التسوية… اصبر شوي";
+  }
+  if(u.includes("/api/admin/out")){
+    return "جاري جلب الطلبات الخارجة للتوصيل… اصبر شوي";
+  }
+  if(u.includes("/api/admin/shipped-no-tracking")){
+    return "جاري جلب طلبات المندوب… اصبر شوي";
+  }
+
+  return "جاري العمل… اصبر شوي";
+}
+
+const __origFetch = window.fetch.bind(window);
+window.fetch = async (input, init) => {
+  netBegin(inferLoaderText(input));
+  try{
+    return await __origFetch(input, init);
+  } finally {
+    netEnd();
+  }
+};
+
+/* =========================
+   Modal: Confirm Settle
+========================= */
+let _modalResolve = null;
+
+function openSettleModal({ total, count, date }) {
+  const m = document.getElementById("m");
+  const totalEl = document.getElementById("mTotal");
+  const countEl = document.getElementById("mCount");
+  const subEl = document.getElementById("mSub");
+
+  if (!m || !totalEl || !countEl || !subEl) {
+    throw new Error("نافذة الترحيل غير موجودة في الصفحة");
+  }
+
+  totalEl.textContent = fmt(total);
+  countEl.textContent = String(count);
+  subEl.textContent = date
+    ? `تقرير يوم: ${date}`
+    : "كل الطلبات المطابقة للفلتر الحالي";
+
+  m.style.display = "flex";
+
+  return new Promise(resolve => {
+    _modalResolve = resolve;
+  });
+}
+
+function closeModal(){
+  const m = document.getElementById("m");
+  if (m) m.style.display = "none";
+
+  if (_modalResolve) {
+    _modalResolve(false);
+    _modalResolve = null;
+  }
+}
+
+function confirmSettle(){
+  const m = document.getElementById("m");
+  if (m) m.style.display = "none";
+
+  if (_modalResolve) {
+    _modalResolve(true);
+    _modalResolve = null;
+  }
+}
+
+  
+/* =========================
+   Login
+========================= */
+async function tryLogin(){
+  const pw = String($("pw")?.value || "").trim();
+  const err = $("loginErr");
+
+  if(err) err.style.display = "none";
+
+  if(!pw){
+    if(err){
+      err.textContent = "أدخل كلمة السر";
+      err.style.display = "block";
+    }
+    return;
+  }
+
+  saveKey(pw);
+
+  try{
+    setBusy(true);
+    await loadAll();
+    if ($("loginView")) $("loginView").style.display = "none";
+    if ($("app")) $("app").style.display = "block";
+    toast("ok", "تم الدخول", "تم فتح لوحة الإدارة بنجاح", 1800);
+  }catch(e){
+    const msg = String(e?.message || "تعذر فتح لوحة الإدارة");
+    clearSavedKey();
+    if(err){
+      err.textContent = msg;
+      err.style.display = "block";
+    }
+  }finally{
+    setBusy(false);
+  }
+}
+
+  
+/* =========================
+   Data Loaders
+========================= */
+async function loadOrders(){
+  const q = String($("q")?.value || "").trim();
+  const date = getDateParam();
+  const since = getSinceParam();
+
+  const qs = new URLSearchParams();
+  if(date) qs.set("date", date);
+  if(q) qs.set("q", q);
+  if(since) qs.set("since", since);
+
+  const r = await fetch("/api/admin/orders" + (qs.toString() ? ("?" + qs.toString()) : ""), {
+    headers: adminHeaders()
+  });
+
+  const d = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(d.error || "فشل جلب الطلبات");
+
+  cache = d.orders || [];
+
+  const qText = q ? ` • البحث: ${q}` : "";
+  const dateText = date ? ` • التاريخ: ${date}` : "";
+  const sinceText = since ? ` • من: ${since}` : "";
+
+  if ($("count")) $("count").textContent = d.count || 0;
+  if ($("totalNet")) $("totalNet").textContent = fmt(sumNet(cache));
+  if ($("meta")) $("meta").textContent = `عدد النتائج: ${d.count || 0}${dateText}${sinceText}${qText}`;
+
+  renderTable(cache);
+}
+
+  
+async function loadOutList(){
+  const q = String($("q")?.value || "").trim();
+  const date = getDateParam();
+  const since = getSinceParam();
+
+  const qs = new URLSearchParams();
+  if(date) qs.set("date", date);
+  if(q) qs.set("q", q);
+  if(since) qs.set("since", since);
+
+  const r = await fetch("/api/admin/out" + (qs.toString() ? ("?" + qs.toString()) : ""), {
+    headers: adminHeaders()
+  });
+
+  const d = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(d.error || "فشل جلب قائمة خرج للتوصيل");
+
+  outCache = d.orders || [];
+  if ($("outCount")) $("outCount").textContent = d.count || 0;
+  renderOut(outCache);
+}
+
+async function loadShipList(){
+  const q = String($("q")?.value || "").trim();
+  const date = getDateParam();
+  const since = getSinceParam();
+
+  const qs = new URLSearchParams();
+  if(date) qs.set("date", date);
+  if(q) qs.set("q", q);
+  if(since) qs.set("since", since);
+
+  const r = await fetch("/api/admin/shipped-no-tracking" + (qs.toString() ? ("?" + qs.toString()) : ""), {
+    headers: adminHeaders()
+  });
+
+  const d = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(d.error || "فشل جلب قائمة تم الشحن بدون تتبع");
+
+  shipCache = d.orders || [];
+  if ($("shipCount")) $("shipCount").textContent = d.count || 0;
+  renderShip(shipCache);
+}
+  
+async function loadAll(){
+  try{
+    setBusy(true);
+    await Promise.all([loadOrders(), loadOutList(), loadShipList()]);
+  }catch(e){
+    const msg = (e && e.message) ? String(e.message) : "حدث خطأ";
+    if (msg.includes("غير مصرح")) {
+      clearSavedKey();
+      throw e;
+    }
+    toast("err","تعذر التحديث", msg);
+    throw e;
+  }finally{
+    setBusy(false);
+  }
+}
+
+/* =========================
+   Renderers
+========================= */
+function renderTable(rows){
+  const tb = $("body");
+  if(!tb) return;
+
+  if(!rows.length){
+    tb.innerHTML = `<tr><td colspan="6" class="muted" style="padding:14px">لا توجد بيانات</td></tr>`;
+    return;
+  }
+
+  tb.innerHTML = rows.map(o => `
+    <tr>
+      <td><b>${escapeHtml(o.orderName || "")}</b></td>
+      <td><span class="pill">${escapeHtml(o.status || "")}</span></td>
+      <td>${fmt(o.total)}</td>
+      <td>${fmt(o.fee)}</td>
+      <td><b>${fmt(o.outstanding)}</b></td>
+      <td><b>${fmt(o.net)}</b></td>
+    </tr>
+  `).join("");
+}
+
+function translateFinancialForCard(financialRaw, outstanding){
+  const out = Number(outstanding || 0) || 0;
+  if (out <= 0) return "مدفوع";
+
+  const f = String(financialRaw || "").trim().toUpperCase();
+  if (f.includes("PENDING") || f.includes("UNPAID")) return `غير مدفوع • ${fmtMoney(out)}`;
+  if (f.includes("PARTIALLY")) return `مدفوع جزئي • ${fmtMoney(out)}`;
+  return `المستحق: ${fmtMoney(out)}`;
+}
+
+function safeText(v, dash = "—"){
+  const s = String(v ?? "").trim();
+  return s || dash;
+}
+
+function itemsToHtml(items){
+  const arr = Array.isArray(items) ? items.filter(Boolean) : [];
+  if(!arr.length){
+    return `<div class="miniVal">—</div>`;
+  }
+
+  return `
+    <div class="miniVal">
+      ${arr.map(x => `<div>${escapeHtml(String(x.title || ""))} × ${escapeHtml(String(x.qty || 0))}</div>`).join("")}
+    </div>
+  `;
+}
+
+function buildDetailsGrid(o, timeLabel, timeValue){
+  const customerName = safeText(o.customerName);
+  const phone = safeText(o.phone);
+  const address = safeText(o.address || o.addressLine);
+  const city = safeText(o.city || o.cityName);
+  const financialText = translateFinancialForCard(o.financial, o.outstanding);
+  const net = Number(o.net || 0) || 0;
+
+  return `
+    <div class="miniGrid">
+      <div class="miniCell">
+        <div class="miniLbl">${escapeHtml(timeLabel)}</div>
+        <div class="miniVal">${escapeHtml(safeText(timeValue))}</div>
+      </div>
+
+      <div class="miniCell">
+        <div class="miniLbl">الاسم</div>
+        <div class="miniVal">${escapeHtml(customerName)}</div>
+      </div>
+
+      <div class="miniCell">
+        <div class="miniLbl">الرقم</div>
+        <div class="miniVal">${escapeHtml(phone)}</div>
+      </div>
+
+      <div class="miniCell">
+        <div class="miniLbl">المنطقة / المدينة</div>
+        <div class="miniVal">${escapeHtml(city)}</div>
+      </div>
+
+      <div class="miniCell" style="grid-column:1/-1">
+        <div class="miniLbl">العنوان</div>
+        <div class="miniVal">${escapeHtml(address)}</div>
+      </div>
+
+      <div class="miniCell" style="grid-column:1/-1">
+        <div class="miniLbl">تفاصيل الطلب</div>
+        ${itemsToHtml(o.items)}
+      </div>
+
+      <div class="miniCell">
+        <div class="miniLbl">الحالة المالية</div>
+        <div class="miniVal">${escapeHtml(financialText)}</div>
+      </div>
+
+      <div class="miniCell">
+        <div class="miniLbl">المبلغ المطلوب تسليمه للإدارة</div>
+        <div class="miniVal">${escapeHtml(fmtMoney(net))}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderOut(rows){
+  const wrap = $("outList");
+  if(!rows.length){
+    wrap.innerHTML = `<div class="muted">لا توجد طلبات خرجت للتوصيل حاليًا</div>`;
+    return;
+  }
+
+  wrap.innerHTML = rows.map(o => {
+    const outAtTxt = fmtDT(o.outAt);
+    const noteText = String(o.note || "").trim();
+    const noteHtml = noteText
+      ? `<div class="stickyNote" title="ملاحظة المندوب"><p class="stickyText">${escapeHtml(noteText)}</p></div>`
+      : ``;
+
+    return `
+      <div class="noteItem">
+        <div class="noteTop" style="align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <p class="noteTitle">الطلب: <b>${escapeHtml(o.orderName || "")}</b></p>
+            <span class="badge">
+              <svg class="svg sm" viewBox="0 0 24 24"><path d="M3 7h11v10H3z"></path><path d="M14 10h4l3 3v4h-7z"></path></svg>
+              خرج للتوصيل
+            </span>
+          </div>
+          ${noteHtml}
+        </div>
+
+        ${buildDetailsGrid(o, "وقت خروج المندوب", outAtTxt)}
+      </div>
+    `;
+  }).join("");
+}
+
+function renderShip(rows){
+  const wrap = $("shipList");
+  if(!rows.length){
+    wrap.innerHTML = `<div class="muted">لا توجد طلبات “تم الشحن بدون تتبع” حاليًا</div>`;
+    return;
+  }
+
+  wrap.innerHTML = rows.map(o => {
+    const handedTxt = fmtDT(o.handedAt);
+    const noteText = String(o.note || "").trim();
+    const noteHtml = noteText
+      ? `<div class="stickyNote" title="ملاحظة المندوب"><p class="stickyText">${escapeHtml(noteText)}</p></div>`
+      : ``;
+
+    return `
+      <div class="noteItem">
+        <div class="noteTop" style="align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <p class="noteTitle">الطلب: <b>${escapeHtml(o.orderName || "")}</b></p>
+            <span class="badge">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M21 8l-9-5-9 5 9 5 9-5z"></path>
+                <path d="M3 8v8l9 5 9-5V8"></path>
+                <path d="M12 13v9"></path>
+              </svg>
+              لدى المندوب
+            </span>
+          </div>
+          ${noteHtml}
+        </div>
+
+        ${buildDetailsGrid(o, "وقت تسليم المندوب", handedTxt)}
+      </div>
+    `;
+  }).join("");
+}
+
+/* =========================
+   Actions
+========================= */
+async function settle(){
+  if(!cache.length){
+    toast("warn","لا توجد بيانات","لا توجد طلبات جاهزة للترحيل");
+    return;
+  }
+
+  const total = sumNet(cache);
+  const count = cache.length;
+  const date = getDateParam();
+
+  const ok = await openSettleModal({ total, count, date });
+  if(!ok) return;
+
+  try{
+    setBusy(true);
+
+    const q = String(document.getElementById("q")?.value || "").trim();
+    const since = getSinceParam();
+
+    const qs = new URLSearchParams();
+    if (date) qs.set("date", date);
+    if (q) qs.set("q", q);
+    if (since) qs.set("since", since);
+
+    const r = await fetch("/api/admin/settle" + (qs.toString() ? ("?" + qs.toString()) : ""), {
+      method: "POST",
+      headers: adminHeaders()
+    });
+
+    const d = await r.json().catch(() => ({}));
+    if(!r.ok) throw new Error(d.error || "فشل الترحيل");
+
+    const failed = Number(d.failedCount || 0);
+    const skipped = Number(d.skippedCount || 0);
+    const archived = Number(d.archivedCount || 0);
+
+    if (failed > 0){
+      toast("warn","تم الترحيل مع ملاحظات", `تم: ${archived} • متجاوز: ${skipped} • فشل: ${failed}`, 4200);
+    } else {
+      toast("ok","تم الترحيل بنجاح", `تم وسم ${archived} طلب بتاق “مرحل”${skipped ? ` • تم تجاوز ${skipped}` : ""}`, 3200);
+    }
+
+    await loadAll();
+  } catch(e){
+    toast("err","فشل الترحيل", e.message || "حدث خطأ أثناء الترحيل");
+  } finally {
+    setBusy(false);
+  }
+}
+
+  
+function downloadExcel(){
+  if(!cache.length){
+    toast("warn","لا توجد بيانات","لا توجد طلبات للتقرير");
+    return;
+  }
+
+  netBegin("جاري تجهيز ملف الإكسل… اصبر شوي");
+  try{
+    const date = getDateParam() || new Date().toISOString().slice(0,10);
+
+    const rows = cache.map(o => {
+      const total = Number(o.total || 0) || 0;
+      const fee = Number(o.fee || 0) || 0;
+      const outstanding = Number(o.outstanding || 0) || 0;
+      const net = Number(o.net || 0) || 0;
+      const isPaid = outstanding <= 0;
+
+      return {
+        "رقم الطلب": o.orderName || "",
+        "الاسم": o.customerName || "",
+        "الرقم": o.phone || "",
+        "المدينة / المنطقة": o.city || "",
+        "العنوان": o.address || "",
+        "تفاصيل الطلب": Array.isArray(o.items)
+          ? o.items.map(x => `${x.title} × ${x.qty}`).join(" | ")
+          : (o.itemsText || ""),
+        "الحالة المالية": isPaid ? "مدفوع" : (o.status || ""),
+        "الإجمالي": isPaid ? "" : total,
+        "التوصيل": isPaid ? "" : fee,
+        "المبلغ المتبقي على العميل": isPaid ? "" : outstanding,
+        "المبلغ المطلوب تسليمه للإدارة": net
+      };
+    });
+
+    const totalToAdmin = rows.reduce((acc, r) => acc + (Number(r["المبلغ المطلوب تسليمه للإدارة"]) || 0), 0);
+
+    rows.push({
+      "رقم الطلب": "الإجمالي",
+      "الاسم": "",
+      "الرقم": "",
+      "المدينة / المنطقة": "",
+      "العنوان": "",
+      "تفاصيل الطلب": "",
+      "الحالة المالية": "",
+      "الإجمالي": "",
+      "التوصيل": "",
+      "المبلغ المتبقي على العميل": "",
+      "المبلغ المطلوب تسليمه للإدارة": totalToAdmin
+    });
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+
+    ws["!cols"] = [
+      { wch: 14 },
+      { wch: 24 },
+      { wch: 16 },
+      { wch: 18 },
+      { wch: 34 },
+      { wch: 44 },
+      { wch: 18 },
+      { wch: 12 },
+      { wch: 12 },
+      { wch: 18 },
+      { wch: 22 }
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "تقرير المندوب");
+    XLSX.writeFile(wb, `Driver_Full_Report_${date}.xlsx`);
+
+    toast("ok","تم التحميل","تم تحميل تقرير Excel الكامل بنجاح");
+  }catch(e){
+    toast("err","فشل التحميل", e.message || "تعذر إنشاء الملف");
+  }finally{
+    netEnd();
+  }
+}
+
+/* =========================
+   Events
+========================= */
+window.addEventListener("DOMContentLoaded", async () => {
+  const saved = getSavedKey();
+
+  $("btnLogin")?.addEventListener("click", tryLogin);
+
+  $("pw")?.addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      e.preventDefault();
+      tryLogin();
+    }
+  });
+
+  $("q")?.addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      e.preventDefault();
+      loadAll().catch(() => {});
+    }
+  });
+
+  if($("date")){
+    $("date").value = new Date().toISOString().slice(0,10);
+  }
+
+  if(saved){
+    $("pw").value = saved;
+    try{
+      await loadAll();
+      $("loginView").style.display = "none";
+      $("app").style.display = "block";
+    }catch{
+      clearSavedKey();
+    }
+  }else{
+    $("app").style.display = "none";
+    $("loginView").style.display = "flex";
+  }
+});
+</script>
+
+  
+</body>
+</html>

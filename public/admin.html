@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | لوحة الإدارة</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root{
+      --purple:#6B0FA6; --purpleDark:#3C0A63; --peach:#F1C6B1;
+      --ink:#101828; --muted:#667085;
+      --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12); --shadow2:0 8px 18px rgba(16,24,40,.10);
+      --r18:18px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+    .wrap{ max-width:1100px; margin:0 auto; padding:18px 14px 26px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow2); border:1px solid var(--line);
+      backdrop-filter: blur(6px); flex-wrap:wrap;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandMark{
+      width:44px; height:44px; border-radius:14px; display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      flex:0 0 auto;
+    }
+    .brandName{
+      font-size:18px; font-weight:900; margin:0; line-height:1.2;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brandName .b1{ color:var(--purple); } .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px; padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+
+    .row{
+      display:flex; gap:10px; align-items:stretch; flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .box{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px;
+      background:#fff; border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+    }
+    .box input{
+      border:none; outline:none; width:100%;
+      font-family:"Cairo"; font-weight:900;
+      background:transparent;
+    }
+    .searchBox{ flex:1; min-width:240px; }
+    .dateBox{ width:190px; }
+
+    .btn{
+      border:none; border-radius:14px; padding:12px 12px; cursor:pointer;
+      font-weight:900; font-size:14px; font-family:"Cairo";
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none; white-space:nowrap;
+    }
+    .btn:active{ transform:scale(.985); }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff; box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .btnGhost{
+      background:#f2f4f7; color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+    .btnDanger{
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color:#fff; box-shadow:0 10px 22px rgba(239,68,68,.18);
+    }
+    .btn[disabled]{ opacity:.65; cursor:not-allowed; }
+
+    .totalCard{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:14px; flex-wrap:wrap;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(107,15,166,.18);
+    }
+    .totalTitle{ font-size:13px; color:rgba(16,24,40,.62); font-weight:950; }
+    .totalValue{ margin-top:6px; font-size:30px; font-weight:980; color:var(--purpleDark); }
+    .totalSub{ margin-top:4px; font-size:12px; color:rgba(16,24,40,.55); font-weight:900; }
+
+    .metaLine{
+      margin-top:10px;
+      color:rgba(16,24,40,.62);
+      font-weight:900;
+      font-size:12.5px;
+      min-height:18px;
+    }
+
+    .tableWrap{
+      margin-top:12px;
+      border-radius:14px;
+      overflow:auto;
+      max-height:60vh;
+      border:1px solid rgba(16,24,40,.08);
+      background:#fff;
+    }
+    table{ width:100%; border-collapse:collapse; }
+    th,td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(16,24,40,.08);
+      text-align:right;
+      font-weight:900;
+      font-size:13px;
+      white-space:nowrap;
+    }
+    th{
+      background:rgba(107,15,166,.08);
+      color:var(--purpleDark);
+      position:sticky; top:0; z-index:2;
+    }
+    tr:hover td{ background:rgba(241,198,177,.18); }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      background: rgba(241,198,177,.35);
+      color: var(--purpleDark);
+      border:1px solid rgba(241,198,177,.65);
+    }
+
+    .noteList{ display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+    .noteItem{
+      padding:12px;
+      border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+    }
+    .noteTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .noteTitle{ font-weight:950; margin:0; }
+    .noteText{
+      margin:8px 0 0 0;
+      font-weight:900;
+      color:rgba(16,24,40,.70);
+      white-space:pre-wrap;
+      line-height:1.5;
+    }
+    .muted{ color:rgba(16,24,40,.55); font-weight:900; font-size:12px; }
+
+    .miniGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:8px 10px;
+      margin-top:10px;
+    }
+    .miniCell{
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+    }
+    .miniLbl{ font-size:12px; font-weight:950; color:rgba(16,24,40,.55); }
+    .miniVal{ margin-top:3px; font-weight:980; color:var(--purpleDark); }
+
+    .svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .svg.sm{ width:18px; height:18px; }
+
+    .toasts{ position:fixed; bottom:14px; left:14px; right:14px; z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
+    .toast{
+      pointer-events:auto; display:flex; align-items:flex-start; gap:10px;
+      padding:12px 12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px); opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+    .toast .icon{ width:34px; height:34px; border-radius:12px; display:grid; place-items:center; flex:0 0 auto; color:#fff; }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{ border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px; border-radius:10px; color:rgba(16,24,40,.55); }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+    .bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+    .bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+    @keyframes shrink{ to{ transform:scaleX(0); } }
+
+    /* ورقة ملاحظة جنب رقم الطلب */
+    .stickyNote{
+      position:relative;
+      max-width: 420px;
+      background: rgba(241,198,177,.38);
+      border:1px solid rgba(241,198,177,.85);
+      border-radius:14px;
+      padding:10px 12px;
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+    }
+    .stickyNote:after{
+      content:"";
+      position:absolute;
+      top:0; left:0;
+      width:0; height:0;
+      border-top:14px solid rgba(241,198,177,.95);
+      border-right:14px solid transparent;
+      border-top-left-radius:12px;
+      filter: drop-shadow(0 2px 0 rgba(16,24,40,.08));
+    }
+    .stickyText{
+      margin:0;
+      font-weight:950;
+      color:rgba(16,24,40,.78);
+      white-space:pre-wrap;
+      line-height:1.5;
+    }
+
+    .countCard{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:16px;
+      background: rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+    }
+    .countNum{
+      min-width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:980;
+      font-size:18px;
+      color:#fff;
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+    }
+    .countMeta{ line-height:1.1; }
+    .countLbl{
+      font-size:12px;
+      font-weight:950;
+      color:rgba(16,24,40,.55);
+    }
+    .countTitle{
+      font-size:13.5px;
+      font-weight:980;
+      color:var(--purpleDark);
+      margin-top:3px;
+    }
+
+    /* =========================
+       ✅ Responsive (Mobile + Web)
+       ========================= */
+    @media (max-width: 768px){
+      body{ background-attachment:scroll; }
+    }
+    @media (max-width: 640px){
+      .wrap{ padding:14px 10px 22px; }
+      .topbar{ padding:12px; gap:10px; }
+      .brandMark{ width:40px; height:40px; border-radius:12px; }
+      .brandName{ font-size:16px; }
+      .brandSub{ font-size:12px; }
+      .card{ padding:12px; }
+      .totalValue{ font-size:26px; }
+      .row{ gap:10px; }
+      .dateBox{ width:100%; }
+      .searchBox{ min-width:0; width:100%; }
+      .btn{ width:100%; justify-content:center; }
+      .miniGrid{ grid-template-columns: 1fr; }
+      .tableWrap{ max-height:65vh; }
+      th,td{ font-size:12.5px; padding:9px 9px; }
+      .stickyNote{ max-width:100%; }
+    }
+    @media (max-width: 380px){
+      .badge{ font-size:11.5px; padding:7px 9px; }
+      .totalValue{ font-size:24px; }
+    }
+    @media (pointer: coarse){
+      .btn{ min-height:44px; }
+      .box{ min-height:44px; }
+    }
+
+    /* ✅ إجبار الطلبات تكون بالطول (عمود واحد) وتاخذ عرض كامل */
+    @media (min-width: 900px){
+      #outList.noteList,
+      #shipList.noteList{
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100% !important;
+      }
+      #outList .noteItem,
+      #shipList .noteItem{
+        width: 100% !important;
+      }
+      .card{ width: 100% !important; }
+      .card > *{ align-self: stretch !important; }
+    }
+
+    /* =====================
+       ✅ Login Screen (Pro)
+       ===================== */
+    #app{ display:none; }
+
+    #loginView{
+      position:fixed; inset:0; z-index:20000;
+      display:flex; align-items:center; justify-content:center;
+      padding:18px;
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.65), rgba(241,198,177,.40)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+    }
+
+    .loginCard{
+      width:min(460px, 100%);
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(16,24,40,.12);
+      border-radius:22px;
+      box-shadow:0 22px 60px rgba(16,24,40,.22);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .loginHead{
+      padding:16px 16px 12px;
+      display:flex; align-items:center; gap:12px;
+      border-bottom:1px solid rgba(16,24,40,.08);
+    }
+    .loginTitle{ margin:0; font-weight:980; font-size:16px; color:var(--purpleDark); }
+    .loginSub{ margin:4px 0 0 0; font-weight:900; font-size:12.5px; color:rgba(16,24,40,.60); }
+    .loginBody{ padding:14px 16px 16px; }
+    .loginHint{
+      margin:0 0 12px 0;
+      font-weight:900;
+      color:rgba(16,24,40,.62);
+      font-size:12.5px;
+    }
+    .loginActions{ display:flex; gap:10px; margin-top:12px; }
+    .loginActions .btn{ flex:1; }
+    .errLine{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(239,68,68,.10);
+      border:1px solid rgba(239,68,68,.18);
+      color:#991b1b;
+      font-weight:950;
+      font-size:12.5px;
+      display:none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ✅ شاشة تسجيل الدخول (بدون منبثقة) -->
+  <div id="loginView" aria-label="تسجيل الدخول">
+    <div class="loginCard">
+      <div class="loginHead">
+        <div class="brandMark" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" class="svg" style="stroke:var(--purple);">
+            <path d="M12 7v6l4 2"></path>
+            <circle cx="12" cy="13" r="2.4" style="stroke:var(--peach)"></circle>
+            <path d="M12 3c1.6 0 2.6 1.4 2.1 2.8-.3.8-1.1 1.2-2.1 1.2s-1.8-.4-2.1-1.2C9.4 4.4 10.4 3 12 3Z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="loginTitle">Hala Beauty • لوحة الإدارة</p>
+          <p class="loginSub">تسجيل دخول آمن للوصول إلى البيانات</p>
+        </div>
+      </div>
+
+      <div class="loginBody">
+        <p class="loginHint">أدخل كلمة السر للمتابعة</p>
+
+        <div class="box" style="margin:0">
+          <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+            <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+            <path d="M6 11h12v10H6z"></path>
+          </svg>
+          <input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password">
+        </div>
+
+        <div id="loginErr" class="errLine">كلمة السر غير صحيحة</div>
+
+        <div class="loginActions">
+          <button id="btnLogin" class="btn btnPrimary" type="button">
+            دخول
+          </button>
+          <button class="btn btnGhost" type="button" onclick="clearSavedKey()">
+            مسح
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ التطبيق -->
+  <div id="app">
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">
+          <div class="brandMark" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" class="svg" style="stroke:var(--purple);">
+              <path d="M12 7v6l4 2"></path>
+              <circle cx="12" cy="13" r="2.4" style="stroke:var(--peach)"></circle>
+              <path d="M12 3c1.6 0 2.6 1.4 2.1 2.8-.3.8-1.1 1.2-2.1 1.2s-1.8-.4-2.1-1.2C9.4 4.4 10.4 3 12 3Z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+            <div class="brandSub">لوحة الإدارة • تسوية حساب المندوب</div>
+          </div>
+        </div>
+
+        <div class="badge" title="قائمة التسوية">
+          <svg class="svg sm" viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"></path></svg>
+          طلبات للتسوية
+        </div>
+      </div>
+
+      <div class="card totalCard">
+        <div style="min-width:260px">
+          <div class="totalTitle">المبلغ الكلي المطلوب من المندوب (مجموع الصافي)</div>
+          <div id="totalNet" class="totalValue">0 ر.ع</div>
+          <div class="totalSub">تم حسابه من الطلبات الظاهرة في الجدول الذي تم التوصيل</div>
+        </div>
+
+        <div style="flex:1">
+          <div class="row">
+            <div class="box dateBox" title="تقرير يومي">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <path d="M8 2v3"></path><path d="M16 2v3"></path>
+                <path d="M3 9h18"></path>
+                <path d="M5 5h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"></path>
+              </svg>
+              <input id="date" type="date">
+            </div>
+
+            <div class="box searchBox">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="M20 20l-3-3"></path>
+              </svg>
+              <input id="q" placeholder="بحث برقم الطلب">
+            </div>
+
+            <button id="btnRefresh" class="btn btnPrimary" onclick="loadAll()">
+              <svg class="svg" viewBox="0 0 24 24"><path d="M21 21H3"></path><path d="M12 3v10"></path><path d="M8 11l4 4 4-4"></path></svg>
+              تحديث
+            </button>
+
+            <button class="btn btnGhost" onclick="downloadExcel()">
+              <svg class="svg" viewBox="0 0 24 24">
+                <path d="M14 3v4a2 2 0 0 0 2 2h4"></path>
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z"></path>
+                <path d="M9 14l6 0"></path>
+                <path d="M10 12l-1 4"></path>
+                <path d="M14 12l1 4"></path>
+              </svg>
+              تحميل Excel
+            </button>
+
+            <button id="btnSettle" class="btn btnDanger" onclick="settle()">
+              <svg class="svg" viewBox="0 0 24 24"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              ترحيل المبلغ
+            </button>
+          </div>
+
+          <div id="meta" class="metaLine"></div>
+        </div>
+      </div>
+
+      <!-- جدول التسوية -->
+      <div class="card">
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>رقم الطلب</th>
+                <th>الحالة المالية</th>
+                <th>الإجمالي</th>
+                <th>التوصيل</th>
+                <th>المتبقي</th>
+                <th>الصافي</th>
+              </tr>
+            </thead>
+            <tbody id="body">
+              <tr><td colspan="6" class="muted" style="padding:14px">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- قائمة خرج للتوصيل (مسقط) + ملاحظة -->
+      <div class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="brandMark" style="width:40px;height:40px;border-radius:14px;">
+              <svg class="svg" viewBox="0 0 24 24" style="color:var(--purpleDark)">
+                <path d="M3 7h11v10H3z"></path>
+                <path d="M14 10h4l3 3v4h-7z"></path>
+                <circle cx="7" cy="19" r="1.8"></circle>
+                <circle cx="18" cy="19" r="1.8"></circle>
+              </svg>
+            </div>
+            <div>
+              <div style="font-weight:950">طلبات خرجت للتوصيل (مسقط)</div>
+              <div class="muted">يظهر وقت خروج المندوب + الحالة المالية + المستحق + ملاحظة المندوب</div>
+            </div>
+          </div>
+
+          <div class="badge" title="حالة خرج للتوصيل">
+            <svg class="svg sm" viewBox="0 0 24 24"><path d="M3 7h11v10H3z"></path><path d="M14 10h4l3 3v4h-7z"></path></svg>
+            <span id="outCount">0</span>
+          </div>
+        </div>
+
+        <div id="outList" class="noteList">
+          <div class="muted">لا توجد بيانات</div>
+        </div>
+      </div>
+
+      <!-- ✅ قائمة (بدون تتبع) -->
+      <div class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="brandMark" style="width:40px;height:40px;border-radius:14px;">
+              <svg class="svg" viewBox="0 0 24 24" style="color:var(--purpleDark)">
+                <path d="M3 7h11v10H3z"></path>
+                <path d="M14 10h4l3 3v4h-7z"></path>
+                <circle cx="7" cy="19" r="1.8"></circle>
+                <circle cx="18" cy="19" r="1.8"></circle>
+              </svg>
+            </div>
+            <div>
+              <div style="font-weight:950">طلبات مع المندوب (مسقط)</div>
+              <div class="muted">يظهر وقت تسليم المندوب - الطلبات المعلّقة التي لم تتحرك حتى الآن</div>
+            </div>
+          </div>
+
+          <div class="countCard" title="عدد الطلبات مع المندوب">
+            <div class="countNum" id="shipCount">0</div>
+            <div class="countMeta">
+              <div class="countLbl">إحصائية</div>
+              <div class="countTitle">الطلبات التي لم تبدأ بالتوصيل</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="shipList" class="noteList">
+          <div class="muted">لا توجد بيانات</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: تأكيد الترحيل -->
+    <div id="m" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:10000;background:rgba(16,24,40,.55);backdrop-filter:blur(6px);padding:16px">
+      <div style="width:min(520px,100%);background:rgba(255,255,255,.96);border:1px solid rgba(16,24,40,.12);border-radius:22px;box-shadow:0 18px 50px rgba(16,24,40,.22);overflow:hidden">
+        <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(16,24,40,.08)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--purple),var(--purpleDark))">
+              <svg class="svg" viewBox="0 0 24 24" style="stroke:#fff"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+              <div style="font-weight:980">تأكيد ترحيل الدفعة</div>
+              <div id="mSub" class="muted">—</div>
+            </div>
+          </div>
+
+          <button onclick="closeModal()" class="x" style="padding:6px;border-radius:12px;border:none;background:transparent;cursor:pointer">
+            <svg class="svg sm" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+          </button>
+        </div>
+
+        <div style="padding:14px 16px">
+          <div style="display:grid;gap:10px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="box" style="margin:0">
+                <div style="min-width:0">
+                  <div class="muted">المبلغ</div>
+                  <div id="mTotal" style="font-weight:980;font-size:20px;color:var(--purpleDark)">—</div>
+                </div>
+              </div>
+              <div class="box" style="margin:0">
+                <div style="min-width:0">
+                  <div class="muted">عدد الطلبات</div>
+                  <div id="mCount" style="font-weight:980;font-size:20px;color:var(--purpleDark)">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="box" style="margin:0;align-items:flex-start">
+              <svg class="svg sm" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65);margin-top:2px">
+                <path d="M12 9v4"></path><path d="M12 17h.01"></path>
+                <path d="M10.3 4.3h3.4L22 20H2z"></path>
+              </svg>
+              <div style="font-weight:900;color:rgba(16,24,40,.70);line-height:1.6">
+                سيتم ترحيل <b>كل الطلبات التي تم توصيلها</b> من القائمة الحالية.
+                <div class="muted" style="margin-top:6px">لن تظهر مرة اخرى هنا</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 16px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid rgba(16,24,40,.08);background:rgba(242,244,247,.55)">
+          <button class="btn btnGhost" onclick="closeModal()">إلغاء</button>
+          <button id="mOk" class="btn btnDanger" onclick="confirmSettle()">تأكيد الترحيل</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ======================
+   ✅ ADMIN KEY HELPERS
+   ====================== */
+function getAdminKey(){
+  return localStorage.getItem("ADMIN_KEY") || "";
+}
+function adminHeaders(){
+  return { "x-admin-key": getAdminKey() };
+}
+
+/* ======================
+   ✅ Login UI
+   كلمة السر عند السيرفر: 0
+   ====================== */
+function showLogin(msg){
+  document.getElementById("loginView").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+  const err = document.getElementById("loginErr");
+  if(msg){
+    err.textContent = msg;
+    err.style.display = "block";
+  }else{
+    err.style.display = "none";
+  }
+  setTimeout(()=> document.getElementById("pw")?.focus(), 50);
+}
+
+function showApp(){
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("app").style.display = "block";
+}
+
+function clearSavedKey(){
+  localStorage.removeItem("ADMIN_KEY");
+  const pw = document.getElementById("pw");
+  if(pw) pw.value = "";
+  showLogin();
+}
+
+async function tryLogin(){
+  const pw = (document.getElementById("pw").value || "").trim();
+  if(!pw){
+    showLogin("اكتب كلمة السر");
+    return;
+  }
+
+  localStorage.setItem("ADMIN_KEY", pw);
+
+  // تحقق سريع: إذا السيرفر رجع 401 معناها كلمة السر خطأ
+  try{
+    const r = await fetch("/api/admin/orders?since=2000-01-01", { headers: adminHeaders() });
+    if(!r.ok){
+      localStorage.removeItem("ADMIN_KEY");
+      showLogin("كلمة السر غير صحيحة");
+      return;
+    }
+    showApp();
+    loadAll();
+  }catch(e){
+    localStorage.removeItem("ADMIN_KEY");
+    showLogin("تعذر الاتصال بالسيرفر");
+  }
+}
+
+document.getElementById("btnLogin").addEventListener("click", tryLogin);
+document.getElementById("pw").addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") tryLogin();
+});
+
+/* ======================
+   ✅ App Logic (كما هو)
+   ====================== */
+let cache = [];
+let outCache = [];
+let shipCache = [];
+let _modalResolve = null;
+
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+
+function fmt(n){
+  const x = Number(n || 0);
+  return x.toFixed(3).replace(/\.000$/,"");
+}
+
+function fmtMoney(n){
+  return `${fmt(n)} ر.ع`;
+}
+
+function fmtDT(iso){
+  if(!iso) return "—";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "—";
+  return d.toLocaleString("ar-OM", {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit"
+  });
+}
+
+function sumNet(rows){
+  return rows.reduce((acc, o) => acc + (Number(o.net) || 0), 0);
+}
+
+function toast(type, title, msg, ms = 2600){
+  const wrap = document.getElementById("toasts");
+  const el = document.createElement("div");
+  el.className = `toast ${type}`;
+
+  const iconSvg = {
+    ok:   `<svg class="svg" viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"/></svg>`,
+    err:  `<svg class="svg" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>`,
+    warn: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3h3.4L22 20H2z"/></svg>`,
+    info: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/></svg>`
+  }[type];
+
+  el.innerHTML = `
+    <div class="icon">${iconSvg}</div>
+    <div class="body">
+      <p class="title">${escapeHtml(title || "")}</p>
+      <p class="msg">${escapeHtml(msg || "")}</p>
+      <div class="bar"><i style="animation-duration:${ms}ms"></i></div>
+    </div>
+    <button class="x" aria-label="إغلاق" title="إغلاق">
+      <svg class="svg sm" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+    </button>
+  `;
+
+  const close = () => {
+    el.classList.add("out");
+    setTimeout(()=> el.remove(), 170);
+  };
+
+  el.querySelector(".x").onclick = close;
+  wrap.prepend(el);
+  setTimeout(close, ms);
+}
+
+function getSinceParam(){
+  const d = new Date();
+  d.setDate(d.getDate() - 1); // أمس
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function getDateParam(){
+  const d = document.getElementById("date").value;
+  return (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) ? d : "";
+}
+
+function setBusy(isBusy){
+  const b1 = document.getElementById("btnRefresh");
+  const b2 = document.getElementById("btnSettle");
+  if(b1) b1.disabled = !!isBusy;
+  if(b2) b2.disabled = !!isBusy;
+}
+
+function translateFinancialForCard(financialRaw, outstanding){
+  const out = Number(outstanding || 0) || 0;
+  if (out <= 0) return "";
+
+  const f = String(financialRaw || "").trim().toUpperCase();
+  if (f.includes("PENDING") || f.includes("UNPAID")) return `غير مدفوع • ${fmtMoney(out)}`;
+  if (f.includes("PARTIALLY")) return `مدفوع جزئي • ${fmtMoney(out)}`;
+  return `المستحق: ${fmtMoney(out)}`;
+}
+
+function openSettleModal({ total, count, date }) {
+  const m = document.getElementById("m");
+  document.getElementById("mTotal").textContent = fmt(total) + " ر.ع";
+  document.getElementById("mCount").textContent = String(count);
+  document.getElementById("mSub").textContent =
+    date ? `تقرير يوم: ${date}` : "كل الطلبات المطابقة للفلتر الحالي";
+
+  m.style.display = "flex";
+  return new Promise(resolve => { _modalResolve = resolve; });
+}
+
+function closeModal(){
+  const m = document.getElementById("m");
+  m.style.display = "none";
+  if (_modalResolve) { _modalResolve(false); _modalResolve = null; }
+}
+
+function confirmSettle(){
+  const m = document.getElementById("m");
+  m.style.display = "none";
+  if (_modalResolve) { _modalResolve(true); _modalResolve = null; }
+}
+
+async function loadOrders(){
+  const q = (document.getElementById("q").value || "").trim();
+  const date = getDateParam();
+  const since = getSinceParam();
+
+  const qs = new URLSearchParams();
+  if (q) qs.set("q", q);
+  if (date) qs.set("date", date);
+  qs.set("since", since);
+
+  const url = "/api/admin/orders" + (qs.toString() ? ("?" + qs.toString()) : "");
+
+  const r = await fetch(url, { headers: adminHeaders() });
+  const d = await r.json();
+  if(!r.ok) throw new Error(d.error || "فشل جلب البيانات");
+
+  cache = d.orders || [];
+  const total = sumNet(cache);
+  document.getElementById("totalNet").textContent = fmt(total) + " ر.ع";
+
+  document.getElementById("meta").textContent =
+    `عدد الطلبات: ${d.count || 0} • من تاريخ: ${since} • آخر تحديث: ${new Date().toLocaleString("ar-OM")}`;
+
+  renderTable(cache);
+}
+
+async function loadOutList(){
+  const since = getSinceParam();
+  const qs = new URLSearchParams();
+  qs.set("since", since);
+
+  const r = await fetch("/api/admin/out" + "?" + qs.toString(), {
+    headers: adminHeaders()
+  });
+  const d = await r.json();
+  if(!r.ok) throw new Error(d.error || "فشل جلب قائمة خرج للتوصيل");
+
+  outCache = d.orders || [];
+  document.getElementById("outCount").textContent = d.count || 0;
+  renderOut(outCache);
+}
+
+async function loadShipList(){
+  const since = getSinceParam();
+  const qs = new URLSearchParams();
+  qs.set("since", since);
+
+  const r = await fetch("/api/admin/shipped-no-tracking" + "?" + qs.toString(), {
+    headers: adminHeaders()
+  });
+  const d = await r.json();
+  if(!r.ok) throw new Error(d.error || "فشل جلب قائمة تم الشحن بدون تتبع");
+
+  shipCache = d.orders || [];
+  document.getElementById("shipCount").textContent = d.count || 0;
+  renderShip(shipCache);
+}
+
+async function loadAll(){
+  try{
+    setBusy(true);
+    toast("info","جاري التحديث","يتم جلب البيانات الآن…", 1400);
+    await Promise.all([loadOrders(), loadOutList(), loadShipList()]);
+    toast("ok","تم التحديث","تم تحديث لوحة الإدارة بنجاح");
+  }catch(e){
+    // لو السيرفر قال غير مصرح، رجع لصفحة الدخول
+    const msg = (e && e.message) ? String(e.message) : "حدث خطأ";
+    if (msg.includes("غير مصرح")) {
+      clearSavedKey();
+      return;
+    }
+    toast("err","تعذر التحديث", msg);
+  }finally{
+    setBusy(false);
+  }
+}
+
+function renderTable(rows){
+  const tb = document.getElementById("body");
+  if(!rows.length){
+    tb.innerHTML = `<tr><td colspan="6" class="muted" style="padding:14px">لا توجد بيانات</td></tr>`;
+    return;
+  }
+
+  tb.innerHTML = rows.map(o => `
+    <tr>
+      <td><b>${escapeHtml(o.orderName)}</b></td>
+      <td><span class="pill">
+        <svg class="svg sm" viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M17 6H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        ${escapeHtml(o.status)}
+      </span></td>
+      <td>${fmt(o.total)}</td>
+      <td>${fmt(o.fee)}</td>
+      <td><b>${fmt(o.outstanding)}</b></td>
+      <td><b>${fmt(o.net)}</b></td>
+    </tr>
+  `).join("");
+}
+
+function renderOut(rows){
+  const wrap = document.getElementById("outList");
+  if(!rows.length){
+    wrap.innerHTML = `<div class="muted">لا توجد طلبات خرجت للتوصيل حاليًا</div>`;
+    return;
+  }
+
+  wrap.innerHTML = rows.map(o => {
+    const outAtTxt = fmtDT(o.outAt);
+    const outstanding = Number(o.outstanding || 0) || 0;
+    const finTxt = translateFinancialForCard(o.financial, outstanding);
+
+    const noteText = String(o.note || "").trim();
+    const noteHtml = noteText
+      ? `<div class="stickyNote" title="ملاحظة المندوب"><p class="stickyText">${escapeHtml(noteText)}</p></div>`
+      : ``;
+
+    return `
+      <div class="noteItem">
+        <div class="noteTop" style="align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <p class="noteTitle">الطلب: <b>${escapeHtml(o.orderName)}</b></p>
+            <span class="badge">
+              <svg class="svg sm" viewBox="0 0 24 24"><path d="M3 7h11v10H3z"></path><path d="M14 10h4l3 3v4h-7z"></path></svg>
+              خرج للتوصيل
+            </span>
+          </div>
+          ${noteHtml}
+        </div>
+
+        <div class="miniGrid">
+          <div class="miniCell">
+            <div class="miniLbl">وقت خروج المندوب</div>
+            <div class="miniVal">${escapeHtml(outAtTxt)}</div>
+          </div>
+
+          ${finTxt ? `
+          <div class="miniCell">
+            <div class="miniLbl">المستحق</div>
+            <div class="miniVal">${escapeHtml(finTxt)}</div>
+          </div>
+          ` : ``}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderShip(rows){
+  const wrap = document.getElementById("shipList");
+  if(!rows.length){
+    wrap.innerHTML = `<div class="muted">لا توجد طلبات “تم الشحن بدون تتبع” حاليًا</div>`;
+    return;
+  }
+
+  wrap.innerHTML = rows.map(o => {
+    const handedTxt = fmtDT(o.handedAt);
+    const outstanding = Number(o.outstanding || 0) || 0;
+    const finTxt = translateFinancialForCard(o.financial, outstanding);
+
+    const noteText = String(o.note || "").trim();
+    const noteHtml = noteText
+      ? `<div class="stickyNote" title="ملاحظة المندوب"><p class="stickyText">${escapeHtml(noteText)}</p></div>`
+      : ``;
+
+    return `
+      <div class="noteItem">
+        <div class="noteTop" style="align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <p class="noteTitle">الطلب: <b>${escapeHtml(o.orderName)}</b></p>
+            <span class="badge">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M21 8l-9-5-9 5 9 5 9-5z"></path>
+                <path d="M3 8v8l9 5 9-5V8"></path>
+                <path d="M12 13v9"></path>
+              </svg>
+              لدى المندوب
+            </span>
+          </div>
+          ${noteHtml}
+        </div>
+
+        <div class="miniGrid">
+          <div class="miniCell">
+            <div class="miniLbl">وقت تسليم المندوب</div>
+            <div class="miniVal">${escapeHtml(handedTxt)}</div>
+          </div>
+
+          ${finTxt ? `
+          <div class="miniCell">
+            <div class="miniLbl">المستحق</div>
+            <div class="miniVal">${escapeHtml(finTxt)}</div>
+          </div>
+          ` : ``}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function settle(){
+  if(!cache.length){
+    toast("warn","لا توجد بيانات","لا توجد طلبات جاهزة للترحيل");
+    return;
+  }
+
+  const total = sumNet(cache);
+  const count = cache.length;
+  const date = getDateParam();
+
+  const ok = await openSettleModal({ total, count, date });
+  if(!ok) return;
+
+  try{
+    setBusy(true);
+    toast("info","جاري الترحيل","يتم إضافة تاق “مرحل” للطلبات…", 2200);
+
+    const q = (document.getElementById("q").value || "").trim();
+    const since = getSinceParam();
+
+    const qs = new URLSearchParams();
+    if (date) qs.set("date", date);
+    if (q) qs.set("q", q);
+    qs.set("since", since);
+
+    const r = await fetch("/api/admin/settle" + (qs.toString() ? ("?" + qs.toString()) : ""), {
+      method:"POST",
+      headers: adminHeaders()
+    });
+
+    const ct = (r.headers.get("content-type") || "");
+    const raw = await r.text();
+    let d = {};
+    try { d = ct.includes("application/json") ? JSON.parse(raw) : { error: raw }; }
+    catch { d = { error: raw }; }
+
+    if(!r.ok) throw new Error(d.error || "فشل الترحيل");
+
+    const failed = Number(d.failedCount || 0);
+    const skipped = Number(d.skippedCount || 0);
+
+    if (failed > 0){
+      toast("warn","تم الترحيل مع ملاحظات", `تم: ${d.archivedCount} • متجاوز: ${skipped} • فشل: ${failed}`, 4200);
+    } else {
+      toast("ok","تم الترحيل بنجاح", `تم وسم ${d.archivedCount} طلب بتاق “مرحل”${skipped ? ` • تم تجاوز ${skipped}` : ""}`, 3200);
+    }
+
+    await loadAll();
+  }catch(e){
+    const msg = e.message || "حدث خطأ";
+    if (msg.includes("غير مصرح")) {
+      clearSavedKey();
+      return;
+    }
+    toast("err","فشل الترحيل", msg);
+  }finally{
+    setBusy(false);
+  }
+}
+
+function downloadExcel(){
+  if(!cache.length){
+    toast("warn","لا توجد بيانات","لا توجد طلبات للتقرير");
+    return;
+  }
+
+  const date = getDateParam() || new Date().toISOString().slice(0,10);
+
+  const rows = cache.map(o => ({
+    "رقم الطلب": o.orderName,
+    "الحالة المالية": o.status,
+    "الإجمالي": Number(o.total || 0),
+    "التوصيل": Number(o.fee || 0),
+    "المتبقي": Number(o.outstanding || 0),
+    "الصافي": Number(o.net || 0)
+  }));
+
+  const totalNet = sumNet(cache);
+  rows.push({ "رقم الطلب": "الإجمالي", "الحالة المالية": "", "الإجمالي": "", "التوصيل": "", "المتبقي": "", "الصافي": Number(totalNet || 0) });
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "تقرير يومي");
+
+  XLSX.writeFile(wb, `Daily_Report_${date}.xlsx`);
+  toast("ok","تم التحميل","تم تحميل تقرير Excel بنجاح");
+}
+
+/* ✅ Init */
+(function init(){
+  document.getElementById("date").value = "";
+  // إذا فيه كلمة محفوظة حاول تسجيل الدخول تلقائيًا
+  if(getAdminKey()){
+    document.getElementById("pw").value = getAdminKey();
+    tryLogin();
+  }else{
+    showLogin();
+  }
+})();
+
+document.getElementById("q").addEventListener("keydown", e => {
+  if(e.key === "Enter") loadAll();
+});
+</script>
+
+</body>
+</html>

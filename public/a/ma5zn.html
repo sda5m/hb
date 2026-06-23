@@ -1,0 +1,3357 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Hala Beauty | المخزون المحلي</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900;1000&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+      --bg:#f7f3fb;
+      --card:rgba(255,255,255,.94);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 20px 55px rgba(16,24,40,.14);
+      --shadow2:0 10px 24px rgba(16,24,40,.10);
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+      --r16:16px;
+      --r20:20px;
+      --r26:26px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{min-height:100%}
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(107,15,166,.28), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(241,198,177,.35), transparent 32%),
+        linear-gradient(180deg, rgba(60,10,99,.34), rgba(241,198,177,.18)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+button,input,select{
+  font-family:inherit;
+}
+
+    
+    button{
+      cursor:pointer;
+    }
+
+    .page{
+      width:100%;
+      max-width:1280px;
+      margin:0 auto;
+      padding:18px 18px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px;
+      border-radius:var(--r26);
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow2);
+      backdrop-filter:blur(8px);
+      position:sticky;
+      top:12px;
+      z-index:100;
+    }
+
+    .brandRow{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .iconBtn{
+      width:46px;
+      height:46px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+      color:rgba(16,24,40,.75);
+      flex:0 0 auto;
+    }
+
+    .brandLogo{
+      width:50px;
+      height:50px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(107,15,166,.16);
+      box-shadow:0 10px 22px rgba(107,15,166,.12);
+      flex:0 0 auto;
+    }
+
+    .brandLogo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .brandText{
+      min-width:0;
+    }
+
+    .brandText h1{
+      margin:0;
+      font-size:20px;
+      font-weight:1000;
+      line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .brandText h1 .b1{color:var(--purple)}
+    .brandText h1 .b2{color:var(--peach)}
+
+    .brandText p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:12.5px;
+      font-weight:900;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .statusPill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      color:var(--purpleDark);
+      background:rgba(107,15,166,.10);
+      border:1px solid rgba(107,15,166,.16);
+      font-weight:950;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .hero{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:1.25fr .75fr;
+      gap:14px;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r26);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(8px);
+      padding:16px;
+      min-width:0;
+    }
+
+    .panelHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .panelHead h2,
+    .panelHead h3{
+      margin:0;
+      color:var(--purpleDark);
+      font-size:20px;
+      font-weight:1000;
+      line-height:1.25;
+    }
+
+    .panelHead p{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:12.5px;
+      font-weight:900;
+      line-height:1.6;
+    }
+
+    .searchGrid{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+      align-items:stretch;
+      position:relative;
+      z-index:20;
+    }
+
+    .searchBox{
+      position:relative;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+      min-width:0;
+    }
+
+    .searchBox input{
+      border:0;
+      outline:0;
+      width:100%;
+      background:transparent;
+      color:var(--ink);
+      font-size:15px;
+      font-weight:900;
+      min-width:0;
+    }
+
+    .searchBox input::placeholder{
+      color:rgba(102,112,133,.86);
+      font-weight:850;
+    }
+
+    .btn{
+      border:0;
+      border-radius:18px;
+      padding:12px 16px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      font-size:14px;
+      font-weight:1000;
+      min-height:48px;
+      transition:.14s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+
+    .btn:active{
+      transform:scale(.985);
+    }
+
+    .btnPrimary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--purple),var(--purpleDark));
+      box-shadow:0 14px 28px rgba(107,15,166,.22);
+    }
+
+    .btnSoft{
+      color:var(--purpleDark);
+      background:#fff;
+      border:1px solid rgba(107,15,166,.18);
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+    }
+
+    .btnGreen{
+      color:#fff;
+      background:linear-gradient(135deg,#22c55e,#15803d);
+      box-shadow:0 14px 28px rgba(22,163,74,.20);
+    }
+
+    .btnWarn{
+      color:#fff;
+      background:linear-gradient(135deg,#f59e0b,#c2410c);
+      box-shadow:0 14px 28px rgba(245,158,11,.20);
+    }
+
+    .btnDanger{
+      color:#fff;
+      background:linear-gradient(135deg,#ef4444,#b91c1c);
+    }
+
+    .suggestBox{
+      position:absolute;
+      top:calc(100% + 10px);
+      right:0;
+      left:0;
+      z-index:9999;
+      background:rgba(255,255,255,.98);
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 20px 50px rgba(16,24,40,.18);
+      border-radius:20px;
+      overflow:hidden;
+      display:none;
+      max-height:360px;
+      overflow-y:auto;
+    }
+
+    .suggestBox.show{display:block}
+
+    .suggestItem{
+      padding:12px 14px;
+      cursor:pointer;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid rgba(16,24,40,.08);
+    }
+
+    .suggestItem:last-child{border-bottom:0}
+    .suggestItem:hover{background:rgba(107,15,166,.06)}
+
+    .suggestMain{
+      font-size:13px;
+      font-weight:1000;
+      color:var(--ink);
+      line-height:1.45;
+    }
+
+    .suggestSub{
+      margin-top:4px;
+      font-size:11.5px;
+      font-weight:850;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .suggestTag{
+      flex:0 0 auto;
+      padding:6px 10px;
+      border-radius:999px;
+      color:var(--purpleDark);
+      background:rgba(241,198,177,.35);
+      border:1px solid rgba(241,198,177,.7);
+      font-size:11px;
+      font-weight:1000;
+      white-space:nowrap;
+    }
+
+    .statsGrid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .stat{
+      border-radius:20px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      padding:14px;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+    }
+
+    .stat span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .stat b{
+      display:block;
+      margin-top:5px;
+      color:var(--purpleDark);
+      font-size:23px;
+      font-weight:1000;
+      line-height:1.1;
+    }
+
+    .productsPanel{
+      margin-top:14px;
+    }
+
+    .resultTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .resultTop h3{
+      margin:0;
+      color:var(--purpleDark);
+      font-size:19px;
+      font-weight:1000;
+    }
+
+    .resultTop p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .productsGrid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .productCard{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 14px 30px rgba(16,24,40,.10);
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .productImg{
+      aspect-ratio:4/3;
+      background:linear-gradient(135deg,rgba(107,15,166,.08),rgba(241,198,177,.18));
+      overflow:hidden;
+      position:relative;
+    }
+
+    .productImg img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .qtyBadge{
+      position:absolute;
+      top:10px;
+      right:10px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 20px rgba(16,24,40,.12);
+      color:var(--purpleDark);
+      font-size:12px;
+      font-weight:1000;
+    }
+
+    .productBody{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      flex:1;
+    }
+
+    .productName{
+      font-size:13.5px;
+      font-weight:1000;
+      line-height:1.45;
+      color:var(--ink);
+      min-height:40px;
+    }
+
+    .productMeta{
+      color:var(--muted);
+      font-size:11.5px;
+      font-weight:850;
+      line-height:1.6;
+      min-height:36px;
+    }
+
+.productActions{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:auto;
+}
+
+    
+    .smallBtn{
+      border:0;
+      border-radius:16px;
+      padding:10px 8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      font-size:12.5px;
+      font-weight:1000;
+      min-height:42px;
+      transition:.14s ease;
+    }
+
+    .smallBtn:active{transform:scale(.985)}
+    .smallBtn.inv{
+      color:var(--purpleDark);
+      background:rgba(107,15,166,.10);
+      border:1px solid rgba(107,15,166,.16);
+    }
+    .smallBtn.sale{
+      color:#fff;
+      background:linear-gradient(135deg,#22c55e,#15803d);
+    }
+
+.smallBtn.cart{
+  color:#fff;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+}
+    
+    .emptyState{
+      grid-column:1/-1;
+      background:#fff;
+      border:1px dashed rgba(60,10,99,.25);
+      border-radius:24px;
+      padding:28px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:900;
+      line-height:1.8;
+    }
+
+
+.cartPanel{
+  margin-top:14px;
+}
+
+.cartHeadLine{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.cartHeadLine h3{
+  margin:0;
+  color:var(--purpleDark);
+  font-size:19px;
+  font-weight:1000;
+}
+
+.cartItems{
+  display:grid;
+  gap:10px;
+}
+
+.cartEmpty{
+  background:#fff;
+  border:1px dashed rgba(60,10,99,.25);
+  border-radius:20px;
+  padding:18px;
+  color:var(--muted);
+  font-weight:900;
+  text-align:center;
+}
+
+.cartItem{
+  background:#fff;
+  border:1px solid rgba(16,24,40,.10);
+  border-radius:22px;
+  padding:12px;
+  display:grid;
+  grid-template-columns:56px 1fr auto;
+  gap:10px;
+  align-items:center;
+  box-shadow:0 8px 18px rgba(16,24,40,.06);
+}
+
+.cartItem img{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  object-fit:cover;
+  background:#f2f4f7;
+}
+
+.cartItem b{
+  display:block;
+  font-size:13px;
+  font-weight:1000;
+  line-height:1.45;
+}
+
+.cartItem small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11.5px;
+  font-weight:850;
+  line-height:1.5;
+}
+
+.cartQtyBox{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.cartQtyBox button{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:12px;
+  font-weight:1000;
+  background:rgba(107,15,166,.10);
+  color:var(--purpleDark);
+}
+
+.cartQtyBox input{
+  width:58px;
+  height:36px;
+  border:1px solid rgba(16,24,40,.13);
+  border-radius:12px;
+  text-align:center;
+  font-weight:1000;
+}
+
+.cartWarn{
+  display:inline-flex;
+  margin-top:6px;
+  padding:5px 8px;
+  border-radius:999px;
+  background:rgba(245,158,11,.12);
+  color:#92400e;
+  border:1px solid rgba(245,158,11,.22);
+  font-size:11px;
+  font-weight:1000;
+}
+
+.cartFooterActions{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+}
+
+.cartFooterActions .btn{
+  flex:1;
+}
+
+.checkoutItem{
+  border:1px solid rgba(16,24,40,.10);
+  border-radius:20px;
+  padding:12px;
+  background:#fff;
+  margin-bottom:10px;
+}
+
+.checkoutTitle{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.checkoutTitle b{
+  font-size:13px;
+  font-weight:1000;
+  line-height:1.5;
+}
+
+.checkoutHint{
+  margin-top:8px;
+  padding:10px;
+  border-radius:16px;
+  background:rgba(245,158,11,.10);
+  border:1px solid rgba(245,158,11,.20);
+  color:#78350f;
+  font-size:12px;
+  font-weight:900;
+  line-height:1.7;
+}
+
+.field select{
+  width:100%;
+  outline:0;
+  border:1px solid rgba(16,24,40,.13);
+  background:#fff;
+  border-radius:16px;
+  padding:12px;
+  font-size:14px;
+  font-weight:900;
+  color:var(--ink);
+}
+
+@media(max-width:700px){
+  .productActions{
+    grid-template-columns:1fr;
+  }
+
+  .cartItem{
+    grid-template-columns:52px 1fr;
+  }
+
+  .cartQtyBox{
+    grid-column:1/-1;
+    justify-content:flex-start;
+  }
+}
+
+
+
+.employeeFinancePanel{
+  margin-top:14px;
+}
+
+.employeeFinanceTop{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:10px;
+  align-items:end;
+}
+
+.customerCards{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+.customerCard{
+  border:1px solid rgba(16,24,40,.10);
+  background:#fff;
+  border-radius:22px;
+  padding:12px;
+  box-shadow:0 8px 18px rgba(16,24,40,.06);
+  cursor:pointer;
+}
+
+.customerCard:hover{
+  background:rgba(107,15,166,.05);
+}
+
+.customerCard b{
+  display:block;
+  color:var(--purpleDark);
+  font-size:14px;
+  font-weight:1000;
+}
+
+.customerCard small{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:11.5px;
+  font-weight:850;
+  line-height:1.6;
+}
+
+.customerCard .warnMini{
+  display:inline-flex;
+  margin-top:8px;
+  padding:5px 8px;
+  border-radius:999px;
+  background:rgba(245,158,11,.12);
+  color:#92400e;
+  border:1px solid rgba(245,158,11,.22);
+  font-size:11px;
+  font-weight:1000;
+}
+
+.invoiceSummary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.invoiceSummary .stat b{
+  font-size:18px;
+}
+
+.invoiceItems{
+  display:grid;
+  gap:10px;
+}
+
+.invoiceItem{
+  background:#fff;
+  border:1px solid rgba(16,24,40,.10);
+  border-radius:20px;
+  padding:12px;
+}
+
+.invoiceItemTop{
+  display:grid;
+  grid-template-columns:62px 1fr auto;
+  gap:10px;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.invoiceProductImg{
+  width:62px;
+  height:62px;
+  border-radius:16px;
+  object-fit:cover;
+  background:#f2f4f7;
+  border:1px solid rgba(16,24,40,.08);
+}
+
+.invoiceItemTop b{
+  font-size:13px;
+  font-weight:1000;
+  line-height:1.5;
+}
+
+.invoiceItemTop small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11.5px;
+  font-weight:850;
+}
+
+.invoicePriceGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:8px;
+  align-items:end;
+}
+
+.invoicePriceGrid input{
+  width:100%;
+  border:1px solid rgba(16,24,40,.13);
+  border-radius:14px;
+  padding:10px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.invoiceAutoPurchase{
+  margin-top:8px;
+  padding:9px;
+  border-radius:14px;
+  background:rgba(37,99,235,.08);
+  border:1px solid rgba(37,99,235,.14);
+  color:#1e3a8a;
+  font-size:11.5px;
+  font-weight:900;
+  line-height:1.7;
+}
+
+.invoiceActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.invoiceActions .btn{
+  flex:1;
+}
+
+@media(max-width:800px){
+  .employeeFinanceTop{
+    grid-template-columns:1fr;
+  }
+
+  .customerCards{
+    grid-template-columns:1fr;
+  }
+
+  .invoiceSummary{
+    grid-template-columns:1fr;
+  }
+
+  .invoiceItemTop{
+    grid-template-columns:54px 1fr;
+  }
+
+  .invoiceItemTop .suggestTag{
+    grid-column:1/-1;
+    width:max-content;
+  }
+
+  .invoiceProductImg{
+    width:54px;
+    height:54px;
+  }
+
+  .invoicePriceGrid{
+    grid-template-columns:1fr;
+  }
+}
+    
+    .scanArea{
+      display:none;
+      margin-top:12px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:22px;
+      padding:12px;
+    }
+
+    .scanArea.show{display:block}
+
+    .scanArea video{
+      width:100%;
+      max-height:380px;
+      border-radius:18px;
+      background:#000;
+      display:block;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      z-index:20000;
+      background:rgba(0,0,0,.42);
+      backdrop-filter:blur(5px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+    }
+
+    .modal.show{display:flex}
+
+    .modalCard{
+      width:min(560px,96vw);
+      max-height:92vh;
+      overflow:auto;
+      background:rgba(255,255,255,.98);
+      border:1px solid rgba(16,24,40,.12);
+      border-radius:28px;
+      box-shadow:0 28px 90px rgba(0,0,0,.24);
+    }
+
+    .modalHead{
+      padding:16px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid rgba(16,24,40,.08);
+    }
+
+    .modalHead h3{
+      margin:0;
+      color:var(--purpleDark);
+      font-size:19px;
+      font-weight:1000;
+      line-height:1.25;
+    }
+
+    .modalHead p{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      line-height:1.6;
+    }
+
+    .modalClose{
+      border:0;
+      width:42px;
+      height:42px;
+      border-radius:16px;
+      background:#f2f4f7;
+      color:rgba(16,24,40,.70);
+      font-size:24px;
+      font-weight:900;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+
+    .modalBody{
+      padding:16px;
+    }
+
+    .modalFoot{
+      padding:16px;
+      display:flex;
+      gap:10px;
+      border-top:1px solid rgba(16,24,40,.08);
+    }
+
+    .modalFoot .btn{
+      flex:1;
+    }
+
+    .modalProd{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:22px;
+      padding:12px;
+      margin-bottom:14px;
+    }
+
+    .modalProd img{
+      width:74px;
+      height:74px;
+      border-radius:20px;
+      object-fit:cover;
+      background:#f2f4f7;
+      flex:0 0 auto;
+    }
+
+    .modalProd b{
+      display:block;
+      font-size:14px;
+      font-weight:1000;
+      line-height:1.45;
+    }
+
+    .modalProd small{
+      display:block;
+      color:var(--muted);
+      margin-top:5px;
+      font-size:11.5px;
+      font-weight:850;
+      line-height:1.5;
+    }
+
+    .formGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
+
+    .field.full{grid-column:1/-1}
+
+    .field label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:1000;
+    }
+
+    .field input{
+      width:100%;
+      outline:0;
+      border:1px solid rgba(16,24,40,.13);
+      background:#fff;
+      border-radius:16px;
+      padding:12px;
+      font-size:14px;
+      font-weight:900;
+      color:var(--ink);
+    }
+
+    .modeGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .modeBtn{
+      border:1px solid rgba(16,24,40,.12);
+      background:#fff;
+      color:var(--purpleDark);
+      border-radius:18px;
+      padding:12px;
+      text-align:right;
+      font-weight:1000;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+    }
+
+    .modeBtn span{
+      display:block;
+      color:var(--muted);
+      font-size:11.5px;
+      font-weight:850;
+      margin-top:3px;
+    }
+
+    .modeBtn.active{
+      background:linear-gradient(135deg,rgba(107,15,166,.12),rgba(241,198,177,.22));
+      border-color:rgba(107,15,166,.28);
+    }
+
+    .previewBox{
+      margin-top:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      border-radius:18px;
+      background:#f8f5fb;
+      border:1px solid rgba(107,15,166,.12);
+      padding:12px;
+      color:var(--purpleDark);
+      font-weight:1000;
+    }
+
+    .previewBox span{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .toasts{
+      position:fixed;
+      bottom:14px;
+      left:14px;
+      right:14px;
+      z-index:30000;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      pointer-events:none;
+    }
+
+    .toast{
+      pointer-events:auto;
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px;
+      border-radius:20px;
+      background:rgba(255,255,255,.97);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 18px 44px rgba(16,24,40,.18);
+      transform:translateY(12px);
+      opacity:0;
+      animation:toastIn .22s ease-out forwards;
+    }
+
+    @keyframes toastIn{to{transform:translateY(0);opacity:1}}
+    .toast.out{animation:toastOut .16s ease-in forwards}
+    @keyframes toastOut{to{transform:translateY(12px);opacity:0}}
+
+    .toastIcon{
+      width:36px;
+      height:36px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      flex:0 0 auto;
+    }
+
+    .toast.ok .toastIcon{background:linear-gradient(135deg,#22c55e,#16a34a)}
+    .toast.err .toastIcon{background:linear-gradient(135deg,#f87171,#ef4444)}
+    .toast.warn .toastIcon{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+    .toast.info .toastIcon{background:linear-gradient(135deg,#60a5fa,#2563eb)}
+
+    .toast b{
+      display:block;
+      font-size:13px;
+      font-weight:1000;
+      line-height:1.3;
+    }
+
+    .toast p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:12.5px;
+      font-weight:850;
+      line-height:1.5;
+    }
+
+    .toastX{
+      border:0;
+      background:transparent;
+      color:rgba(16,24,40,.50);
+      padding:4px;
+      margin-top:-2px;
+      flex:0 0 auto;
+    }
+
+    @media(max-width:1050px){
+      .hero{grid-template-columns:1fr}
+      .productsGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+
+    @media(max-width:760px){
+      .page{padding:12px}
+      .topbar{top:8px;border-radius:22px}
+      .brandText h1{font-size:17px}
+      .brandText p{font-size:11.5px}
+      .statusPill{display:none}
+      .searchGrid{grid-template-columns:1fr}
+      .productsGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .statsGrid{grid-template-columns:1fr 1fr}
+      .formGrid{grid-template-columns:1fr}
+      .modeGrid{grid-template-columns:1fr}
+      .modalFoot{flex-direction:column}
+    }
+
+    @media(max-width:460px){
+      .productsGrid{grid-template-columns:1fr}
+      .statsGrid{grid-template-columns:1fr}
+      .topbar{align-items:flex-start}
+      .iconBtn{width:42px;height:42px}
+      .brandLogo{width:44px;height:44px}
+    }
+
+    button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="page">
+    <header class="topbar">
+      <div class="brandRow">
+        <button class="iconBtn" id="btnBack" aria-label="رجوع" title="رجوع">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <button class="iconBtn" id="btnRefresh" aria-label="تحديث" title="تحديث">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+            <path d="M21 3v7h-7"></path>
+          </svg>
+        </button>
+
+        <div class="brandLogo">
+          <img src="/a/ico1.png" alt="Hala Beauty">
+        </div>
+
+        <div class="brandText">
+          <h1><span class="b1">Beauty</span><span class="b2">time</span></h1>
+          <p>المخزون المحلي • تعديل الكمية والبيع المحلي للموظف</p>
+        </div>
+      </div>
+
+      <div class="statusPill">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 8h.01"></path>
+          <path d="M11 12h1v6h1"></path>
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span id="statusBadge">جاهز</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="panel">
+        <div class="panelHead">
+          <div>
+            <h2>بحث المنتج</h2>
+            <p>ابحث باسم المنتج أو SKU أو الباركود، ثم عدّل الكمية أو سجل بيع محلي.</p>
+          </div>
+        </div>
+
+        <div class="searchGrid">
+          <div class="searchBox">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="rgba(60,10,99,.70)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-3-3"></path>
+            </svg>
+            <input id="qInput" placeholder="مثال: SKU / باركود / اسم المنتج..." autocomplete="off">
+            <div id="suggestBox" class="suggestBox"></div>
+          </div>
+
+          <button class="btn btnSoft" id="btnScan" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+              <circle cx="12" cy="13" r="3.2"></circle>
+            </svg>
+            مسح
+          </button>
+
+          <button class="btn btnPrimary" id="btnLoad" type="button">
+            بحث
+          </button>
+        </div>
+
+        <div id="scanArea" class="scanArea">
+          <video id="video" playsinline></video>
+          <button class="btn btnSoft" id="btnStopScan" type="button" style="margin-top:10px;width:100%">
+            إيقاف المسح
+          </button>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <div class="panelHead">
+          <div>
+            <h3>ملخص البحث</h3>
+            <p>الأرقام حسب النتائج الظاهرة من البحث الحالي.</p>
+          </div>
+        </div>
+
+        <div class="statsGrid">
+          <div class="stat">
+            <span>نتائج Shopify</span>
+            <b id="statResults">0</b>
+          </div>
+          <div class="stat">
+            <span>منتجات لها مخزون</span>
+            <b id="statWithStock">0</b>
+          </div>
+          <div class="stat">
+            <span>إجمالي الكمية المحلية</span>
+            <b id="statTotalQty">0</b>
+          </div>
+          <div class="stat">
+            <span>آخر تحديث</span>
+            <b id="statUpdated" style="font-size:15px">—</b>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+<section class="panel productsPanel">
+  <div class="resultTop">
+    <div>
+      <h3>المنتجات</h3>
+      <p id="resultHint">اكتب في البحث لعرض المنتجات.</p>
+    </div>
+  </div>
+
+  <div id="grid" class="productsGrid"></div>
+</section>
+
+<section class="panel cartPanel">
+  <div class="cartHeadLine">
+    <div>
+      <h3>سلة البيع المحلي</h3>
+      <p id="cartHint" style="margin:4px 0 0;color:var(--muted);font-size:12px;font-weight:900">
+        أضف أكثر من منتج ثم احفظها باسم شخص واحد.
+      </p>
+    </div>
+
+    <span class="statusPill" id="cartCountPill">0 منتج</span>
+  </div>
+
+  <div id="saleCartList" class="cartItems"></div>
+
+  <div class="cartFooterActions">
+    <button class="btn btnGreen" id="btnCheckoutCart" type="button">
+      حفظ السلة / الفاتورة
+    </button>
+
+    <button class="btn btnSoft" id="btnClearCart" type="button">
+      تفريغ السلة
+    </button>
+  </div>
+</section>
+
+<section class="panel employeeFinancePanel">
+  <div class="panelHead">
+    <div>
+      <h3>فواتير البيع المحلي</h3>
+      <p>عرض حساب الشخص، تعديل الأسعار، نسخ الفاتورة أو إرسالها واتساب.</p>
+    </div>
+  </div>
+
+  <div class="employeeFinanceTop">
+    <div class="field">
+      <label>اسم الشخص</label>
+      <input id="employeeInvoiceCustomer" list="saleCustomersList" placeholder="اكتب اسم الشخص أو اختر من القائمة">
+    </div>
+
+    <button class="btn btnPrimary" id="btnEmployeeLoadInvoice" type="button">
+      عرض الفاتورة
+    </button>
+
+    <button class="btn btnSoft" id="btnEmployeeRefreshCustomers" type="button">
+      تحديث الأشخاص
+    </button>
+  </div>
+
+  <div id="employeeCustomerCards" class="customerCards"></div>
+</section>
+  
+  </div>
+
+  <div id="inventoryModal" class="modal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div>
+          <h3>تعديل المخزون المحلي</h3>
+          <p>كل تعديل هنا محلي فقط ولا يغيّر مخزون Shopify.</p>
+        </div>
+        <button class="modalClose" data-close-modal type="button">×</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="modalProd">
+          <img id="invImg" src="/a/noimg.png" alt="">
+          <div>
+            <b id="invName">—</b>
+            <small id="invMeta">—</small>
+          </div>
+        </div>
+
+        <div class="modeGrid">
+          <button class="modeBtn active" id="modeAdd" type="button">
+            إضافة كمية
+            <span>يزيد على الكمية الحالية</span>
+          </button>
+          <button class="modeBtn" id="modeSet" type="button">
+            تعيين الكمية
+            <span>يجعل المخزون يساوي الرقم المكتوب</span>
+          </button>
+        </div>
+
+        <div class="formGrid">
+          <div class="field">
+            <label id="invQtyLabel">الكمية المراد إضافتها</label>
+            <input id="invQtyInput" type="number" inputmode="numeric" min="0" placeholder="مثال: 5">
+          </div>
+
+          <div class="field">
+            <label>المخزون الحالي</label>
+            <input id="invCurrentQty" disabled>
+          </div>
+        </div>
+
+        <div class="previewBox">
+          <span>الكمية بعد الحفظ</span>
+          <b id="invPreviewQty">—</b>
+        </div>
+      </div>
+
+      <div class="modalFoot">
+        <button class="btn btnPrimary" id="btnSaveInventory" type="button">حفظ المخزون</button>
+        <button class="btn btnSoft" data-close-modal type="button">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+<div id="cartCheckoutModal" class="modal" aria-hidden="true">
+  <div class="modalCard" style="width:min(780px,96vw)">
+    <div class="modalHead">
+      <div>
+        <h3>حفظ بيع محلي متعدد</h3>
+        <p>إذا المنتج ناقص من المخزون، سيتم إضافته تلقائيًا ثم خصمه.</p>
+      </div>
+      <button class="modalClose" data-close-modal type="button">×</button>
+    </div>
+
+    <div class="modalBody">
+      <div class="formGrid">
+        <div class="field full">
+          <label>اسم الشخص</label>
+          <input id="cartCustomer" list="saleCustomersList" placeholder="مثال: كمال او يوسف">
+        </div>
+
+        <div class="field full">
+          <label>ملاحظة عامة - اختياري</label>
+          <input id="cartNote" placeholder="مثال: يدفع نهاية الأسبوع">
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div id="cartCheckoutItems"></div>
+    </div>
+
+    <div class="modalFoot">
+      <button class="btn btnGreen" id="btnSaveCartSale" type="button">
+        حفظ وخصم المخزون
+      </button>
+
+      <button class="btn btnSoft" data-close-modal type="button">
+        إلغاء
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="employeeInvoiceModal" class="modal" aria-hidden="true">
+  <div class="modalCard" style="width:min(900px,96vw)">
+    <div class="modalHead">
+      <div>
+        <h3 id="employeeInvoiceTitle">فاتورة البيع المحلي</h3>
+        <p id="employeeInvoiceSub">عرض وتعديل الأسعار قبل الإرسال.</p>
+      </div>
+      <button class="modalClose" data-close-modal type="button">×</button>
+    </div>
+
+    <div class="modalBody">
+      <div id="employeeInvoiceSummary" class="invoiceSummary"></div>
+
+      <div class="formGrid" style="margin-bottom:12px">
+        <div class="field">
+          <label>رقم واتساب - اختياري</label>
+          <input id="employeeInvoicePhone" placeholder="مثال: 9689xxxxxxx">
+        </div>
+
+        <div class="field">
+          <label>إظهار العمليات المرحلة؟</label>
+          <select id="employeeInvoiceIncludeSettled">
+            <option value="0">لا، فقط غير المرحلة</option>
+            <option value="1">نعم، إظهار الكل</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="employeeInvoiceItems" class="invoiceItems"></div>
+    </div>
+
+    <div class="modalFoot invoiceActions">
+      <button class="btn btnPrimary" id="btnEmployeeCopyInvoice" type="button">
+        نسخ الفاتورة
+      </button>
+
+      <button class="btn btnGreen" id="btnEmployeeWhatsInvoice" type="button">
+        إرسال واتساب
+      </button>
+
+      <button class="btn btnSoft" id="btnEmployeePrintInvoice" type="button">
+        طباعة
+      </button>
+    </div>
+  </div>
+</div>
+
+  
+  <div id="saleModal" class="modal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div>
+          <h3>بيع محلي من المخزون</h3>
+          <p>السعر اختياري، ويمكن للمدير المالي إضافته لاحقًا.</p>
+        </div>
+        <button class="modalClose" data-close-modal type="button">×</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="modalProd">
+          <img id="saleImg" src="/a/noimg.png" alt="">
+          <div>
+            <b id="saleName">—</b>
+            <small id="saleMeta">—</small>
+          </div>
+        </div>
+
+        <div class="formGrid">
+          <div class="field full">
+            <label>اسم الشخص</label>
+            <input id="saleCustomer" list="saleCustomersList" placeholder="مثال: كمال او يوسف">
+            <datalist id="saleCustomersList"></datalist>
+          </div>
+
+          <div class="field">
+            <label>الكمية</label>
+            <input id="saleQty" type="number" inputmode="numeric" min="1" value="1">
+          </div>
+
+          <div class="field">
+            <label>السعر للحبة - اختياري</label>
+            <input id="salePrice" type="number" inputmode="decimal" step="0.001" min="0" placeholder="اختياري">
+          </div>
+
+          <div class="field full">
+            <label>ملاحظة - اختياري</label>
+            <input id="saleNote" placeholder="مثال: يدفع نهاية الأسبوع">
+          </div>
+        </div>
+      </div>
+
+      <div class="modalFoot">
+        <button class="btn btnGreen" id="btnSaveSale" type="button">حفظ البيع</button>
+        <button class="btn btnSoft" data-close-modal type="button">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requirePackLogin, authFetch } from "./auth.js";
+    requirePackLogin();
+
+    const $ = (id) => document.getElementById(id);
+
+const state = {
+  items: [],
+  localMap: {},
+  searchText: "",
+  inventoryCtx: null,
+  inventoryMode: "add",
+  saleCtx: null,
+
+  // سلة البيع المحلي المتعدد
+  saleCart: [],
+
+  // فواتير وأسعار الموظف
+  employeeFinance: {
+    customers: [],
+    invoice: null
+  }
+};
+let inventorySaving = false;
+let saleSaving = false;
+let cartSaleSaving = false;
+
+    
+    const icons = {
+      ok: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7 9 18l-5-5"/></svg>`,
+      err: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>`,
+      warn: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3h3.4L22 20H2z"/></svg>`,
+      info: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/></svg>`
+    };
+
+    function setStatus(txt){
+      if($("statusBadge")) $("statusBadge").textContent = txt || "";
+    }
+
+    function esc(s){
+      return String(s ?? "").replace(/[&<>"']/g, m => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+      }[m]));
+    }
+
+    function escAttr(s){
+      return esc(s).replace(/`/g, "&#096;");
+    }
+
+    function nowTime(){
+      const d = new Date();
+      return d.toLocaleTimeString("ar-OM", { hour:"2-digit", minute:"2-digit" });
+    }
+
+    function toast(type, title, msg, ms = 2600){
+      const host = $("toasts");
+      if(!host) return;
+
+      const el = document.createElement("div");
+      el.className = `toast ${type || "info"}`;
+
+      el.innerHTML = `
+        <div class="toastIcon">${icons[type] || icons.info}</div>
+        <div style="min-width:0;flex:1">
+          <b>${esc(title || "")}</b>
+          <p>${esc(msg || "")}</p>
+        </div>
+        <button class="toastX" type="button">×</button>
+      `;
+
+      const close = () => {
+        el.classList.add("out");
+        setTimeout(() => el.remove(), 180);
+      };
+
+      el.querySelector(".toastX").onclick = close;
+      host.prepend(el);
+      setTimeout(close, ms);
+    }
+
+    function normAr(s){
+      s = String(s || "").toLowerCase().trim();
+      s = s.replace(/[\\u064B-\\u065F\\u0670]/g, "");
+      s = s
+        .replace(/[إأآا]/g, "ا")
+        .replace(/ة/g, "ه")
+        .replace(/ى/g, "ي")
+        .replace(/ؤ/g, "و")
+        .replace(/ئ/g, "ي");
+      return s.replace(/\\s+/g, " ");
+    }
+
+    function normalizeCode(v){
+      return String(v || "").trim().replace("#", "");
+    }
+
+    function getImg(it){
+      let u = it?.image || it?.imageUrl || it?.img || it?.featuredImage || it?.productImage || it?.variantImage || "";
+      if(!u && it?.image && typeof it.image === "object"){
+        u = it.image.src || it.image.url || it.image.originalSrc || "";
+      }
+      if(u && u.startsWith("//")) u = "https:" + u;
+      return String(u || "").trim();
+    }
+
+    function productName(it){
+      if(!it) return "منتج";
+      return (it.variantTitle && it.variantTitle !== "Default Title")
+        ? `${it.productTitle || ""} • ${it.variantTitle || ""}`.trim()
+        : String(it.productTitle || it.sku || it.barcode || "منتج").trim();
+    }
+
+    function productHay(it){
+      return [
+        it.productTitle,
+        it.variantTitle,
+        it.sku,
+        it.barcode,
+        it.variantId
+      ].map(normAr).join(" | ");
+    }
+
+    function smartMatch(it, rawQ){
+      const q = normAr(rawQ);
+      if(!q) return true;
+
+      const text = productHay(it);
+      if(text.includes(q)) return true;
+
+      const tokens = q.split(" ").filter(Boolean);
+      const words = text.split(/[\\s|]+/).filter(Boolean);
+
+      return tokens.every(t => words.some(w => w.startsWith(t)));
+    }
+
+    function filteredItems(){
+      const q = $("qInput")?.value || "";
+      return (state.items || []).filter(it => smartMatch(it, q));
+    }
+
+    function localQtyOf(variantId){
+      return Math.max(0, Number(state.localMap?.[variantId] || 0) || 0);
+    }
+
+function cartItemKey(it){
+  return String(it?.variantId || it?.product_key || "").trim();
+}
+
+function cartShortage(item){
+  const available = localQtyOf(item.product_key);
+  return Math.max(0, Number(item.qty || 0) - available);
+}
+
+function addToCart(it){
+  const product_key = cartItemKey(it);
+  if(!product_key) return;
+
+  const found = state.saleCart.find(x => x.product_key === product_key);
+
+  if(found){
+    found.qty = Math.max(1, Number(found.qty || 0) + 1);
+  }else{
+    state.saleCart.push({
+      product_key,
+      product_name: productName(it),
+      image: getImg(it),
+      sku: String(it.sku || "").trim(),
+      barcode: String(it.barcode || "").trim(),
+      qty: 1,
+
+      // سعر البيع اختياري، المدير المالي يقدر يكتبه لاحقًا
+      unitPrice: "",
+
+      // هذه تظهر فقط إذا المنتج ناقص من المخزون المحلي
+      purchaseVendor: "",
+      purchaseSource: "CASH_MUSCAT",
+      purchaseUnitCost: "",
+      purchaseNote: ""
+    });
+  }
+
+  const qty = localQtyOf(product_key);
+
+  if(qty <= 0){
+    toast(
+      "warn",
+      "تمت الإضافة للسلة",
+      "هذا المنتج غير متوفر محليًا. عند الحفظ سيتم تسجيل شراء فوري ثم خصمه."
+    );
+  }else{
+    toast("ok", "تمت الإضافة", "تمت إضافة المنتج للسلة.");
+  }
+
+  renderSaleCart();
+}
+
+function renderSaleCart(){
+  const list = $("saleCartList");
+  const pill = $("cartCountPill");
+  const hint = $("cartHint");
+
+  const cart = state.saleCart || [];
+  const qtyTotal = cart.reduce((s, x) => s + Math.max(0, Number(x.qty || 0)), 0);
+  const shortageTotal = cart.reduce((s, x) => s + cartShortage(x), 0);
+
+  if(pill) pill.textContent = `${cart.length} صنف / ${qtyTotal} قطعة`;
+
+  if(hint){
+    hint.textContent = shortageTotal > 0
+      ? `يوجد ${shortageTotal} قطعة ناقصة، سيتم إدخالها كإضافة مخزون تلقائية عند الحفظ.`
+      : "أضف أكثر من منتج ثم احفظها باسم شخص واحد.";
+  }
+
+  if(!list) return;
+
+  if(!cart.length){
+    list.innerHTML = `<div class="cartEmpty">السلة فارغة. اضغط “إضافة للسلة” من أي منتج.</div>`;
+    return;
+  }
+
+  list.innerHTML = cart.map((x, idx) => {
+    const available = localQtyOf(x.product_key);
+    const shortage = cartShortage(x);
+
+    return `
+      <article class="cartItem" data-cart-index="${idx}">
+        <img
+          src="${escAttr(x.image || "/a/noimg.png")}"
+          alt=""
+          onerror="this.onerror=null;this.src='/a/noimg.png';"
+        >
+
+        <div>
+          <b>${esc(x.product_name || "منتج")}</b>
+          <small>
+            المتوفر محليًا: ${available}
+            ${x.sku ? ` • SKU: ${esc(x.sku)}` : ""}
+            ${x.barcode ? ` • باركود: ${esc(x.barcode)}` : ""}
+          </small>
+
+          ${
+            shortage > 0
+              ? `<span class="cartWarn">سيتم شراء/إضافة ${shortage} تلقائيًا</span>`
+              : ""
+          }
+        </div>
+
+        <div class="cartQtyBox">
+          <button type="button" data-cart-minus="${idx}">-</button>
+
+          <input
+            type="number"
+            min="1"
+            step="1"
+            value="${Number(x.qty || 1)}"
+            data-cart-qty="${idx}"
+          >
+
+          <button type="button" data-cart-plus="${idx}">+</button>
+
+          <button
+            type="button"
+            data-cart-remove="${idx}"
+            style="background:rgba(239,68,68,.10);color:#b91c1c"
+          >
+            ×
+          </button>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function setCartQty(idx, qty){
+  const item = state.saleCart[idx];
+  if(!item) return;
+
+  item.qty = Math.max(1, Math.floor(Number(qty || 1)) || 1);
+  renderSaleCart();
+}
+
+function removeCartItem(idx){
+  state.saleCart.splice(idx, 1);
+  renderSaleCart();
+}
+
+function clearSaleCart(){
+  state.saleCart = [];
+  renderSaleCart();
+}
+
+function openCheckoutCart(){
+  if(!state.saleCart.length){
+    toast("warn", "السلة فارغة", "أضف منتج واحد على الأقل.");
+    return;
+  }
+
+  renderCustomerDatalist();
+
+  $("cartCustomer").value = "";
+  $("cartNote").value = "";
+
+  renderCheckoutItems();
+
+  $("cartCheckoutModal").classList.add("show");
+  $("cartCheckoutModal").setAttribute("aria-hidden", "false");
+
+  setTimeout(() => $("cartCustomer")?.focus(), 80);
+}
+
+function renderCheckoutItems(){
+  const host = $("cartCheckoutItems");
+  if(!host) return;
+
+  host.innerHTML = state.saleCart.map((x, idx) => {
+    const available = localQtyOf(x.product_key);
+    const shortage = cartShortage(x);
+
+    return `
+      <div class="checkoutItem" data-checkout-index="${idx}">
+        <div class="checkoutTitle">
+          <b>${esc(x.product_name || "منتج")}</b>
+          <span class="suggestTag">الكمية: ${Number(x.qty || 1)}</span>
+        </div>
+
+        <div class="formGrid">
+          <div class="field">
+            <label>سعر البيع للحبة - اختياري</label>
+            <input
+              type="number"
+              step="0.001"
+              min="0"
+              value="${escAttr(x.unitPrice)}"
+              data-cart-field="unitPrice"
+              data-cart-field-idx="${idx}"
+              placeholder="يمكن للمدير إضافته لاحقًا"
+            >
+          </div>
+
+          <div class="field">
+            <label>المتوفر / الناقص</label>
+            <input disabled value="متوفر ${available} / ناقص ${shortage}">
+          </div>
+        </div>
+
+        ${
+          shortage > 0
+            ? `
+              <div class="checkoutHint">
+                المنتج ناقص من المخزون المحلي. اكتب من أي تاجر تم شراؤه حتى يظهر للمدير المالي.
+              </div>
+
+              <div class="formGrid" style="margin-top:10px">
+                <div class="field">
+                  <label>التاجر / الشخص الذي تم الشراء منه</label>
+                  <input
+                    value="${escAttr(x.purchaseVendor)}"
+                    data-cart-field="purchaseVendor"
+                    data-cart-field-idx="${idx}"
+                    placeholder="اسم التاجر"
+                  >
+                </div>
+
+                <div class="field">
+                  <label>مصدر الدفع</label>
+                  <select data-cart-field="purchaseSource" data-cart-field-idx="${idx}">
+                    <option value="CASH_MUSCAT" ${x.purchaseSource === "CASH_MUSCAT" ? "selected" : ""}>كاش مسقط</option>
+                    <option value="BANK" ${x.purchaseSource === "BANK" ? "selected" : ""}>الحساب البنكي</option>
+                    <option value="UNKNOWN" ${x.purchaseSource === "UNKNOWN" ? "selected" : ""}>غير محدد</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>تكلفة الشراء للحبة - اختياري</label>
+                  <input
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    value="${escAttr(x.purchaseUnitCost)}"
+                    data-cart-field="purchaseUnitCost"
+                    data-cart-field-idx="${idx}"
+                    placeholder="0.000"
+                  >
+                </div>
+
+                <div class="field">
+                  <label>ملاحظة شراء - اختياري</label>
+                  <input
+                    value="${escAttr(x.purchaseNote)}"
+                    data-cart-field="purchaseNote"
+                    data-cart-field-idx="${idx}"
+                    placeholder="مثال: شراء سريع للعميل"
+                  >
+                </div>
+              </div>
+            `
+            : ""
+        }
+      </div>
+    `;
+  }).join("");
+}
+
+function updateCartField(idx, field, value){
+  const item = state.saleCart[idx];
+  if(!item) return;
+
+  item[field] = value;
+}
+
+
+function empFmtMoney(v){
+  return (Number(v || 0) || 0).toLocaleString("en-US", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3
+  });
+}
+
+function empLocalDateTime(v){
+  const s = String(v || "");
+  if(!s) return "—";
+
+  const d = new Date(s);
+  if(Number.isNaN(d.getTime())) return s;
+
+  return d.toLocaleString("ar-OM", {
+    year:"numeric",
+    month:"2-digit",
+    day:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+async function loadEmployeeCustomers(){
+  try{
+    const r = await authFetch("/api/pack-shopify/local-stock/customers", {
+      cache:"no-store"
+    });
+
+    const d = await r.json().catch(() => ({}));
+
+    if(!r.ok){
+      throw new Error(d?.error || "فشل جلب الأشخاص");
+    }
+
+    state.employeeFinance.customers = Array.isArray(d.customers) ? d.customers : [];
+
+    for(const c of state.employeeFinance.customers){
+      if(c?.customer) saveLocalCustomerName(c.customer);
+    }
+
+    renderCustomerDatalist();
+    renderEmployeeCustomers();
+  }catch(e){
+    console.warn("loadEmployeeCustomers failed:", e?.message || e);
+  }
+}
+
+function renderEmployeeCustomers(){
+  const host = $("employeeCustomerCards");
+  if(!host) return;
+
+  const rows = state.employeeFinance.customers || [];
+
+  if(!rows.length){
+    host.innerHTML = `<div class="cartEmpty" style="grid-column:1/-1">لا توجد فواتير بيع محلي حتى الآن.</div>`;
+    return;
+  }
+
+  host.innerHTML = rows.slice(0, 30).map((x) => `
+    <article class="customerCard" data-employee-customer="${escAttr(x.customer)}">
+      <b>${esc(x.customer || "—")}</b>
+      <small>
+        ${Number(x.salesCount || 0)} عملية • ${Number(x.qty || 0)} قطعة
+        <br>
+        المتبقي: ${empFmtMoney(x.outstanding)} ر.ع
+        <br>
+        آخر عملية: ${esc(empLocalDateTime(x.lastAt))}
+      </small>
+
+      ${
+        Number(x.missingPriceCount || 0) > 0
+          ? `<span class="warnMini">${Number(x.missingPriceCount || 0)} بدون سعر</span>`
+          : ""
+      }
+    </article>
+  `).join("");
+}
+
+async function openEmployeeInvoice(customer){
+  const name = String(customer || $("employeeInvoiceCustomer")?.value || "").trim();
+
+  if(!name){
+    toast("warn", "تنبيه", "اكتب اسم الشخص أولاً.");
+    return;
+  }
+
+  const includeSettled = $("employeeInvoiceIncludeSettled")?.value || "0";
+
+  try{
+    setStatus("جاري جلب الفاتورة...");
+
+    const qs = new URLSearchParams({
+      customer: name,
+      includeSettled
+    });
+
+    const r = await authFetch(`/api/pack-shopify/local-stock/customer-invoice?${qs.toString()}`, {
+      cache:"no-store"
+    });
+
+    const d = await r.json().catch(() => ({}));
+
+    if(!r.ok){
+      throw new Error(d?.error || "فشل جلب الفاتورة");
+    }
+
+    state.employeeFinance.invoice = d;
+
+    $("employeeInvoiceCustomer").value = name;
+    $("employeeInvoiceTitle").textContent = `فاتورة ${name}`;
+    $("employeeInvoiceSub").textContent =
+      `${Number(d.count || 0)} منتج • الإجمالي ${empFmtMoney(d.totalAmount)} ر.ع`;
+
+    renderEmployeeInvoice();
+
+    $("employeeInvoiceModal").classList.add("show");
+    $("employeeInvoiceModal").setAttribute("aria-hidden", "false");
+
+    setStatus("تم");
+  }catch(e){
+    setStatus("خطأ");
+    toast("err", "فشل عرض الفاتورة", e?.message || String(e));
+  }
+}
+
+function renderEmployeeInvoice(){
+  const data = state.employeeFinance.invoice || {};
+  const items = Array.isArray(data.items) ? data.items : [];
+
+  const summary = $("employeeInvoiceSummary");
+  const host = $("employeeInvoiceItems");
+
+  if(summary){
+    summary.innerHTML = `
+      <div class="stat">
+        <span>عدد المنتجات</span>
+        <b>${Number(data.count || 0)}</b>
+      </div>
+
+      <div class="stat">
+        <span>إجمالي القطع</span>
+        <b>${Number(data.totalQty || 0)}</b>
+      </div>
+
+      <div class="stat">
+        <span>الإجمالي</span>
+        <b>${empFmtMoney(data.totalAmount)} ر.ع</b>
+      </div>
+    `;
+  }
+
+  if(!host) return;
+
+  if(!items.length){
+    host.innerHTML = `<div class="cartEmpty">لا توجد منتجات غير مرحلة لهذا الشخص.</div>`;
+    return;
+  }
+
+  host.innerHTML = items.map((x) => {
+    const lineTotal = Number(x.total || 0) || 0;
+    const confirmed = Number(x.unitPrice || 0) > 0;
+    const img = x.image || "/a/noimg.png";
+
+    return `
+      <article class="invoiceItem" data-sale-id="${escAttr(x.id)}">
+        <div class="invoiceItemTop">
+          <img
+            class="invoiceProductImg"
+            src="${escAttr(img)}"
+            alt=""
+            onerror="this.onerror=null;this.src='/a/noimg.png';"
+          >
+
+          <div>
+            <b>${esc(x.product_name || "منتج")}</b>
+            <small>
+              الكمية: ${Number(x.qty || 0)}
+              ${x.sku ? ` • SKU: ${esc(x.sku)}` : ""}
+              ${x.barcode ? ` • باركود: ${esc(x.barcode)}` : ""}
+              <br>
+              التاريخ: ${esc(empLocalDateTime(x.at))}
+            </small>
+          </div>
+
+          <span class="suggestTag">${confirmed ? "مسعر" : "بدون سعر"}</span>
+        </div>
+
+        <div class="invoicePriceGrid">
+          <div class="field">
+            <label>سعر الحبة</label>
+            <input
+              type="number"
+              step="0.001"
+              min="0"
+              value="${Number(x.unitPrice || 0) > 0 ? escAttr(x.unitPrice) : ""}"
+              data-employee-price="${escAttr(x.id)}"
+              placeholder="اكتب السعر"
+              ${x.settled ? "disabled" : ""}
+            >
+          </div>
+
+          <div class="field">
+            <label>الإجمالي</label>
+            <input disabled value="${empFmtMoney(lineTotal)} ر.ع">
+          </div>
+
+          <button
+            class="smallBtn sale"
+            type="button"
+            data-save-employee-price="${escAttr(x.id)}"
+            ${x.settled ? "disabled" : ""}
+          >
+            حفظ السعر
+          </button>
+        </div>
+
+        ${
+          x.autoPurchase
+            ? `
+              <div class="invoiceAutoPurchase">
+                شراء فوري:
+                ${esc(x.autoPurchase.vendor || "—")}
+                • الكمية ${Number(x.autoPurchase.qty || 0)}
+                ${
+                  Number(x.autoPurchase.unitCost || 0) > 0
+                    ? ` • التكلفة ${empFmtMoney(x.autoPurchase.unitCost)} ر.ع`
+                    : ""
+                }
+              </div>
+            `
+            : ""
+        }
+      </article>
+    `;
+  }).join("");
+}
+
+function findEmployeePriceInput(saleId){
+  return Array.from(document.querySelectorAll("[data-employee-price]"))
+    .find((el) => el.getAttribute("data-employee-price") === String(saleId));
+}
+
+async function saveEmployeeSalePrice(saleId){
+  const input = findEmployeePriceInput(saleId);
+  const unitPrice = String(input?.value || "").trim();
+
+  if(!saleId){
+    toast("warn", "تنبيه", "عملية البيع غير معروفة.");
+    return;
+  }
+
+  if(!(Number(unitPrice) > 0)){
+    toast("warn", "تنبيه", "اكتب سعر أكبر من صفر.");
+    return;
+  }
+
+  try{
+    setStatus("جاري حفظ السعر...");
+
+    const r = await authFetch("/api/pack-shopify/local-stock/sale-price", {
+      method:"PATCH",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        saleId,
+        unitPrice
+      })
+    });
+
+    const d = await r.json().catch(() => ({}));
+
+    if(!r.ok){
+      throw new Error(d?.error || "فشل حفظ السعر");
+    }
+
+    const currentCustomer =
+      state.employeeFinance.invoice?.customer ||
+      $("employeeInvoiceCustomer")?.value ||
+      "";
+
+    toast("ok", "تم حفظ السعر", "تم تحديث الفاتورة.");
+
+    await openEmployeeInvoice(currentCustomer);
+    await loadEmployeeCustomers();
+
+    setStatus("تم");
+  }catch(e){
+    setStatus("خطأ");
+    toast("err", "فشل حفظ السعر", e?.message || String(e));
+  }
+}
+
+function employeeInvoiceText(){
+  const data = state.employeeFinance.invoice || {};
+  const items = Array.isArray(data.items) ? data.items : [];
+
+  const lines = [];
+
+  lines.push(`فاتورة Hala Beauty`);
+  lines.push(`العميل: ${data.customer || "—"}`);
+  lines.push(`----------------------`);
+
+  for(const x of items){
+    const name = x.product_name || "منتج";
+    const qty = Number(x.qty || 0);
+    const price = Number(x.unitPrice || 0);
+    const total = Number(x.total || 0);
+
+    lines.push(`${name}`);
+    lines.push(`الكمية: ${qty}`);
+    lines.push(`السعر: ${empFmtMoney(price)} ر.ع`);
+    lines.push(`الإجمالي: ${empFmtMoney(total)} ر.ع`);
+    lines.push(`----------------------`);
+  }
+
+  lines.push(`المجموع: ${empFmtMoney(data.totalAmount)} ر.ع`);
+
+  if(Number(data.unpricedCount || 0) > 0){
+    lines.push(`تنبيه: توجد ${Number(data.unpricedCount || 0)} منتجات بدون سعر.`);
+  }
+
+  return lines.join("\n");
+}
+
+async function copyEmployeeInvoice(){
+  const text = employeeInvoiceText();
+
+  try{
+    await navigator.clipboard.writeText(text);
+    toast("ok", "تم النسخ", "تم نسخ الفاتورة.");
+  }catch{
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    toast("ok", "تم النسخ", "تم نسخ الفاتورة.");
+  }
+}
+
+function openEmployeeInvoiceWhatsApp(){
+  const text = employeeInvoiceText();
+  let phone = String($("employeeInvoicePhone")?.value || "").replace(/[^\d]/g, "");
+
+  if(phone && !phone.startsWith("968")){
+    phone = "968" + phone;
+  }
+
+  const url = phone
+    ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}`
+    : `https://wa.me/?text=${encodeURIComponent(text)}`;
+
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function printEmployeeInvoice(){
+  const text = employeeInvoiceText()
+    .split("\n")
+    .map((x) => `<div>${esc(x)}</div>`)
+    .join("");
+
+  const w = window.open("", "_blank", "width=420,height=720");
+
+  if(!w){
+    toast("warn", "المتصفح منع النافذة", "انسخ الفاتورة بدل الطباعة.");
+    return;
+  }
+
+  w.document.write(`
+    <!doctype html>
+    <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="utf-8">
+        <title>فاتورة بيع محلي</title>
+        <style>
+          body{font-family:Arial,sans-serif;padding:18px;line-height:1.8}
+          h2{margin:0 0 12px}
+          .box{border:1px solid #ddd;border-radius:14px;padding:14px}
+        </style>
+      </head>
+      <body>
+        <h2>فاتورة Hala Beauty</h2>
+        <div class="box">${text}</div>
+        <script>
+          window.onload = () => window.print();
+        <\/script>
+      </body>
+    </html>
+  `);
+
+  w.document.close();
+}
+    
+async function saveCartSale(){
+  if(cartSaleSaving) return;
+
+  const customer = String($("cartCustomer")?.value || "").trim();
+  const note = String($("cartNote")?.value || "").trim();
+
+  if(!customer){
+    toast("warn", "تنبيه", "اكتب اسم الشخص.");
+    return;
+  }
+
+  if(!state.saleCart.length){
+    toast("warn", "تنبيه", "السلة فارغة.");
+    return;
+  }
+
+  for(const x of state.saleCart){
+    if(!(Number(x.qty) > 0)){
+      toast("warn", "تنبيه", "تأكد من الكميات.");
+      return;
+    }
+
+    if(String(x.unitPrice || "").trim() && Number(x.unitPrice) < 0){
+      toast("warn", "تنبيه", "سعر البيع غير صحيح.");
+      return;
+    }
+
+    const shortage = cartShortage(x);
+
+    if(shortage > 0 && !String(x.purchaseVendor || "").trim()){
+      toast("warn", "ناقص", `اكتب التاجر للمنتج: ${x.product_name}`);
+      return;
+    }
+
+    if(String(x.purchaseUnitCost || "").trim() && Number(x.purchaseUnitCost) < 0){
+      toast("warn", "تنبيه", "تكلفة الشراء غير صحيحة.");
+      return;
+    }
+  }
+
+  const btn = $("btnSaveCartSale");
+
+  try{
+    cartSaleSaving = true;
+
+    if(btn){
+      btn.disabled = true;
+      btn.textContent = "جاري الحفظ...";
+    }
+
+    setStatus("جاري حفظ السلة...");
+
+    const payload = {
+      customer,
+      note,
+      items: state.saleCart.map((x) => ({
+        product_key: x.product_key,
+        product_name: x.product_name,
+        image: x.image,
+        sku: x.sku,
+        barcode: x.barcode,
+        qty: Math.max(1, Math.floor(Number(x.qty || 1))),
+        unitPrice: String(x.unitPrice || "").trim(),
+
+        // الكمية الناقصة التي يجب إضافتها تلقائيًا قبل الخصم
+        buyQty: cartShortage(x),
+
+        // بيانات الشراء الفوري للمدير المالي
+        purchaseVendor: String(x.purchaseVendor || "").trim(),
+        purchaseSource: String(x.purchaseSource || "UNKNOWN").trim(),
+        purchaseUnitCost: String(x.purchaseUnitCost || "").trim(),
+        purchaseNote: String(x.purchaseNote || "").trim()
+      }))
+    };
+
+    const r = await authFetch("/api/pack-shopify/local-stock/staff-sale-bulk", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const d = await r.json().catch(() => ({}));
+
+    if(!r.ok){
+      throw new Error(d?.error || "فشل حفظ السلة");
+    }
+
+    if(d?.qtyAfterMap && typeof d.qtyAfterMap === "object"){
+      for(const [k,v] of Object.entries(d.qtyAfterMap)){
+        state.localMap[k] = Math.max(0, Number(v || 0) || 0);
+      }
+    }
+
+    saveLocalCustomerName(customer);
+    clearSaleCart();
+    closeAllModals();
+
+    setStatus("تم");
+    toast("ok", "تم حفظ السلة", "تم تسجيل البيع المحلي وخصم المخزون.");
+
+    await loadAllLocalStock();
+await loadEmployeeCustomers();
+  }catch(e){
+    setStatus("خطأ");
+    toast("err", "فشل حفظ السلة", e?.message || String(e));
+  }finally{
+    cartSaleSaving = false;
+
+    if(btn){
+      btn.disabled = false;
+      btn.textContent = "حفظ وخصم المخزون";
+    }
+  }
+}
+
+    
+    function renderStats(){
+      const list = filteredItems();
+      const withStock = list.filter(x => localQtyOf(x.variantId) > 0).length;
+      const totalQty = list.reduce((s, x) => s + localQtyOf(x.variantId), 0);
+
+      if($("statResults")) $("statResults").textContent = String(list.length);
+      if($("statWithStock")) $("statWithStock").textContent = String(withStock);
+      if($("statTotalQty")) $("statTotalQty").textContent = String(totalQty);
+      if($("statUpdated")) $("statUpdated").textContent = nowTime();
+    }
+
+    async function loadLocalForItems(){
+      const keys = (state.items || [])
+        .map(x => String(x.variantId || "").trim())
+        .filter(Boolean);
+
+      if(!keys.length){
+        state.localMap = {};
+        return;
+      }
+
+      const r = await authFetch("/api/inv?keys=" + encodeURIComponent(keys.join(",")), { cache:"no-store" });
+      const d = await r.json().catch(() => ({}));
+
+      state.localMap = d && d.map && typeof d.map === "object" ? d.map : {};
+    }
+
+    async function searchShopify(q){
+      const query = String(q || "").trim();
+      state.searchText = query;
+
+      if(!query){
+        state.items = [];
+        state.localMap = {};
+        render();
+        return;
+      }
+
+      setStatus("جاري البحث...");
+
+      try{
+        const url = "/api/pack-shopify/active?limit=40&after=&q=" + encodeURIComponent(query);
+        const r = await authFetch(url, { cache:"no-store" });
+        const d = await r.json().catch(() => ({}));
+
+        if(!r.ok) throw new Error(d?.error || "فشل البحث من شوبيفاي");
+
+        state.items = Array.isArray(d.items) ? d.items : [];
+        await loadLocalForItems();
+
+        setStatus("تم");
+        render();
+      }catch(e){
+        setStatus("خطأ");
+        state.items = [];
+        state.localMap = {};
+        render();
+        toast("err", "فشل البحث", e?.message || String(e));
+      }
+    }
+
+
+async function loadAllLocalStock(){
+  setStatus("جاري تحميل المخزون المحلي...");
+
+  try{
+    const r = await authFetch("/api/inv/local-list", { cache:"no-store" });
+    const d = await r.json().catch(() => ({}));
+
+    if(!r.ok) throw new Error(d?.error || "فشل تحميل المخزون المحلي");
+
+    state.items = Array.isArray(d.items) ? d.items : [];
+
+    state.localMap = {};
+    for(const it of state.items){
+      const vid = String(it.variantId || "").trim();
+      if(vid) state.localMap[vid] = Math.max(0, Number(it.localQty || 0) || 0);
+    }
+
+    setStatus("تم");
+    render();
+  }catch(e){
+    setStatus("خطأ");
+    toast("err", "فشل", e?.message || String(e));
+  }
+}
+    
+    function renderSuggestions(){
+      const box = $("suggestBox");
+      if(!box) return;
+
+      const q = $("qInput")?.value || "";
+      if(!q.trim()){
+        box.classList.remove("show");
+        box.innerHTML = "";
+        return;
+      }
+
+      const matches = (state.items || []).filter(it => smartMatch(it, q)).slice(0, 8);
+
+      if(!matches.length){
+        box.classList.add("show");
+        box.innerHTML = `
+          <div class="suggestItem" style="cursor:default">
+            <div>
+              <div class="suggestMain">لا توجد نتائج مطابقة</div>
+              <div class="suggestSub">جرّب SKU أو باركود أو اسم مختصر</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      box.classList.add("show");
+      box.innerHTML = matches.map(it => {
+        const vid = String(it.variantId || "");
+        const qty = localQtyOf(vid);
+
+        return `
+          <div class="suggestItem" data-sug="${escAttr(vid)}">
+            <div>
+              <div class="suggestMain">${esc(productName(it))}</div>
+              <div class="suggestSub">
+                ${it.sku ? `SKU: ${esc(it.sku)} • ` : ""}
+                ${it.barcode ? `باركود: ${esc(it.barcode)} • ` : ""}
+                Variant: ${esc(vid)}
+              </div>
+            </div>
+            <div class="suggestTag">محلي: ${qty}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function closeSuggestions(){
+      const box = $("suggestBox");
+      if(!box) return;
+      box.classList.remove("show");
+      box.innerHTML = "";
+    }
+
+    function render(){
+      const grid = $("grid");
+      const hint = $("resultHint");
+      if(!grid) return;
+
+      const q = $("qInput")?.value || "";
+
+if(!q.trim() && !(state.items || []).length){
+  grid.innerHTML = `
+    <div class="emptyState">
+      لا توجد منتجات في المخزون المحلي حاليًا.<br>
+      ابحث عن منتج وأضف له كمية حتى يظهر هنا تلقائيًا.
+    </div>
+  `;
+  if(hint) hint.textContent = "كل المنتجات التي لها مخزون محلي ستظهر هنا.";
+  renderStats();
+renderSaleCart();
+  closeSuggestions();
+  return;
+}
+      const list = filteredItems();
+
+      if(hint) hint.textContent = `تم العثور على ${list.length} نتيجة مطابقة.`;
+
+      if(!list.length){
+        grid.innerHTML = `<div class="emptyState">لا توجد منتجات مطابقة للبحث الحالي.</div>`;
+        renderStats();
+renderSaleCart();
+        renderSuggestions();
+        return;
+      }
+
+      grid.innerHTML = list.slice(0, 24).map(it => {
+        const vid = String(it.variantId || "").trim();
+        const img = getImg(it);
+        const qty = localQtyOf(vid);
+
+        return `
+          <article class="productCard" data-vid="${escAttr(vid)}">
+            <div class="productImg">
+              <img
+                src="${escAttr(img || "/a/noimg.png")}"
+                alt="${escAttr(productName(it))}"
+                loading="lazy"
+                decoding="async"
+                referrerpolicy="no-referrer"
+                onerror="this.onerror=null;this.src='/a/noimg.png';"
+              >
+              <div class="qtyBadge">المخزون: <b>${qty}</b></div>
+            </div>
+
+            <div class="productBody">
+              <div class="productName">${esc(productName(it))}</div>
+
+              <div class="productMeta">
+                ${it.sku ? `SKU: <b>${esc(it.sku)}</b><br>` : ""}
+                ${it.barcode ? `باركود: <b>${esc(it.barcode)}</b>` : ""}
+                ${!it.sku && !it.barcode ? "لا يوجد SKU أو باركود" : ""}
+              </div>
+
+<div class="productActions">
+  <button class="smallBtn inv" data-action="inventory" type="button">
+    تعديل الكمية
+  </button>
+
+  <button class="smallBtn sale" data-action="sale" type="button">
+    بيع محلي
+  </button>
+
+  <button class="smallBtn cart" data-action="cart" type="button">
+    إضافة للسلة
+  </button>
+</div>
+</div>
+          </article>
+        `;
+      }).join("");
+
+      renderStats();
+renderSaleCart();
+      renderSuggestions();
+    }
+
+    function setInventoryMode(mode){
+      state.inventoryMode = mode === "set" ? "set" : "add";
+
+      $("modeAdd")?.classList.toggle("active", state.inventoryMode === "add");
+      $("modeSet")?.classList.toggle("active", state.inventoryMode === "set");
+
+      if($("invQtyLabel")){
+        $("invQtyLabel").textContent =
+          state.inventoryMode === "add"
+            ? "الكمية المراد إضافتها"
+            : "الكمية النهائية المطلوبة";
+      }
+
+      updateInventoryPreview();
+    }
+
+    function openInventoryModal(it){
+      const vid = String(it?.variantId || "").trim();
+      if(!vid) return;
+
+      const qty = localQtyOf(vid);
+      const img = getImg(it);
+
+      state.inventoryCtx = {
+        product_key: vid,
+        product_name: productName(it),
+        image: img,
+        sku: String(it.sku || "").trim(),
+        barcode: String(it.barcode || "").trim(),
+        currentQty: qty
+      };
+
+      $("invImg").src = img || "/a/noimg.png";
+      $("invName").textContent = state.inventoryCtx.product_name;
+      $("invMeta").textContent =
+        `المخزون الحالي: ${qty}` +
+        (state.inventoryCtx.sku ? ` • SKU: ${state.inventoryCtx.sku}` : "") +
+        (state.inventoryCtx.barcode ? ` • باركود: ${state.inventoryCtx.barcode}` : "");
+
+      $("invCurrentQty").value = String(qty);
+      $("invQtyInput").value = "";
+
+      setInventoryMode("add");
+
+      $("inventoryModal").classList.add("show");
+      $("inventoryModal").setAttribute("aria-hidden", "false");
+
+      setTimeout(() => $("invQtyInput")?.focus(), 80);
+    }
+
+    function updateInventoryPreview(){
+      const ctx = state.inventoryCtx;
+      if(!ctx) return;
+
+      const raw = $("invQtyInput")?.value || "";
+      const n = Number(raw || 0);
+
+      let next = ctx.currentQty;
+
+      if(Number.isFinite(n)){
+        if(state.inventoryMode === "add"){
+          next = ctx.currentQty + Math.max(0, Math.floor(n));
+        }else{
+          next = Math.max(0, Math.floor(n));
+        }
+      }
+
+      if($("invPreviewQty")) $("invPreviewQty").textContent = String(next);
+    }
+
+async function saveInventory(){
+  if(inventorySaving) return;
+
+  const ctx = state.inventoryCtx;
+  if(!ctx) return;
+
+  const raw = String($("invQtyInput")?.value || "").trim();
+  const value = Number(raw);
+
+  if(raw === "" || !Number.isFinite(value) || value < 0 || !Number.isInteger(value)){
+    toast("warn", "تنبيه", "اكتب رقم صحيح بدون كسور.");
+    return;
+  }
+
+  const inputQty = Math.floor(value);
+
+  const next = state.inventoryMode === "add"
+    ? ctx.currentQty + inputQty
+    : inputQty;
+
+  const delta = next - ctx.currentQty;
+
+  if(delta === 0){
+    toast("info", "لا يوجد تغيير", "الكمية بعد الحفظ نفس الكمية الحالية.");
+    return;
+  }
+
+  if(delta < 0){
+    toast("warn", "تنبيه", "تعيين كمية أقل من الحالية غير مدعوم هنا. استخدم البيع المحلي للخصم من المخزون.");
+    return;
+  }
+
+  const btn = $("btnSaveInventory");
+
+  try{
+    inventorySaving = true;
+
+    if(btn){
+      btn.disabled = true;
+      btn.textContent = "جاري الحفظ...";
+    }
+
+    setStatus("جاري حفظ المخزون...");
+
+    const r = await authFetch("/api/inv/add", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        product_key: ctx.product_key,
+        product_name: ctx.product_name,
+        image: ctx.image,
+        sku: ctx.sku,
+        barcode: ctx.barcode,
+        qty: delta
+      })
+    });
+
+    const d = await r.json().catch(() => ({}));
+
+    if(!r.ok){
+      throw new Error(d?.error || "فشل حفظ المخزون");
+    }
+
+    const after = Math.max(0, Number(d?.qtyAfter ?? next) || 0);
+    state.localMap[ctx.product_key] = after;
+
+    closeAllModals();
+
+    setStatus("تم");
+    toast("ok", "تم الحفظ", `تمت إضافة ${delta}. المخزون المحلي الآن: ${after}`);
+
+    await loadAllLocalStock();
+  }catch(e){
+    setStatus("خطأ");
+    toast("err", "فشل الحفظ", e?.message || String(e));
+  }finally{
+    inventorySaving = false;
+
+    if(btn){
+      btn.disabled = false;
+      btn.textContent = "حفظ المخزون";
+    }
+  }
+}
+    
+    function localCustomerList(){
+      try{
+        const arr = JSON.parse(localStorage.getItem("bt_local_sale_customers") || "[]");
+        return Array.isArray(arr) ? arr : [];
+      }catch{
+        return [];
+      }
+    }
+
+    function saveLocalCustomerName(name){
+      const n = String(name || "").trim();
+      if(!n) return;
+
+      const list = localCustomerList();
+      const exists = list.some(x => String(x).toLowerCase() === n.toLowerCase());
+
+      if(!exists){
+        list.unshift(n);
+        localStorage.setItem("bt_local_sale_customers", JSON.stringify(list.slice(0, 50)));
+      }
+    }
+
+    function renderCustomerDatalist(){
+      const el = $("saleCustomersList");
+      if(!el) return;
+
+      el.innerHTML = localCustomerList()
+        .map(x => `<option value="${escAttr(x)}"></option>`)
+        .join("");
+    }
+
+    function openSaleModal(it){
+      const vid = String(it?.variantId || "").trim();
+      if(!vid) return;
+
+      const qty = localQtyOf(vid);
+      if(qty <= 0){
+        toast("warn", "لا يوجد مخزون", "لا يمكن بيع المنتج لأن المخزون المحلي صفر.");
+        return;
+      }
+
+      const img = getImg(it);
+
+      state.saleCtx = {
+        product_key: vid,
+        product_name: productName(it),
+        image: img,
+        sku: String(it.sku || "").trim(),
+        barcode: String(it.barcode || "").trim(),
+        localQty: qty
+      };
+
+      $("saleImg").src = img || "/a/noimg.png";
+      $("saleName").textContent = state.saleCtx.product_name;
+      $("saleMeta").textContent =
+        `المخزون المتاح: ${qty}` +
+        (state.saleCtx.sku ? ` • SKU: ${state.saleCtx.sku}` : "") +
+        (state.saleCtx.barcode ? ` • باركود: ${state.saleCtx.barcode}` : "");
+
+      $("saleCustomer").value = "";
+      $("saleQty").value = "1";
+      $("saleQty").max = String(qty);
+      $("salePrice").value = "";
+      $("saleNote").value = "";
+
+      renderCustomerDatalist();
+
+      $("saleModal").classList.add("show");
+      $("saleModal").setAttribute("aria-hidden", "false");
+
+      setTimeout(() => $("saleCustomer")?.focus(), 80);
+    }
+
+async function saveSale(){
+  if(saleSaving) return;
+
+  const ctx = state.saleCtx;
+  if(!ctx) return;
+
+  const customer = String($("saleCustomer")?.value || "").trim();
+  const qty = Math.floor(Number($("saleQty")?.value || 0));
+  const unitPriceRaw = String($("salePrice")?.value || "").trim();
+  const note = String($("saleNote")?.value || "").trim();
+
+  if(!customer){
+    toast("warn", "تنبيه", "اكتب اسم الشخص.");
+    return;
+  }
+
+  if(!Number.isFinite(qty) || qty <= 0){
+    toast("warn", "تنبيه", "اكتب كمية صحيحة.");
+    return;
+  }
+
+  if(qty > ctx.localQty){
+    toast("warn", "الكمية غير كافية", `المتوفر فقط ${ctx.localQty}`);
+    return;
+  }
+
+  if(unitPriceRaw && Number(unitPriceRaw) < 0){
+    toast("warn", "تنبيه", "السعر غير صحيح.");
+    return;
+  }
+
+  const btn = $("btnSaveSale");
+
+  try{
+    saleSaving = true;
+
+    if(btn){
+      btn.disabled = true;
+      btn.textContent = "جاري الحفظ...";
+    }
+
+    setStatus("جاري حفظ البيع...");
+
+    const r = await authFetch("/api/pack-shopify/local-stock/staff-sale", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        product_key: ctx.product_key,
+        product_name: ctx.product_name,
+        image: ctx.image,
+        sku: ctx.sku,
+        barcode: ctx.barcode,
+        customer,
+        qty,
+        unitPrice: unitPriceRaw,
+        note
+      })
+    });
+
+    const d = await r.json().catch(() => ({}));
+
+    if(!r.ok){
+      throw new Error(d?.error || "فشل حفظ البيع");
+    }
+
+    const after = Math.max(0, Number(d?.qtyAfter ?? (ctx.localQty - qty)) || 0);
+    state.localMap[ctx.product_key] = after;
+
+    saveLocalCustomerName(customer);
+    closeAllModals();
+
+    setStatus("تم");
+    toast("ok", "تم البيع", `تم خصم ${qty} من المخزون المحلي. المتبقي: ${after}`);
+
+    await loadAllLocalStock();
+await loadEmployeeCustomers();
+  }catch(e){
+    setStatus("خطأ");
+    toast("err", "فشل البيع", e?.message || String(e));
+  }finally{
+    saleSaving = false;
+
+    if(btn){
+      btn.disabled = false;
+      btn.textContent = "حفظ البيع";
+    }
+  }
+}
+    function closeAllModals(){
+      document.querySelectorAll(".modal.show").forEach(m => {
+        m.classList.remove("show");
+        m.setAttribute("aria-hidden", "true");
+      });
+
+      state.inventoryCtx = null;
+      state.saleCtx = null;
+    }
+
+    let stream = null;
+    let scanning = false;
+    let detector = null;
+
+    async function ensureDetector(){
+      if(!("BarcodeDetector" in window)) return null;
+      if(detector) return detector;
+
+      detector = new BarcodeDetector({
+        formats:["code_128","ean_13","ean_8","upc_a","upc_e","qr_code"]
+      });
+
+      return detector;
+    }
+
+    async function startScan(){
+      if(scanning) return;
+
+      if(!navigator.mediaDevices?.getUserMedia){
+        toast("err", "غير مدعوم", "متصفحك لا يدعم الكاميرا.");
+        return;
+      }
+
+      const det = await ensureDetector();
+      if(!det){
+        toast("err", "غير مدعوم", "BarcodeDetector غير مدعوم. جرّب Chrome على الجوال.");
+        return;
+      }
+
+      try{
+        const area = $("scanArea");
+        const video = $("video");
+
+        area.classList.add("show");
+
+        stream = await navigator.mediaDevices.getUserMedia({
+          video:{ facingMode:"environment" }
+        });
+
+        video.setAttribute("playsinline", "");
+        video.srcObject = stream;
+        await video.play();
+
+        scanning = true;
+        setStatus("جاري المسح...");
+
+        const loop = async () => {
+          if(!scanning) return;
+
+          try{
+            const codes = await det.detect(video);
+            if(codes && codes.length){
+              const val = normalizeCode(codes[0].rawValue);
+
+              $("qInput").value = val;
+              stopScan();
+
+              toast("ok", "تم المسح", "تم قراءة الباركود.");
+              await searchShopify(val);
+              return;
+            }
+          }catch{}
+
+          requestAnimationFrame(loop);
+        };
+
+        loop();
+      }catch{
+        stopScan();
+        toast("err", "رفض الإذن", "فعّل إذن الكاميرا ثم أعد المحاولة.");
+      }
+    }
+
+    function stopScan(){
+      scanning = false;
+
+      $("scanArea")?.classList.remove("show");
+
+      const video = $("video");
+      if(video){
+        video.pause();
+        video.srcObject = null;
+      }
+
+      if(stream){
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+
+      setStatus("جاهز");
+    }
+
+$("btnLoad")?.addEventListener("click", () => {
+  const q = $("qInput")?.value || "";
+  if(String(q).trim()) searchShopify(q);
+  else loadAllLocalStock();
+});
+
+$("btnRefresh")?.addEventListener("click", () => {
+  const q = $("qInput")?.value || "";
+  if(String(q).trim()) searchShopify(q);
+  else loadAllLocalStock();
+});
+    $("btnScan")?.addEventListener("click", startScan);
+    $("btnStopScan")?.addEventListener("click", stopScan);
+
+    $("btnBack")?.addEventListener("click", () => {
+      const last = localStorage.getItem("lastPage") || "";
+      if(last){
+        window.location.href = "/a/" + last + ".html";
+        return;
+      }
+
+      if(window.history.length > 1) window.history.back();
+      else window.location.href = "/";
+    });
+
+    let searchTimer = null;
+    $("qInput")?.addEventListener("input", () => {
+      render();
+      clearTimeout(searchTimer);
+
+      const v = $("qInput")?.value || "";
+      if(String(v).trim().length < 2) return;
+
+      searchTimer = setTimeout(() => searchShopify(v), 260);
+    });
+
+    document.addEventListener("click", (ev) => {
+      const sug = ev.target.closest("[data-sug]");
+      if(sug){
+        const id = sug.getAttribute("data-sug");
+        const it = (state.items || []).find(x => String(x.variantId) === String(id));
+
+        closeSuggestions();
+
+        if(it){
+          $("qInput").value = productName(it);
+          render();
+          $("qInput").blur();
+        }
+
+        return;
+      }
+
+      const actionBtn = ev.target.closest("[data-action]");
+      if(actionBtn){
+        const card = ev.target.closest(".productCard");
+        const vid = card?.getAttribute("data-vid") || "";
+        const it = (state.items || []).find(x => String(x.variantId) === String(vid));
+
+        if(!it) return;
+
+        const action = actionBtn.getAttribute("data-action");
+
+if(action === "inventory") openInventoryModal(it);
+if(action === "sale") openSaleModal(it);
+if(action === "cart") addToCart(it);
+
+        return;
+      }
+
+      const closeBtn = ev.target.closest("[data-close-modal]");
+      if(closeBtn){
+        closeAllModals();
+        return;
+      }
+
+      if(ev.target.classList?.contains("modal")){
+        closeAllModals();
+        return;
+      }
+
+      const box = $("suggestBox");
+      const insideSearch = ev.target.closest(".searchBox");
+      if(box && !insideSearch) closeSuggestions();
+    });
+
+    $("modeAdd")?.addEventListener("click", () => setInventoryMode("add"));
+    $("modeSet")?.addEventListener("click", () => setInventoryMode("set"));
+    $("invQtyInput")?.addEventListener("input", updateInventoryPreview);
+    $("btnSaveInventory")?.addEventListener("click", saveInventory);
+    $("btnSaveSale")?.addEventListener("click", saveSale);
+
+$("btnCheckoutCart")?.addEventListener("click", openCheckoutCart);
+$("btnClearCart")?.addEventListener("click", clearSaleCart);
+$("btnSaveCartSale")?.addEventListener("click", saveCartSale);
+
+$("saleCartList")?.addEventListener("click", (ev) => {
+  const minus = ev.target.closest("[data-cart-minus]");
+  const plus = ev.target.closest("[data-cart-plus]");
+  const remove = ev.target.closest("[data-cart-remove]");
+
+  if(minus){
+    const idx = Number(minus.getAttribute("data-cart-minus"));
+    const item = state.saleCart[idx];
+
+    if(item) setCartQty(idx, Number(item.qty || 1) - 1);
+    return;
+  }
+
+  if(plus){
+    const idx = Number(plus.getAttribute("data-cart-plus"));
+    const item = state.saleCart[idx];
+
+    if(item) setCartQty(idx, Number(item.qty || 1) + 1);
+    return;
+  }
+
+  if(remove){
+    removeCartItem(Number(remove.getAttribute("data-cart-remove")));
+    return;
+  }
+});
+
+$("saleCartList")?.addEventListener("change", (ev) => {
+  const q = ev.target.closest("[data-cart-qty]");
+  if(!q) return;
+
+  setCartQty(Number(q.getAttribute("data-cart-qty")), q.value);
+});
+
+$("cartCheckoutItems")?.addEventListener("input", (ev) => {
+  const el = ev.target.closest("[data-cart-field]");
+  if(!el) return;
+
+  updateCartField(
+    Number(el.getAttribute("data-cart-field-idx")),
+    el.getAttribute("data-cart-field"),
+    el.value
+  );
+});
+
+$("cartCheckoutItems")?.addEventListener("change", (ev) => {
+  const el = ev.target.closest("[data-cart-field]");
+  if(!el) return;
+
+  updateCartField(
+    Number(el.getAttribute("data-cart-field-idx")),
+    el.getAttribute("data-cart-field"),
+    el.value
+  );
+});
+
+
+$("btnEmployeeRefreshCustomers")?.addEventListener("click", loadEmployeeCustomers);
+
+$("btnEmployeeLoadInvoice")?.addEventListener("click", () => {
+  openEmployeeInvoice();
+});
+
+$("employeeCustomerCards")?.addEventListener("click", (ev) => {
+  const card = ev.target.closest("[data-employee-customer]");
+  if(!card) return;
+
+  const customer = card.getAttribute("data-employee-customer") || "";
+  $("employeeInvoiceCustomer").value = customer;
+  openEmployeeInvoice(customer);
+});
+
+$("employeeInvoiceItems")?.addEventListener("click", (ev) => {
+  const btn = ev.target.closest("[data-save-employee-price]");
+  if(!btn) return;
+
+  saveEmployeeSalePrice(btn.getAttribute("data-save-employee-price"));
+});
+
+$("employeeInvoiceIncludeSettled")?.addEventListener("change", () => {
+  const customer =
+    state.employeeFinance.invoice?.customer ||
+    $("employeeInvoiceCustomer")?.value ||
+    "";
+
+  if(customer) openEmployeeInvoice(customer);
+});
+
+$("btnEmployeeCopyInvoice")?.addEventListener("click", copyEmployeeInvoice);
+$("btnEmployeeWhatsInvoice")?.addEventListener("click", openEmployeeInvoiceWhatsApp);
+$("btnEmployeePrintInvoice")?.addEventListener("click", printEmployeeInvoice);
+
+    
+document.addEventListener("keydown", (ev) => {
+  if(ev.key === "Escape") closeAllModals();
+
+  if(ev.key === "Enter"){
+    if($("inventoryModal")?.classList.contains("show")){
+      ev.preventDefault();
+      saveInventory();
+    }else if($("saleModal")?.classList.contains("show")){
+      ev.preventDefault();
+      saveSale();
+    }else if($("cartCheckoutModal")?.classList.contains("show")){
+      ev.preventDefault();
+      saveCartSale();
+    }
+  }
+});
+
+    
+window.addEventListener("load", () => {
+  setStatus("جاهز");
+  loadAllLocalStock();
+  loadEmployeeCustomers();
+});
+  
+  </script>
+</body>
+</html>

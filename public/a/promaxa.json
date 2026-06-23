@@ -1,0 +1,13 @@
+{
+  "name": "تجهيز الطلبات",
+  "short_name": "تجهيز الطلبات",
+  "start_url": "/a/",
+  "scope": "/a/",
+  "display": "standalone",
+  "background_color": "#6b0083",
+  "theme_color": "#fdd8c2",
+  "icons": [
+    { "src": "/a/ico2.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/a/ico1.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

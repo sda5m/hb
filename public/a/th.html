@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | تأكيد الدفع</title>
+
+  <link rel="manifest" href="/a/promaxa.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="تأكيد الدفع">
+  <link rel="apple-touch-icon" href="/a/ico1.png">
+  <link rel="icon" href="/a/ico2.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --btMain:#6b0083;
+      --btSoft:#fdd8c2;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+      --r18:18px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+    .wrap{ width:100%; max-width:100%; margin:0; padding:18px 24px 26px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow2);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandMark{
+      width:44px;height:44px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      overflow:hidden; display:grid; place-items:center;
+    }
+    .brandIcon{ width:100%; height:100%; object-fit:cover; display:block; }
+    .brandName{
+      font-size:18px;font-weight:900;margin:0;line-height:1.2;letter-spacing:.2px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px; padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns: 1fr auto auto;
+      gap:12px;
+    }
+    @media (max-width:900px){ .controls{ grid-template-columns:1fr; } }
+
+    .box{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px; background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+    }
+    .box input{
+      border:none; outline:none; background:transparent; width:100%;
+      font-size:15px; font-weight:900; color:var(--ink);
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+    .box input::placeholder{ color: rgba(102,112,133,.9); font-weight:800; }
+
+    .btn{
+      border:none; border-radius:14px; padding:12px 12px;
+      cursor:pointer; font-weight:900; font-size:15px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none;
+      width:auto;
+      white-space:nowrap;
+    }
+    .btn:active{ transform:scale(.985); }
+
+    .btnGhost{
+      background:#f2f4f7; color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+
+    .btnAll{
+      background: linear-gradient(135deg, rgba(22,163,74,.18), rgba(34,197,94,.12));
+      border:1px solid rgba(22,163,74,.26);
+      color:#166534;
+      box-shadow:0 10px 22px rgba(22,163,74,.12);
+    }
+    .btnAll svg{ stroke: currentColor; }
+
+    .list{ margin-top:12px; display:grid; gap:10px; }
+    .empty{
+      background:#fff; border:1px dashed rgba(16,24,40,.18);
+      border-radius:16px; padding:14px;
+      text-align:center; font-weight:900; color:rgba(16,24,40,.62);
+    }
+
+    .orderCard{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.08);
+      border-radius:16px;
+      padding:12px;
+      transition:.15s;
+    }
+
+    .orderTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .orderId{ font-weight:980; color:var(--purpleDark); font-size:13.5px; }
+
+    .tagPill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(245,158,11,.12);
+      border:1px solid rgba(245,158,11,.28);
+      color:#92400e;
+      white-space:nowrap;
+    }
+
+    .meta{
+      margin-top:8px;
+      font-weight:900;
+      color:rgba(16,24,40,.70);
+      font-size:12.8px;
+      line-height:1.75;
+    }
+
+    .infoLine{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      margin:6px 0;
+    }
+    .icoWrap{
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background: var(--btSoft);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 auto;
+      margin-top:1px;
+    }
+    .ico{
+      width:16px;
+      height:16px;
+      fill:none;
+      stroke: var(--btMain);
+      stroke-width:2.4;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .payLine{
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      background: linear-gradient(135deg, rgba(37,99,235,.10), rgba(241,198,177,.10));
+    }
+    .payText{
+      font-weight:980;
+      font-size:13px;
+      color:rgba(16,24,40,.78);
+    }
+.amt{
+  font-weight:990;
+  color:#1d4ed8;
+  letter-spacing:.2px;
+  white-space:nowrap;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.amt .ico{
+  width:18px;
+  height:18px;
+  stroke: currentColor;
+  fill:none;
+}
+
+    .btnConfirm{
+      margin-top:12px;
+      width:100%;
+      border-radius:14px;
+      padding:12px 12px;
+      border:1px solid rgba(22,163,74,.24);
+      background: linear-gradient(135deg, rgba(22,163,74,.16), rgba(34,197,94,.10));
+      color:#166534;
+      box-shadow:0 10px 22px rgba(22,163,74,.12);
+      font-weight:980;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      cursor:pointer;
+    }
+    .btnConfirm:active{ transform:scale(.985); }
+    .btnConfirm .ico{ stroke: currentColor; }
+
+    /* Toasts */
+    .toasts{
+      position:fixed; bottom:14px; left:14px; right:14px;
+      z-index:9999; display:flex; flex-direction:column; gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px); opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast .icon{ width:34px; height:34px; border-radius:12px; display:grid; place-items:center; flex:0 0 auto; color:#fff; }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{ border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px; border-radius:10px; color:rgba(16,24,40,.55); }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <img src="/a/ico1.png" alt="icon" class="brandIcon">
+        </div>
+        <div style="min-width:0">
+          <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+          <div class="brandSub">طلبات التحويل فقط • تأكيد الدفع</div>
+        </div>
+      </div>
+      <div class="badge"><span id="statusBadge">جاهز</span></div>
+    </div>
+
+    <div class="card">
+      <div class="controls">
+        <div class="box">
+          <input id="qInput" placeholder="ابحث برقم الطلب أو الرقم أو العنوان...">
+        </div>
+
+        <!-- ✅ زر تأكيد الدفع للكل -->
+        <button class="btn btnAll" id="btnConfirmAll" type="button" title="تأكيد الدفع لكل طلبات التحويل">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+          تأكيد الدفع للكل
+        </button>
+
+        <button class="btn btnGhost" id="btnRefresh" type="button">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+            <path d="M21 3v7h-7"></path>
+          </svg>
+          تحديث
+        </button>
+      </div>
+
+      <div class="list" id="ordersList"></div>
+    </div>
+  </div>
+
+<script type="module">
+  import { requirePackLogin, authFetch } from "./auth.js";
+  requirePackLogin();
+
+  const API_URL = "/api/manage/orders?limit=50";
+  const $ = (id) => document.getElementById(id);
+
+  const state = { orders: [], totalsById: {} };
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function toast(type, title, msg, ms=2200){
+    const wrap = $("toasts");
+    const el = document.createElement("div");
+    el.className = "toast " + type;
+    el.innerHTML = `
+      <div class="icon"></div>
+      <div class="body">
+        <p class="title">${esc(title||"")}</p>
+        <p class="msg">${esc(msg||"")}</p>
+      </div>
+      <button class="x" title="إغلاق">✕</button>
+    `;
+    el.querySelector(".x").onclick = ()=> el.remove();
+    wrap.prepend(el);
+    setTimeout(()=> el.remove(), ms);
+  }
+
+  function normalizeTags(o){
+    if(Array.isArray(o.tags)) return o.tags.map(t=>String(t||"").trim()).filter(Boolean);
+    if(typeof o.tags === "string") return o.tags.split(",").map(t=>t.trim()).filter(Boolean);
+    return [];
+  }
+  function hasTag(o, t){
+    const tags = normalizeTags(o).map(x => x.toLowerCase());
+    return tags.includes(String(t).toLowerCase());
+  }
+
+  function orderMatchesQuery(o, q){
+    if(!q) return true;
+    const tags = normalizeTags(o).join(" ");
+    const hay = [o.id, o.name, o.phone, o.shipping, o.address1, o.city, tags]
+      .map(x=>String(x||"")).join(" ").toLowerCase();
+    return hay.includes(q);
+  }
+
+  function money(n){
+    const x = Number(n||0);
+    return (Number.isFinite(x) ? x.toFixed(3) : "0.000");
+  }
+
+  async function postManage(url, body){
+    const r = await authFetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body || {}),
+      cache: "no-store",
+    });
+
+    const text = await r.text();
+    let d = null;
+    try { d = text ? JSON.parse(text) : null; }
+    catch { d = { raw: text }; }
+
+    if(!r.ok){
+      const msg =
+        (typeof d?.error === "string" && d.error) ||
+        (typeof d?.message === "string" && d.message) ||
+        (text || "Request failed");
+      throw new Error(msg);
+    }
+    return d;
+  }
+
+  async function addTag(orderId, tag){
+    return await postManage("/api/manage/order/tag/add", { orderId, tag });
+  }
+  async function removeTag(orderId, tag){
+    return await postManage("/api/manage/order/tag/remove", { orderId, tag });
+  }
+
+  async function ensureTotals(orderId){
+    const id = String(orderId);
+    const cached = state.totalsById[id];
+    if(cached?.ready) return cached;
+    if(cached?.promise) return await cached.promise;
+
+    const p = (async ()=>{
+      const r = await authFetch("/api/manage/order/" + encodeURIComponent(id) + "/totals", { cache:"no-store" });
+      const d = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل جلب المبلغ");
+      state.totalsById[id] = { ready:true, ...d };
+      return state.totalsById[id];
+    })().catch(()=>{
+      state.totalsById[id] = { ready:true, current_total_price:0 };
+      return state.totalsById[id];
+    });
+
+    state.totalsById[id] = { promise:p, ready:false, current_total_price:0 };
+    return await p;
+  }
+
+  function renderOrders(){
+    const listEl = $("ordersList");
+    const q = (($("qInput")?.value) || "").trim().toLowerCase();
+
+    // ✅ فقط طلبات فيها تحويل
+    let list = (Array.isArray(state.orders) ? state.orders : [])
+      .filter(o => hasTag(o, "تحويل"))
+      .filter(o => orderMatchesQuery(o, q));
+
+    $("statusBadge").textContent = `تحويل: ${list.length}`;
+
+    // زر الكل يتعطل لو ما فيه
+    $("btnConfirmAll").disabled = list.length === 0;
+    $("btnConfirmAll").style.opacity = list.length === 0 ? ".6" : "1";
+
+    if(!list.length){
+      listEl.innerHTML = `<div class="empty">لا توجد طلبات محولة للحساب البنكي حالياً.</div>`;
+      return;
+    }
+
+    listEl.innerHTML = list.map(o=>{
+      const oid = String(o.id);
+      const t = state.totalsById[oid];
+      const amt = t?.ready ? money(t.current_total_price || 0) : null;
+
+      const orderNo = o.name || ("#" + oid);
+      const phone = o.phone || "—";
+      const addr = o.shipping || o.address1 || "—";
+
+      return `
+        <div class="orderCard" data-oid="${esc(oid)}">
+          <div class="orderTop">
+            <div class="orderId">${esc(orderNo)}</div>
+            <div class="tagPill">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" style="stroke:currentColor">
+                <path d="M12 6v6l4 2"></path>
+                <circle cx="12" cy="12" r="9"></circle>
+              </svg>
+              <span>تحويل</span>
+            </div>
+          </div>
+
+          <div class="meta">
+            <div class="infoLine">
+              <span class="icoWrap">
+                <svg class="ico" viewBox="0 0 24 24">
+                  <path d="M6.6 10.8c1.5 3 3.6 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.3 21 3 13.7 3 4c0-.6.4-1 1-1h3.1c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1L6.6 10.8z"/>
+                </svg>
+              </span>
+              <div>رقم الجوال: <b>${esc(phone)}</b></div>
+            </div>
+
+            <div class="infoLine">
+              <span class="icoWrap">
+                <svg class="ico" viewBox="0 0 24 24">
+                  <path d="M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7z"/>
+                  <path d="M12 11.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                </svg>
+              </span>
+              <div>العنوان: <b>${esc(addr)}</b></div>
+            </div>
+          </div>
+
+<div class="payLine">
+  <div class="payText">المبلغ المدفوع:</div>
+
+  <div class="amt">
+    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" style="stroke:#1d4ed8">
+      <path d="M4 6h16a2 2 0 0 1 2 2v2H2V8a2 2 0 0 1 2-2z"></path>
+      <path d="M2 12h20v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4z"></path>
+      <path d="M6 16h6v2H6z"></path>
+    </svg>
+
+    ${amt ? esc(amt) + " ر.ع" : "..."}
+  </div>
+</div>
+
+          <!-- (اختياري) زر فردي تحت كل طلب -->
+          <button class="btnConfirm" data-act="confirmPay" data-oid="${esc(oid)}">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+            تأكيد الدفع
+          </button>
+        </div>
+      `;
+    }).join("");
+
+    // حمّل المبالغ
+    list.forEach(o => {
+      const oid = String(o.id);
+      if(!state.totalsById[oid]?.ready) {
+        ensureTotals(oid).then(()=> renderOrders());
+      }
+    });
+  }
+
+  async function confirmOne(oid){
+    // 1) إزالة تحويل
+    await removeTag(oid, "تحويل").catch(()=>{});
+    // 2) إضافة مدفوع
+    await addTag(oid, "مدفوع").catch(()=>{});
+    // 3) (اختياري) تثبيت paid
+    await postManage("/api/manage/paid", { orderId: oid }).catch(()=>{});
+
+    // إزالته من الواجهة
+    state.orders = state.orders.filter(o => String(o.id) !== String(oid));
+  }
+
+  async function loadOrders(){
+    try{
+      $("statusBadge").textContent = "جاري التحميل...";
+      $("ordersList").innerHTML = `<div class="empty">جاري تحميل الطلبات...</div>`;
+
+      const r = await authFetch(API_URL, { cache:"no-store" });
+      const d = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل تحميل الطلبات");
+
+      state.orders = Array.isArray(d.orders) ? d.orders : [];
+      renderOrders();
+      toast("ok","تم","تم تحميل الطلبات ✅", 1200);
+    }catch(e){
+      $("statusBadge").textContent = "خطأ ❌";
+      $("ordersList").innerHTML = `<div class="empty">فشل تحميل الطلبات</div>`;
+      toast("err","خطأ", e?.message || String(e), 4000);
+    }
+  }
+
+  // ✅ زر فردي
+  document.addEventListener("click", async (ev)=>{
+    const btn = ev.target.closest("[data-act='confirmPay']");
+    if(!btn) return;
+    const oid = btn.getAttribute("data-oid");
+    if(!oid) return;
+
+    btn.disabled = true;
+    btn.style.opacity = ".7";
+    btn.style.pointerEvents = "none";
+
+    try{
+      toast("info","جاري","تأكيد الدفع...", 900);
+      await confirmOne(oid);
+      toast("ok","تم","تم تأكيد الدفع ✅", 1200);
+      renderOrders();
+    }catch(e){
+      toast("err","خطأ", e?.message || String(e), 4000);
+      btn.disabled = false;
+      btn.style.opacity = "";
+      btn.style.pointerEvents = "";
+    }
+  });
+
+  // ✅ زر تأكيد الدفع للكل
+  $("btnConfirmAll")?.addEventListener("click", async ()=>{
+    // اجلب قائمة التحويل الحالية
+    const toPay = (Array.isArray(state.orders) ? state.orders : []).filter(o => hasTag(o, "تحويل"));
+    if(!toPay.length){
+      toast("warn","تنبيه","لا توجد طلبات تحويل.", 1800);
+      return;
+    }
+
+    const btn = $("btnConfirmAll");
+    btn.disabled = true;
+    btn.style.opacity = ".7";
+
+    try{
+      toast("info","جاري","تأكيد الدفع للكل...", 1200);
+
+      // تنفيذ بالتتابع (أضمن للـ API)
+      for(const o of toPay){
+        await confirmOne(String(o.id));
+      }
+
+      toast("ok","تم","تم تأكيد الدفع لكل الطلبات ✅", 1600);
+      renderOrders();
+    }catch(e){
+      toast("err","خطأ", e?.message || String(e), 4000);
+    }finally{
+      btn.disabled = false;
+      btn.style.opacity = "";
+      renderOrders();
+    }
+  });
+
+  $("btnRefresh")?.addEventListener("click", loadOrders);
+  $("qInput")?.addEventListener("input", renderOrders);
+
+  loadOrders();
+</script>
+
+</body>
+</html>

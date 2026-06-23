@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+<style>
+body{
+  font-family:'Almarai',sans-serif;
+  margin:0;
+  padding:0;
+}
+/* مهم: ثبّت مقاس الورقة الحقيقي */
+@page{
+  size: 100mm 150mm;  margin: 0;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+}
+
+/* خلي container بالمقاس الحقيقي */
+.container{
+  width:100mm;
+  height:150mm;
+  border:1px solid #000;
+  padding:5mm;
+  box-sizing:border-box;
+  overflow:hidden;
+
+  /* لا تفرض page-break هنا */
+  page-break-before: auto;
+}
+
+/* إعدادات الطباعة */
+@media print{
+  html, body{
+    margin:0 !important;
+    padding:0 !important;
+    width:100mm;
+    height:150mm;
+  }
+
+  .container{
+    width:100mm !important;
+    height:150mm !important;
+    margin:0 !important;
+
+    page-break-inside: avoid;
+    page-break-after: always; /* صفحة لكل طلب */
+  }
+}
+.container{
+  width:10cm;
+  height:15cm;
+  border:1px solid #000;
+  padding:5mm;
+  box-sizing:border-box;
+  overflow:hidden;
+  page-break-before:auto;
+}
+
+.logo-container{
+  border:2px dashed #000;
+  padding:10px;
+  margin-bottom:10px;
+  text-align:center;
+}
+
+.logo{
+  max-height:2cm;
+  filter:grayscale(100%);
+}
+
+.contact-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:5px;
+}
+
+.contact-item{
+  display:flex;
+  align-items:center;
+  font-weight:bold;
+  font-size:15px;
+}
+
+.large-icon{font-size:24px}
+
+.info-title{
+  font-size:14px;
+  font-weight:bold;
+  text-align:center;
+  margin:10px 0;
+  border-top:1px solid #000;
+  padding-top:5px;
+}
+
+.table-section{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.table-section td{
+  border:1px dashed #000;
+  padding:6px;
+  vertical-align:middle;
+}
+
+.section-title{
+  background:#f0f0f0;
+  font-weight:bold;
+  text-align:center;
+}
+
+.order-number{
+  font-size:12px;
+  font-weight:bold;
+  text-align:center;
+  margin-top:5px;
+}
+/* يثبت القياسات ويمنع تمدد الخانات بسبب المحتوى */
+.table-section{
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* نفس عرض الخانتين بالضبط */
+.table-section td{
+  width: 50%;
+  padding: 4px 6px;     /* كان 6px — خففناه */
+  line-height: 1.1;     /* يقلل الانتفاخ */
+}
+
+/* صف الاسم + الهاتف (يصير مثل الأصلي) */
+.table-section tr:nth-child(2) td{
+  height: 28px;         /* ثبّت ارتفاع الصف */
+  white-space: nowrap;  /* يمنع نزول سطر */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* الأيقونات لا تضيف مسافة عمودية */
+.table-section i,
+.contact-row i{
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.qr-code img{height:20mm}
+.barcode-img{height:10mm}
+</style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script>
+(async()=>{
+
+  const url = "/api/print/orders?limit=250&t=" + Date.now();
+  const res = await fetch(url, { cache: "no-store" });
+  const data = await res.json();
+  let orders = data.orders || [];
+  const root = document.getElementById("root");
+
+  // ======================
+  // TAGS
+  // ======================
+  function normTags(tags){
+    if(Array.isArray(tags)) return tags.map(x=>String(x).trim()).filter(Boolean);
+    return String(tags||"").split(",").map(x=>x.trim()).filter(Boolean);
+  }
+  function hasTag(o,t){ return normTags(o.tags).includes(String(t).trim()); }
+  function isArabic(o){ return hasTag(o,"ar"); }
+  orders = orders.filter(o => !hasTag(o, "\u0645\u063a\u0644\u0641"));
+
+  function isGinacomOffice(o){
+    const shippingMethod = String(o.shipping_method||"").toLowerCase();
+    return shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
+  }
+
+  // ======================
+  // FILTER (مثل الأصل)
+  // ======================
+  const mode = (new URLSearchParams(location.search).get("mode") || "all").toLowerCase();
+  if (mode === "muscat") orders = orders.filter(o => hasTag(o, "مسقط"));
+  else if (mode === "office") orders = orders.filter(o => hasTag(o, "مكتب"));
+  else orders = orders.filter(o => hasTag(o, "مسقط") || hasTag(o, "مكتب"));
+
+  // ======================
+  // UTILS
+  // ======================
+  function money(n){ return Number(n||0).toFixed(3); }
+
+  function esc(s){
+    return String(s||"").replace(/[&<>"']/g,m=>(
+      {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]
+    ));
+  }
+
+  function oneLine(s){ return String(s||"").replace(/\s+/g," ").trim(); }
+
+  function clampChars(s, max){
+    const v = oneLine(s);
+    if(!v) return "";
+    return v.length > max ? (v.slice(0, max - 1) + "…") : v;
+  }
+
+  function cleanName(name){
+    const v = oneLine(name);
+    if(!v) return "";
+    const parts = v.split(" ").filter(Boolean);
+
+    if(parts.length === 2 && parts[0].toLowerCase() === parts[1].toLowerCase()){
+      return parts[0];
+    }
+
+    // إذا طويل جدًا: الاسم الأول فقط
+    const tooLong = v.length > 18 || parts.length > 2;
+    if(tooLong) return parts[0];
+
+    return v;
+  }
+
+  function cleanPhone(p){
+    let v = oneLine(p).replace(/\s+/g,"");
+    if (v.length > 8) v = v.replace(/^(\+968|968)/, "");
+    return v;
+  }
+
+  function cleanAddress(shippingText){
+    const s = oneLine(shippingText);
+    if(!s) return "";
+
+    const parts = s.split(/,|\n|-/).map(x => x.trim()).filter(Boolean);
+    if(parts.length < 2) return s;
+
+    const a1 = parts[0].replace(/\s+/g,"").toLowerCase();
+    const city = parts[1].replace(/\s+/g,"").toLowerCase();
+
+    let out = parts;
+    if(a1 === city) out = [parts[0], ...parts.slice(2)];
+    return out.join(" - ");
+  }
+
+  function clampLines(lines){
+    return `display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:${lines};overflow:hidden;`;
+  }
+
+  // ======================
+  // PAYMENT (مطابق للأصل)
+  // ======================
+  function getOutstanding(o){
+    const v = o.outstanding ?? o.amountDue ?? o.total_outstanding ?? 0;
+    return Number(v || 0) || 0;
+  }
+
+  function getFinancialStatus(o){
+    return String(o.financial_status || "").toLowerCase().trim();
+  }
+
+  function statusLabel(o, f, unpaid){
+    const ar = isArabic(o);
+
+    if (f === "pending") return ar ? "انتظار الدفع" : "Unpaid";
+    if (f === "paid") return ar ? "مدفوع" : "Paid";
+    if (f === "partially_paid") return ar ? "مدفوع جزئياً" : "Part-paid";
+
+    // fallback: لو عليه مبلغ -> انتظار الدفع
+    return unpaid > 0 ? (ar ? "انتظار الدفع" : "Pending payment") : (ar ? "مدفوع" : "Paid");
+  }
+
+  function paidGatewayIcon(o){
+    const tx = Array.isArray(o.transactions) ? o.transactions : [];
+    for (const t of tx){
+      const g = String(t.gateway || "").toLowerCase();
+      if (g.includes("bank") || g.includes("deposit")) return "bi-bank";
+      if (g.includes("amwal")) return "bi-credit-card";
+      if (g.includes("cod") || g.includes("cash")) return "bi-bank2";
+    }
+    return "bi-check-circle";
+  }
+
+  function statusIcon(o, f){
+    if (f === "pending") return "bi-clock-history";
+    if (f === "paid") return paidGatewayIcon(o);
+    if (f === "partially_paid") return "bi-cash-stack";
+    return "bi-info-circle";
+  }
+function getCountryDialCode(o){
+
+  // أولوية الفوترة
+  let c =
+    o.billingAddress?.countryCodeV2 ||
+    o.billing_country_code ||
+    o.billingCountryCode ||
+    o.shippingAddress?.countryCodeV2 ||
+    o.shipping_country_code ||
+    o.shippingCountryCode ||
+    "";
+
+  c = String(c).toUpperCase();
+
+  const map = {
+    OM: "968",
+    AE: "971",
+    SA: "966",
+    QA: "974",
+    KW: "965",
+    BH: "973"
+  };
+
+  return map[c] || "968"; // افتراضي عمان
+}
+
+  // ======================
+  // RENDER
+  // ======================
+  orders.forEach(o=>{
+
+    const ar = isArabic(o);
+    const dir = ar ? "rtl" : "ltr";
+    const align = ar ? "right" : "left";
+
+    const unpaid = getOutstanding(o);
+    const f = getFinancialStatus(o);
+
+    // ✅ مطابق للأصل: صندوق المبلغ يظهر إذا الحالة ليست paid
+    const showAmountBox = (f !== "paid");
+
+    // ✅ مطابق للأصل: سطر WWW يظهر فقط لو paid
+    // (وزدنا أمان: لو outstanding=0 ومع ذلك f فاضي، لا نظهره)
+    const showWWW = (f === "paid");
+
+    const ginacom = isGinacomOffice(o);
+
+    // حماية صارمة داخل مربع العنوان (بدون ما يكبر)
+    const addressText = cleanAddress(o.shipping || "");
+    const noteText = String(o.note || "").trim();
+
+
+    root.insertAdjacentHTML("beforeend",`
+
+<div class="container" style="direction:${dir};text-align:${align}">
+
+  <div class="logo-container">
+    <img src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/bt.jpg?v=1739274499" class="logo">
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-item"><i class="bi bi-whatsapp large-icon"></i>&nbsp;77255566</div>
+    <div class="contact-item"><i class="bi bi-instagram large-icon"></i>&nbsp;halabt.com</div>
+    <div class="contact-item"><i class="bi bi-link-45deg large-icon"></i>&nbsp;halabt.com</div>
+  </div>
+
+  <div class="info-title">
+    ${ar ? "مع هلا بيوتي، جمالك يبدأ الآن! طلبك جاهز" : "Your Hala Beauty order is ready! Your order is ready"}
+  </div>
+
+  <table class="table-section">
+    <tr>
+      <td class="section-title" colspan="2">${ar ? "معلومات التوصيل" : "Delivery Information"}</td>
+    </tr>
+
+    <tr>
+      <td style="font-size:16px;font-weight:bold;text-align:center">
+        <i class="bi bi-person-circle" style="float:${ar?"right":"left"};font-size:20px;margin-${ar?"left":"right"}:8px"></i>
+        ${esc(cleanName(o.customer) || "غير معروف")}
+      </td>
+
+      <td style="font-size:16px;font-weight:bold;text-align:center">
+        <i class="bi bi-whatsapp" style="float:${ar?"right":"left"};font-size:20px;margin-${ar?"left":"right"}:8px"></i>
+        ${esc(cleanPhone(o.phone))}
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2" style="text-align:${align}; font-size:16px; height:90px; font-weight:bold; overflow:hidden;">
+        <i class="bi bi-geo-alt-fill" style="float:${ar?"right":"left"};font-size:20px;margin-${ar?"left":"right"}:8px;"></i>
+
+        <div style="${clampLines(3)} line-height:1.15; margin:0; padding:0;">
+          ${esc(addressText)}
+        </div>
+
+        ${ginacom?`
+          <div style="text-align:center; margin:2px 0 0 0; padding:0; font-size:14px; ${clampLines(1)}">
+            <i class="bi bi-shop-window"></i>
+            ${ar ? "مكتب جيناكم" : "Ginacom Office"}
+          </div>`:""}
+
+        ${noteText?`
+          <div style="text-align:center; margin:2px 0 0 0; padding:0; font-size:14px; ${clampLines(1)}">
+            <i class="bi bi-journal-text"></i> ${esc(clampChars(noteText, 45))}
+          </div>`:""}
+      </td>
+    </tr>
+  </table>
+
+  <div style="border:2px dashed #000;padding:10px;border-radius:5px">
+
+    ${showAmountBox?`
+      <div style="text-align:center;border-bottom:2px dashed #000;padding-bottom:10px;margin-bottom:10px">
+        <span style="font-size:22px;font-weight:bold">${money(unpaid)}</span>
+        <i class="material-icons-outlined" style="vertical-align:middle;font-size:18px">payments</i>
+      </div>`:""}
+
+    <div style="display:flex">
+      <div style="flex:1;border-inline-end:2px dashed #000;text-align:center;font-size:16px">
+        <i class="bi ${statusIcon(o, f)}"></i>
+        <b>${statusLabel(o, f, unpaid)}</b>
+      </div>
+
+      <div style="flex:1;text-align:center;font-size:16px">
+        <i class="bi bi-calendar-event"></i>
+        ${String(o.createdAt||"").slice(0,10)}
+      </div>
+    </div>
+  </div>
+
+<table class="table-section">
+    <tr>
+      <td style="text-align:center">
+        <img class="barcode-img"
+          src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(o.name)}&scale=2&height=7&includetext=false">
+        <div class="order-number">${esc(o.name)}</div>
+      </td>
+
+      <td class="qr-code" style="text-align:center">
+        ${
+          ginacom
+          ? `<img src="https://api.qrserver.com/v1/create-qr-code/?data=https://halabt.com/app&size=150x150">`
+          : `<img src="https://api.qrserver.com/v1/create-qr-code/?data=https://wa.me/${getCountryDialCode(o)}${cleanPhone(o.phone)}&size=150x150">`
+        }
+      </td>
+    </tr>
+  </table>
+
+  ${showWWW?`
+  <div style="display:flex;align-items:center;margin:15px 0;">
+    <div style="flex:1;height:1px;background:linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);"></div>
+    <span style="margin:0 2px;font-size:8px;letter-spacing:4px;color:#000;text-transform:uppercase;">halabt.com</span>
+    <div style="flex:1;height:1px;background:linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);"></div>
+  </div>`:""}
+
+</div>
+    `);
+  });
+
+  // ======================
+  // Print after images load
+  // ======================
+  function waitImagesAndPrint(){
+    const imgs = Array.from(document.images);
+    let loaded = 0;
+    if (imgs.length === 0) return window.print();
+
+    imgs.forEach(img => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === imgs.length) window.print();
+      } else {
+        img.onload = img.onerror = () => {
+          loaded++;
+          if (loaded === imgs.length) window.print();
+        };
+      }
+    });
+  }
+
+  waitImagesAndPrint();
+
+})();
+</script>
+
+
+ 
+
+</body>
+</html>

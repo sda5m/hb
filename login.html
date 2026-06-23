@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | تسجيل الدخول</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--purple:#6B0FA6;--purpleDark:#3C0A63;--peach:#F1C6B1;--ink:#101828;--card:rgba(255,255,255,.94);--line:rgba(16,24,40,.12)}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:"Cairo",system-ui,sans-serif;color:var(--ink);
+      background:linear-gradient(180deg, rgba(60,10,99,.65), rgba(241,198,177,.40)), url("d.jpg");
+      background-size:cover;background-position:center}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:18px}
+    .card{width:min(460px,100%);background:var(--card);border:1px solid var(--line);border-radius:22px;
+      box-shadow:0 22px 60px rgba(16,24,40,.22);backdrop-filter:blur(10px);overflow:hidden}
+    .head{padding:16px;border-bottom:1px solid rgba(16,24,40,.08);display:flex;gap:12px;align-items:center}
+    .mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));border:1px solid rgba(107,15,166,.18)}
+    .title{margin:0;font-weight:980;font-size:16px;color:var(--purpleDark)}
+    .sub{margin:4px 0 0 0;font-weight:900;font-size:12.5px;color:rgba(16,24,40,.60)}
+    .body{padding:14px 16px 16px}
+    .box{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#fff;
+      border:1px solid rgba(16,24,40,.12);box-shadow:0 6px 14px rgba(16,24,40,.08)}
+    .box input{border:none;outline:none;width:100%;font-family:"Cairo";font-weight:900;background:transparent}
+    .btns{display:flex;gap:10px;margin-top:12px}
+    .btn{flex:1;border:none;border-radius:14px;padding:12px;cursor:pointer;font-weight:900;font-family:"Cairo"}
+    .p{background:linear-gradient(135deg,var(--purple),var(--purpleDark));color:#fff}
+    .g{background:#f2f4f7;color:var(--purpleDark);border:1px dashed rgba(60,10,99,.30)}
+    .err{margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(239,68,68,.10);
+      border:1px solid rgba(239,68,68,.18);color:#991b1b;font-weight:950;font-size:12.5px;display:none}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="head">
+      <div class="mark">🔒</div>
+      <div>
+        <p class="title">Hala Beauty • تسجيل الدخول</p>
+        <p class="sub">أدخل كلمة السر للوصول للوحة</p>
+      </div>
+    </div>
+    <div class="body">
+      <div class="box">
+        <span style="opacity:.7">🔑</span>
+        <input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password">
+      </div>
+      <div id="err" class="err">—</div>
+      <div class="btns">
+        <button id="go" class="btn p" type="button">دخول</button>
+        <button id="clr" class="btn g" type="button">مسح</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = "ADMIN_KEY";
+const VERIFY_URL  = "/api/admin/orders?since=2000-01-01"; // غيّره إذا تبي فحص ثاني
+
+function setErr(msg){
+  const el = document.getElementById("err");
+  if(!msg){ el.style.display="none"; el.textContent=""; }
+  else { el.style.display="block"; el.textContent=msg; }
+}
+
+function clearKey(){
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById("pw").value = "";
+  setErr("");
+}
+
+async function login(){
+  const pw = (document.getElementById("pw").value || "").trim();
+  if(!pw){ setErr("اكتب كلمة السر"); return; }
+
+  localStorage.setItem(STORAGE_KEY, pw);
+
+  const btn = document.getElementById("go");
+  btn.disabled = true;
+  try{
+    const r = await fetch(VERIFY_URL, { headers: { "x-admin-key": pw } });
+    if(!r.ok){
+      clearKey();
+      setErr("كلمة السر غير صحيحة");
+      return;
+    }
+    const next = new URLSearchParams(location.search).get("next");
+    location.href = next || "/";
+  }catch(e){
+    clearKey();
+    setErr("تعذر الاتصال بالسيرفر");
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+document.getElementById("go").addEventListener("click", login);
+document.getElementById("clr").addEventListener("click", clearKey);
+document.getElementById("pw").addEventListener("keydown", e => { if(e.key==="Enter") login(); });
+
+(function init(){
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if(saved){
+    document.getElementById("pw").value = saved;
+    login();
+  }else{
+    document.getElementById("pw").focus();
+  }
+})();
+</script>
+</body>
+</html>

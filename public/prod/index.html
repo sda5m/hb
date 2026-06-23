@@ -1,0 +1,3041 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | لوحة وديع</title>
+
+  <link rel="manifest" href="/prod/manifest.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="اضافة منتجات">
+  <link rel="apple-touch-icon" href="/prod/ico1.png">
+  <link rel="icon" href="/prod/ico2.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="qrcode.min.js" defer></script>
+  
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+
+      --r16:16px;
+      --r18:18px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+    .wrap{ max-width:760px; margin:0 auto; padding:18px 14px 26px; }
+
+.topbar{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:14px 14px;
+  border-radius:var(--r18);
+  background:var(--card);
+  box-shadow:var(--shadow2);
+  border:1px solid var(--line);
+  backdrop-filter: blur(6px);
+}
+    
+    .topActions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.topMain{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+@media (max-width:640px){
+  .topActions{
+    justify-content:center;
+  }
+
+  .topMain{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+
+  .badge{
+    justify-content:center;
+  }
+}
+    
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandText{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .brandName{ margin:0; font-size:18px; font-weight:900; line-height:1.2; }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px; padding:14px;
+      border-radius:var(--r18);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+
+    .label{ font-size:13px; color:var(--muted); font-weight:900; margin:0 0 10px 0; }
+
+    .searchRow{ display:flex; gap:10px; align-items:stretch; }
+    .iconBtn{
+      width:54px; border:none; border-radius:14px;
+      background: rgba(107,15,166,.10);
+      border:1px solid rgba(107,15,166,.20);
+      box-shadow:0 6px 14px rgba(107,15,166,.14);
+      cursor:pointer; display:grid; place-items:center; transition:.15s; flex:0 0 auto;
+    }
+    .iconBtn:active{ transform:scale(.98); }
+
+    .searchBox{
+      flex:1; display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+      min-width:0;
+    }
+    .searchBox input{
+      border:none; outline:none; background:transparent; width:100%;
+      font-size:17px; font-weight:900; color:var(--ink);
+      min-width:0; font-family:"Cairo",system-ui,sans-serif;
+    }
+    .searchBox input::placeholder{ color: rgba(102,112,133,.9); font-weight:800; }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:13px 12px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:15px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none;
+    }
+    .btn:active{ transform:scale(.985); }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff;
+      box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .btnGhost{
+      background:#f2f4f7;
+      color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+
+    .videoWrap{
+      margin-top:12px; padding:12px; border-radius:var(--r18);
+      border:1px solid rgba(16,24,40,.12);
+      background:#fff;
+      box-shadow:0 8px 18px rgba(16,24,40,.10);
+    }
+    video{ width:100%; border-radius:14px; }
+
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    @media (max-width:520px){ .row{ grid-template-columns:1fr; } .iconBtn{ width:52px; } }
+
+    .btnDone{
+      background: linear-gradient(135deg, #4ade80, #16a34a);
+      color:#fff;
+      box-shadow:0 10px 22px rgba(22,163,74,.20);
+    }
+    .btnWarn{
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color:#fff;
+      box-shadow:0 10px 22px rgba(245,158,11,.22);
+    }
+
+    .list{ display:flex; flex-direction:column; gap:10px; }
+    .item{
+      padding:12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+      overflow:hidden;
+    }
+
+    .mini{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px 10px;
+    }
+    @media (max-width:520px){
+      .mini{ grid-template-columns:1fr; }
+    }
+    .cell{
+      padding:10px 12px; border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+    }
+    .lbl{ font-size:12px; font-weight:950; color:rgba(16,24,40,.55); }
+    .val{ margin-top:3px; font-weight:980; color:var(--purpleDark); font-size:13px; word-break:break-word; }
+
+    .svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .svg.sm{ width:18px; height:18px; }
+
+    .toasts{
+      position:fixed; bottom:14px; left:14px; right:14px;
+      z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px 12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px);
+      opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+    .toast .icon{
+      width:34px; height:34px; border-radius:12px; display:grid; place-items:center;
+      flex:0 0 auto; color:#fff;
+    }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{ border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px; border-radius:10px; color:rgba(16,24,40,.55); }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+    .bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+    .bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+    @keyframes shrink{ to{ transform:scaleX(0); } }
+
+    .statusLine{ margin-top:10px; color:var(--muted); font-size:12px; font-weight:900; min-height:18px; }
+
+    /* ===== الصورة الكبيرة + overlay + الأيقونات (مثل سكربت الشراء) ===== */
+    .imgWrap{
+      margin-top:10px;
+      position:relative;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, rgba(107,15,166,.08), rgba(241,198,177,.18));
+      overflow:hidden;
+      border-radius:18px;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+    }
+    .imgWrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition:.18s;
+    }
+
+    .ordersOverlay{
+      position:absolute;
+      top:10px;
+      left:10px;
+      right:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      z-index:2;
+      pointer-events:none;
+    }
+    .orderPill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 9px;
+      border-radius:999px;
+      font-weight:950;
+      font-size:12px;
+      color:#111827;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 8px 18px rgba(16,24,40,.12);
+      backdrop-filter: blur(6px);
+      max-width:100%;
+    }
+    .orderPill b{ color: var(--purpleDark); font-weight:980; }
+    .orderPill .dot{
+      width:7px;height:7px;border-radius:99px;
+      background: rgba(107,15,166,.65);
+      flex:0 0 auto;
+    }
+
+    .btnStack{
+      position:absolute;
+      left:8px;
+      bottom:8px;
+      z-index:5;
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
+    .btnStack button{
+      width:34px;
+      height:34px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.12);
+      backdrop-filter: blur(6px);
+      padding:0;
+    }
+    .btnStack button:active{ transform:scale(.97); }
+    .btnStack svg{
+      width:17px;
+      height:17px;
+      stroke:#111827;
+      fill:none;
+      stroke-width:2.2;
+    }
+
+    /* ===== Image modal ===== */
+    .imgModal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:99999;
+    }
+    .imgModal.open{ display:flex; }
+    .imgModalCard{
+      width:min(720px, 100%);
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .imgModalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 12px;
+      border-bottom:1px solid rgba(16,24,40,.10);
+    }
+    .imgModalTitle{
+      font-weight:980;
+      font-size:14px;
+      color:#111827;
+      line-height:1.4;
+    }
+    .imgModalClose{
+      border:none;
+      background:rgba(16,24,40,.06);
+      border:1px solid rgba(16,24,40,.10);
+      width:40px;height:40px;
+      border-radius:14px;
+      cursor:pointer;
+      display:grid;place-items:center;
+    }
+    .imgModalClose svg{ width:18px;height:18px; stroke:#111827; fill:none; stroke-width:2.2; }
+    .imgModalBody{
+      padding:12px;
+      background: #0b0b0b;
+    }
+    .imgModalBody img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:14px;
+      background:#111;
+    }
+    /* ===== Slider داخل imgWrap ===== */
+.slider{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  position:relative;
+  touch-action: pan-y;
+}
+
+.track{
+  height:100%;
+  display:flex;
+  transition: transform .22s ease;
+  will-change: transform;
+  /* لا تضع width هنا */
+}
+
+.slide{
+  flex:0 0 100%;
+  height:100%;
+}
+
+.slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  -webkit-user-drag:none;
+  user-select:none;
+}
+
+.navBtn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:4;
+
+  width:40px;height:40px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+
+  background: rgba(255,255,255,.92);
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 10px 22px rgba(16,24,40,.14);
+  backdrop-filter: blur(6px);
+}
+.navBtn:active{ transform:translateY(-50%) scale(.98); }
+.navBtn svg{ width:18px;height:18px; stroke:#111827; fill:none; stroke-width:2.2; }
+
+.navPrev{ right:10px; }
+.navNext{ left:10px; }
+
+/* dots */
+.dots{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  z-index:4;
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  pointer-events:none;
+}
+.dots i{
+  width:7px;height:7px;
+  border-radius:99px;
+  background: rgba(255,255,255,.55);
+  border:1px solid rgba(16,24,40,.18);
+  box-shadow:0 6px 14px rgba(16,24,40,.10);
+  transform:scale(.95);
+}
+.dots i.on{
+  background: rgba(255,255,255,.95);
+  transform:scale(1.12);
+}
+/* تحسين السلايدر + منع مشاكل iOS */
+.slider, .track { direction:ltr; }
+/* مربع صورة الباركود تحت كلمة باركود */
+.bcThumb{
+  width:58px;
+  height:58px;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(16,24,40,.14);
+  box-shadow:0 8px 18px rgba(16,24,40,.12);
+  background:#fff;
+
+  cursor:pointer;
+  pointer-events:auto; /* مهم لأن overlay غالباً pointer-events:none */
+}
+.bcThumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+/* ---- تحسين رفع الملفات (نفس الإدارة) ---- */
+.file input[type="file"]{
+  position:absolute;
+  width:1px;height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+.filePick{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%;
+  border-radius:14px;
+  padding:12px 12px;
+  cursor:pointer;
+  font-weight:950;
+  background:#fff;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.06);
+  color:rgba(60,10,99,.85);
+  user-select:none;
+}
+.filePick:active{ transform:scale(.99); }
+.fileHint{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(16,24,40,.55);
+}
+.fileName{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(16,24,40,.72);
+  word-break:break-word;
+}
+
+/* نفس uploader */
+.uploader{
+  margin-top:10px;
+  padding:12px;
+  border-radius:18px;
+  border:1px solid rgba(16,24,40,.10);
+  background:rgba(242,244,247,.55);
+  display:grid;
+  gap:10px;
+}
+.uRow{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (max-width:640px){ .uRow{ grid-template-columns:1fr; } }
+
+/* ===== Barcode row (نفس الإدارة) ===== */
+.bcRow{
+  display:grid;
+  grid-template-columns: 54px 1fr auto;
+  gap:10px;
+  align-items:center;
+}
+@media (max-width:640px){
+  .bcRow{ grid-template-columns: 54px 1fr; }
+  .bcRow .bcPills{ grid-column:1 / -1; }
+}
+.bcPills{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-start;
+}
+.pillToggle{
+  border:none;
+  cursor:pointer;
+  padding:9px 11px;
+  border-radius:999px;
+  font-weight:950;
+  font-size:12.5px;
+  background:rgba(255,255,255,.90);
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.06);
+  color:rgba(16,24,40,.75);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.pillToggle.active{
+  background: rgba(107,15,166,.12);
+  border-color: rgba(107,15,166,.22);
+  color: var(--purpleDark);
+}
+.pillToggle svg{
+  width:18px;height:18px;
+  fill:none; stroke:currentColor; stroke-width:2.2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+
+/* زر مسح صغير (إذا ما تبغى تستخدم الموجود عندك) */
+.iconBtn{
+  width:54px; border:none; border-radius:14px;
+  background: rgba(107,15,166,.10);
+  border:1px solid rgba(107,15,166,.20);
+  box-shadow:0 6px 14px rgba(107,15,166,.14);
+  cursor:pointer; display:grid; place-items:center;
+  transition:.15s; flex:0 0 auto;
+}
+.iconBtn:active{ transform:scale(.98); }
+
+/* مكان الكاميرا */
+.videoWrap{
+  margin-top:12px; padding:12px; border-radius:18px;
+  border:1px solid rgba(16,24,40,.12);
+  background:#fff;
+  box-shadow:0 8px 18px rgba(16,24,40,.10);
+}
+video{ width:100%; border-radius:14px; }
+/* ===== Staff form: barcode + price (clean) ===== */
+.stGrid{
+  display:grid;
+  grid-template-columns: 1.35fr .65fr;
+  gap:10px;
+}
+@media (max-width:640px){
+  .stGrid{ grid-template-columns:1fr; }
+}
+
+.field{
+  background:#fff;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.06);
+  border-radius:14px;
+  padding:10px 12px;
+}
+
+.fieldLabel{
+  font-size:12px;
+  font-weight:950;
+  color:rgba(16,24,40,.55);
+  margin:0 0 8px 0;
+}
+
+.inputRow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.inputIcon{
+  width:34px;height:34px;
+  border-radius:12px;
+  display:grid; place-items:center;
+  background: rgba(107,15,166,.10);
+  border:1px solid rgba(107,15,166,.18);
+  flex:0 0 auto;
+  color: var(--purpleDark);
+}
+
+.inputRow input{
+  border:none;
+  outline:none;
+  background:transparent;
+  width:100%;
+  font-size:16px;
+  font-weight:900;
+  font-family:"Cairo",system-ui,sans-serif;
+  color:var(--ink);
+}
+
+.scanMini{
+  width:38px;height:38px;
+  border-radius:14px;
+  border:1px solid rgba(16,24,40,.12);
+  background: rgba(255,255,255,.92);
+  box-shadow:0 8px 18px rgba(16,24,40,.10);
+  display:grid; place-items:center;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.scanMini:active{ transform:scale(.98); }
+.scanMini svg{ width:18px;height:18px; stroke:#111827; fill:none; stroke-width:2.2; }
+
+.pillsRow{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  background:rgba(107,15,166,.10);
+  color:var(--purpleDark);
+  border:1px solid rgba(107,15,166,.18);
+  white-space:nowrap;
+}
+.btnBig{
+  margin-top:12px;
+  padding:16px 14px;
+  font-size:18px;
+  border-radius:18px;
+  box-shadow:0 14px 30px rgba(107,15,166,.26);
+}
+.btnBig{
+  margin-top:12px;
+  width:100%;
+}
+/* ===== Topbar actions (مثل سكربت التجهيز) ===== */
+
+.backBtn{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  border:1px solid rgba(16,24,40,.10);
+  background:rgba(255,255,255,.85);
+  box-shadow:0 8px 18px rgba(16,24,40,.08);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  transition:.15s;
+  padding:0;
+}
+.backBtn:active{ transform:scale(.98); }
+
+/* ✅ لا تعيد تعريف .brandMark (خليه كما هو فوق) */
+/* فقط أضف overflow هنا بدون إعادة كتابة كل الكلاس */
+.brandMark{ overflow:hidden; }
+
+.brandIcon{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* منع خط تحت رابط time */
+.brandName a.b2{
+  text-decoration:none;
+  color: var(--peach);
+}
+.brandName a.b2:visited,
+.brandName a.b2:hover,
+.brandName a.b2:active,
+.brandName a.b2:focus{
+  text-decoration:none;
+  color: var(--peach);
+  outline:none;
+}
+/* ===== Brand icon exactly like تجهيز ===== */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.brandMark{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+
+  background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+  border:1px solid rgba(107,15,166,.18);
+
+  overflow:hidden;              /* مهم */
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;                /* مهم */
+}
+
+.brandIcon{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* منع خط تحت رابط time */
+.brandName a.b2{
+  text-decoration:none;
+  color: var(--peach);
+}
+.brandName a.b2:visited,
+.brandName a.b2:hover,
+.brandName a.b2:active,
+.brandName a.b2:focus{
+  text-decoration:none;
+  color: var(--peach);
+  outline:none;
+}
+
+.bcNum{
+  font-weight:980;
+  color: var(--purpleDark);
+  cursor: pointer;
+  pointer-events:auto; /* لأن overlay عليه pointer-events:none */
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+.bcNum:active{ transform: scale(.98); }
+.bcIcon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color: rgba(16,24,40,.75);
+  pointer-events:none; /* الأيقونة ما تنضغط، الضغط يكون على الرقم فقط */
+}
+/* ===== Collapsible (Accordion) ===== */
+.collapseCard{ padding:0; overflow:hidden; }
+.collapseHead{
+  width:100%;
+  background:transparent;
+  border:0;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px;
+  text-align:right;
+  font-family:"Cairo",system-ui,sans-serif;
+}
+.collapseHead:active{ transform:scale(.995); }
+.collapseTitle{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+.collapseTitle .t1{ font-weight:980; }
+.collapseTitle .t2{ font-weight:900; font-size:12px; color:rgba(16,24,40,.55); }
+
+.chev{
+  width:42px;height:42px;
+  border-radius:14px;
+  border:1px solid rgba(16,24,40,.10);
+  background:rgba(255,255,255,.85);
+  box-shadow:0 8px 18px rgba(16,24,40,.08);
+  display:grid; place-items:center;
+  flex:0 0 auto;
+}
+.chev svg{ width:18px;height:18px; stroke:rgba(16,24,40,.75); fill:none; stroke-width:2.4; transition:.18s; }
+
+.collapseBody{
+  padding:0 14px 14px;
+  display:none;
+}
+.collapseCard.open .collapseBody{ display:block; }
+.collapseCard.open .chev svg{ transform:rotate(180deg); }
+/* ===== Edit Request style ===== */
+.item.editReq{
+  border:1px solid rgba(245,158,11,.35);
+  box-shadow:0 10px 22px rgba(245,158,11,.16);
+  background:rgba(255,251,235,.85);
+}
+
+.pillEdit{
+  background: rgba(245,158,11,.14);
+  border:1px solid rgba(245,158,11,.22);
+  color: #92400e;
+}
+.noteBox{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:#fff;
+  border:1px dashed rgba(16,24,40,.18);
+  font-size:13px;
+  font-weight:900;
+  color:rgba(16,24,40,.75);
+  line-height:1.5;
+}
+.noteBox b{
+  color: var(--purpleDark);
+}
+.dashSeg{
+  background:#fff;
+  border:1px solid rgba(16,24,40,.10);
+  border-radius:16px;
+  box-shadow:0 8px 18px rgba(16,24,40,.08);
+  overflow:hidden;
+  margin-top:10px;
+}
+.dashSegTop{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px 12px;
+  cursor:pointer;
+  user-select:none;
+  background:#fafafa;
+}
+.dashSegName{ font-weight:950; color:var(--purpleDark); }
+.dashCount{
+  min-width:34px; height:30px; padding:0 10px;
+  border-radius:999px;
+  font-weight:950;
+  background: rgba(107,15,166,.10);
+  color: var(--purpleDark);
+  border:1px solid rgba(107,15,166,.18);
+  display:grid; place-items:center;
+}
+.dashSegRight{ display:flex; align-items:center; gap:10px; }
+.segArrow{
+  width:18px; height:18px;
+  stroke:#666; fill:none; stroke-width:2;
+  transition: transform 0.25s ease;
+}
+.dashSegTop.active .segArrow{ transform: rotate(180deg); }
+
+.dashSegBody{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.28s ease;
+  background:#fff;
+  border-top:1px solid rgba(16,24,40,.08);
+}
+
+.empty{
+  padding:12px;
+  border:1px dashed rgba(16,24,40,.18);
+  border-radius:12px;
+  color:rgba(16,24,40,.55);
+  font-weight:900;
+  font-size:12.5px;
+  text-align:center;
+}
+
+/* ===== App confirm modal ===== */
+.appModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.56);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:100000;
+}
+.appModal.open{ display:flex; }
+
+.appModalCard{
+  width:min(460px, 100%);
+  background:rgba(255,255,255,.98);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(10px);
+}
+
+.appModalHead{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 16px 10px;
+}
+
+.appModalIcon{
+  width:52px;
+  height:52px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:linear-gradient(135deg, var(--purple), var(--purpleDark));
+  box-shadow:0 12px 24px rgba(107,15,166,.22);
+  flex:0 0 auto;
+}
+.appModalIcon svg{
+  width:24px;
+  height:24px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2.2;
+}
+
+.appModalTitleWrap{ min-width:0; }
+.appModalTitle{
+  margin:0;
+  font-size:17px;
+  font-weight:980;
+  color:#111827;
+}
+.appModalSub{
+  margin:4px 0 0 0;
+  font-size:12.5px;
+  font-weight:900;
+  color:rgba(16,24,40,.58);
+  line-height:1.5;
+}
+
+.appModalBody{
+  padding:0 16px 16px;
+}
+.appModalMsg{
+  margin:0;
+  padding:12px 14px;
+  border-radius:16px;
+  background:linear-gradient(135deg, rgba(107,15,166,.06), rgba(241,198,177,.16));
+  border:1px solid rgba(16,24,40,.08);
+  color:#111827;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.7;
+}
+
+.appModalActions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:0 16px 16px;
+}
+@media (max-width:520px){
+  .appModalActions{ grid-template-columns:1fr; }
+}
+
+.btnDanger{
+  background:linear-gradient(135deg, #ef4444, #b91c1c);
+  color:#fff;
+  box-shadow:0 10px 22px rgba(239,68,68,.22);
+}
+
+/* ===== Popup Barcode Camera ===== */
+.scanModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.68);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:100002;
+}
+
+.scanModal.open{
+  display:flex;
+}
+
+.scanModalCard{
+  width:min(460px, 100%);
+  background:#fff;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,.35);
+}
+
+.scanModalTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(16,24,40,.10);
+}
+
+.scanModalTitle{
+  font-weight:980;
+  color:#111827;
+}
+
+.scanModalClose{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  border:1px solid rgba(16,24,40,.10);
+  background:rgba(16,24,40,.06);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+}
+
+.scanModalClose svg{
+  width:18px;
+  height:18px;
+  stroke:#111827;
+  fill:none;
+  stroke-width:2.2;
+}
+
+.scanModalBody{
+  padding:12px;
+}
+
+#barcodeScanReader{
+  width:100%;
+  min-height:280px;
+}
+
+#barcodeScanReader video{
+  width:100% !important;
+  border-radius:16px;
+}
+
+.scanHint{
+  margin:10px 0 0;
+  text-align:center;
+  font-size:12.5px;
+  font-weight:900;
+  color:rgba(16,24,40,.62);
+}
+    
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+<div class="wrap">
+<div class="topbar">
+
+  <!-- صف الأيقونات -->
+  <div class="topActions">
+    <button class="backBtn" type="button" onclick="loadPending()" title="تحديث" aria-label="تحديث">
+      <svg width="22" height="22" viewBox="0 0 24 24"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M21 12a9 9 0 1 1-3-6.7"/>
+        <path d="M21 3v7h-7"/>
+      </svg>
+    </button>
+
+    <button class="backBtn" type="button" onclick="enableProdPushNotifications()" title="تفعيل الإشعارات" aria-label="تفعيل الإشعارات">
+      <svg width="22" height="22" viewBox="0 0 24 24"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h11"></path>
+        <path d="M9 17a3 3 0 0 0 6 0"></path>
+      </svg>
+    </button>
+
+    <a href="tag.html" class="backBtn" title="إدارة التاقات" aria-label="إدارة التاقات">
+      <svg width="22" height="22" viewBox="0 0 24 24"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M20 13V7a2 2 0 0 0-2-2h-6l-8 8 6 6 8-8Z"></path>
+        <circle cx="15" cy="9" r="1.5"></circle>
+      </svg>
+    </a>
+
+    <a href="Brand.html" class="backBtn" title="الماركات" aria-label="إدارة الماركات">
+      <svg width="22" height="22" viewBox="0 0 24 24"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z"/>
+        <path d="M8 9h8"/>
+        <path d="M8 12h8"/>
+        <path d="M8 15h5"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- صف الشعار + الخروج -->
+  <div class="topMain">
+    <div class="brand">
+      <div class="brandMark" aria-hidden="true">
+        <img src="/prod/ico1.png" alt="icon" class="brandIcon">
+      </div>
+
+      <div style="min-width:0">
+        <p class="brandName">
+          <span class="b1">Beauty</span>
+          <a class="b2" href="admin.html">time</a>
+        </p>
+        <div class="brandSub">لوحة وديع • قائمة المنتجات</div>
+      </div>
+    </div>
+
+    <div class="badge" title="الخروج">
+      <svg class="svg sm" viewBox="0 0 24 24">
+        <path d="M10 17l5-5-5-5"></path>
+        <path d="M15 12H3"></path>
+        <path d="M21 3v18"></path>
+      </svg>
+      <button style="border:none;background:transparent;font:inherit;color:inherit;cursor:pointer;padding:0" onclick="logout()">خروج</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+    <div>
+      <div style="font-weight:980">طلب إضافة منتج من وديع</div>
+      <div style="margin-top:2px;font-weight:900;font-size:12px;color:rgba(16,24,40,.55)">
+        ارفع صور المنتج + (باركود أو اختر لا يوجد باركود) + السعر
+      </div>
+    </div>
+  </div> 
+  <div class="uploader" style="margin-top:12px">
+    <!-- صور المنتج -->
+    <div class="file" style="position:relative">
+      <label class="filePick" for="st_prod_photos">
+        <svg class="svg sm" viewBox="0 0 24 24">
+          <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+          <circle cx="12" cy="13" r="3.2"></circle>
+        </svg>
+        اختر صور المنتج (أو صوّر)
+      </label>
+      <input id="st_prod_photos" type="file" accept="image/*" multiple>
+      <div class="fileHint">يمكن اختيار أكثر من صورة</div>
+      <div id="st_prod_photos_name" class="fileName"></div>
+    </div>
+
+    <!-- صورة الباركود -->
+    <div class="file" style="position:relative">
+      <label class="filePick" for="st_barcode_photo">
+        <svg viewBox="0 0 13 13" aria-hidden="true" style="width:20px;height:20px;fill:currentColor">
+          <path d="M1 1.5v13h1v-13H1zm2 0v13h2v-13H3zm3 0v13h1v-13H6zm2 0v13h2v-13H8zm3 0v13h1v-13h-1zm2 0v13h1v-13h-1z"></path>
+        </svg>
+        رفع صورة الباركود (اختياري)
+      </label>
+      <input id="st_barcode_photo" type="file" accept="image/*">
+      <div id="st_barcode_photo_name" class="fileName"></div>
+    </div>
+
+<!-- ✅ باركود + سعر (تصميم نظيف) -->
+<div class="stGrid">
+
+  <!-- Barcode field -->
+  <div class="field">
+    <div class="fieldLabel">الباركود</div>
+
+    <div class="inputRow">
+      <div class="inputIcon" aria-hidden="true">
+        <svg class="svg sm" viewBox="0 0 24 24">
+          <path d="M4 7h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 17h10"></path>
+        </svg>
+      </div>
+
+      <input id="st_barcode" inputmode="numeric" placeholder="اكتب الباركود أو امسحه بالكاميرا">
+
+      <button class="scanMini" type="button" onclick="toggleStaffScan()" title="مسح بالكاميرا" aria-label="مسح بالكاميرا">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+          <circle cx="12" cy="13" r="3.2"></circle>
+        </svg>
+      </button>
+    </div>
+
+    <div class="pillsRow">
+      <button type="button" class="pillToggle" id="stPillNoBarcode" onclick="stSetNoBarcode(true)">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
+        لا يوجد باركود
+      </button>
+
+      <button type="button" class="pillToggle active" id="stPillHasBarcode" onclick="stSetNoBarcode(false)">
+        <svg viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"></path></svg>
+        يوجد باركود
+      </button>
+    </div>
+  </div>
+
+  <!-- Price field -->
+  <div class="field">
+    <div class="fieldLabel">السعر (اختياري)</div>
+
+    <div class="inputRow">
+      <div class="inputIcon" aria-hidden="true">
+        <svg class="svg sm" viewBox="0 0 24 24">
+          <path d="M12 1v22"></path>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+      </div>
+
+      <input id="st_price" inputmode="decimal" placeholder="مثال: 3.500">
+    </div>
+  </div>
+
+</div> <!-- /stGrid -->
+<!-- ملاحظة الطلب (إضافة) -->
+<div class="file" style="position:relative">
+  <div class="field" style="margin:0">
+    <div class="fieldLabel">ملاحظة (اختياري)</div>
+    <div class="inputRow" style="align-items:flex-start">
+      <div class="inputIcon" aria-hidden="true">
+        <svg class="svg sm" viewBox="0 0 24 24">
+          <path d="M4 6h16"></path>
+          <path d="M4 12h10"></path>
+          <path d="M4 18h14"></path>
+        </svg>
+      </div>
+      <textarea id="st_note"
+        placeholder="اكتب ملاحظة لوديع (اكتب اي ملاحظه بيشوفها وديع )"
+        style="border:none;outline:none;background:transparent;width:100%;min-height:88px;resize:vertical;
+               font-size:15px;font-weight:900;font-family:'Cairo',system-ui,sans-serif;color:var(--ink)"></textarea>
+    </div>
+  </div>
+</div>
+
+
+</div> <!-- /uploader -->
+
+<button class="btn btnPrimary btnBig" type="button" onclick="submitStaffRequest()">
+  <svg class="svg" viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+  إرسال الطلب
+</button>
+
+<div id="statusLine" class="statusLine"></div>
+
+</div> <!-- ✅ /card (طلب إضافة منتج) -->
+
+<div class="card collapseCard" id="editCard">
+  <button class="collapseHead" type="button"
+          onclick="toggleCollapse('editCard')" aria-expanded="false">
+    <div class="collapseTitle">
+      <div class="t1">طلب تعديل منتج</div>
+      <div class="t2">اضغط لفتح الخيارات • ارفع القديمة + الجديدة + ملاحظة (مع باركود)</div>
+    </div>
+    <div class="chev" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </button>
+
+  <div class="collapseBody">
+
+    <div class="uploader" style="margin-top:12px">
+
+      <!-- باركود المنتج (تعديل) -->
+      <div class="file" style="position:relative">
+        <div class="field" style="margin:0">
+          <div class="fieldLabel">باركود المنتج</div>
+
+          <div class="inputRow">
+            <div class="inputIcon" aria-hidden="true">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M4 7h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 17h10"></path>
+              </svg>
+            </div>
+
+            <input id="ed_barcode" inputmode="numeric" placeholder="اكتب الباركود أو امسحه بالكاميرا">
+
+            <button class="scanMini" type="button" onclick="toggleEditScan()"
+                    title="مسح بالكاميرا" aria-label="مسح بالكاميرا">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+                <circle cx="12" cy="13" r="3.2"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- الصورة القديمة -->
+      <div class="file" style="position:relative">
+        <label class="filePick" for="ed_old_photo">
+          <svg class="svg sm" viewBox="0 0 24 24">
+            <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+            <circle cx="12" cy="13" r="3.2"></circle>
+          </svg>
+          رفع الصورة القديمة
+        </label>
+       <input id="ed_old_photo" type="file" accept="image/*">
+        <div id="ed_old_photo_name" class="fileName"></div>
+      </div>
+
+      <!-- الصورة الجديدة -->
+      <div class="file" style="position:relative">
+        <label class="filePick" for="ed_new_photo">
+          <svg class="svg sm" viewBox="0 0 24 24">
+            <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+            <circle cx="12" cy="13" r="3.2"></circle>
+          </svg>
+          رفع الصورة الجديدة
+        </label>
+        <input id="ed_new_photo" type="file" accept="image/*">
+        <div id="ed_new_photo_name" class="fileName"></div>
+      </div>
+
+      <!-- الملاحظة -->
+      <div class="file" style="position:relative">
+        <div class="field" style="margin:0">
+          <div class="fieldLabel">ملاحظة</div>
+          <div class="inputRow" style="align-items:flex-start">
+            <div class="inputIcon" aria-hidden="true">
+              <svg class="svg sm" viewBox="0 0 24 24">
+                <path d="M4 6h16"></path>
+                <path d="M4 12h10"></path>
+                <path d="M4 18h14"></path>
+              </svg>
+            </div>
+            <textarea id="ed_note"
+              placeholder="اكتب سبب التعديل أو أي ملاحظة..."
+              style="border:none;outline:none;background:transparent;width:100%;min-height:88px;resize:vertical;
+                     font-size:15px;font-weight:900;font-family:'Cairo',system-ui,sans-serif;color:var(--ink)"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /uploader -->
+
+    <button class="btn btnPrimary btnBig" type="button" onclick="submitEditRequest()">
+      <svg class="svg" viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+      إرسال طلب التعديل
+    </button>
+
+  </div><!-- /collapseBody -->
+</div><!-- /editCard -->
+
+<div class="card">
+  <div style="font-weight:980">القوائم</div>
+  <div style="margin-top:2px;font-weight:900;font-size:12px;color:rgba(16,24,40,.55)">
+    اضغط على القسم لفتح/إغلاق
+  </div>
+
+  <!-- بانتظار الإضافة -->
+  <div class="dashSeg">
+    <div class="dashSegTop" onclick="toggleSeg('segWaiting', this)">
+      <div class="dashSegName">
+        منتجات بانتظار الإضافة
+      </div>
+      <div class="dashSegRight">
+        <div class="dashCount" id="cntWaiting">0</div>
+        <svg class="segArrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+      </div>
+    </div>
+    <div class="dashSegBody" id="segWaiting">
+      <div class="list" id="list"><div class="empty">لا توجد بيانات</div></div>
+    </div>
+  </div>
+
+  <!-- قائمة انتظار التعديل -->
+  <div class="dashSeg">
+    <div class="dashSegTop" onclick="toggleSeg('segEdit', this)">
+      <div class="dashSegName">
+        قائمة انتظار التعديل
+      </div>
+      <div class="dashSegRight">
+        <div class="dashCount" id="cntEdit">0</div>
+        <svg class="segArrow" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+      </div>
+    </div>
+    <div class="dashSegBody" id="segEdit">
+      <div class="list" id="editList"><div class="empty">لا توجد بيانات</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Image Modal -->
+<div id="imgModal" class="imgModal" onclick="closeImgModal(event)">
+  <div class="imgModalCard">
+    <div class="imgModalTop">
+      <div id="imgModalTitle" class="imgModalTitle"></div>
+      <button class="imgModalClose" onclick="closeImgModal()" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="imgModalBody">
+      <img id="imgModalImg" src="" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- Barcode Camera Popup Modal -->
+<div id="barcodeScanModal" class="scanModal" onclick="closeBarcodeScanModal(event)">
+  <div class="scanModalCard">
+    <div class="scanModalTop">
+      <div id="barcodeScanTitle" class="scanModalTitle">مسح الباركود</div>
+
+      <button type="button" class="scanModalClose" onclick="stopAnyScan()" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 6l12 12"></path>
+          <path d="M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="scanModalBody">
+      <div id="barcodeScanReader"></div>
+
+      <p class="scanHint">وجّه الكاميرا نحو الباركود</p>
+
+      <button type="button" class="btn btnGhost" style="margin-top:12px" onclick="stopAnyScan()">
+        إيقاف المسح
+      </button>
+    </div>
+  </div>
+</div>
+  
+<!-- Confirm Exit Modal -->
+<div id="exitModal" class="appModal" onclick="closeExitModal(event)">
+  <div class="appModalCard">
+    <div class="appModalHead">
+      <div class="appModalIcon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 17l5-5-5-5"></path>
+          <path d="M15 12H3"></path>
+          <path d="M21 3v18"></path>
+        </svg>
+      </div>
+
+      <div class="appModalTitleWrap">
+        <p class="appModalTitle">تأكيد الخروج</p>
+        <p class="appModalSub">سيتم إغلاق الصفحة الحالية داخل التطبيق</p>
+      </div>
+    </div>
+
+    <div class="appModalBody">
+      <p class="appModalMsg">هل تريد الخروج من التطبيق؟</p>
+    </div>
+
+    <div class="appModalActions">
+      <button type="button" class="btn btnGhost" onclick="stayInApp()">
+        <svg class="svg" viewBox="0 0 24 24">
+          <path d="M20 7l-11 11-5-5"></path>
+        </svg>
+        لا، البقاء
+      </button>
+
+      <button type="button" class="btn btnDanger" onclick="confirmExitApp()">
+        <svg class="svg" viewBox="0 0 24 24">
+          <path d="M10 17l5-5-5-5"></path>
+          <path d="M15 12H3"></path>
+          <path d="M21 3v18"></path>
+        </svg>
+        نعم، خروج
+      </button>
+    </div>
+  </div>
+</div>
+
+  
+<script>
+  (function guard(){
+    const k = (localStorage.getItem("PRODUCTS_STAFF_KEY") || "").trim();
+    if(!k) window.location.href = "/prod/login-w.html";
+  })();
+
+  function staffKey(){
+    return (localStorage.getItem("PRODUCTS_STAFF_KEY") || "").trim();
+  }
+  function staffHeaders(extra = {}){
+    return { "x-products-staff-key": staffKey(), ...extra };
+  }
+  function logout(){
+    localStorage.removeItem("PRODUCTS_STAFF_KEY");
+    window.location.href = "/prod/login-w.html";
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  async function copyTextToClipboard(text){
+    const t = String(text || "").trim();
+    if(!t) return;
+
+    try{
+      if(navigator.clipboard?.writeText){
+        await navigator.clipboard.writeText(t);
+      }else{
+        const ta = document.createElement("textarea");
+        ta.value = t;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+      toast("ok","تم النسخ", `تم نسخ الباركود: ${t}`, 2000);
+    }catch(e){
+      toast("err","فشل النسخ","المتصفح منع النسخ", 2600);
+    }
+  }
+
+  document.addEventListener("click", (e)=>{
+    const bc = e.target.closest(".bcNum");
+    if(!bc) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const val = bc.dataset.bc || bc.textContent;
+    copyTextToClipboard(val);
+  }, true);
+
+  function toast(type, title, msg, ms = 2400){
+    const wrap = document.getElementById("toasts");
+    if (!wrap) return;
+
+    const el = document.createElement("div");
+    el.className = `toast ${type}`;
+
+    const iconSvg = {
+      ok:   `<svg class="svg" viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"/></svg>`,
+      err:  `<svg class="svg" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>`,
+      warn: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3h3.4L22 20H2z"/></svg>`,
+      info: `<svg class="svg" viewBox="0 0 24 24"><path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/></svg>`
+    }[type] || `<svg class="svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>`;
+
+    el.innerHTML = `
+      <div class="icon">${iconSvg}</div>
+      <div class="body">
+        <p class="title">${escapeHtml(title || "")}</p>
+        <p class="msg">${escapeHtml(msg || "")}</p>
+        <div class="bar"><i style="animation-duration:${ms}ms"></i></div>
+      </div>
+      <button class="x" aria-label="إغلاق" title="إغلاق">
+        <svg class="svg sm" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+      </button>
+    `;
+
+    const close = () => {
+      el.classList.add("out");
+      setTimeout(()=> el.remove(), 170);
+    };
+    el.querySelector(".x").onclick = close;
+
+    wrap.prepend(el);
+    setTimeout(close, ms);
+  }
+
+  function setStatusLine(msg){
+    const el = document.getElementById("statusLine");
+    if (el) el.textContent = msg || "";
+  }
+
+  function fmtDT(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return "—";
+    return d.toLocaleString("ar-OM", {
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+  }
+
+  function normalizeBarcode(v){
+    return (v || "").toString().trim();
+  }
+
+  async function createProduct(){
+    const el = document.getElementById("st_barcode");
+    const barcode = normalizeBarcode(el?.value);
+
+    if(!barcode){
+      toast("warn","مطلوب","أدخل الباركود أو امسحه");
+      return;
+    }
+
+    setStatusLine("جاري الإضافة...");
+    try{
+      const r = await fetch("/api/products/staff/new", {
+        method:"POST",
+        headers: staffHeaders({ "Content-Type":"application/json" }),
+        body: JSON.stringify({ barcode, createdBy: "staff" })
+      });
+      const d = await r.json();
+
+      if(!r.ok){
+        setStatusLine("");
+        toast("err","فشل", d.error || "تعذر الإضافة");
+        return;
+      }
+
+      toast("ok","تم","تمت إضافة المنتج للقائمة");
+      setStatusLine("تمت الإضافة بنجاح");
+      if(el) el.value = "";
+      await loadPending();
+    }catch(e){
+      setStatusLine("");
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+  function getActionNote(id){
+    const el = document.querySelector(`.actionNote[data-id="${CSS.escape(String(id))}"]`);
+    return (el?.value || "").trim();
+  }
+
+  async function markDone(id){
+    const note = getActionNote(id);
+    try{
+      const r = await fetch(`/api/products/staff/${encodeURIComponent(id)}/done`,{
+        method:"POST",
+        headers: staffHeaders({ "Content-Type":"application/json" }),
+        body: JSON.stringify({
+          addedBy:"staff",
+          note
+        })
+      });
+      const d = await r.json();
+      if(!r.ok) return toast("err","فشل", d.error || "تعذر التحديث");
+      toast("ok","تم","تم تسجيل الإضافة");
+      await loadPending();
+    }catch(e){
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+  async function noPhoto(id){
+    const note = getActionNote(id);
+
+    try{
+      const r = await fetch(`/api/products/staff/${encodeURIComponent(id)}/no-photo`,{
+        method:"POST",
+        headers: staffHeaders({ "Content-Type":"application/json" }),
+        body: JSON.stringify({
+          needPhotoBy:"staff",
+          reason: note || "الصور غير مناسبة للإنترنت",
+          note
+        })
+      });
+
+      const d = await r.json();
+      if(!r.ok) return toast("err","فشل", d.error || "تعذر التحديث");
+      toast("warn","تم","تم إرسال طلب تصوير للإدارة");
+      await loadPending();
+    }catch(e){
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+  window.copyImage = async function (ev) {
+    ev.stopPropagation();
+    const imageUrl = getStackUrl(ev);
+    if(!imageUrl) return toast("warn","تنبيه","لا توجد صورة", 1600);
+
+    try {
+      const res = await fetch(imageUrl, { mode: "cors", cache: "no-store" });
+      if (!res.ok) throw new Error("Fetch failed: " + res.status);
+
+      const blob = await res.blob();
+      if (!blob || !blob.type.startsWith("image/")) throw new Error("Not an image blob");
+
+      await navigator.clipboard.write([ new ClipboardItem({ [blob.type]: blob }) ]);
+      toast("ok", "تم النسخ", "الصوره جاهزه للصق", 2200);
+    } catch (e) {
+      toast("err", "تعذر النسخ", "المتصفح/المصدر لا يسمح", 3200);
+    }
+  };
+
+  window.downloadImage = async function(ev, name){
+    ev.stopPropagation();
+    const imageUrl = getStackUrl(ev);
+    if(!imageUrl) return toast("warn","تنبيه","لا توجد صورة", 1600);
+
+    try{
+      const res = await fetch(imageUrl, { mode:"cors", cache:"no-store" });
+      if(!res.ok) throw new Error("Fetch failed: " + res.status);
+
+      const blob = await res.blob();
+      const ext = (blob.type.split("/")[1] || "png").replace("jpeg","jpg");
+      const safeName = (name || "image").toString().slice(0,40).replace(/[^\w\u0600-\u06FF]+/g,"_");
+      const fileName = `${safeName}.${ext}`;
+
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=> URL.revokeObjectURL(a.href), 2000);
+
+      toast("ok","تم","تم تحميل الصوره", 2000);
+    }catch(e){
+      toast("err","فشل","تعذر تحميل الصوره", 2600);
+    }
+  };
+
+  window.shareImage = async function(ev, name){
+    ev.stopPropagation();
+    const imageUrl = getStackUrl(ev);
+    if(!imageUrl) return toast("warn","تنبيه","لا توجد صورة", 1600);
+
+    if(!navigator.share){
+      toast("warn","غير مدعوم","المشاركه غير مدعومه", 2400);
+      return;
+    }
+
+    try{
+      const res = await fetch(imageUrl, { mode:"cors", cache:"no-store" });
+      if(!res.ok) throw new Error("Fetch failed: " + res.status);
+
+      const blob = await res.blob();
+      const ext = (blob.type.split("/")[1] || "png").replace("jpeg","jpg");
+      const safeName = (name || "image").toString().slice(0,40).replace(/[^\w\u0600-\u06FF]+/g,"_");
+      const file = new File([blob], `${safeName}.${ext}`, { type: blob.type });
+
+      await navigator.share({ title: name || "صوره", files: [file] });
+    }catch(e){
+      toast("err","فشل","تعذر مشاركه الصوره", 2600);
+    }
+  };
+
+  let __appModalDepth = 0;
+  let __exitArmed = false;
+  let __allowRealExit = false;
+
+  function isImgModalOpen(){
+    return document.getElementById("imgModal")?.classList.contains("open");
+  }
+
+  function isExitModalOpen(){
+    return document.getElementById("exitModal")?.classList.contains("open");
+  }
+
+function isStaffScanOpen(){
+  return isBarcodeScanOpen() && window.__barcodeScanMode === "staff";
+}
+
+function isEditScanOpen(){
+  return isBarcodeScanOpen() && window.__barcodeScanMode === "edit";
+}
+  function pushAppState(kind){
+    history.pushState({ appLayer: true, kind }, "");
+    __appModalDepth++;
+  }
+
+  function safeBackOne(){
+    if(__appModalDepth > 0){
+      __appModalDepth--;
+      history.back();
+    }
+  }
+
+  function closeTopLayerFromBack(){
+    if(isImgModalOpen()){
+      closeImgModal(null, true);
+      return true;
+    }
+
+    if(isExitModalOpen()){
+      hideExitModal(true);
+      return true;
+    }
+
+    if(isStaffScanOpen()){
+      stopStaffScan(true);
+      return true;
+    }
+
+    if(isEditScanOpen()){
+      stopEditScan(true);
+      return true;
+    }
+
+    return false;
+  }
+
+  function armRootHistoryTrap(){
+    if(__exitArmed) return;
+    history.replaceState({ appRoot: true }, "");
+    history.pushState({ appSentinel: true }, "");
+    __exitArmed = true;
+  }
+
+  window.openImgModal = function(ev, title){
+    ev?.stopPropagation?.();
+    const imageUrl = getStackUrl(ev);
+    if(!imageUrl) return toast("warn","تنبيه","لا توجد صورة", 1600);
+
+    const modal = document.getElementById("imgModal");
+    const img = document.getElementById("imgModalImg");
+    const ttl = document.getElementById("imgModalTitle");
+    if(!modal || !img || !ttl) return;
+
+    ttl.textContent = title || "";
+    img.src = imageUrl;
+    img.alt = title || "";
+    modal.classList.add("open");
+
+    pushAppState("imgModal");
+  };
+
+  window.closeImgModal = function(ev, fromBack = false){
+    if(ev && ev.target && ev.target.closest(".imgModalCard")) return;
+
+    const modal = document.getElementById("imgModal");
+    const img = document.getElementById("imgModalImg");
+
+    if(modal) modal.classList.remove("open");
+    if(img) img.src = "";
+
+    if(!fromBack && __appModalDepth > 0){
+      safeBackOne();
+    }
+  };
+
+  function showExitModal(){
+    const modal = document.getElementById("exitModal");
+    if(!modal || modal.classList.contains("open")) return;
+    modal.classList.add("open");
+    pushAppState("exitConfirm");
+  }
+
+function hideExitModal(fromBack = false){
+  const modal = document.getElementById("exitModal");
+  if(modal) modal.classList.remove("open");
+
+  if(!fromBack && __appModalDepth > 0){
+    __appModalDepth--;
+  }
+}
+
+window.closeExitModal = function(ev){
+  if(ev && ev.target && ev.target.closest(".appModalCard")) return;
+  hideExitModal(false);
+
+  setTimeout(() => {
+    history.pushState({ appSentinel: true }, "");
+  }, 0);
+};
+
+window.stayInApp = function(){
+  hideExitModal(false);
+
+  setTimeout(() => {
+    history.pushState({ appSentinel: true }, "");
+  }, 0);
+};
+
+  window.confirmExitApp = function(){
+    __allowRealExit = true;
+
+    if(window.history.length > 1){
+      history.go(-1);
+      return;
+    }
+
+    window.close();
+
+    setTimeout(() => {
+      __allowRealExit = false;
+      toast("info","ملاحظة","قد يمنع الجهاز الإغلاق المباشر، يمكنك الضغط رجوع مرة أخرى", 2600);
+    }, 300);
+  };
+
+  function pickMainImage(p){
+    const prodArr = Array.isArray(p.photoProductUrls) ? p.photoProductUrls : [];
+    const firstProd = prodArr.find(u => typeof u === "string" && u.trim());
+    if(firstProd) return firstProd.trim();
+    if(typeof p.photoBarcodeUrl === "string" && p.photoBarcodeUrl.trim()) return p.photoBarcodeUrl.trim();
+    return "";
+  }
+
+  function getAllImages(p){
+    const prodArr = Array.isArray(p.photoProductUrls) ? p.photoProductUrls : [];
+    const imgs = prodArr
+      .filter(u => typeof u === "string" && u.trim())
+      .map(u => u.trim());
+
+    if(!imgs.length && typeof p.photoBarcodeUrl === "string" && p.photoBarcodeUrl.trim()){
+      imgs.push(p.photoBarcodeUrl.trim());
+    }
+
+    return imgs.slice(0, 6);
+  }
+
+  function setSlide(root, idx){
+    const track = root.querySelector(".track");
+    const slides = Array.from(root.querySelectorAll(".slide"));
+    const dots = Array.from(root.querySelectorAll(".dots i"));
+    const total = slides.length;
+
+    if(!track || total === 0) return;
+
+    let i = idx;
+    if(i < 0) i = total - 1;
+    if(i >= total) i = 0;
+
+    root.dataset.idx = String(i);
+    track.style.transform = `translateX(${-i * 100}%)`;
+
+    if(dots.length){
+      dots.forEach((d, n) => d.classList.toggle("on", n === i));
+    }
+
+    const curImg = slides[i].querySelector("img");
+    const url = curImg?.getAttribute("src") || "";
+    const stack = root.closest(".imgWrap")?.querySelector(".btnStack");
+    if(stack) stack.dataset.url = url;
+  }
+
+  function stepSlide(btn, dir){
+    const root = btn.closest(".imgWrap")?.querySelector(".slider");
+    if(!root) return;
+    const i = Number(root.dataset.idx || "0") || 0;
+    setSlide(root, i + dir);
+  }
+
+  function bindSwipe(slider){
+    let x0 = null;
+    let locked = false;
+
+    slider.addEventListener("touchstart", (e)=>{
+      if(e.touches && e.touches[0]){
+        x0 = e.touches[0].clientX;
+        locked = false;
+      }
+    }, { passive:true });
+
+    slider.addEventListener("touchmove", (e)=>{
+      if(x0 == null || locked) return;
+      const x1 = e.touches?.[0]?.clientX;
+      if(x1 == null) return;
+
+      const dx = x1 - x0;
+      if(Math.abs(dx) > 40){
+        locked = true;
+        const dir = (dx > 0) ? -1 : +1;
+        setSlide(slider, (Number(slider.dataset.idx||"0")||0) + dir);
+        x0 = null;
+      }
+    }, { passive:true });
+
+    slider.addEventListener("touchend", ()=>{ x0 = null; locked=false; }, { passive:true });
+  }
+
+  function bindAllSliders(){
+    document.querySelectorAll(".slider").forEach(sl => {
+      if(sl.dataset.bound === "1") return;
+      sl.dataset.bound = "1";
+      bindSwipe(sl);
+      setSlide(sl, Number(sl.dataset.idx || "0") || 0);
+    });
+  }
+
+  function getStackUrl(ev){
+    const stack = ev?.target?.closest?.(".btnStack");
+    if(stack?.dataset?.url) return stack.dataset.url;
+
+    const img = ev?.target?.closest?.(".imgWrap img");
+    if(img?.getAttribute("src")) return img.getAttribute("src");
+
+    const anyImg = ev?.target?.closest?.(".imgWrap")?.querySelector?.(".slide img");
+    return anyImg?.getAttribute("src") || "";
+  }
+
+  function safeImg(u){
+    return (u || "").toString().trim();
+  }
+
+  function onImgError(imgEl){
+    try{
+      const slide = imgEl.closest(".slide");
+      const slider = imgEl.closest(".slider");
+      if(slide) slide.remove();
+
+      if(slider){
+        const slides = slider.querySelectorAll(".slide");
+        const dotsWrap = slider.querySelector(".dots");
+        if(dotsWrap){
+          dotsWrap.innerHTML = Array.from(slides).map((_,i)=>`<i class="${i===0?'on':''}"></i>`).join("");
+        }
+        slider.dataset.idx = "0";
+        setSlide(slider, 0);
+      }
+    }catch(_){}
+  }
+
+  document.addEventListener("click", (e)=>{
+    const img = e.target.closest(".imgWrap img");
+    if(!img) return;
+
+    if(e.target.closest(".btnStack") || e.target.closest(".navBtn")) return;
+
+    const wrap = img.closest(".imgWrap");
+    const title = wrap?.querySelector(".orderPill b")?.textContent
+      ? `باركود: ${wrap.querySelector(".orderPill b").textContent}`
+      : "صورة";
+    openImgModal(e, title);
+  });
+
+  window.openImgModalUrl = function(ev, title, url){
+    ev?.stopPropagation?.();
+    if(!url) return toast("warn","تنبيه","لا توجد صورة", 1600);
+
+    const modal = document.getElementById("imgModal");
+    const img = document.getElementById("imgModalImg");
+    const ttl = document.getElementById("imgModalTitle");
+    if(!modal || !img || !ttl) return;
+
+    ttl.textContent = title || "";
+    img.src = url;
+    img.alt = title || "";
+    modal.classList.add("open");
+
+    pushAppState("imgModal");
+  };
+
+  function render(products){
+    const wrap = document.getElementById("list");
+    const editWrap = document.getElementById("editList");
+
+    const arr = Array.isArray(products) ? products : [];
+    let edits  = arr.filter(p => String(p.notes || "").includes("EDIT_REQUEST||"));
+    let normal = arr.filter(p => !String(p.notes || "").includes("EDIT_REQUEST||"));
+
+    const cW = document.getElementById("cntWaiting");
+    const cE = document.getElementById("cntEdit");
+    if(cW) cW.textContent = String(normal.length);
+    if(cE) cE.textContent = String(edits.length);
+
+    renderInto(wrap, normal, false);
+    renderInto(editWrap, edits, true);
+
+    bindAllSliders();
+
+    ["segWaiting","segEdit"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el && el.classList.contains("open")){
+        el.style.maxHeight = el.scrollHeight + "px";
+        setTimeout(()=>{ if(el.classList.contains("open")) el.style.maxHeight = "none"; }, 300);
+      }
+    });
+  }
+
+  function renderInto(container, products, isEditSection){
+    if(!container) return;
+
+    if(!products.length){
+      container.innerHTML = `<div style="font-weight:900;color:rgba(16,24,40,.55);padding:6px">لا توجد بيانات</div>`;
+      return;
+    }
+
+    const orderKey = isEditSection ? "PENDING_ADD_ORDER_EDIT" : "PENDING_ADD_ORDER_WAITING";
+
+    container.innerHTML = products.map(p => {
+      const imgs = getAllImages(p);
+      const hasPhotos = imgs.length > 0;
+
+      const isEdit = String(p.notes || "").includes("EDIT_REQUEST||");
+      const cleanNote = String(p.notes || "").replace("EDIT_REQUEST||", "").trim();
+
+      const title = `باركود: ${p.barcode || ""}`;
+
+      const sliderHtml = hasPhotos ? `
+        <div class="slider" data-idx="0">
+          <div class="track">
+            ${imgs.map((u,i)=>`
+              <div class="slide" data-i="${i}">
+                <img src="${escapeHtml(safeImg(u))}" alt="${escapeHtml(title)}"
+                     loading="eager" decoding="async" onerror="onImgError(this)">
+              </div>
+            `).join("")}
+          </div>
+
+          ${imgs.length > 1 ? `
+            <button class="navBtn navPrev" onclick="event.stopPropagation(); stepSlide(this,-1)" title="السابق">
+              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="navBtn navNext" onclick="event.stopPropagation(); stepSlide(this,1)" title="التالي">
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <div class="dots">
+              ${imgs.map((_,i)=>`<i class="${i===0?'on':''}"></i>`).join("")}
+            </div>
+          ` : ``}
+        </div>
+      ` : `
+        <div style="width:100%;height:100%;display:grid;place-items:center;color:rgba(60,10,99,.65);font-weight:950">
+          لا توجد صوره
+        </div>
+      `;
+
+      const stackBtns = hasPhotos ? `
+        <div class="btnStack" data-url="${escapeHtml(imgs[0])}" onclick="event.stopPropagation()">
+          <button onclick="shareImage(event,'${escapeHtml(title)}')" title="مشاركه">
+            <svg viewBox="0 0 24 24">
+              <circle cx="18" cy="5" r="2"></circle>
+              <circle cx="6" cy="12" r="2"></circle>
+              <circle cx="18" cy="19" r="2"></circle>
+              <path d="M8 12l8-6"></path>
+              <path d="M8 12l8 6"></path>
+            </svg>
+          </button>
+
+          <button onclick="downloadImage(event,'${escapeHtml(title)}')" title="تحميل الصوره">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3v10"></path>
+              <path d="M8 11l4 4 4-4"></path>
+              <path d="M21 21H3"></path>
+            </svg>
+          </button>
+
+          <button onclick="copyImage(event)" title="نسخ الصوره">
+            <svg viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+
+          <button onclick="openImgModal(event,'${escapeHtml(title)}')" title="تكبير الصوره">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-3-3"></path>
+              <path d="M11 8v6"></path>
+              <path d="M8 11h6"></path>
+            </svg>
+          </button>
+        </div>
+      ` : ``;
+
+      const orderBtns = `
+        <div style="display:flex; gap:8px; align-items:center" onclick="event.stopPropagation()">
+          <button type="button" title="رفع للأعلى"
+            onclick="event.stopPropagation(); if(window.moveInOrder) moveInOrder('${escapeHtml(p.id)}',-1,'${orderKey}')"
+            style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(16,24,40,.10);
+                   background:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer;
+                   box-shadow:0 6px 18px rgba(16,24,40,.08)">
+            <svg viewBox="0 0 24 24" width="18" height="18" style="display:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5l-6 6"></path>
+              <path d="M12 5l6 6"></path>
+              <path d="M12 19V6"></path>
+            </svg>
+          </button>
+
+          <button type="button" title="تنزيل للأسفل"
+            onclick="event.stopPropagation(); if(window.moveInOrder) moveInOrder('${escapeHtml(p.id)}',1,'${orderKey}')"
+            style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(16,24,40,.10);
+                   background:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer;
+                   box-shadow:0 6px 18px rgba(16,24,40,.08)">
+            <svg viewBox="0 0 24 24" width="18" height="18" style="display:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19l-6-6"></path>
+              <path d="M12 19l6-6"></path>
+              <path d="M12 5v13"></path>
+            </svg>
+          </button>
+
+          <input
+            class="priInp"
+            type="number" min="1" max="9999"
+            value="${escapeHtml(String(p.priority || ""))}"
+            placeholder="رقم ترتيب"
+            onclick="event.stopPropagation()"
+            onkeydown="if(event.key==='Enter'){ event.preventDefault(); this.nextElementSibling.click(); }"
+            style="width:70px;height:38px;border-radius:12px;border:1px solid rgba(16,24,40,.12);
+                   padding:0 10px;font-weight:950;background:rgba(255,255,255,.85);outline:none" />
+
+          <button type="button" title="حفظ الترتيب"
+            onclick="event.stopPropagation(); savePriority('${escapeHtml(p.id)}', this.previousElementSibling.value, ${isEditSection ? "'PHOTO_UPLOADED'" : "'WAITING_ADD'"})"
+            style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(16,24,40,.10);
+                   background:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer;
+                   box-shadow:0 6px 18px rgba(16,24,40,.08)">
+            <svg viewBox="0 0 24 24" width="18" height="18" style="display:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V7l4-4h10l4 4v12a2 2 0 0 1-2 2z"></path>
+              <path d="M17 21v-8H7v8"></path>
+              <path d="M7 3v4h10V3"></path>
+            </svg>
+          </button>
+        </div>
+      `;
+
+      return `
+        <div class="item ${isEdit ? "editReq" : ""}">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+            <p style="margin:0;font-weight:950;font-size:14px">
+              باركود: <b>${escapeHtml(p.barcode || "—")}</b>
+            </p>
+
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <span class="pill ${isEdit ? "pillEdit" : ""}">
+                <svg class="svg sm" viewBox="0 0 24 24"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="9"></circle></svg>
+                ${escapeHtml(isEdit ? "طلب تعديل" : "بانتظار الإضافة")}
+              </span>
+
+              ${orderBtns}
+            </div>
+          </div>
+
+          ${cleanNote ? `
+            <div class="noteBox">
+              <b>ملاحظة:</b> ${escapeHtml(cleanNote)}
+            </div>
+          ` : ``}
+
+          <div class="imgWrap">
+            ${sliderHtml}
+
+            <div class="ordersOverlay">
+              <span class="orderPill">
+                <span class="bcIcon" aria-hidden="true">
+                  <svg viewBox="0 0 13 16" width="16" height="16" style="display:block;fill:currentColor">
+                    <path d="M1 1.5v13h1v-13H1zm2 0v13h2v-13H3zm3 0v13h1v-13H6zm2 0v13h2v-13H8zm3 0v13h1v-13h-1zm2 0v13h1v-13h-1z"></path>
+                  </svg>
+                </span>
+                <span class="bcNum" data-bc="${escapeHtml(p.barcode || "")}">
+                  ${escapeHtml(p.barcode || "—")}
+                </span>
+              </span>
+
+              ${
+                (p.photoBarcodeUrl && String(p.photoBarcodeUrl).trim())
+                ? `
+                  <div class="bcThumb"
+                       onclick="openImgModalUrl(event,'${isEdit ? "قبل التعديل" : "صورة الباركود"}','${escapeHtml(String(p.photoBarcodeUrl).trim())}')"
+                       title="تكبير صورة الباركود">
+                    <img src="${escapeHtml(String(p.photoBarcodeUrl).trim())}" alt="${isEdit ? "before" : "barcode"}">
+                  </div>
+                `
+                : ``
+              }
+            </div>
+
+            ${stackBtns}
+          </div>
+
+          <div class="mini">
+            <div class="cell">
+              <div class="lbl">وقت الإنشاء</div>
+              <div class="val">${escapeHtml(fmtDT(p.createdAt))}</div>
+            </div>
+
+            <div class="cell">
+              <div class="lbl">السعر</div>
+              <div class="val">${escapeHtml(p.price || "—")}</div>
+            </div>
+
+            <div class="cell">
+              <div class="lbl">حالة الصور</div>
+              <div class="val">${escapeHtml(hasPhotos ? "متوفر" : "غير متوفر")}</div>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:10px">
+            <div class="fieldLabel">ملاحظة للإدارة قبل الإجراء</div>
+            <div class="inputRow" style="align-items:flex-start">
+              <div class="inputIcon" aria-hidden="true">
+                <svg class="svg sm" viewBox="0 0 24 24">
+                  <path d="M4 6h16"></path><path d="M4 12h10"></path><path d="M4 18h14"></path>
+                </svg>
+              </div>
+              <textarea class="actionNote"
+                data-id="${escapeHtml(p.id)}"
+                placeholder="مثال: تم رفعه بالموقع / الصور غير مناسبة / يحتاج قص..."
+                style="border:none;outline:none;background:transparent;width:100%;min-height:70px;resize:vertical;
+                       font-size:14px;font-weight:900;font-family:'Cairo',system-ui,sans-serif;color:var(--ink)"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <button class="btn btnDone" onclick="markDone('${escapeHtml(p.id)}')">
+              <svg class="svg" viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"></path></svg>
+              ${isEditSection ? "تم التعديل" : "تم"}
+            </button>
+
+            ${isEditSection ? `
+              <button class="btn btnGhost" type="button"
+                      onclick="openImgModalUrl(event,'بعد التعديل','${escapeHtml(imgs[0] || "")}')">
+                <svg class="svg" viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+                بعد التعديل
+              </button>
+            ` : `
+              <button class="btn btnWarn" onclick="noPhoto('${escapeHtml(p.id)}')">
+                <svg class="svg" viewBox="0 0 24 24"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 4.3h3.4L22 20H2z"></path></svg>
+                لا توجد صورة
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  let __pendingCache = [];
+
+  async function loadPending(){
+    try{
+      const r = await fetch("/api/products/staff/pending-add", { headers: staffHeaders(), cache:"no-store" });
+      const d = await r.json();
+      if(!r.ok){
+        if(String(d.error||"").includes("غير مصرح")){
+          logout();
+          return;
+        }
+        toast("err","فشل", d.error || "تعذر جلب البيانات");
+        return;
+      }
+
+      __pendingCache = Array.isArray(d.products) ? d.products.slice() : [];
+      __pendingCache.reverse();
+      render(__pendingCache);
+    }catch(e){
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+  async function savePriority(id, priority, list){
+    try{
+      const pr = Number(priority);
+      if(!Number.isFinite(pr) || pr < 1){
+        toast("err","خطأ","اكتب رقم صحيح للأولوية");
+        return;
+      }
+
+      const r = await fetch(`/api/products/staff/${encodeURIComponent(id)}/priority`, {
+        method:"PATCH",
+        headers: staffHeaders({ "Content-Type":"application/json" }),
+        body: JSON.stringify({ priority: pr, list })
+      });
+
+      const d = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(d.error || "تعذر حفظ الترتيب");
+
+      toast("ok","تم","تم حفظ الترتيب");
+      loadPending();
+    }catch(e){
+      toast("err","فشل", e.message || "تعذر حفظ الترتيب");
+    }
+  }
+
+  async function saveServerOrder(){
+    const edits  = __pendingCache.filter(p => String(p.notes||"").includes("EDIT_REQUEST||")).map(p => String(p.id));
+    const normal = __pendingCache.filter(p => !String(p.notes||"").includes("EDIT_REQUEST||")).map(p => String(p.id));
+
+    const payload = { normal, edits };
+
+    const r = await fetch("/api/products/staff/pending-add/order", {
+      method:"POST",
+      headers: staffHeaders({ "Content-Type":"application/json" }),
+      body: JSON.stringify(payload)
+    });
+
+    const d = await r.json().catch(()=> ({}));
+    if(!r.ok) throw new Error(d.error || "تعذر حفظ الترتيب");
+  }
+
+  window.moveInOrder = async function(id, dir, orderKeyIgnored){
+    const sid = String(id);
+    const isEdit = (__pendingCache.find(x => String(x.id)===sid)?.notes || "").includes("EDIT_REQUEST||");
+
+    const section = __pendingCache.filter(p => String(p.notes||"").includes("EDIT_REQUEST||") === isEdit);
+    const ids = section.map(p => String(p.id));
+
+    const i = ids.indexOf(sid);
+    if(i === -1) return;
+
+    const j = i + dir;
+    if(j < 0 || j >= ids.length) return;
+
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+
+    const rank = new Map(ids.map((x, idx)=> [x, idx]));
+    const BIG = 1e9;
+
+    __pendingCache.sort((a,b)=>{
+      const ae = String(a.notes||"").includes("EDIT_REQUEST||");
+      const be = String(b.notes||"").includes("EDIT_REQUEST||");
+
+      if(ae !== be) return ae ? 1 : -1;
+
+      if(ae === isEdit){
+        const ai = rank.has(String(a.id)) ? rank.get(String(a.id)) : BIG;
+        const bi = rank.has(String(b.id)) ? rank.get(String(b.id)) : BIG;
+        return ai - bi;
+      }
+
+      return 0;
+    });
+
+    render(__pendingCache);
+
+    try{
+      await saveServerOrder();
+      toast("ok","تم","تم حفظ الترتيب");
+    }catch(e){
+      toast("err","فشل", e.message || "تعذر حفظ الترتيب");
+    }
+  };
+
+let barcodeHtml5Qr = null;
+let barcodeScanRunning = false;
+let barcodeScanLocked = false;
+
+let staffScanning = false;
+let editScanning = false;
+
+window.__barcodeScanMode = "";
+
+function getBarcodeScanConfig(){
+  const F = window.Html5QrcodeSupportedFormats;
+
+  const config = {
+    fps: 10,
+    qrbox: function(viewfinderWidth, viewfinderHeight){
+      const width = Math.floor(viewfinderWidth * 0.82);
+      const height = Math.max(120, Math.floor(viewfinderHeight * 0.32));
+      return { width, height };
+    },
+    aspectRatio: 1.7778
+  };
+
+  if(F){
+    config.formatsToSupport = [
+      F.QR_CODE,
+      F.CODE_128,
+      F.CODE_39,
+      F.EAN_13,
+      F.EAN_8,
+      F.UPC_A,
+      F.UPC_E,
+      F.ITF
+    ];
+  }
+
+  return config;
+}
+
+async function toggleStaffScan(){
+  if(barcodeScanRunning && window.__barcodeScanMode === "staff"){
+    return stopAnyScan();
+  }
+
+  if(editScanning){
+    await stopAnyScan();
+  }
+
+  await openBarcodeScanPopup("staff");
+}
+
+async function openBarcodeScanPopup(mode){
+  if(typeof Html5Qrcode === "undefined"){
+    toast("err", "خطأ", "لم يتم تحميل مكتبة html5-qrcode");
+    return;
+  }
+
+  await stopAnyScan(true);
+
+  const modal = document.getElementById("barcodeScanModal");
+  const reader = document.getElementById("barcodeScanReader");
+  const title = document.getElementById("barcodeScanTitle");
+
+  if(!modal || !reader){
+    toast("err", "خطأ", "نافذة الكاميرا غير موجودة");
+    return;
+  }
+
+  window.__barcodeScanMode = mode;
+  barcodeScanLocked = false;
+
+  staffScanning = mode === "staff";
+  editScanning = mode === "edit";
+
+  if(title){
+    title.textContent = mode === "edit"
+      ? "مسح باركود التعديل"
+      : "مسح باركود المنتج";
+  }
+
+  reader.innerHTML = "";
+  modal.classList.add("open");
+
+  try{
+    barcodeHtml5Qr = new Html5Qrcode("barcodeScanReader");
+
+    await barcodeHtml5Qr.start(
+      { facingMode: "environment" },
+      getBarcodeScanConfig(),
+
+      async function(decodedText){
+        if(barcodeScanLocked) return;
+        barcodeScanLocked = true;
+
+        const code = String(decodedText || "").trim();
+
+        if(window.__barcodeScanMode === "staff"){
+          stSetBarcodeValue(code);
+          toast("ok", "تم", "تمت قراءة الباركود");
+        }
+
+        if(window.__barcodeScanMode === "edit"){
+          const input = document.getElementById("ed_barcode");
+          if(input) input.value = code;
+          toast("ok", "تم", "تمت قراءة باركود التعديل");
+        }
+
+        await stopAnyScan(true);
+      },
+
+      function(){
+        // تجاهل أخطاء القراءة أثناء توجيه الكاميرا
+      }
+    );
+
+    barcodeScanRunning = true;
+
+  }catch(e){
+    console.error(e);
+    await stopAnyScan(true);
+    toast("err", "فشل", "تعذر تشغيل الكاميرا. تأكد من السماح للكاميرا واستخدام HTTPS.");
+  }
+}
+
+async function stopAnyScan(silent = false){
+  const modal = document.getElementById("barcodeScanModal");
+  const reader = document.getElementById("barcodeScanReader");
+
+  if(barcodeHtml5Qr){
+    try{ await barcodeHtml5Qr.stop(); }catch(e){}
+    try{ await barcodeHtml5Qr.clear(); }catch(e){}
+    barcodeHtml5Qr = null;
+  }
+
+  barcodeScanRunning = false;
+  barcodeScanLocked = false;
+  staffScanning = false;
+  editScanning = false;
+  window.__barcodeScanMode = "";
+
+  if(reader) reader.innerHTML = "";
+  if(modal) modal.classList.remove("open");
+}
+
+async function stopStaffScan(){
+  await stopAnyScan();
+}
+
+function closeBarcodeScanModal(ev){
+  if(ev && ev.target && ev.target.closest(".scanModalCard")) return;
+  stopAnyScan();
+}
+
+function isBarcodeScanOpen(){
+  return document.getElementById("barcodeScanModal")?.classList.contains("open");
+}
+
+function isStaffScanOpen(){
+  return isBarcodeScanOpen() && window.__barcodeScanMode === "staff";
+}
+
+function isEditScanOpen(){
+  return isBarcodeScanOpen() && window.__barcodeScanMode === "edit";
+}
+
+
+  async function submitStaffRequest(){
+    const prodInput = document.getElementById("st_prod_photos");
+    const barPhoto  = document.getElementById("st_barcode_photo");
+    const barcodeEl = document.getElementById("st_barcode");
+    const priceEl   = document.getElementById("st_price");
+    const noteEl    = document.getElementById("st_note");
+
+    const prodFiles = prodInput?.files ? Array.from(prodInput.files) : [];
+    const barFile = (barPhoto?.files && barPhoto.files[0]) ? barPhoto.files[0] : null;
+
+    const noBarcode = stIsNoBarcodeSelected();
+    const barcode = (barcodeEl?.value || "").trim();
+    const price = (priceEl?.value || "").trim();
+    const note  = (noteEl?.value || "").trim();
+
+    if(!noBarcode && !barcode && !barFile){
+      toast("warn","مطلوب","أدخل/امسح الباركود أو ارفع صورة الباركود أو اختر (لا يوجد باركود)");
+      return;
+    }
+    if(!prodFiles.length && !barFile){
+      toast("warn","مطلوب","ارفق صور المنتج أو صورة الباركود");
+      return;
+    }
+
+    const fd = new FormData();
+    prodFiles.forEach(f => fd.append("productPhotos", f, f.name || "product.jpg"));
+    if(barFile) fd.append("barcodePhoto", barFile, barFile.name || "barcode.jpg");
+
+    fd.append("staffName", "staff");
+    fd.append("noBarcode", noBarcode ? "1" : "0");
+    fd.append("barcode", barcode);
+    fd.append("price", price);
+    fd.append("note", note);
+
+    try{
+      const r = await fetch("/api/products/staff/new-request", {
+        method:"POST",
+        headers: staffHeaders(),
+        body: fd
+      });
+
+      const d = await r.json();
+      if(!r.ok) return toast("err","فشل", d.error || "تعذر إرسال الطلب");
+
+      toast("ok","تم","تم إرسال الطلب");
+
+      if(prodInput) prodInput.value = "";
+      if(barPhoto) barPhoto.value = "";
+      if(barcodeEl) barcodeEl.value = "";
+      if(priceEl) priceEl.value = "";
+      if(noteEl) noteEl.value = "";
+      stSetNoBarcode(false);
+
+      const pn = document.getElementById("st_prod_photos_name");
+      const bn = document.getElementById("st_barcode_photo_name");
+      if(pn) pn.textContent = "";
+      if(bn) bn.textContent = "";
+
+      await loadPending();
+    }catch(e){
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+  async function submitEditRequest(){
+    const bcEl = document.getElementById("ed_barcode");
+    const oldEl = document.getElementById("ed_old_photo");
+    const newEl = document.getElementById("ed_new_photo");
+    const noteEl = document.getElementById("ed_note");
+
+    const barcode = (bcEl?.value || "").trim();
+    const oldFile = (oldEl?.files && oldEl.files[0]) ? oldEl.files[0] : null;
+    const newFile = (newEl?.files && newEl.files[0]) ? newEl.files[0] : null;
+    const note = (noteEl?.value || "").trim();
+
+    if(!newFile){
+      toast("warn","مطلوب","ارفق الصورة الجديدة");
+      return;
+    }
+
+    const fd = new FormData();
+    fd.append("productPhotos", newFile, newFile.name || "new.jpg");
+
+    if(oldFile){
+      fd.append("barcodePhoto", oldFile, oldFile.name || "old.jpg");
+    }
+
+    fd.append("barcode", barcode);
+    fd.append("noBarcode", barcode ? "0" : "1");
+    fd.append("price", "");
+    fd.append("staffName", "staff");
+    fd.append("note", `EDIT_REQUEST||${note}`);
+
+    try{
+      const r = await fetch("/api/products/staff/new-request", {
+        method:"POST",
+        headers: staffHeaders(),
+        body: fd
+      });
+
+      const d = await r.json().catch(()=> ({}));
+      if(!r.ok){
+        toast("err","فشل", d.error || "تعذر إرسال طلب التعديل");
+        return;
+      }
+
+      toast("ok","تم","تم إرسال طلب التعديل");
+
+      if(bcEl) bcEl.value = "";
+      if(oldEl) oldEl.value = "";
+      if(newEl) newEl.value = "";
+      if(noteEl) noteEl.value = "";
+
+      const on = document.getElementById("ed_old_photo_name");
+      const nn = document.getElementById("ed_new_photo_name");
+      if(on) on.textContent = "";
+      if(nn) nn.textContent = "";
+
+      await loadPending();
+
+    }catch(e){
+      toast("err","خطأ", e.message || "تعذر الاتصال");
+    }
+  }
+
+  (function bindEditFileNames(){
+    const o = document.getElementById("ed_old_photo");
+    const n = document.getElementById("ed_new_photo");
+    const on = document.getElementById("ed_old_photo_name");
+    const nn = document.getElementById("ed_new_photo_name");
+
+    if(o){
+      o.addEventListener("change", () => {
+        const f = (o.files && o.files[0]) ? o.files[0] : null;
+        if(on) on.textContent = f ? `تم اختيار: ${f.name}` : "";
+      });
+    }
+    if(n){
+      n.addEventListener("change", () => {
+        const f = (n.files && n.files[0]) ? n.files[0] : null;
+        if(nn) nn.textContent = f ? `تم اختيار: ${f.name}` : "";
+      });
+    }
+  })();
+
+  (function bindStaffFileNames(){
+    const p = document.getElementById("st_prod_photos");
+    const b = document.getElementById("st_barcode_photo");
+    const pName = document.getElementById("st_prod_photos_name");
+    const bName = document.getElementById("st_barcode_photo_name");
+
+    if(p){
+      p.addEventListener("change", () => {
+        const files = p.files ? Array.from(p.files) : [];
+        if(pName) pName.textContent = files.length ? `تم اختيار: ${files.length} صورة` : "";
+      });
+    }
+    if(b){
+      b.addEventListener("change", () => {
+        const f = (b.files && b.files[0]) ? b.files[0] : null;
+        if(bName) bName.textContent = f ? `تم اختيار: ${f.name}` : "";
+      });
+    }
+  })();
+
+  function stSetNoBarcode(flag){
+    const inp = document.getElementById("st_barcode");
+    const pillNo = document.getElementById("stPillNoBarcode");
+    const pillYes = document.getElementById("stPillHasBarcode");
+
+    if(flag){
+      if(inp){ inp.value=""; inp.disabled=true; }
+      pillNo?.classList.add("active");
+      pillYes?.classList.remove("active");
+    }else{
+      if(inp){ inp.disabled=false; inp.focus(); }
+      pillYes?.classList.add("active");
+      pillNo?.classList.remove("active");
+    }
+  }
+
+  function stIsNoBarcodeSelected(){
+    return document.getElementById("stPillNoBarcode")?.classList.contains("active");
+  }
+
+  function stSetBarcodeValue(v){
+    const inp = document.getElementById("st_barcode");
+    if(!inp) return;
+    inp.disabled = false;
+    inp.value = String(v || "").trim();
+    stSetNoBarcode(false);
+  }
+
+async function toggleEditScan(){
+  if(barcodeScanRunning && window.__barcodeScanMode === "edit"){
+    return stopAnyScan();
+  }
+
+  if(staffScanning){
+    await stopAnyScan();
+  }
+
+  await openBarcodeScanPopup("edit");
+}
+
+async function stopEditScan(){
+  await stopAnyScan();
+}
+  function toggleCollapse(id){
+    const card = document.getElementById(id);
+    if(!card) return;
+
+    const isOpen = card.classList.toggle("open");
+    const headBtn = card.querySelector(".collapseHead");
+    if(headBtn) headBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  }
+
+  async function askNoteBeforeAction(title){
+    const n = prompt(title + "\n\nاكتب الملاحظة للإدارة (اختياري):", "");
+    if(n === null) return { cancelled:true, note:"" };
+    return { cancelled:false, note:String(n || "").trim() };
+  }
+
+  function toggleSeg(id, headerEl){
+    const body = document.getElementById(id);
+    if(!body) return;
+
+    const isOpen = body.classList.contains("open");
+
+    if(isOpen){
+      body.style.maxHeight = body.scrollHeight + "px";
+      requestAnimationFrame(()=> body.style.maxHeight = "0px");
+      body.classList.remove("open");
+    }else{
+      body.classList.add("open");
+      body.style.maxHeight = "0px";
+      requestAnimationFrame(()=> body.style.maxHeight = body.scrollHeight + "px");
+
+      body.addEventListener("transitionend", function onEnd(e){
+        if(e.propertyName !== "max-height") return;
+        body.removeEventListener("transitionend", onEnd);
+        if(body.classList.contains("open")) body.style.maxHeight = "none";
+      });
+    }
+
+    if(headerEl) headerEl.classList.toggle("active", !isOpen);
+  }
+
+  let __prodPushReg = null;
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+
+    return outputArray;
+  }
+
+  async function registerProdPushSW() {
+    if (!("serviceWorker" in navigator)) {
+      throw new Error("Service Worker غير مدعوم");
+    }
+
+    __prodPushReg = await navigator.serviceWorker.register("/prod/promax.js", {
+      scope: "/prod/"
+    });
+
+    return __prodPushReg;
+  }
+
+  async function doEnableProdPushNotifications() {
+    if (!("PushManager" in window) || !("Notification" in window)) {
+      throw new Error("Push غير مدعوم على هذا الجهاز");
+    }
+
+    const reg = __prodPushReg || await registerProdPushSW();
+
+    let permission = Notification.permission;
+    if (permission !== "granted") {
+      permission = await Notification.requestPermission();
+    }
+
+    if (permission !== "granted") {
+      throw new Error("لم يتم منح إذن الإشعارات");
+    }
+
+    const keyRes = await fetch("/api/products/push/public-key", {
+      headers: staffHeaders(),
+      cache: "no-store"
+    });
+
+    const keyData = await keyRes.json().catch(() => ({}));
+    if (!keyRes.ok) {
+      throw new Error(keyData?.error || "فشل جلب المفتاح العام");
+    }
+
+    const publicKey = String(keyData.publicKey || "").trim();
+    if (!publicKey) {
+      throw new Error("المفتاح العام فارغ");
+    }
+
+    let sub = await reg.pushManager.getSubscription();
+
+    if (!sub) {
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicKey)
+      });
+    }
+
+    const saveRes = await fetch("/api/products/push/subscribe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...staffHeaders()
+      },
+      body: JSON.stringify(sub),
+      cache: "no-store"
+    });
+
+    const saveData = await saveRes.json().catch(() => ({}));
+    if (!saveRes.ok) {
+      throw new Error(saveData?.error || "فشل حفظ الاشتراك");
+    }
+
+    toast("ok", "تم", "تم تفعيل إشعارات المنتجات ✅");
+  }
+
+  async function doSendProdPushTest() {
+    const r = await fetch("/api/products/push/send-test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...staffHeaders()
+      },
+      cache: "no-store"
+    });
+
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      throw new Error(d?.error || "فشل إرسال الإشعار التجريبي");
+    }
+
+    toast("ok", "تم", "تم إرسال إشعار تجريبي", 2500);
+  }
+
+  window.enableProdPushNotifications = async () => {
+    try {
+      await doEnableProdPushNotifications();
+    } catch (e) {
+      toast("err", "خطأ", e?.message || "تعذر تفعيل الإشعارات", 3500);
+    }
+  };
+
+  window.sendProdPushTest = async () => {
+    try {
+      await doSendProdPushTest();
+    } catch (e) {
+      toast("err", "خطأ", e?.message || "تعذر إرسال الإشعار التجريبي", 3500);
+    }
+  };
+
+  registerProdPushSW().catch((e) => {
+    console.warn("prod SW register failed", e);
+  });
+
+  window.addEventListener("popstate", (e) => {
+    if(closeTopLayerFromBack()) return;
+
+    if(__allowRealExit) return;
+
+    const state = e.state || {};
+    if(state.appRoot || !state.appLayer){
+      showExitModal();
+      return;
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key !== "Escape") return;
+
+    if(isImgModalOpen()){
+      closeImgModal();
+      return;
+    }
+
+    if(isExitModalOpen()){
+      hideExitModal(false);
+      return;
+    }
+  });
+
+  window.addEventListener("load", () => {
+    armRootHistoryTrap();
+    stSetNoBarcode(false);
+    loadPending();
+  });
+
+  document.addEventListener("visibilitychange", ()=>{
+    if(!document.hidden) loadPending();
+  });
+</script>
+</body>
+</html>

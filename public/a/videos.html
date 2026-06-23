@@ -1,0 +1,1772 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+  />
+  <title>Hala Beauty | الفيديو</title>
+
+  <link rel="manifest" href="/a/promaxa.json">
+  <meta name="theme-color" content="#6B0FA6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="الفيديو">
+  <link rel="apple-touch-icon" href="/a/ico1.png">
+  <link rel="icon" href="/a/ico2.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purple2:#8B47FF;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+
+      --bg:#F8F5FB;
+      --card:#FFFFFF;
+      --ink:#171223;
+      --muted:#7B7189;
+      --line:#EEE6F5;
+      --line2:#E5D7FB;
+      --soft:#F7F0FF;
+
+      --danger:#D94872;
+      --dangerBg:#FFF2F6;
+      --ok:#16845F;
+      --okBg:#ECFBF5;
+      --warn:#B87514;
+      --warnBg:#FFF7EA;
+
+      --shadow:0 16px 38px rgba(60,10,99,.08);
+      --shadow2:0 8px 20px rgba(60,10,99,.06);
+      --r:22px;
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+      overflow-x:hidden;
+      touch-action:manipulation;
+    }
+
+    body{
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(107,15,166,.10), transparent 28%),
+        radial-gradient(circle at 95% 5%, rgba(241,198,177,.18), transparent 28%),
+        linear-gradient(180deg,#FFFFFF 0%,var(--bg) 100%);
+      overscroll-behavior:none;
+      user-select:none;
+    }
+
+    input,button{
+      font:inherit;
+    }
+
+    button{
+      cursor:pointer;
+    }
+
+    img,video{
+      -webkit-user-drag:none;
+      user-select:none;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    .page{
+      width:min(1080px,calc(100% - 18px));
+      margin:9px auto 28px;
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+
+    .appTop{
+      background:rgba(255,255,255,.90);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow2);
+      border-radius:26px;
+      padding:12px;
+      backdrop-filter:blur(16px);
+      position:sticky;
+      top:8px;
+      z-index:30;
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brandIcon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#fff;
+      flex:0 0 auto;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    .brandIcon img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .brandName{
+      margin:0;
+      font-size:20px;
+      font-weight:950;
+      line-height:1.1;
+      color:var(--ink);
+    }
+
+    .brandSub{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .status{
+      min-height:38px;
+      padding:0 12px;
+      border-radius:999px;
+      background:var(--soft);
+      color:var(--purpleDark);
+      border:1px solid #EADBFB;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .searchBar{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:1fr 104px 92px;
+      gap:8px;
+    }
+
+    .field{
+      min-height:48px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:0 12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      box-shadow:0 6px 14px rgba(60,10,99,.04);
+      min-width:0;
+    }
+
+    .field svg{
+      width:18px;
+      height:18px;
+      color:#8B7AA0;
+      flex:0 0 auto;
+    }
+
+    .field input{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      font-size:14px;
+      font-weight:850;
+      color:var(--ink);
+      min-width:0;
+      user-select:text;
+    }
+
+    .field input::placeholder{
+      color:#AFA3BD;
+      font-weight:750;
+    }
+
+    .btn{
+      min-height:48px;
+      border:none;
+      border-radius:16px;
+      padding:0 13px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      font-size:13px;
+      font-weight:950;
+      transition:.15s;
+      white-space:nowrap;
+    }
+
+    .btn:active{
+      transform:scale(.98);
+    }
+
+    .btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .btn svg{
+      width:17px;
+      height:17px;
+      flex:0 0 auto;
+    }
+
+    .btnPrimary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--purple),var(--purple2));
+      box-shadow:0 12px 22px rgba(107,15,166,.20);
+    }
+
+    .btnGhost{
+      color:var(--purpleDark);
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 6px 14px rgba(60,10,99,.04);
+    }
+
+    .panel{
+      margin-top:12px;
+      background:rgba(255,255,255,.90);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:26px;
+      padding:12px;
+    }
+
+    .uploadBox{
+      display:grid;
+      grid-template-columns:1.25fr 1fr 112px;
+      gap:8px;
+      align-items:center;
+    }
+
+    .selected{
+      min-height:52px;
+      border-radius:17px;
+      background:#fff;
+      border:1px solid #EADBFB;
+      color:var(--purpleDark);
+      padding:7px 12px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      font-size:13px;
+      font-weight:950;
+      min-width:0;
+    }
+
+    .selectedThumb{
+      width:40px;
+      height:40px;
+      border:none;
+      padding:0;
+      border-radius:14px;
+      overflow:hidden;
+      background:var(--soft);
+      border:1px solid var(--line);
+      flex:0 0 auto;
+      cursor:zoom-in;
+    }
+
+    .selectedThumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .selectedText{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .selectedText b{
+      display:block;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      font-size:13px;
+      color:var(--purpleDark);
+    }
+
+    .selectedText small{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .fileBox{
+      cursor:pointer;
+    }
+
+    .fileBox input{
+      display:none;
+    }
+
+    .fileName{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:850;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      min-width:0;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:10px 12px;
+      min-height:66px;
+    }
+
+    .stat span{
+      display:block;
+      font-size:11.5px;
+      color:var(--muted);
+      font-weight:850;
+    }
+
+    .stat strong{
+      display:block;
+      margin-top:5px;
+      color:var(--purpleDark);
+      font-size:20px;
+      line-height:1;
+      font-weight:950;
+    }
+
+    .loader{
+      display:none;
+      margin-top:10px;
+      height:8px;
+      border-radius:999px;
+      background:#EEE6F5;
+      overflow:hidden;
+    }
+
+    .loader.show{
+      display:block;
+    }
+
+    .loader i{
+      display:block;
+      height:100%;
+      width:38%;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--purple),var(--purple2));
+      animation:move 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes move{
+      from{transform:translateX(90%)}
+      to{transform:translateX(-180%)}
+    }
+
+    .sectionHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--purpleDark);
+      font-size:14px;
+      font-weight:950;
+    }
+
+    .sectionTitle svg{
+      width:18px;
+      height:18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    .product{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 8px 18px rgba(60,10,99,.05);
+      overflow:hidden;
+      transition:.15s;
+    }
+
+    .product.selectedCard{
+      border-color:rgba(107,15,166,.42);
+      box-shadow:0 12px 24px rgba(107,15,166,.10);
+    }
+
+    .pTop{
+      display:grid;
+      grid-template-columns:76px 1fr;
+      gap:10px;
+      padding:10px;
+      align-items:center;
+    }
+
+    .thumb{
+      width:76px;
+      height:76px;
+      border-radius:18px;
+      background:var(--soft);
+      overflow:hidden;
+      border:1px solid var(--line);
+      position:relative;
+      flex:0 0 auto;
+      cursor:pointer;
+    }
+
+    .thumb img,
+    .thumb video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      background:#111;
+    }
+
+    .videoBadge{
+      position:absolute;
+      top:5px;
+      right:5px;
+      width:26px;
+      height:26px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      background:rgba(107,15,166,.92);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.35);
+      box-shadow:0 8px 16px rgba(60,10,99,.18);
+    }
+
+    .videoBadge svg{
+      width:14px;
+      height:14px;
+    }
+
+    .pMeta{
+      min-width:0;
+    }
+
+    .pName{
+      font-size:14px;
+      font-weight:950;
+      line-height:1.45;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .pSub{
+      margin-top:7px;
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .pill{
+      min-height:26px;
+      padding:0 9px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      font-size:11px;
+      font-weight:950;
+      border:1px solid transparent;
+      max-width:100%;
+    }
+
+    .pill svg{
+      width:13px;
+      height:13px;
+    }
+
+    .pillSoft{
+      color:#6542C8;
+      background:#F7F2FF;
+      border-color:#EADFFF;
+    }
+
+    .pillOk{
+      color:var(--ok);
+      background:var(--okBg);
+      border-color:#D5EEE5;
+    }
+
+    .pillMuted{
+      color:#776B86;
+      background:#FAF8FC;
+      border-color:var(--line);
+    }
+
+    .pActions{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      padding:0 10px 10px;
+    }
+
+    .mini{
+      min-height:38px;
+      border:none;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+
+    .mini svg{
+      width:15px;
+      height:15px;
+    }
+
+    .miniPick{
+      color:#5F35BF;
+      background:#F4EEFF;
+      border:1px solid #E5D7FB;
+    }
+
+    .miniChange{
+      color:var(--ok);
+      background:var(--okBg);
+      border:1px solid #D5EEE5;
+    }
+
+    .miniDanger{
+      color:var(--danger);
+      background:var(--dangerBg);
+      border:1px solid #FFD8E4;
+    }
+
+    .mini:disabled{
+      opacity:.4;
+      cursor:not-allowed;
+    }
+
+    .empty{
+      background:#fff;
+      border:1px dashed var(--line);
+      border-radius:20px;
+      padding:20px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:850;
+    }
+
+    .moreBox{
+      display:flex;
+      justify-content:center;
+      margin-top:10px;
+    }
+
+    .overlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      background:rgba(20,10,32,.48);
+      backdrop-filter:blur(4px);
+      z-index:100;
+    }
+
+    .overlay.open{
+      display:flex;
+    }
+
+    .modal{
+      width:min(420px,100%);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 28px 70px rgba(27,11,49,.24);
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+
+    .modalHead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .modalHead h3{
+      margin:0;
+      font-size:16px;
+      font-weight:950;
+    }
+
+    .modalClose{
+      width:38px;
+      height:38px;
+      border:none;
+      border-radius:13px;
+      background:var(--soft);
+      color:var(--purpleDark);
+      display:grid;
+      place-items:center;
+    }
+
+    .modalClose svg{
+      width:18px;
+      height:18px;
+    }
+
+    .modalBody{
+      padding:16px;
+    }
+
+    .confirmText{
+      padding:13px;
+      border-radius:18px;
+      background:var(--dangerBg);
+      border:1px solid #FFD8E4;
+      color:#7A3150;
+      font-size:13px;
+      font-weight:850;
+      line-height:1.8;
+    }
+
+    .modalActions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .viewer{
+      position:fixed;
+      inset:0;
+      display:none;
+      z-index:250;
+      background:rgba(15,8,24,.82);
+      backdrop-filter:blur(7px);
+      touch-action:none;
+    }
+
+    .viewer.open{
+      display:block;
+    }
+
+    .viewerStage{
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .viewerImg,
+    .viewerVideo{
+      max-width:94vw;
+      max-height:82vh;
+      border-radius:22px;
+      background:#000;
+      box-shadow:0 28px 80px rgba(0,0,0,.36);
+      transform:translate(0px,0px) scale(1);
+      transform-origin:center center;
+      user-select:none;
+      -webkit-user-drag:none;
+      will-change:transform;
+    }
+
+    .viewerImg{
+      object-fit:contain;
+      cursor:zoom-out;
+    }
+
+    .viewerVideo{
+      width:min(980px,94vw);
+      height:auto;
+      max-height:82vh;
+      outline:none;
+    }
+
+    .viewerTools{
+      position:absolute;
+      top:calc(12px + env(safe-area-inset-top));
+      left:12px;
+      right:12px;
+      z-index:3;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      pointer-events:none;
+    }
+
+    .viewerToolsGroup{
+      display:flex;
+      gap:8px;
+      pointer-events:auto;
+    }
+
+    .toolBtn{
+      min-width:42px;
+      height:42px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,.92);
+      color:var(--purpleDark);
+      border:1px solid rgba(255,255,255,.38);
+      box-shadow:0 12px 28px rgba(0,0,0,.18);
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      font-weight:950;
+      backdrop-filter:blur(8px);
+    }
+
+    .toolBtn.smallText{
+      min-width:58px;
+      padding:0 10px;
+      font-size:12px;
+    }
+
+    .toast{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:calc(12px + env(safe-area-inset-bottom));
+      min-height:50px;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:12px 14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 18px 38px rgba(27,11,49,.18);
+      color:var(--purpleDark);
+      font-size:13px;
+      font-weight:950;
+      z-index:300;
+      text-align:center;
+    }
+
+    .toast.show{
+      display:flex;
+    }
+
+    svg{
+      fill:none;
+      stroke:currentColor;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    @media (min-width:760px){
+      .grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .pTop{
+        grid-template-columns:88px 1fr;
+      }
+
+      .thumb{
+        width:88px;
+        height:88px;
+      }
+    }
+
+    @media (min-width:1120px){
+      .grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:640px){
+      .page{
+        width:calc(100% - 14px);
+        margin-top:8px;
+      }
+
+      .appTop{
+        position:relative;
+        top:auto;
+        border-radius:22px;
+      }
+
+      .topRow{
+        align-items:flex-start;
+      }
+
+      .brand{
+        flex:1;
+      }
+
+      .brandIcon{
+        width:42px;
+        height:42px;
+        border-radius:14px;
+      }
+
+      .brandName{
+        font-size:18px;
+      }
+
+      .searchBar{
+        grid-template-columns:1fr;
+      }
+
+      .uploadBox{
+        grid-template-columns:1fr;
+      }
+
+      .stats{
+        grid-template-columns:repeat(3,1fr);
+      }
+
+      .stat{
+        padding:9px;
+        border-radius:16px;
+      }
+
+      .stat strong{
+        font-size:18px;
+      }
+
+      .panel{
+        border-radius:22px;
+        padding:10px;
+      }
+
+      .pActions{
+        grid-template-columns:1fr;
+      }
+
+      .viewerStage{
+        padding:10px;
+      }
+
+      .viewerImg,
+      .viewerVideo{
+        max-width:96vw;
+        max-height:78vh;
+        border-radius:18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <svg width="0" height="0" style="position:absolute;visibility:hidden">
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M20 20l-3.6-3.6"></path>
+    </symbol>
+
+    <symbol id="i-video" viewBox="0 0 24 24">
+      <rect x="3" y="6" width="13" height="12" rx="2"></rect>
+      <path d="M16 10l5-3v10l-5-3"></path>
+    </symbol>
+
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="M20 6L9 17l-5-5"></path>
+    </symbol>
+
+    <symbol id="i-close" viewBox="0 0 24 24">
+      <path d="M18 6L6 18"></path>
+      <path d="M6 6l12 12"></path>
+    </symbol>
+
+    <symbol id="i-refresh" viewBox="0 0 24 24">
+      <path d="M21 2v6h-6"></path>
+      <path d="M3 12a9 9 0 0 1 15.5-6.4L21 8"></path>
+      <path d="M3 22v-6h6"></path>
+      <path d="M21 12a9 9 0 0 1-15.5 6.4L3 16"></path>
+    </symbol>
+
+    <symbol id="i-upload" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <path d="M17 8l-5-5-5 5"></path>
+      <path d="M12 3v12"></path>
+    </symbol>
+
+    <symbol id="i-trash" viewBox="0 0 24 24">
+      <path d="M3 6h18"></path>
+      <path d="M8 6V4h8v2"></path>
+      <path d="M19 6l-1 14H6L5 6"></path>
+      <path d="M10 11v5"></path>
+      <path d="M14 11v5"></path>
+    </symbol>
+
+    <symbol id="i-box" viewBox="0 0 24 24">
+      <path d="M21 16V8a2 2 0 0 0-1-1.7L12 2 4 6.3A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7L12 22l8-4.3a2 2 0 0 0 1-1.7z"></path>
+      <path d="M3.3 7L12 12l8.7-5"></path>
+      <path d="M12 22V12"></path>
+    </symbol>
+  </svg>
+
+  <div class="page">
+    <div class="appTop">
+      <div class="topRow">
+        <div class="brand">
+          <div class="brandIcon">
+            <img src="/a/ico1.png" alt="">
+          </div>
+          <div>
+            <h1 class="brandName">الفيديو</h1>
+            <div class="brandSub">Hala Beauty</div>
+          </div>
+        </div>
+
+        <div class="status">
+          <svg width="16" height="16"><use href="#i-check"></use></svg>
+          <span id="statusText">جاهز</span>
+        </div>
+      </div>
+
+      <div class="searchBar">
+        <label class="field">
+          <svg><use href="#i-search"></use></svg>
+          <input id="searchInput" type="search" autocomplete="off" placeholder="بحث">
+        </label>
+
+        <button id="searchBtn" class="btn btnPrimary" type="button">
+          <svg><use href="#i-search"></use></svg>
+          بحث
+        </button>
+
+        <button id="clearBtn" class="btn btnGhost" type="button">
+          <svg><use href="#i-close"></use></svg>
+          مسح
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" id="uploadPanel">
+      <div class="uploadBox">
+        <div class="selected">
+          <button id="selectedThumb" class="selectedThumb hidden" type="button">
+            <img id="selectedThumbImg" src="" alt="">
+          </button>
+
+          <svg width="18" height="18"><use href="#i-check"></use></svg>
+
+          <div class="selectedText">
+            <b id="selectedText">اختر منتج</b>
+            <small id="selectedHint">جاهز للرفع</small>
+          </div>
+        </div>
+
+        <label class="field fileBox">
+          <svg><use href="#i-video"></use></svg>
+          <span class="fileName" id="fileName">اختر ملف</span>
+          <input id="videoInput" type="file" accept="video/*">
+        </label>
+
+        <button id="uploadBtn" class="btn btnPrimary" type="button" disabled>
+          <svg><use href="#i-upload"></use></svg>
+          رفع
+        </button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span>المعروض</span>
+          <strong id="countShown">0</strong>
+        </div>
+        <div class="stat">
+          <span>فيديو</span>
+          <strong id="countVideo">0</strong>
+        </div>
+        <div class="stat">
+          <span>المحدد</span>
+          <strong id="countSelected">0</strong>
+        </div>
+      </div>
+
+      <div class="loader" id="loader"><i></i></div>
+    </div>
+
+    <div class="panel">
+      <div class="sectionHead">
+        <div class="sectionTitle">
+          <svg><use href="#i-video"></use></svg>
+          <span id="listTitle">المنتجات التي تحتوي فيديو</span>
+        </div>
+
+        <button id="refreshBtn" class="btn btnGhost" type="button">
+          <svg><use href="#i-refresh"></use></svg>
+          تحديث
+        </button>
+      </div>
+
+      <div id="grid" class="grid">
+        <div class="empty">جاري التحميل.</div>
+      </div>
+
+      <div class="moreBox">
+        <button id="moreBtn" class="btn btnGhost" type="button" disabled>
+          المزيد
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="confirmOverlay">
+    <div class="modal">
+      <div class="modalHead">
+        <h3>حذف الفيديو</h3>
+        <button id="modalClose" class="modalClose" type="button">
+          <svg><use href="#i-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="modalBody">
+        <div class="confirmText" id="confirmText">هل تريد الحذف؟</div>
+
+        <div class="modalActions">
+          <button id="confirmDelete" class="btn btnPrimary" type="button">
+            <svg><use href="#i-trash"></use></svg>
+            حذف
+          </button>
+
+          <button id="cancelDelete" class="btn btnGhost" type="button">إغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mediaViewer" class="viewer" aria-hidden="true">
+    <div class="viewerTools">
+      <div class="viewerToolsGroup">
+        <button id="viewerZoomIn" class="toolBtn" type="button">+</button>
+        <button id="viewerZoomOut" class="toolBtn" type="button">−</button>
+        <button id="viewerZoomReset" class="toolBtn smallText" type="button">100%</button>
+      </div>
+
+      <div class="viewerToolsGroup">
+        <button id="viewerClose" class="toolBtn" type="button">أ—</button>
+      </div>
+    </div>
+
+    <div id="viewerStage" class="viewerStage">
+      <img id="viewerImg" class="viewerImg hidden" src="" alt="">
+      <video id="viewerVideo" class="viewerVideo hidden" controls playsinline preload="metadata"></video>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+<script type="module">
+  import { requirePackLogin, authFetch } from "./auth.js";
+  requirePackLogin();
+
+  const $ = (id) => document.getElementById(id);
+
+  const state = {
+    mode: "videos",
+    items: [],
+    selected: null,
+    selectedProducts: [],
+    file: null,
+    deleteTarget: null,
+    after: "",
+    hasNext: false,
+    lastQuery: ""
+  };
+
+  const viewer = {
+    type: "",
+    scale: 1,
+    x: 0,
+    y: 0,
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    pointerId: null
+  };
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[m]));
+  }
+
+  function setStatus(s){
+    $("statusText").textContent = s || "جاهز";
+  }
+
+  function showToast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => t.classList.remove("show"), 1800);
+  }
+
+  function loading(on){
+    $("loader").classList.toggle("show", Boolean(on));
+  }
+
+  function imgOf(p){
+    let u = p?.image || "";
+    if (u.startsWith("//")) u = "https:" + u;
+    return u || "/a/ico1.png";
+  }
+
+  function firstVideo(p){
+    return Array.isArray(p?.videos) ? (p.videos[0] || null) : null;
+  }
+
+  function firstVideoUrl(p){
+    return firstVideo(p)?.url || "";
+  }
+
+  function selectedLabel(){
+    if (!state.selectedProducts.length) return "جاهز للرفع";
+    const hasVideo = state.selectedProducts.some((p) => p.hasVideo);
+    return hasVideo ? "يمكن التغيير أو الحذف" : "يمكن الرفع";
+  }
+
+  function updateStats(){
+    $("countShown").textContent = String(state.items.length);
+    $("countVideo").textContent = String(state.items.filter(x => x.hasVideo).length);
+    $("countSelected").textContent = String(state.selectedProducts.length);
+
+    $("selectedText").textContent = state.selectedProducts.length > 1 ? `${state.selectedProducts.length} منتجات محددة` : state.selected?.title || "اختر منتج";
+    $("selectedHint").textContent = selectedLabel();
+
+    if (state.selected?.id) {
+      $("selectedThumbImg").src = imgOf(state.selected);
+      $("selectedThumb").classList.remove("hidden");
+    } else {
+      $("selectedThumbImg").removeAttribute("src");
+      $("selectedThumb").classList.add("hidden");
+    }
+
+    const hasVideo = state.selectedProducts.some((p) => p.hasVideo);
+
+    $("uploadBtn").innerHTML = hasVideo
+      ? `<svg><use href="#i-refresh"></use></svg> تغيير`
+      : `<svg><use href="#i-upload"></use></svg> رفع`;
+
+    $("uploadBtn").disabled = !(state.selectedProducts.length && state.file);
+    $("moreBtn").disabled = !(state.mode === "videos" && state.hasNext);
+    $("listTitle").textContent = state.mode === "search" ? "نتائج البحث" : "المنتجات التي تحتوي فيديو";
+  }
+
+  function render(){
+    updateStats();
+
+    const grid = $("grid");
+
+    if (!state.items.length){
+      grid.innerHTML = `<div class="empty">${state.mode === "search" ? "لا توجد نتائج." : "لا توجد منتجات."}</div>`;
+      return;
+    }
+
+    const selectedIds = new Set(state.selectedProducts.map((p) => p.id));
+
+    grid.innerHTML = state.items.map((p) => {
+      const v = firstVideo(p);
+      const videoUrl = v?.url || "";
+      const preview = v?.previewImage || imgOf(p);
+      const selected = selectedIds.has(p.id);
+      const imageSrc = imgOf(p);
+
+      const media = `
+        <img
+          src="${esc(preview || imageSrc)}"
+          alt="${esc(p.title || "")}"
+          loading="lazy"
+          data-media-act="${videoUrl ? "video" : "image"}"
+          data-media-src="${esc(videoUrl || imageSrc)}"
+          data-media-poster="${esc(preview || imageSrc)}"
+          onerror="this.onerror=null;this.src='/a/ico1.png';"
+        >
+      `;
+
+      return `
+        <article class="product ${selected ? "selectedCard" : ""}" data-id="${esc(p.id)}">
+          <div class="pTop">
+            <div class="thumb" data-act="${videoUrl ? "open-video" : "open-image"}" data-src="${esc(videoUrl || imageSrc)}" data-poster="${esc(preview || imageSrc)}">
+              ${media}
+              ${p.hasVideo ? `<div class="videoBadge"><svg><use href="#i-video"></use></svg></div>` : ``}
+            </div>
+
+            <div class="pMeta">
+              <div class="pName">${esc(p.title || "منتج")}</div>
+
+              <div class="pSub">
+                ${p.vendor ? `<span class="pill pillSoft">${esc(p.vendor)}</span>` : ``}
+                ${p.productType ? `<span class="pill pillMuted">${esc(p.productType)}</span>` : ``}
+                ${p.productCount > 1 ? `<span class="pill pillOk"><svg><use href="#i-box"></use></svg>${Number(p.productCount)}</span>` : ``}
+                ${p.hasVideo ? `<span class="pill pillOk"><svg><use href="#i-video"></use></svg>${Number(p.videoCount || 1)}</span>` : `<span class="pill pillMuted">بدون فيديو</span>`}
+              </div>
+            </div>
+          </div>
+
+          <div class="pActions">
+            <button class="mini miniPick" data-act="select" type="button">
+              <svg><use href="#i-check"></use></svg>
+              اختيار
+            </button>
+
+            <button class="mini miniChange" data-act="change" type="button">
+              <svg><use href="#i-refresh"></use></svg>
+              تغيير
+            </button>
+
+            <button class="mini miniDanger" data-act="delete" type="button" ${p.hasVideo ? "" : "disabled"}>
+              <svg><use href="#i-trash"></use></svg>
+              حذف
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  async function loadVideos({ reset = false } = {}){
+    if (reset) {
+      state.mode = "videos";
+      state.items = [];
+      state.after = "";
+      state.hasNext = false;
+    }
+
+    loading(true);
+    setStatus("تحميل");
+
+    try{
+      const qs = new URLSearchParams({ limit: "12" });
+      if (state.after) qs.set("after", state.after);
+
+      const r = await authFetch("/pro/product-videos/with-video?" + qs.toString(), {
+        cache: "no-store"
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التحميل");
+
+      const incoming = Array.isArray(d.items) ? d.items : [];
+      const seen = new Set(state.items.map(x => x.id));
+
+      for (const item of incoming) {
+        if (!seen.has(item.id)) {
+          state.items.push(item);
+          seen.add(item.id);
+        }
+      }
+
+      state.after = d.next || "";
+      state.hasNext = Boolean(d.hasNext && state.after);
+
+      setStatus("جاهز");
+      render();
+    } catch(e) {
+      setStatus("خطأ");
+      $("grid").innerHTML = `<div class="empty">${esc(e?.message || e)}</div>`;
+    } finally {
+      loading(false);
+    }
+  }
+
+  async function searchProducts(){
+    const q = ($("searchInput").value || "").trim();
+    state.lastQuery = q;
+
+    if (!q || q.length < 2){
+      await loadVideos({ reset:true });
+      return;
+    }
+
+    state.mode = "search";
+    state.items = [];
+    state.hasNext = false;
+    state.after = "";
+
+    loading(true);
+    setStatus("بحث");
+
+    try{
+      const qs = new URLSearchParams({
+        q,
+        limit: "24"
+      });
+
+      const r = await authFetch("/pro/product-videos/products?" + qs.toString(), {
+        cache: "no-store"
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل البحث");
+
+      state.items = Array.isArray(d.items) ? d.items : [];
+      setStatus("جاهز");
+      render();
+    } catch(e) {
+      setStatus("خطأ");
+      $("grid").innerHTML = `<div class="empty">${esc(e?.message || e)}</div>`;
+    } finally {
+      loading(false);
+    }
+  }
+
+  function selectProduct(id){
+    const p = state.items.find(x => x.id === id);
+    if (!p) return;
+
+    const exists = state.selectedProducts.some((item) => item.id === id);
+    state.selectedProducts = exists
+      ? state.selectedProducts.filter((item) => item.id !== id)
+      : [...state.selectedProducts, p];
+    state.selected = state.selectedProducts[0] || null;
+    render();
+
+    setTimeout(() => {
+      $("uploadPanel").scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+    }, 40);
+  }
+
+  function openDelete(id){
+    const p = state.items.find(x => x.id === id);
+    if (!p) return;
+
+    state.deleteTarget = p;
+    $("confirmText").innerHTML = `سيتم حذف فيديو <b>${esc(p.title || "")}</b>.`;
+    $("confirmOverlay").classList.add("open");
+  }
+
+  function closeDelete(){
+    state.deleteTarget = null;
+    $("confirmOverlay").classList.remove("open");
+  }
+
+  async function confirmDelete(){
+    const p = state.deleteTarget;
+    if (!p?.id) return;
+
+    loading(true);
+    setStatus("حذف");
+
+    try{
+      const r = await authFetch("/pro/product-videos/delete", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ productId:p.id })
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
+
+      closeDelete();
+
+      if (state.selected?.id === p.id) {
+        state.selected = d.product || null;
+      }
+      state.selectedProducts = state.selectedProducts.filter((item) => item.id !== p.id);
+
+      if (state.mode === "search") {
+        await searchProducts();
+      } else {
+        await loadVideos({ reset:true });
+      }
+
+      setStatus("تم");
+      showToast("تم الحذف");
+    } catch(e) {
+      setStatus("خطأ");
+      alert(e?.message || e);
+    } finally {
+      loading(false);
+    }
+  }
+
+  async function uploadVideo(){
+    if (!state.selectedProducts.length){
+      showToast("اختر منتج");
+      return;
+    }
+
+    if (!state.file){
+      showToast("اختر ملف");
+      return;
+    }
+
+    const fd = new FormData();
+    fd.append("productIds", JSON.stringify(state.selectedProducts.map((p) => p.id)));
+    fd.append("video", state.file);
+    fd.append("replaceExisting", state.selectedProducts.some((p) => p.hasVideo) ? "1" : "0");
+
+    loading(true);
+    setStatus(state.selectedProducts.some((p) => p.hasVideo) ? "تغيير" : "رفع");
+    $("uploadBtn").disabled = true;
+
+    try{
+      const r = await authFetch("/pro/product-videos/upload", {
+        method:"POST",
+        body:fd
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل العملية");
+
+      state.file = null;
+      $("videoInput").value = "";
+      $("fileName").textContent = "اختر ملف";
+
+      state.selectedProducts = Array.isArray(d.products) ? d.products : [];
+      state.selected = state.selectedProducts[0] || d.product || null;
+
+      if (state.mode === "search") {
+        await searchProducts();
+      } else {
+        await loadVideos({ reset:true });
+      }
+
+      setStatus("تم");
+      if (Array.isArray(d.failedProducts) && d.failedProducts.length) {
+        const details = d.failedProducts
+          .map((item) => item?.error)
+          .filter(Boolean)
+          .join(" | ");
+        showToast(`تم رفع ${d.count || state.selectedProducts.length - d.failedProducts.length} وفشل ${d.failedProducts.length}${details ? `: ${details}` : ""}`);
+      } else {
+        showToast("تم");
+      }
+    } catch(e) {
+      setStatus("خطأ");
+      alert(e?.message || e);
+    } finally {
+      loading(false);
+      updateStats();
+    }
+  }
+
+  function resetViewer(){
+    viewer.scale = 1;
+    viewer.x = 0;
+    viewer.y = 0;
+    applyViewerTransform();
+  }
+
+  function applyViewerTransform(){
+    const target = viewer.type === "image" ? $("viewerImg") : $("viewerVideo");
+    target.style.transform = `translate(${viewer.x}px, ${viewer.y}px) scale(${viewer.scale})`;
+    $("viewerZoomReset").textContent = `${Math.round(viewer.scale * 100)}%`;
+  }
+
+  function setViewerZoom(next){
+    viewer.scale = Math.min(4, Math.max(1, Number(next) || 1));
+
+    if (viewer.scale === 1) {
+      viewer.x = 0;
+      viewer.y = 0;
+    }
+
+    applyViewerTransform();
+  }
+
+  function openImageViewer(src){
+    if (!src) return;
+
+    viewer.type = "image";
+    resetViewer();
+
+    $("viewerVideo").pause();
+    $("viewerVideo").removeAttribute("src");
+    $("viewerVideo").classList.add("hidden");
+
+    $("viewerImg").src = src;
+    $("viewerImg").classList.remove("hidden");
+
+    $("mediaViewer").classList.add("open");
+    $("mediaViewer").setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function openVideoViewer(src, poster = ""){
+    if (!src) return;
+
+    viewer.type = "video";
+    resetViewer();
+
+    $("viewerImg").removeAttribute("src");
+    $("viewerImg").classList.add("hidden");
+
+    const video = $("viewerVideo");
+    video.src = src;
+    if (poster) video.poster = poster;
+    else video.removeAttribute("poster");
+
+    video.classList.remove("hidden");
+
+    $("mediaViewer").classList.add("open");
+    $("mediaViewer").setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    setTimeout(() => {
+      video.play().catch(() => {});
+    }, 120);
+  }
+
+  function closeViewer(){
+    const media = $("mediaViewer");
+    const video = $("viewerVideo");
+
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+
+    $("viewerImg").removeAttribute("src");
+    $("viewerImg").classList.add("hidden");
+    video.classList.add("hidden");
+
+    media.classList.remove("open");
+    media.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+
+    viewer.type = "";
+    resetViewer();
+  }
+
+  $("searchBtn").addEventListener("click", searchProducts);
+
+  let searchTimer = null;
+  $("searchInput").addEventListener("input", () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(searchProducts, 450);
+  });
+
+  $("searchInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") searchProducts();
+  });
+
+  $("clearBtn").addEventListener("click", async () => {
+    $("searchInput").value = "";
+    state.selected = null;
+    state.selectedProducts = [];
+    await loadVideos({ reset:true });
+  });
+
+  $("refreshBtn").addEventListener("click", async () => {
+    if (state.mode === "search") {
+      await searchProducts();
+    } else {
+      await loadVideos({ reset:true });
+    }
+  });
+
+  $("moreBtn").addEventListener("click", () => {
+    if (state.mode === "videos" && state.hasNext) loadVideos();
+  });
+
+  $("videoInput").addEventListener("change", () => {
+    const f = $("videoInput").files?.[0] || null;
+    state.file = f;
+    $("fileName").textContent = f ? `${f.name} - ${(f.size / 1024 / 1024).toFixed(1)} MB` : "اختر ملف";
+    updateStats();
+  });
+
+  $("uploadBtn").addEventListener("click", uploadVideo);
+
+  $("modalClose").addEventListener("click", closeDelete);
+  $("cancelDelete").addEventListener("click", closeDelete);
+  $("confirmDelete").addEventListener("click", confirmDelete);
+
+  $("confirmOverlay").addEventListener("click", (e) => {
+    if (e.target === $("confirmOverlay")) closeDelete();
+  });
+
+  $("selectedThumb").addEventListener("click", () => {
+    if (state.selected?.id) {
+      openImageViewer(imgOf(state.selected));
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    const thumb = e.target.closest(".thumb");
+    if (thumb) {
+      const src = thumb.getAttribute("data-src") || "";
+      const poster = thumb.getAttribute("data-poster") || "";
+      const act = thumb.getAttribute("data-act") || "";
+
+      if (act === "open-video") {
+        openVideoViewer(src, poster);
+      } else {
+        openImageViewer(src);
+      }
+
+      return;
+    }
+
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+
+    const card = e.target.closest(".product");
+    const id = card?.getAttribute("data-id") || "";
+    const act = btn.getAttribute("data-act");
+
+    if (act === "select" || act === "change") selectProduct(id);
+    if (act === "delete") openDelete(id);
+  });
+
+  $("viewerClose").addEventListener("click", closeViewer);
+
+  $("mediaViewer").addEventListener("click", (e) => {
+    if (e.target === $("mediaViewer") || e.target === $("viewerStage") || e.target === $("viewerImg")) {
+      closeViewer();
+    }
+  });
+
+  $("viewerZoomIn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    setViewerZoom(viewer.scale + 0.25);
+  });
+
+  $("viewerZoomOut").addEventListener("click", (e) => {
+    e.stopPropagation();
+    setViewerZoom(viewer.scale - 0.25);
+  });
+
+  $("viewerZoomReset").addEventListener("click", (e) => {
+    e.stopPropagation();
+    setViewerZoom(1);
+  });
+
+  $("viewerVideo").addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  $("viewerStage").addEventListener("pointerdown", (e) => {
+    if (!viewer.type || viewer.scale <= 1) return;
+
+    viewer.dragging = true;
+    viewer.pointerId = e.pointerId;
+    viewer.startX = e.clientX - viewer.x;
+    viewer.startY = e.clientY - viewer.y;
+
+    try {
+      $("viewerStage").setPointerCapture(e.pointerId);
+    } catch {}
+  });
+
+  $("viewerStage").addEventListener("pointermove", (e) => {
+    if (!viewer.dragging || e.pointerId !== viewer.pointerId) return;
+
+    viewer.x = e.clientX - viewer.startX;
+    viewer.y = e.clientY - viewer.startY;
+    applyViewerTransform();
+  });
+
+  function endViewerDrag(e){
+    if (viewer.pointerId !== null && e.pointerId !== viewer.pointerId) return;
+
+    viewer.dragging = false;
+    viewer.pointerId = null;
+  }
+
+  $("viewerStage").addEventListener("pointerup", endViewerDrag);
+  $("viewerStage").addEventListener("pointercancel", endViewerDrag);
+
+  $("mediaViewer").addEventListener("wheel", (e) => {
+    if (!$("mediaViewer").classList.contains("open")) return;
+
+    e.preventDefault();
+    setViewerZoom(viewer.scale + (e.deltaY < 0 ? 0.15 : -0.15));
+  }, { passive:false });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeViewer();
+  });
+
+  document.addEventListener("gesturestart", (e) => {
+    e.preventDefault();
+  });
+
+  document.addEventListener("dblclick", (e) => {
+    e.preventDefault();
+  }, { passive:false });
+
+  document.addEventListener("touchmove", (e) => {
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive:false });
+
+  loadVideos({ reset:true });
+</script>
+</body>
+</html>
+

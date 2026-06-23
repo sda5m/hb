@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="color-scheme" content="light dark">
+  <title>Hala Beauty | مدير مالي</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./promax.css">
+</head>
+
+<body>
+  <!-- Toasts -->
+  <div class="toasts" id="toasts"></div>
+
+  <!-- Mobile overlay -->
+  <div class="side-overlay" id="sideOverlay" aria-hidden="true"></div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="box">
+      <div class="spinner"></div>
+      <div>
+        <b id="loadingTitle">جارٍ الشغل…</b>
+        <p id="loadingHint">لحظة وبتكمل</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal (Reusable) -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="hd">
+        <div class="left">
+          <div class="icon" id="modalIcon"></div>
+          <div>
+            <h4 id="modalTitle">عنوان</h4>
+            <div class="sub" id="modalSub">وصف</div>
+          </div>
+        </div>
+        <div class="right" id="modalTopActions"></div>
+      </div>
+      <div class="bd" id="modalBody"></div>
+      <div class="ft" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="side">
+      <div class="brand">
+        <div class="mark" title="Hala Beauty">
+          <img src="https://halabt.com/favicon.ico" alt="Hala Beauty Logo">
+        </div>
+        <div>
+          <h1>لوحة المدير المالي</h1>
+          <p>ترحيل الطلبات + ديون التجار + صرفيات (شغل مرتب)</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="active" data-tab="overview">
+          <span class="l"><span class="ic" data-ic="grid"></span>الملخص</span>
+          <small>نظرة سريعة</small>
+        </button>
+
+        <button data-tab="orders">
+          <span class="l"><span class="ic" data-ic="repeat"></span>ترحيل الطلبات</span>
+          <small>Shopify</small>
+        </button>
+
+        <button data-tab="debts">
+          <span class="l"><span class="ic" data-ic="wallet"></span>ديون التجار</span>
+          <small>إضافة/سداد</small>
+        </button>
+
+        <button data-tab="expenses">
+          <span class="l"><span class="ic" data-ic="receipt"></span>الصرفيات</span>
+          <small>ترحيل جزئي/كامل</small>
+        </button>
+      </nav>
+
+      <div class="foot">
+        <div style="font-weight:1100;color:#fff;margin-bottom:6px">ملاحظات سريعة</div>
+        • الترحيل حق الطلبات يحدّث نقطة البداية تلقائي<br>
+        • الصرفيات تقدر ترحّل المحدد أو الكل<br>
+        • أي مرفق (رابط إيصال) له معاينة داخل منبثق
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="topbar">
+        <div class="title">
+          <h2>Hala Beauty — المدير المالي</h2>
+          <p id="subtitle">كل شي قدّامك… راجع، رحّل، وسوِّ تقارير وانت مرتاح</p>
+        </div>
+
+        <div class="actions">
+          <button class="btn menu" id="btnMenu" type="button" aria-label="القائمة" aria-expanded="false">
+            <span class="ic" data-ic="grid"></span>
+            القائمة
+          </button>
+
+          <button class="btn primary" id="btnRefresh">
+            <span class="ic" data-ic="refresh"></span>
+            تحديث
+          </button>
+
+          <button class="btn" id="btnExport">
+            <span class="ic" data-ic="download"></span>
+            تصدير JSON
+          </button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- KPIs -->
+        <div class="card">
+          <div class="kpi-label">إجمالي الديون (تجار)</div>
+          <div class="kpi-value" id="kpiDebt">—</div>
+          <div class="kpi-sub"><span class="badge warn" id="kpiDebtBadge">قيد الحساب</span></div>
+        </div>
+
+        <div class="card">
+          <div class="kpi-label">إجمالي الصرفيات</div>
+          <div class="kpi-value" id="kpiExp">—</div>
+          <div class="kpi-sub"><span class="badge info" id="kpiExpBadge">قيد الحساب</span></div>
+        </div>
+
+        <div class="card">
+          <div class="kpi-label">إجمالي الطلبات (من الملخص)</div>
+          <div class="kpi-value" id="kpiOrders">—</div>
+          <div class="kpi-sub" id="kpiSince">—</div>
+        </div>
+
+        <div class="card">
+          <div class="kpi-label">حالة اللوحة</div>
+          <div class="kpi-value" id="kpiStatus">جاهز</div>
+          <div class="kpi-sub"><span class="badge good">شغّال تمام</span></div>
+        </div>
+
+        <!-- Overview -->
+        <section class="panel" data-tabpanel="overview" id="panelOverview">
+          <div class="panel-hd">
+            <h3>ملخص سريع</h3>
+            <div class="tools">
+<button class="btn report-btn" id="btnXlsxOverview" type="button">
+  <span class="ic" data-ic="excel"></span>
+  تحميل التقرير
+</button>
+              <input class="input" id="qOverview" placeholder="ابحث بالاسم/بوابة الدفع…" />
+              <select class="select" id="modeOverview">
+                <option value="all">الكل</option>
+                <option value="amwal">أموال</option>
+                <option value="bank">بنك</option>
+                <option value="other">أخرى</option>
+              </select>
+            </div>
+          </div>
+          <div id="overviewBody" class="empty">اضغط “تحديث” وخلك معنا</div>
+        </section>
+
+        <!-- Orders Transfer -->
+        <section class="panel" data-tabpanel="orders" id="panelOrders" style="display:none">
+          <div class="panel-hd">
+            <h3>ترحيل الطلبات</h3>
+            <div class="tools">
+              <button class="btn report-btn" id="btnXlsxOrders" type="button">
+                <span class="ic" data-ic="excel"></span>
+                تحميل التقرير
+              </button>
+
+              <select class="select" id="ordersLimit">
+                <option value="80">80 طلب</option>
+                <option value="140" selected>140 طلب</option>
+                <option value="250">250 طلب</option>
+              </select>
+
+              <input class="input" id="ordersNote" placeholder="ملاحظة للترحيل (اختياري)..." />
+
+              <button class="btn primary" id="btnOrdersTransfer" type="button">
+                <span class="ic" data-ic="send"></span>
+                ترحيل
+              </button>
+            </div>
+          </div>
+
+          <div class="orders-wrap">
+            <div class="orders-sum">
+              <div class="box-title">إجمالي حسب البوابة</div>
+
+              <div class="sum-list">
+                <div class="sum-row"><span>أموال</span><b id="sumAmwal">—</b></div>
+                <div class="sum-row"><span>بنك</span><b id="sumBank">—</b></div>
+                <div class="sum-row sum-total">
+                  <span>الكل</span><b id="sumAll">—</b>
+                </div>
+              </div>
+
+              <div class="sum-hint">
+                “رحّل الآن” يسجل ترحيل ويحدّث نقطة البداية تلقائي.
+              </div>
+            </div>
+
+            <div class="orders-list">
+              <div class="orders-head">
+                <div class="box-title">قائمة الطلبات (آخر جلب)</div>
+                <div class="box-sub" id="ordersCount">—</div>
+              </div>
+
+              <div class="orders-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الطلب</th>
+                      <th>العميل</th>
+                      <th>المبلغ</th>
+                      <th>البوابة</th>
+                      <th>التاريخ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ordersTbody"></tbody>
+                </table>
+                <div id="ordersEmpty" class="empty" style="display:none">مافيش بيانات</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Debts -->
+        <section class="panel" data-tabpanel="debts" id="panelDebts" style="display:none">
+          <div class="panel-hd">
+            <h3>ديون التجار</h3>
+            <div class="tools">
+              <button class="btn report-btn" id="btnXlsxDebts" type="button">
+                <span class="ic" data-ic="excel"></span>
+                تحميل التقرير
+              </button>
+
+              <input class="input" id="qDebts" placeholder="ابحث باسم التاجر..." />
+
+              <button class="btn" id="btnDebtAdd" type="button">
+                <span class="ic" data-ic="plus"></span>
+                إضافة دين
+              </button>
+
+              <button class="btn" id="btnDebtPay" type="button">
+                <span class="ic" data-ic="minus"></span>
+                سداد دين
+              </button>
+            </div>
+          </div>
+
+          <div style="max-height:62vh; overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>التاجر</th>
+                  <th>المبلغ</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="debtsTbody"></tbody>
+            </table>
+            <div id="debtsEmpty" class="empty" style="display:none">مافيش ديون مطابقة</div>
+          </div>
+        </section>
+
+        <!-- Expenses -->
+        <section class="panel" data-tabpanel="expenses" id="panelExpenses" style="display:none">
+          <div class="panel-hd">
+            <h3>الصرفيات</h3>
+            <div class="tools">
+<button class="btn report-btn" id="btnXlsxExpenses" type="button">
+  <span class="ic" data-ic="excel"></span>
+  تحميل التقرير
+</button>
+              <input class="input" id="qExp" placeholder="ابحث بالسبب..." />
+
+              <button class="btn" id="btnExpSelectAll" type="button">
+                <span class="ic" data-ic="check"></span>
+                تحديد الكل
+              </button>
+
+              <button class="btn primary" id="btnExpTransferSelected" type="button">
+                <span class="ic" data-ic="send"></span>
+                رحّل المحدد
+              </button>
+
+              <button class="btn danger" id="btnExpTransferAll" type="button">
+                <span class="ic" data-ic="trash"></span>
+                رحّل الكل
+              </button>
+            </div>
+          </div>
+
+          <div style="max-height:62vh; overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="expHeadChk" class="chk" title="تحديد الكل"></th>
+                  <th>السبب</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                  <th>المرفق</th>
+                </tr>
+              </thead>
+              <tbody id="expTbody"></tbody>
+            </table>
+            <div id="expEmpty" class="empty" style="display:none">مافيش صرفيات مطابقة</div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="./promaxk.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</body>
+</html>

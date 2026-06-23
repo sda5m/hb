@@ -1,0 +1,1313 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | إدارة الماركات</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+      --card:rgba(255,255,255,.95);
+      --line:rgba(16,24,40,.10);
+      --soft:rgba(107,15,166,.08);
+      --shadow:0 14px 34px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --r16:16px;
+      --r18:18px;
+      --r20:20px;
+      --r22:22px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(241,198,177,.28), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(107,15,166,.16), transparent 28%),
+        linear-gradient(180deg, rgba(60,10,99,.58), rgba(241,198,177,.34)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+    .wrap{
+      max-width:1480px;
+      margin:0 auto;
+      padding:16px 16px 28px;
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px;
+      border-radius:var(--r20);
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow2);
+      backdrop-filter: blur(8px);
+      flex-wrap:wrap;
+    }
+
+    .topLeft{
+      display:flex; align-items:center; gap:10px; min-width:0;
+    }
+
+    .iconBtn{
+      width:46px; height:46px;
+      border:none;
+      border-radius:16px;
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+      display:grid; place-items:center;
+      cursor:pointer;
+      transition:.15s;
+      flex:0 0 auto;
+    }
+    .iconBtn:active{ transform:scale(.98); }
+
+    .brand{
+      display:flex; align-items:center; gap:10px; min-width:0;
+    }
+
+    .brandMark{
+      width:46px; height:46px; border-radius:16px;
+      background:linear-gradient(135deg, rgba(107,15,166,.14), rgba(241,198,177,.20));
+      border:1px solid rgba(107,15,166,.18);
+      overflow:hidden; flex:0 0 auto;
+      display:grid; place-items:center;
+    }
+
+    .brandMark img{
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
+
+    .brandName{
+      margin:0;
+      font-size:20px;
+      font-weight:900;
+      line-height:1.1;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+
+    .brandSub{
+      font-size:12.5px;
+      font-weight:800;
+      color:var(--muted);
+    }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(107,15,166,.10);
+      color:var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px;
+      padding:14px;
+      border-radius:var(--r22);
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .label{
+      margin:0 0 10px 0;
+      font-size:13px;
+      font-weight:900;
+      color:var(--muted);
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1.15fr auto auto;
+      gap:12px;
+      align-items:center;
+    }
+
+    @media (max-width:900px){
+      .toolbar{ grid-template-columns:1fr; }
+    }
+
+    .searchBox{
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 8px 18px rgba(16,24,40,.07);
+    }
+
+    .searchBox input{
+      border:none; outline:none; background:transparent; width:100%;
+      font-size:15px; font-weight:900;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+    }
+
+    .btn{
+      border:none;
+      border-radius:16px;
+      padding:12px 14px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:14.5px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s;
+      white-space:nowrap;
+    }
+    .btn:active{ transform:scale(.985); }
+
+    .btnPrimary{
+      background:linear-gradient(135deg,var(--purple),var(--purpleDark));
+      color:#fff;
+      box-shadow:0 12px 24px rgba(107,15,166,.22);
+    }
+
+    .btnGhost{
+      background:#f2f4f7;
+      color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.28);
+    }
+
+    .btnDanger{
+      background:rgba(239,68,68,.10);
+      color:#991b1b;
+      border:1px solid rgba(239,68,68,.22);
+    }
+
+    .btnOk{
+      background:rgba(22,163,74,.10);
+      color:#166534;
+      border:1px solid rgba(22,163,74,.24);
+    }
+
+    .alphaWrap{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+      align-items:center;
+    }
+
+    .alphaBtn{
+      min-width:42px;
+      height:38px;
+      padding:0 12px;
+      border:none;
+      border-radius:999px;
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(16,24,40,.10);
+      color:rgba(16,24,40,.72);
+      font-size:13px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+
+    .alphaBtn.active{
+      background:linear-gradient(135deg,var(--purple),var(--purpleDark));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 12px 24px rgba(107,15,166,.20);
+    }
+
+    .alphaBtn.warn{
+      background:rgba(245,158,11,.10);
+      color:#9a6700;
+      border:1px solid rgba(245,158,11,.26);
+    }
+
+    .alphaBtn.warn.active{
+      background:linear-gradient(135deg,#f59e0b,#b45309);
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 12px 24px rgba(245,158,11,.20);
+    }
+
+    .sectionHead{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+
+    .sectionTitle{
+      font-size:15px;
+      font-weight:980;
+      color:var(--purpleDark);
+    }
+
+    .vendorsGrid{
+      display:grid;
+      grid-template-columns:repeat(7, minmax(0,1fr));
+      gap:12px;
+    }
+
+    @media (max-width:1500px){ .vendorsGrid{ grid-template-columns:repeat(6, minmax(0,1fr)); } }
+    @media (max-width:1200px){ .vendorsGrid{ grid-template-columns:repeat(5, minmax(0,1fr)); } }
+    @media (max-width:980px){ .vendorsGrid{ grid-template-columns:repeat(4, minmax(0,1fr)); } }
+    @media (max-width:760px){ .vendorsGrid{ grid-template-columns:repeat(3, minmax(0,1fr)); } }
+    @media (max-width:560px){ .vendorsGrid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; } }
+
+    .vendorTile{
+      border:none;
+      text-align:right;
+      width:100%;
+      padding:10px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.08);
+      cursor:pointer;
+      transition:.15s;
+      position:relative;
+    }
+
+    .vendorTile:hover{ transform:translateY(-1px); }
+
+    .vendorTile.needDesc{
+      border-color:rgba(245,158,11,.38);
+      box-shadow:0 10px 22px rgba(245,158,11,.10);
+    }
+
+    .vendorTile .logo{
+      width:100%;
+      aspect-ratio:1 / 1;
+      border-radius:16px;
+      overflow:hidden;
+      background:linear-gradient(135deg, rgba(107,15,166,.06), rgba(241,198,177,.18));
+      border:1px solid rgba(16,24,40,.08);
+      display:grid; place-items:center;
+    }
+
+.vendorTile .logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  background:var(--purple);
+  padding:8px;
+}
+    
+    .vendorTile .fallback{
+      font-size:24px;
+      font-weight:980;
+      color:rgba(16,24,40,.45);
+    }
+
+    .vendorTile .name{
+      margin-top:10px;
+      font-size:13px;
+      font-weight:980;
+      color:var(--ink);
+      line-height:1.45;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      min-height:38px;
+    }
+
+    .vendorTile .sub{
+      margin-top:4px;
+      font-size:11px;
+      font-weight:900;
+      color:rgba(16,24,40,.55);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .miniTag{
+      position:absolute;
+      top:8px;
+      left:8px;
+      padding:6px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:950;
+      background:rgba(245,158,11,.14);
+      color:#9a6700;
+      border:1px solid rgba(245,158,11,.24);
+    }
+
+    .empty{
+      padding:24px;
+      border-radius:18px;
+      border:1px dashed rgba(16,24,40,.16);
+      background:#fff;
+      text-align:center;
+      font-size:14px;
+      font-weight:900;
+      color:rgba(16,24,40,.58);
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.48);
+      display:none;
+      z-index:99999;
+      backdrop-filter: blur(4px);
+      padding:18px;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .modal.open{ display:flex; }
+
+    .modalCard{
+      width:min(760px,100%);
+      max-height:min(92vh,100%);
+      overflow:auto;
+      background:rgba(255,255,255,.98);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 26px 60px rgba(0,0,0,.24);
+      border-radius:24px;
+      padding:16px;
+    }
+
+    .modalHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:12px;
+    }
+
+    .modalTitle{
+      font-size:18px;
+      font-weight:980;
+      color:var(--purpleDark);
+    }
+
+    .previewBox{
+      width:100%;
+      aspect-ratio: 4 / 3;
+      border-radius:18px;
+      overflow:hidden;
+      background:linear-gradient(135deg, rgba(107,15,166,.06), rgba(241,198,177,.18));
+      border:1px solid rgba(16,24,40,.10);
+      display:grid; place-items:center;
+      margin-bottom:12px;
+    }
+
+    .previewBox img{
+      width:100%; height:100%; object-fit:contain; display:block; background:#fff;
+    }
+
+    .inlineMeta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .chip{
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(107,15,166,.08);
+      border:1px solid rgba(107,15,166,.14);
+      color:var(--purpleDark);
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .quickActions{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    @media (max-width:560px){
+      .quickActions{ grid-template-columns:1fr; }
+    }
+
+    .field{
+      display:grid;
+      gap:6px;
+      margin-bottom:12px;
+    }
+
+    .fieldTitle{
+      font-size:12px;
+      font-weight:950;
+      color:rgba(16,24,40,.56);
+    }
+
+    .input, .textarea{
+      width:100%;
+      border:none; outline:none;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      border-radius:16px;
+      padding:12px 13px;
+      font-size:14px;
+      font-weight:900;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+    }
+
+    .textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .fileInput{ display:none; }
+
+    .fileLabel{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      min-height:46px;
+      border-radius:16px;
+      padding:0 14px;
+      background:#f2f4f7;
+      color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+      cursor:pointer;
+      font-size:14px;
+      font-weight:950;
+    }
+
+    .muted{
+      font-size:12px;
+      font-weight:900;
+      color:rgba(16,24,40,.58);
+    }
+
+    .modalActions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    @media (max-width:560px){
+      .modalActions{ grid-template-columns:1fr; }
+    }
+
+    .hidden{ display:none !important; }
+
+    .toasts{
+      position:fixed; bottom:14px; left:14px; right:14px;
+      z-index:100000; display:flex; flex-direction:column; gap:10px;
+      pointer-events:none;
+    }
+
+    .toast{
+      pointer-events:auto;
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px); opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+
+    .toast .icon{
+      width:34px; height:34px; border-radius:12px;
+      display:grid; place-items:center; flex:0 0 auto; color:#fff;
+    }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast.ok .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+
+    #globalLoader{
+      position: fixed; inset: 0;
+      display: none; align-items: center; justify-content: center;
+      padding: 16px;
+      background: rgba(0,0,0,.38);
+      backdrop-filter: blur(2px);
+      z-index: 200000;
+    }
+    #globalLoader.show{ display:flex; }
+    #globalLoader .glCard{
+      width: min(420px, 92vw);
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(16,24,40,.10);
+      box-shadow: 0 26px 60px rgba(0,0,0,.22);
+      border-radius: 18px;
+      padding: 14px;
+      display: flex; align-items: center; gap: 12px;
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+    #globalLoader .glGif{
+      width: 54px; height: 54px;
+      border-radius: 14px;
+      background:#fff;
+      border: 1px solid rgba(16,24,40,.10);
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+    #globalLoader .glText{
+      font-weight: 950;
+      font-size: 14px;
+      color: var(--purpleDark);
+      line-height: 1.6;
+    }
+    #globalLoader .glSub{
+      margin-top: 3px;
+      font-weight: 900;
+      font-size: 12.5px;
+      color: rgba(16,24,40,.65);
+    }
+  </style>
+</head>
+<body>
+  <div id="globalLoader" aria-hidden="true">
+    <div class="glCard" role="status" aria-live="polite">
+      <img class="glGif"
+        src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/icon_-3.gif"
+        alt="loading">
+      <div style="min-width:0">
+        <div id="globalLoaderText" class="glText">جاري العمل… اصبر شوي</div>
+        <div class="glSub">لا تسوي تحديث، بنرجع لك حالًا</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="topLeft">
+        <button class="iconBtn" id="btnBack" title="رجوع" aria-label="رجوع">
+          <svg width="22" height="22" viewBox="0 0 24 24" style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <button class="iconBtn" id="btnReload" title="تحديث" aria-label="تحديث">
+          <svg width="22" height="22" viewBox="0 0 24 24" style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+            <path d="M21 3v7h-7"></path>
+          </svg>
+        </button>
+
+        <div class="brand">
+          <div class="brandMark">
+            <img src="./ico1.png" alt="icon" class="brandIcon">
+          </div>
+          <div>
+            <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+            <div class="brandSub">إدارة الماركات</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M12 8h.01"></path>
+          <path d="M11 12h1v6h1"></path>
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span id="statusBadge">جاهز</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">إدارة الماركات</p>
+
+      <div class="toolbar">
+        <div class="searchBox">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(60,10,99,.65);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3-3"></path>
+          </svg>
+          <input id="searchInput" placeholder="ابحث باسم الماركة">
+        </div>
+
+        <button class="btn btnGhost" id="btnRefreshList" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+            <path d="M21 3v7h-7"></path>
+          </svg>
+          تحديث القائمة
+        </button>
+
+        <button class="btn btnPrimary" id="btnAddVendor" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          إضافة ماركة
+        </button>
+      </div>
+
+      <div id="alphaWrap" class="alphaWrap"></div>
+    </div>
+
+    <div class="card">
+      <div class="sectionHead">
+        <div class="sectionTitle" id="sectionTitle">كل الماركات</div>
+        <div class="chips">
+          <div class="chip" id="vendorsCountChip">0 ماركة</div>
+        </div>
+      </div>
+
+      <div id="vendorsGrid" class="vendorsGrid"></div>
+    </div>
+  </div>
+
+  <div id="vendorModal" class="modal">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div class="modalTitle" id="modalTitle">تحرير الماركة</div>
+        <button class="iconBtn" id="btnCloseModal" type="button" title="إغلاق">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="previewBox" id="modalPreview">
+        <div class="muted">لا توجد صورة</div>
+      </div>
+
+      <div class="inlineMeta">
+        <div class="chip" id="modalHandleChip">handle: -</div>
+        <div class="chip" id="modalStatusChip">status: -</div>
+      </div>
+
+      <div class="quickActions">
+        <div class="field">
+          <div class="fieldTitle">اسم الماركة</div>
+          <input id="modalName" class="input" placeholder="اسم الماركة">
+        </div>
+
+        <div class="field">
+          <div class="fieldTitle">الرابط</div>
+          <input id="modalLink" class="input" placeholder="رابط الماركة">
+        </div>
+      </div>
+
+<div class="field">
+  <div class="fieldTitle">الوصف</div>
+  <textarea id="modalDescription" class="textarea" placeholder="وصف الماركة بالعربي"></textarea>
+</div>
+
+<div class="field">
+  <div class="fieldTitle">الوصف الإنجليزي</div>
+  <textarea id="modalDescriptionEn" class="textarea" placeholder="English brand description"></textarea>
+</div>
+      <div class="field">
+        <div class="fieldTitle">تغيير الشعار</div>
+        <label class="fileLabel" for="modalImage">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <path d="M17 8l-5-5-5 5"></path>
+            <path d="M12 3v12"></path>
+          </svg>
+          اختر صورة جديدة
+        </label>
+        <input id="modalImage" class="fileInput" type="file" accept="image/*">
+        <div class="muted" id="modalImageName"></div>
+      </div>
+
+      <div class="modalActions">
+        <button class="btn btnPrimary" id="btnSaveVendor" type="button">حفظ التعديلات</button>
+        <button class="btn btnDanger" id="btnHideVendor" type="button">إخفاء الماركة</button>
+        <button class="btn btnOk" id="btnShowVendor" type="button">إظهار الماركة</button>
+        <button class="btn btnGhost" id="btnCloseModal2" type="button">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="createModal" class="modal">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div class="modalTitle">إضافة ماركة جديدة</div>
+        <button class="iconBtn" id="btnCloseCreateModal" type="button" title="إغلاق">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="previewBox" id="createPreview">
+        <div class="muted">معاينة الشعار</div>
+      </div>
+
+      <div class="field">
+        <div class="fieldTitle">اسم الماركة</div>
+        <input id="createName" class="input" placeholder="مثال: COSRX">
+      </div>
+
+      <div class="field">
+        <div class="fieldTitle">الرابط</div>
+        <input id="createLink" class="input" placeholder="سيتم توليده تلقائيًا">
+      </div>
+
+<div class="field">
+  <div class="fieldTitle">الوصف</div>
+  <textarea id="createDescription" class="textarea" placeholder="اكتب وصف الماركة بالعربي"></textarea>
+</div>
+
+<div class="field">
+  <div class="fieldTitle">الوصف الإنجليزي</div>
+  <textarea id="createDescriptionEn" class="textarea" placeholder="Write the English brand description"></textarea>
+</div>
+      <div class="field">
+        <div class="fieldTitle">الشعار</div>
+        <label class="fileLabel" for="createImage">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <path d="M17 8l-5-5-5 5"></path>
+            <path d="M12 3v12"></path>
+          </svg>
+          اختر صورة الشعار
+        </label>
+        <input id="createImage" class="fileInput" type="file" accept="image/*">
+        <div class="muted" id="createImageName"></div>
+      </div>
+
+      <div class="modalActions">
+        <button class="btn btnPrimary" id="btnCreateVendor" type="button">إنشاء الماركة</button>
+        <button class="btn btnGhost" id="btnCloseCreateModal2" type="button">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function guard(){
+      const k = (localStorage.getItem("PRODUCTS_STAFF_KEY") || "").trim();
+      if(!k) window.location.href = "/prod/login-w.html";
+    })();
+
+    function staffKey(){
+      return (localStorage.getItem("PRODUCTS_STAFF_KEY") || "").trim();
+    }
+
+    function staffHeaders(extra = {}){
+      const k = staffKey();
+      return {
+        "x-products-staff-key": k,
+        "Authorization": "Bearer " + k,
+        ...extra
+      };
+    }
+
+    function esc(s){
+      return String(s || "").replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[m]));
+    }
+
+    function setStatus(txt){
+      const b = document.getElementById("statusBadge");
+      if (b) b.textContent = txt;
+    }
+
+    function toast(type, title, msg, ms=2600){
+      const host = document.getElementById("toasts");
+      if(!host) return;
+
+      const el = document.createElement("div");
+      el.className = "toast " + type;
+      el.innerHTML = `
+        <div class="icon">✓</div>
+        <div class="body">
+          <p class="title">${esc(title)}</p>
+          <p class="msg">${esc(msg)}</p>
+        </div>
+      `;
+      host.appendChild(el);
+
+      const kill = () => {
+        el.classList.add("out");
+        setTimeout(() => el.remove(), 180);
+      };
+      setTimeout(kill, ms);
+    }
+
+    let __netPending = 0;
+    let __netTimer = null;
+
+    function setLoaderText(msg){
+      const t = document.getElementById("globalLoaderText");
+      if(t) t.textContent = msg || "جاري العمل… اصبر شوي";
+    }
+
+    function showLoader(msg){
+      setLoaderText(msg);
+      const el = document.getElementById("globalLoader");
+      if(!el) return;
+
+      if(__netTimer) clearTimeout(__netTimer);
+      __netTimer = setTimeout(() => {
+        if(__netPending > 0){
+          el.classList.add("show");
+          el.setAttribute("aria-hidden","false");
+        }
+      }, 180);
+    }
+
+    function hideLoader(){
+      const el = document.getElementById("globalLoader");
+      if(!el) return;
+      if(__netTimer) clearTimeout(__netTimer);
+      el.classList.remove("show");
+      el.setAttribute("aria-hidden","true");
+    }
+
+    function netBegin(msg){
+      __netPending++;
+      if(msg) showLoader(msg);
+    }
+
+    function netEnd(){
+      __netPending = Math.max(0, __netPending - 1);
+      if(__netPending === 0) hideLoader();
+    }
+
+    const state = {
+      items: [],
+      search: "",
+      letter: "ALL",
+      onlyMissingDescription: false,
+      selected: null
+    };
+
+    const letters = ["ALL", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")];
+
+    function buildVendorLink(name){
+      return "https://halabt.com/collections/vendors?q=" + encodeURIComponent(String(name || "").trim());
+    }
+
+    function normalizeDescription(v){
+      return String(v || "").trim();
+    }
+
+    function hasRealDescription(item){
+      const d = normalizeDescription(item?.description);
+      return !!d && d !== "-";
+    }
+
+    function brandFirstLetter(name){
+      const s = String(name || "").trim();
+      if (!s) return "#";
+      const ch = s[0].toUpperCase();
+      if (/[A-Z]/.test(ch)) return ch;
+      return "#";
+    }
+
+    async function getJson(url){
+      netBegin("جاري تحميل الماركات...");
+      try{
+        const r = await fetch(url, {
+          method: "GET",
+          headers: staffHeaders()
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data?.error || ("HTTP " + r.status));
+        return data;
+      } finally {
+        netEnd();
+      }
+    }
+
+    async function postForm(url, formData, msg){
+      netBegin(msg || "جاري التنفيذ...");
+      try{
+        const r = await fetch(url, {
+          method: "POST",
+          headers: staffHeaders(),
+          body: formData
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data?.error || ("HTTP " + r.status));
+        return data;
+      } finally {
+        netEnd();
+      }
+    }
+
+    async function postJson(url, body, msg){
+      netBegin(msg || "جاري التنفيذ...");
+      try{
+        const r = await fetch(url, {
+          method: "POST",
+          headers: staffHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify(body || {})
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data?.error || ("HTTP " + r.status));
+        return data;
+      } finally {
+        netEnd();
+      }
+    }
+
+    function renderLetters(){
+      const host = document.getElementById("alphaWrap");
+      const html = [
+        `<button class="alphaBtn ${state.letter === "ALL" && !state.onlyMissingDescription ? "active" : ""}" data-letter="ALL" type="button">الكل</button>`,
+        ...letters.slice(1).map(letter => `
+          <button class="alphaBtn ${state.letter === letter && !state.onlyMissingDescription ? "active" : ""}" data-letter="${esc(letter)}" type="button">${esc(letter)}</button>
+        `),
+        `<button class="alphaBtn warn ${state.onlyMissingDescription ? "active" : ""}" data-mode="missing" type="button">تحتاج وصف</button>`
+      ];
+      host.innerHTML = html.join("");
+
+      host.querySelectorAll(".alphaBtn[data-letter]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.onlyMissingDescription = false;
+          state.letter = btn.getAttribute("data-letter");
+          renderLetters();
+          renderGrid();
+        });
+      });
+
+      const missingBtn = host.querySelector('[data-mode="missing"]');
+      if (missingBtn) {
+        missingBtn.addEventListener("click", () => {
+          state.onlyMissingDescription = true;
+          state.letter = "ALL";
+          renderLetters();
+          renderGrid();
+        });
+      }
+    }
+
+    function getFilteredItems(){
+      let items = [...state.items];
+
+      const q = String(state.search || "").trim().toLowerCase();
+      if (q) {
+        items = items.filter(x =>
+          String(x.name || "").toLowerCase().includes(q) ||
+          String(x.handle || "").toLowerCase().includes(q) ||
+          String(x.description || "").toLowerCase().includes(q)
+        );
+      }
+
+      if (state.onlyMissingDescription) {
+        items = items.filter(x => !hasRealDescription(x));
+        items.sort((a,b) => String(a.name || "").localeCompare(String(b.name || ""), "en"));
+        return items;
+      }
+
+      if (state.letter !== "ALL") {
+        items = items.filter(x => brandFirstLetter(x.name) === state.letter);
+      }
+
+      items.sort((a,b) => String(a.name || "").localeCompare(String(b.name || ""), "en"));
+      return items;
+    }
+
+    function renderGrid(){
+      const grid = document.getElementById("vendorsGrid");
+      const items = getFilteredItems();
+      const missingCount = state.items.filter(x => !hasRealDescription(x)).length;
+
+      document.getElementById("vendorsCountChip").textContent = state.onlyMissingDescription
+        ? `${missingCount} تحتاج وصف`
+        : `${items.length} ماركة`;
+
+      document.getElementById("sectionTitle").textContent =
+        state.onlyMissingDescription
+          ? "الماركات التي تحتاج وصف"
+          : (state.letter === "ALL" ? "كل الماركات" : `ماركات حرف ${state.letter}`);
+
+      if (!items.length) {
+        grid.innerHTML = `<div class="empty">لا توجد ماركات مطابقة.</div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => {
+        const missing = !hasRealDescription(item);
+        return `
+          <button class="vendorTile ${missing ? "needDesc" : ""}" type="button" data-id="${esc(item.id)}">
+            ${missing ? `<div class="miniTag">بدون وصف</div>` : ``}
+            <div class="logo">
+              ${item.imageUrl
+                ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name)}">`
+                : `<div class="fallback">${esc((item.name || "?").slice(0,1))}</div>`
+              }
+            </div>
+            <div class="name">${esc(item.name || "")}</div>
+            <div class="sub">${esc(item.handle || "")}</div>
+          </button>
+        `;
+      }).join("");
+
+      grid.querySelectorAll(".vendorTile").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          const item = state.items.find(x => String(x.id) === String(id));
+          if (item) openVendorModal(item);
+        });
+      });
+    }
+
+    async function loadVendors(){
+      try{
+        setStatus("جاري التحميل...");
+        const data = await getJson("/api/products/staff/vendors/list");
+        state.items = Array.isArray(data.items) ? data.items : [];
+        renderLetters();
+        renderGrid();
+        setStatus("تم");
+      }catch(e){
+        setStatus("خطأ");
+        document.getElementById("vendorsGrid").innerHTML = `<div class="empty">${esc(e.message || "فشل التحميل")}</div>`;
+      }
+    }
+
+function openVendorModal(item){
+  state.selected = item;
+  document.getElementById("vendorModal").classList.add("open");
+  document.getElementById("modalTitle").textContent = item.name || "تحرير الماركة";
+  document.getElementById("modalName").value = item.name || "";
+  document.getElementById("modalLink").value = item.link || buildVendorLink(item.name);
+  document.getElementById("modalDescription").value = item.description === "-" ? "" : (item.description || "");
+  document.getElementById("modalDescriptionEn").value = item.descriptionEn === "-" ? "" : (item.descriptionEn || "");
+  document.getElementById("modalHandleChip").textContent = `handle: ${item.handle || "-"}`;
+  document.getElementById("modalStatusChip").textContent = `status: ${item.status || "ACTIVE"}`;
+  document.getElementById("modalImage").value = "";
+  document.getElementById("modalImageName").textContent = "";
+
+  const prev = document.getElementById("modalPreview");
+  prev.innerHTML = item.imageUrl
+    ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name)}">`
+    : `<div class="muted">لا توجد صورة</div>`;
+}
+    
+    function closeVendorModal(){
+      document.getElementById("vendorModal").classList.remove("open");
+      state.selected = null;
+    }
+
+    function openCreateModal(){
+      document.getElementById("createModal").classList.add("open");
+    }
+
+    function closeCreateModal(){
+      document.getElementById("createModal").classList.remove("open");
+    }
+
+    document.getElementById("searchInput").addEventListener("input", function(){
+      state.search = this.value || "";
+      renderGrid();
+    });
+
+    document.getElementById("btnBack").addEventListener("click", () => history.back());
+    document.getElementById("btnReload").addEventListener("click", loadVendors);
+    document.getElementById("btnRefreshList").addEventListener("click", loadVendors);
+    document.getElementById("btnAddVendor").addEventListener("click", openCreateModal);
+
+    document.getElementById("btnCloseModal").addEventListener("click", closeVendorModal);
+    document.getElementById("btnCloseModal2").addEventListener("click", closeVendorModal);
+    document.getElementById("btnCloseCreateModal").addEventListener("click", closeCreateModal);
+    document.getElementById("btnCloseCreateModal2").addEventListener("click", closeCreateModal);
+
+    document.getElementById("createName").addEventListener("input", function(){
+      const v = String(this.value || "").trim();
+      document.getElementById("createLink").value = v ? buildVendorLink(v) : "";
+    });
+
+    document.getElementById("createImage").addEventListener("change", function(e){
+      const file = e.target.files?.[0] || null;
+      document.getElementById("createImageName").textContent = file ? file.name : "";
+
+      const preview = document.getElementById("createPreview");
+      if (!file) {
+        preview.innerHTML = '<div class="muted">معاينة الشعار</div>';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(){
+        preview.innerHTML = `<img src="${esc(String(reader.result || ""))}" alt="preview">`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("modalImage").addEventListener("change", function(e){
+      const file = e.target.files?.[0] || null;
+      document.getElementById("modalImageName").textContent = file ? file.name : "";
+
+      if (!file) return;
+
+      const preview = document.getElementById("modalPreview");
+      const reader = new FileReader();
+      reader.onload = function(){
+        preview.innerHTML = `<img src="${esc(String(reader.result || ""))}" alt="preview">`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+document.getElementById("btnCreateVendor").addEventListener("click", async function(){
+  const brandName = String(document.getElementById("createName").value || "").trim();
+  const link = String(document.getElementById("createLink").value || "").trim() || buildVendorLink(brandName);
+  const description = String(document.getElementById("createDescription").value || "").trim() || "-";
+  const descriptionEn = String(document.getElementById("createDescriptionEn").value || "").trim() || "";
+  const image = document.getElementById("createImage").files?.[0] || null;
+
+  if (!brandName) {
+    toast("warn", "تنبيه", "اكتب اسم الماركة");
+    return;
+  }
+
+  if (!image) {
+    toast("warn", "تنبيه", "اختر صورة الشعار");
+    return;
+  }
+
+  try{
+    const fd = new FormData();
+    fd.append("brandName", brandName);
+    fd.append("link", link);
+    fd.append("description", description);
+    fd.append("descriptionEn", descriptionEn);
+    fd.append("image", image);
+
+    await postForm("/api/products/staff/vendors/create-or-sync", fd, "جاري إنشاء الماركة ورفع الشعار...");
+
+    toast("ok", "تم", "تمت إضافة الماركة بنجاح");
+    closeCreateModal();
+
+    document.getElementById("createName").value = "";
+    document.getElementById("createLink").value = "";
+    document.getElementById("createDescription").value = "";
+    document.getElementById("createDescriptionEn").value = "";
+    document.getElementById("createImage").value = "";
+    document.getElementById("createImageName").textContent = "";
+    document.getElementById("createPreview").innerHTML = '<div class="muted">معاينة الشعار</div>';
+
+    await loadVendors();
+  }catch(e){
+    toast("err", "خطأ", e.message || "فشل الإضافة");
+  }
+});
+    
+document.getElementById("btnSaveVendor").addEventListener("click", async function(){
+  const item = state.selected;
+  if (!item) return;
+
+  const brandName = String(document.getElementById("modalName").value || "").trim();
+  const link = String(document.getElementById("modalLink").value || "").trim() || buildVendorLink(brandName);
+  const description = String(document.getElementById("modalDescription").value || "").trim() || "-";
+  const descriptionEn = String(document.getElementById("modalDescriptionEn").value || "").trim() || "";
+  const image = document.getElementById("modalImage").files?.[0] || null;
+
+  if (!brandName) {
+    toast("warn", "تنبيه", "اسم الماركة مطلوب");
+    return;
+  }
+
+  try{
+    const fd = new FormData();
+    fd.append("id", item.id);
+    fd.append("handle", item.handle || "");
+    fd.append("brandName", brandName);
+    fd.append("link", link);
+    fd.append("description", description);
+    fd.append("descriptionEn", descriptionEn);
+    fd.append("currentImageId", item.imageId || "");
+    if (image) fd.append("image", image);
+
+    await postForm("/api/products/staff/vendors/update", fd, "جاري حفظ التعديلات...");
+
+    toast("ok", "تم", "تم حفظ تعديلات الماركة");
+    closeVendorModal();
+    await loadVendors();
+  }catch(e){
+    toast("err", "خطأ", e.message || "فشل الحفظ");
+  }
+});
+
+async function setSelectedVendorStatus(status){
+  const item = state.selected;
+  if (!item) return;
+
+  const finalStatus = String(status || "").toUpperCase() === "DRAFT" ? "DRAFT" : "ACTIVE";
+  const brandName = String(document.getElementById("modalName").value || item.name || "").trim();
+  if (!brandName) {
+    toast("warn", "تنبيه", "اسم الماركة مطلوب");
+    return;
+  }
+
+  const actionText = finalStatus === "DRAFT" ? "إخفاء" : "إظهار";
+  const ok = confirm(`${actionText} الماركة سيغيّر كل منتجات ${brandName} في Shopify إلى ${finalStatus}. هل أنت متأكد؟`);
+  if (!ok) return;
+
+  try{
+    const data = await postJson(
+      "/api/products/staff/vendors/status",
+      {
+        id: item.id,
+        brandName,
+        status: finalStatus
+      },
+      finalStatus === "DRAFT"
+        ? "جاري إخفاء الماركة وتحويل منتجاتها إلى Draft..."
+        : "جاري إظهار الماركة وتحويل منتجاتها إلى Active..."
+    );
+
+    const changed = data?.products?.changed?.length || 0;
+    const skipped = data?.products?.skipped?.length || 0;
+    const failed = data?.products?.failed?.length || 0;
+
+    toast(
+      failed ? "warn" : "ok",
+      "تم",
+      `تم تحديث ${changed} منتج، وتخطي ${skipped}${failed ? `، فشل ${failed}` : ""}`
+    );
+
+    closeVendorModal();
+    await loadVendors();
+  }catch(e){
+    toast("err", "خطأ", e.message || "فشل تحديث حالة الماركة");
+  }
+}
+
+document.getElementById("btnHideVendor").addEventListener("click", () => setSelectedVendorStatus("DRAFT"));
+document.getElementById("btnShowVendor").addEventListener("click", () => setSelectedVendorStatus("ACTIVE"));
+
+    window.addEventListener("click", function(e){
+      if (e.target === document.getElementById("vendorModal")) closeVendorModal();
+      if (e.target === document.getElementById("createModal")) closeCreateModal();
+    });
+
+    window.addEventListener("load", loadVendors);
+  </script>
+</body>
+</html>

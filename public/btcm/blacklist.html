@@ -1,0 +1,1498 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Hala Beauty | حظر العملاء</title>
+
+  <link rel="manifest" href="/btcm/promaxa.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="حظر العملاء">
+  <link rel="apple-touch-icon" href="/btcm/ico1.png">
+  <link rel="icon" href="/btcm/ico2.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/btcm/promax.css">
+
+  <style>
+    :root{
+      --blk-bg:#0f172a;
+      --blk-bg-soft:#111827;
+      --blk-danger:#9f1239;
+      --blk-danger-soft:#fff1f2;
+      --blk-border:rgba(16,24,40,.08);
+      --blk-text:#111827;
+      --blk-sub:rgba(16,24,40,.62);
+      --blk-white:#fff;
+      --blk-shadow:0 18px 44px rgba(17,24,39,.08);
+      --blk-soft:#faf7ff;
+      --blk-green:#166534;
+      --blk-green-bg:#f0fdf4;
+      --blk-amber:#92400e;
+      --blk-amber-bg:#fffbeb;
+      --blk-slate:#475569;
+      --blk-slate-bg:#f8fafc;
+      --blk-purple:#4b0f79;
+    }
+
+    *{ box-sizing:border-box; }
+
+    .stack{
+      display:grid;
+      gap:16px;
+    }
+
+    .headGrid{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panelCard{
+      background:#fff;
+      border:1px solid var(--blk-border);
+      border-radius:22px;
+      box-shadow:var(--blk-shadow);
+      padding:16px;
+    }
+
+    .sectionTitle{
+      font-weight:1000;
+      font-size:15px;
+      color:var(--purpleDark,#3C0A63);
+      margin-bottom:12px;
+    }
+
+    .subHint{
+      margin-top:8px;
+      color:var(--blk-sub);
+      font-size:12.5px;
+      font-weight:900;
+      line-height:1.8;
+    }
+
+    .searchRow{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+      align-items:center;
+    }
+
+    .searchRow .box,
+    .bulkBox .box{
+      margin:0;
+    }
+
+    .bulkActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .statsGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+
+    .statItem{
+      border:1px solid var(--blk-border);
+      border-radius:18px;
+      padding:14px 12px;
+      background:linear-gradient(180deg,#fff,#faf7ff);
+    }
+
+    .statNum{
+      font-size:24px;
+      font-weight:1000;
+      color:#2b1055;
+      line-height:1;
+    }
+
+    .statLbl{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--blk-sub);
+      font-weight:900;
+    }
+
+    .toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin:14px 0 10px;
+    }
+
+    .results{
+      display:grid;
+      gap:12px;
+    }
+
+    .customerCard{
+      background:#fff;
+      border:1px solid var(--blk-border);
+      border-radius:22px;
+      box-shadow:0 12px 32px rgba(17,24,39,.05);
+      padding:14px;
+      display:grid;
+      gap:12px;
+      transition:.18s ease;
+    }
+
+    .customerTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .customerMain{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .avatarBox{
+      width:50px;
+      height:50px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      background:linear-gradient(135deg,#7a0d94,#4b0f79);
+      box-shadow:0 10px 24px rgba(107,0,131,.24);
+      flex:0 0 auto;
+    }
+
+    .avatarBox svg,
+    .statePill svg,
+    .btn svg,
+    .miniMeta svg,
+    .reportPill svg{
+      width:18px;
+      height:18px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2.2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      flex:0 0 auto;
+    }
+
+    .avatarBox svg{
+      width:22px;
+      height:22px;
+    }
+
+    .nameBlock{ min-width:0; }
+
+    .custName{
+      font-size:15px;
+      font-weight:1000;
+      color:#1f1630;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .custSub{
+      margin-top:3px;
+      color:var(--blk-sub);
+      font-size:12.5px;
+      font-weight:900;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .statePill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:38px;
+      padding:0 14px;
+      border-radius:999px;
+      font-size:12.5px;
+      font-weight:1000;
+      border:1px solid transparent;
+      white-space:nowrap;
+    }
+
+    .statePill.blacklisted{
+      background:var(--blk-bg);
+      color:#fff;
+      border-color:var(--blk-bg);
+    }
+
+    .statePill.normal{
+      background:#f8fafc;
+      color:#334155;
+      border-color:rgba(148,163,184,.28);
+    }
+
+    .metaGrid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .metaCard{
+      border:1px solid var(--blk-border);
+      background:#fcfcff;
+      border-radius:16px;
+      padding:11px 12px;
+      min-width:0;
+    }
+
+    .metaLabel{
+      font-size:11.5px;
+      color:rgba(16,24,40,.56);
+      font-weight:1000;
+      margin-bottom:4px;
+    }
+
+    .metaValue{
+      font-size:13px;
+      color:var(--blk-text);
+      font-weight:950;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .actionRow{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btnDark{
+      background:var(--blk-bg-soft);
+      color:#fff;
+      border-color:var(--blk-bg-soft);
+    }
+
+    .btnSoftRose{
+      background:#fff;
+      color:var(--blk-danger);
+      border:1px solid rgba(244,63,94,.22);
+    }
+
+    .btnSoftRose:hover{
+      background:var(--blk-danger-soft);
+    }
+
+    .btnGreen{
+      background:#14532d;
+      color:#fff;
+      border-color:#14532d;
+    }
+
+    .btnGreen:hover{
+      filter:brightness(.98);
+    }
+
+    .emptyState{
+      border:1px dashed rgba(148,163,184,.4);
+      background:#fff;
+      border-radius:18px;
+      padding:22px 16px;
+      text-align:center;
+      color:#64748b;
+      font-weight:900;
+    }
+
+    .splitLine{
+      height:1px;
+      background:linear-gradient(90deg,transparent,rgba(148,163,184,.28),transparent);
+      margin:4px 0 2px;
+    }
+
+    .miniMeta{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:#475569;
+      font-size:12px;
+      font-weight:900;
+      flex-wrap:wrap;
+    }
+
+    .miniMeta svg{
+      width:15px;
+      height:15px;
+    }
+
+    .reportGrid{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .reportCard{
+      border:1px solid var(--blk-border);
+      border-radius:18px;
+      padding:14px 12px;
+      background:#fff;
+    }
+
+    .reportCard.green{ background:var(--blk-green-bg); }
+    .reportCard.amber{ background:var(--blk-amber-bg); }
+    .reportCard.slate{ background:var(--blk-slate-bg); }
+
+    .reportVal{
+      font-size:22px;
+      font-weight:1000;
+      color:#1f1630;
+      line-height:1;
+    }
+
+    .reportTxt{
+      margin-top:6px;
+      font-size:12px;
+      font-weight:900;
+      color:var(--blk-sub);
+      line-height:1.5;
+    }
+
+    .reportList{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .reportItem{
+      border:1px solid var(--blk-border);
+      border-radius:18px;
+      background:#fff;
+      padding:12px;
+      display:grid;
+      gap:10px;
+    }
+
+    .reportHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .reportPhone{
+      font-weight:1000;
+      color:#1f1630;
+      font-size:14px;
+      word-break:break-word;
+    }
+
+    .reportPill{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:1000;
+      border:1px solid transparent;
+    }
+
+    .reportPill.ok{
+      color:var(--blk-green);
+      background:var(--blk-green-bg);
+      border-color:rgba(22,101,52,.12);
+    }
+
+    .reportPill.warn{
+      color:var(--blk-amber);
+      background:var(--blk-amber-bg);
+      border-color:rgba(146,64,14,.12);
+    }
+
+    .reportPill.slate{
+      color:var(--blk-slate);
+      background:var(--blk-slate-bg);
+      border-color:rgba(71,85,105,.12);
+    }
+
+    .reportCustomers{
+      display:grid;
+      gap:8px;
+    }
+
+    .reportCustomer{
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:14px;
+      padding:10px 12px;
+      background:#fcfcff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .reportCustomerName{
+      font-weight:950;
+      color:#1f1630;
+      font-size:13px;
+    }
+
+    .reportCustomerSub{
+      color:#64748b;
+      font-size:12px;
+      font-weight:900;
+      margin-top:3px;
+      word-break:break-word;
+    }
+
+    .reportCustomerAction{
+      font-size:12px;
+      font-weight:1000;
+      white-space:nowrap;
+    }
+
+    .reportCustomerAction.ok{ color:var(--blk-green); }
+    .reportCustomerAction.warn{ color:var(--blk-amber); }
+    .reportCustomerAction.slate{ color:var(--blk-slate); }
+
+    .bulkBox textarea,
+    .exportBox textarea{
+      width:100%;
+      min-height:220px;
+      resize:vertical;
+      border:0;
+      outline:0;
+      background:transparent;
+      font:inherit;
+      color:inherit;
+      padding:0;
+      line-height:1.9;
+    }
+
+    .exportBox textarea{
+      min-height:260px;
+      direction:ltr;
+      text-align:left;
+      font-weight:900;
+    }
+
+    .exportTools{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    @media (max-width: 1100px){
+      .headGrid{
+        grid-template-columns:1fr;
+      }
+
+      .searchRow{
+        grid-template-columns:1fr;
+      }
+
+      .metaGrid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .reportGrid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width: 640px){
+      .stack{ gap:14px; }
+
+      .panelCard{
+        padding:14px;
+        border-radius:20px;
+      }
+
+      .card{
+        padding:12px !important;
+      }
+
+      .statsGrid,
+      .metaGrid,
+      .reportGrid{
+        grid-template-columns:1fr;
+      }
+
+      .customerCard{
+        padding:12px;
+      }
+
+      .avatarBox{
+        width:44px;
+        height:44px;
+        border-radius:15px;
+      }
+
+      .custName{
+        font-size:14px;
+      }
+
+      .custSub,
+      .metaValue,
+      .reportTxt,
+      .subHint{
+        font-size:12px;
+      }
+
+      .btn{
+        min-height:46px;
+      }
+
+      .bulkActions,
+      .exportTools{
+        display:grid;
+        grid-template-columns:1fr;
+      }
+
+      .toolbar{
+        align-items:stretch;
+      }
+
+      .reportHead,
+      .customerTop,
+      .actionRow{
+        align-items:flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body class="page-ui">
+  <div id="toasts" class="toasts"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <img src="/btcm/ico1.png" alt="icon" class="brandIcon">
+        </div>
+        <div style="min-width:0">
+          <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+          <a href="/" class="brandSub">حظر العملاء • Customer Blacklist</a>
+        </div>
+      </div>
+      <div class="badge"><span id="statusBadge">جاهز</span></div>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <div class="headGrid">
+          <section class="panelCard">
+            <div class="sectionTitle">البحث عن عميل</div>
+
+            <div class="searchRow">
+              <div class="box">
+                <input
+                  id="phoneInput"
+                  inputmode="tel"
+                  autocomplete="off"
+                  placeholder="اكتب رقم العميل: 968 / 00968 / بدون مفتاح / مع مسافات"
+                >
+              </div>
+
+              <button class="btn btnPrimary" id="btnSearch" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="M20 20l-3.5-3.5"></path>
+                </svg>
+                بحث
+              </button>
+
+              <button class="btn btnGhost" id="btnRefreshAll" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+                  <path d="M21 3v7h-7"></path>
+                </svg>
+                تحديث
+              </button>
+            </div>
+
+            <div class="subHint">
+              يتم التعرف على الرقم حتى لو كان يبدأ بـ 968 أو 00968 أو بدون مفتاح عمان.
+            </div>
+
+            <div class="splitLine"></div>
+
+            <div id="searchResult" class="results">
+              <div class="emptyState">ابحث برقم عميل لعرض حالته وإجراء الحظر أو إلغاء الحظر.</div>
+            </div>
+          </section>
+
+          <aside class="panelCard">
+            <div class="sectionTitle">إحصائيات الحظر</div>
+
+            <div class="statsGrid">
+              <div class="statItem">
+                <div class="statNum" id="statBlacklisted">0</div>
+                <div class="statLbl">إجمالي المحظورين</div>
+              </div>
+
+              <div class="statItem">
+                <div class="statNum" id="statVisible">0</div>
+                <div class="statLbl">المعروضون الآن</div>
+              </div>
+
+              <div class="statItem">
+                <div class="statNum" id="statFound">0</div>
+                <div class="statLbl">نتائج البحث</div>
+              </div>
+            </div>
+
+            <div class="toolbar">
+              <div class="sectionTitle" style="margin:0">العملاء المحظورون</div>
+
+              <button class="btn btnGhost" id="btnReloadBlacklist" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+                  <path d="M21 3v7h-7"></path>
+                </svg>
+                إعادة تحميل
+              </button>
+            </div>
+
+            <div id="blacklistList" class="results">
+              <div class="emptyState">جاري تحميل القائمة...</div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="card">
+        <section class="panelCard bulkBox">
+          <div class="sectionTitle">الحظر الجماعي</div>
+
+          <div class="box">
+            <textarea
+              id="bulkPhones"
+              placeholder="الصق الأرقام هنا، كل رقم في سطر أو مفصول بمسافة أو فاصلة&#10;&#10;مثال:&#10;+96894977700&#10;+96892405513&#10;+96898152936"
+            ></textarea>
+          </div>
+
+          <div class="subHint">
+            يمكنك لصق عدد كبير من الأرقام دفعة واحدة. سيتم حذف التكرار تلقائيًا، وتجاهل الأرقام غير الصالحة حسب منطق عمان الحالي.
+          </div>
+
+          <div class="bulkActions">
+            <button class="btn btnGhost" id="btnBulkPreview" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              معاينة
+            </button>
+
+            <button class="btn btnGreen" id="btnBulkApply" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              حظر الكل
+            </button>
+
+            <button class="btn btnGhost" id="btnBulkClear" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 6h18"></path>
+                <path d="M8 6V4h8v2"></path>
+                <path d="M19 6l-1 14H6L5 6"></path>
+              </svg>
+              مسح
+            </button>
+          </div>
+
+          <div class="splitLine"></div>
+
+          <div class="reportGrid" id="bulkSummary">
+            <div class="reportCard">
+              <div class="reportVal">0</div>
+              <div class="reportTxt">إجمالي المدخلات</div>
+            </div>
+            <div class="reportCard slate">
+              <div class="reportVal">0</div>
+              <div class="reportTxt">غير صالح</div>
+            </div>
+            <div class="reportCard amber">
+              <div class="reportVal">0</div>
+              <div class="reportTxt">غير موجود</div>
+            </div>
+            <div class="reportCard">
+              <div class="reportVal">0</div>
+              <div class="reportTxt">محظور مسبقًا</div>
+            </div>
+            <div class="reportCard green">
+              <div class="reportVal">0</div>
+              <div class="reportTxt">تم حظره الآن</div>
+            </div>
+          </div>
+
+          <div id="bulkResults" class="reportList">
+            <div class="emptyState">قم بعمل معاينة أو نفّذ الحظر الجماعي لعرض التقرير هنا.</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="card">
+        <section class="panelCard exportBox">
+          <div class="toolbar">
+            <div class="sectionTitle" style="margin:0">أرقام العملاء المحظورين الجاهزة للنسخ</div>
+
+<div class="exportTools">
+  <button class="btn btnGhost" id="btnRefreshExport" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+      <path d="M21 3v7h-7"></path>
+    </svg>
+    تحديث القائمة
+  </button>
+
+  <button class="btn btnGhost" id="btnToggleExportView" type="button">
+    عرض الكل
+  </button>
+
+  <button class="btn btnPrimary" id="btnCopyExport" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    نسخ الكل
+  </button>
+</div>
+          
+          </div>
+
+          <div class="subHint">
+            هذه القائمة مهيأة مباشرة للصقها داخل EasySell COD Form (via import)، وكل رقم يكون في سطر مستقل بهذه الصيغة: +968XXXXXXXX
+          </div>
+
+          <div class="box" style="margin-top:12px">
+            <textarea
+              id="exportPhones"
+              readonly
+              placeholder="ستظهر هنا أرقام العملاء المحظورين بصيغة +968XXXXXXXX"
+            ></textarea>
+          </div>
+
+          <div class="subHint">
+            <span id="exportCount">0</span> رقم جاهز للنسخ
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+  import { requirePackLogin, authFetch as _authFetch } from "./auth.js";
+  requirePackLogin();
+
+  const $ = (id) => document.getElementById(id);
+
+const state = {
+  blacklist: [],
+  searchResults: [],
+  bulkPreview: null,
+  bulkApply: null,
+  blacklistVisibleCount: 5,
+  exportVisibleCount: 5,
+  exportExpanded: false,
+  exportAllPhones: []
+};
+
+  
+  function ensureGlobalLoader(){
+    if(document.getElementById("globalLoader")) return;
+
+    const css = document.createElement("style");
+    css.textContent = `
+      #globalLoader{
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        background: rgba(0,0,0,.38);
+        backdrop-filter: blur(2px);
+        z-index: 200000;
+      }
+      #globalLoader.show{ display:flex; }
+      #globalLoader .glCard{
+        width: min(420px, 92vw);
+        background: rgba(255,255,255,.96);
+        border: 1px solid rgba(16,24,40,.10);
+        box-shadow: 0 26px 60px rgba(0,0,0,.22);
+        border-radius: 18px;
+        padding: 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family:"Cairo",system-ui,sans-serif;
+      }
+      #globalLoader .glGif{
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        background:#fff;
+        border: 1px solid rgba(16,24,40,.10);
+        object-fit: contain;
+        flex: 0 0 auto;
+      }
+      #globalLoader .glText{
+        font-weight: 950;
+        font-size: 14px;
+        color: var(--purpleDark, #3C0A63);
+        line-height: 1.6;
+      }
+      #globalLoader .glSub{
+        margin-top: 3px;
+        font-weight: 900;
+        font-size: 12.5px;
+        color: rgba(16,24,40,.65);
+      }
+    `;
+    document.head.appendChild(css);
+
+    const el = document.createElement("div");
+    el.id = "globalLoader";
+    el.setAttribute("aria-hidden","true");
+    el.innerHTML = `
+      <div class="glCard" role="status" aria-live="polite">
+        <img class="glGif"
+          src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/icon_-3.gif"
+          alt="loading">
+        <div style="min-width:0">
+          <div id="globalLoaderText" class="glText">جاري العمل… اصبر شوي</div>
+          <div class="glSub">لا تسوي تحديث، بنرجع لك حالًا</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(el);
+  }
+
+  ensureGlobalLoader();
+
+  function showLoader(msg){
+    const el = document.getElementById("globalLoader");
+    const t = document.getElementById("globalLoaderText");
+    if(t) t.textContent = msg || "جاري العمل… اصبر شوي";
+    el?.classList.add("show");
+    el?.setAttribute("aria-hidden","false");
+  }
+
+  function hideLoader(){
+    const el = document.getElementById("globalLoader");
+    el?.classList.remove("show");
+    el?.setAttribute("aria-hidden","true");
+  }
+
+  function toast(title, msg, ms = 1800){
+    showLoader(`${String(title || "").trim()} • ${String(msg || "").trim()}`);
+    setTimeout(hideLoader, ms);
+  }
+
+  const authFetch = async (input, init) => {
+    return await _authFetch(input, init);
+  };
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[m]));
+  }
+
+  function normalizePhone(raw){
+    let d = String(raw || "").replace(/\D+/g, "");
+    if(d.startsWith("00968")) d = d.slice(5);
+    while(d.startsWith("968968")) d = d.slice(3);
+    if(d.startsWith("968")) d = d.slice(3);
+    if(d.length > 8) d = d.slice(-8);
+    return d;
+  }
+
+  function prettyPhone(raw){
+    const local = normalizePhone(raw);
+    return local && local.length === 8 ? `+968 ${local}` : (raw || "—");
+  }
+
+  function toEasySellPhone(raw){
+    const local = normalizePhone(raw);
+    if(!/^\d{8}$/.test(local)) return "";
+    return `+968${local}`;
+  }
+
+  function fmtDate(v){
+    try{
+      const d = new Date(v);
+      if(Number.isNaN(d.getTime())) return "—";
+      return new Intl.DateTimeFormat("ar-OM", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(d);
+    }catch{
+      return "—";
+    }
+  }
+
+  function splitPhones(raw){
+    return String(raw || "")
+      .split(/[\n\r,;|\t ]+/)
+      .map((x) => String(x || "").trim())
+      .filter(Boolean);
+  }
+
+  async function postJSON(url, body){
+    const r = await authFetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body || {}),
+      cache: "no-store"
+    });
+
+    const d = await r.json().catch(() => ({}));
+    if(!r.ok) throw new Error(d?.error || "Request failed");
+    return d;
+  }
+
+  function customerCardHTML(c){
+    const isBlocked = !!c?.blacklisted;
+
+    return `
+      <article class="customerCard" data-customer-id="${esc(c.id)}">
+        <div class="customerTop">
+          <div class="customerMain">
+            <div class="avatarBox" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 21a8 8 0 0 0-16 0"></path>
+                <circle cx="12" cy="8" r="4"></circle>
+              </svg>
+            </div>
+
+            <div class="nameBlock">
+              <div class="custName">${esc(c.name || "عميل بدون اسم")}</div>
+              <div class="custSub">${esc(c.email || "بدون بريد إلكتروني")}</div>
+            </div>
+          </div>
+
+          <div class="statePill ${isBlocked ? "blacklisted" : "normal"}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              ${
+                isBlocked
+                  ? `<circle cx="12" cy="12" r="9"></circle><path d="M18 6L6 18"></path><path d="M6 6l12 12"></path>`
+                  : `<path d="M20 6 9 17l-5-5"></path>`
+              }
+            </svg>
+            <span>${isBlocked ? "محظور من الدفع عند الاستلام" : "غير محظور من الدفع عند الاستلام"}</span>
+          </div>
+        </div>
+
+        <div class="metaGrid">
+          <div class="metaCard">
+            <div class="metaLabel">رقم الهاتف</div>
+            <div class="metaValue">${esc(prettyPhone(c.phone))}</div>
+          </div>
+
+          <div class="metaCard">
+            <div class="metaLabel">المدينة</div>
+            <div class="metaValue">${esc(c.city || "—")}</div>
+          </div>
+
+          <div class="metaCard">
+            <div class="metaLabel">عدد الطلبات</div>
+            <div class="metaValue">${esc(String(c.ordersCount ?? 0))}</div>
+          </div>
+
+          <div class="metaCard">
+            <div class="metaLabel">آخر تحديث</div>
+            <div class="metaValue">${esc(fmtDate(c.updatedAt || c.createdAt))}</div>
+          </div>
+        </div>
+
+        <div class="actionRow">
+          ${
+            isBlocked
+              ? `
+                <button class="btn btnSoftRose" data-act="unblacklist" data-id="${esc(c.id)}" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 6L6 18"></path>
+                    <path d="M6 6l12 12"></path>
+                  </svg>
+                  إلغاء المنع
+                </button>
+              `
+              : `
+                <button class="btn btnDark" data-act="blacklist" data-id="${esc(c.id)}" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M18 6L6 18"></path>
+                  </svg>
+                  منع الدفع عند الاستلام
+                </button>
+              `
+          }
+
+          <span class="miniMeta">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 12h-4"></path>
+              <path d="M6 12H2"></path>
+              <path d="M12 6V2"></path>
+              <path d="M12 22v-4"></path>
+              <circle cx="12" cy="12" r="4"></circle>
+            </svg>
+            الحالة الحالية: ${isBlocked ? "محظور من الدفع عند الاستلام" : "غير محظور من الدفع عند الاستلام"}
+          </span>
+        </div>
+      </article>
+    `;
+  }
+
+  function setStats(){
+    $("statBlacklisted").textContent = String(state.blacklist.length);
+    $("statVisible").textContent = String(Math.min(state.blacklistVisibleCount, state.blacklist.length));
+    $("statFound").textContent = String(state.searchResults.length);
+    $("statusBadge").textContent = `المحظورون من الدفع عند الاستلام: ${state.blacklist.length}`;
+  }
+
+function buildBlacklistedPhonesExport(customers = []){
+  const phones = customers
+    .map((c) => toEasySellPhone(c?.phone || ""))
+    .filter(Boolean);
+
+  const unique = [...new Set(phones)].sort();
+
+  state.exportAllPhones = unique;
+
+  const visible = state.exportExpanded
+    ? unique
+    : unique.slice(0, state.exportVisibleCount);
+
+  $("exportPhones").value = visible.join("\n");
+  $("exportCount").textContent = String(unique.length);
+
+  const btn = $("btnToggleExportView");
+  if (btn) {
+    if (unique.length <= state.exportVisibleCount) {
+      btn.style.display = "none";
+    } else {
+      btn.style.display = "";
+      btn.textContent = state.exportExpanded
+        ? "عرض أقل"
+        : `عرض الكل (${unique.length})`;
+    }
+  }
+}
+  function renderBlacklistList(){
+    const all = Array.isArray(state.blacklist) ? state.blacklist : [];
+    const visible = all.slice(0, state.blacklistVisibleCount);
+
+    const listHtml = visible.length
+      ? visible.map(customerCardHTML).join("")
+      : `<div class="emptyState">لا يوجد أي عميل محظور من الدفع عند الاستلام حاليًا.</div>`;
+
+    const hasMore = all.length > visible.length;
+
+    $("blacklistList").innerHTML = `
+      ${listHtml}
+      ${
+        hasMore
+          ? `
+            <div style="display:grid;gap:10px;">
+              <button class="btn btnGhost" id="btnShowMoreBlacklist" type="button">
+                عرض المزيد (${visible.length} / ${all.length})
+              </button>
+            </div>
+          `
+          : all.length
+            ? `
+              <div class="subHint" style="text-align:center">
+                تم عرض جميع العملاء المحظورين من الدفع عند الاستلام (${all.length})
+              </div>
+            `
+            : ``
+      }
+    `;
+  }
+
+  async function loadBlacklist(){
+    try{
+      showLoader("جاري تحميل العملاء المحظورين من الدفع عند الاستلام…");
+      const r = await authFetch("/api/manage/customers/blacklist?limit=150", {
+        cache: "no-store"
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل تحميل القائمة");
+
+      state.blacklist = Array.isArray(d?.customers) ? d.customers : [];
+      state.blacklistVisibleCount = 5;
+state.exportVisibleCount = 5;
+state.exportExpanded = false;
+      state.blacklistVisibleCount = 5;
+
+      renderBlacklistList();
+      buildBlacklistedPhonesExport(state.blacklist);
+      setStats();
+    }catch(e){
+      $("blacklistList").innerHTML = `<div class="emptyState">تعذر تحميل قائمة العملاء المحظورين من الدفع عند الاستلام.</div>`;
+      buildBlacklistedPhonesExport([]);
+      toast("خطأ", e?.message || "فشل التحميل", 2200);
+    }finally{
+      hideLoader();
+    }
+  }
+
+  async function searchCustomer(){
+    try{
+      const raw = String($("phoneInput")?.value || "").trim();
+
+      if(!raw){
+        toast("تنبيه", "اكتب رقم العميل أولًا", 1600);
+        return;
+      }
+
+      showLoader("جاري البحث عن العميل…");
+
+      const r = await authFetch(
+        `/api/manage/customers/by-phone?phone=${encodeURIComponent(raw)}`,
+        { cache: "no-store" }
+      );
+
+      const d = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل البحث");
+
+      state.searchResults = Array.isArray(d?.customers) ? d.customers : [];
+
+      $("searchResult").innerHTML = state.searchResults.length
+        ? state.searchResults.map(customerCardHTML).join("")
+        : `<div class="emptyState">لم يتم العثور على عميل بهذا الرقم.</div>`;
+
+      setStats();
+    }catch(e){
+      $("searchResult").innerHTML = `<div class="emptyState">تعذر إكمال البحث.</div>`;
+      toast("خطأ", e?.message || "فشل البحث", 2200);
+    }finally{
+      hideLoader();
+    }
+  }
+
+  async function blacklistCustomer(customerId){
+    try{
+      showLoader("جاري منع العميل من الدفع عند الاستلام…");
+      await postJSON("/api/manage/customer/blacklist/add", { customerId });
+      toast("تم", "تم منع العميل من الدفع عند الاستلام", 1200);
+      await loadBlacklist();
+      if(String($("phoneInput")?.value || "").trim()) await searchCustomer();
+    }catch(e){
+      toast("خطأ", e?.message || "تعذر تنفيذ العملية", 2200);
+    }finally{
+      hideLoader();
+    }
+  }
+
+  async function unblacklistCustomer(customerId){
+    try{
+      showLoader("جاري إلغاء منع الدفع عند الاستلام…");
+      await postJSON("/api/manage/customer/blacklist/remove", { customerId });
+      toast("تم", "تم إلغاء المنع بنجاح", 1200);
+      await loadBlacklist();
+      if(String($("phoneInput")?.value || "").trim()) await searchCustomer();
+    }catch(e){
+      toast("خطأ", e?.message || "تعذر تنفيذ العملية", 2200);
+    }finally{
+      hideLoader();
+    }
+  }
+
+  function renderBulkSummary(summary, mode = "apply"){
+    const s = summary || {
+      totalInput: 0,
+      invalid: 0,
+      notFound: 0,
+      alreadyBlacklisted: 0,
+      blacklistedNow: 0,
+      readyToBlacklist: 0
+    };
+
+    const lastVal = mode === "preview"
+      ? String(s.readyToBlacklist ?? 0)
+      : String(s.blacklistedNow ?? 0);
+
+    const lastLbl = mode === "preview"
+      ? "جاهز للتنفيذ"
+      : "تم المنع الآن";
+
+    $("bulkSummary").innerHTML = `
+      <div class="reportCard">
+        <div class="reportVal">${esc(String(s.totalInput ?? 0))}</div>
+        <div class="reportTxt">إجمالي المدخلات</div>
+      </div>
+      <div class="reportCard slate">
+        <div class="reportVal">${esc(String(s.invalid ?? 0))}</div>
+        <div class="reportTxt">غير صالح</div>
+      </div>
+      <div class="reportCard amber">
+        <div class="reportVal">${esc(String(s.notFound ?? 0))}</div>
+        <div class="reportTxt">غير موجود</div>
+      </div>
+      <div class="reportCard">
+        <div class="reportVal">${esc(String(s.alreadyBlacklisted ?? 0))}</div>
+        <div class="reportTxt">محظور مسبقًا</div>
+      </div>
+      <div class="reportCard green">
+        <div class="reportVal">${esc(lastVal)}</div>
+        <div class="reportTxt">${lastLbl}</div>
+      </div>
+    `;
+  }
+
+  function renderBulkResults(results){
+    const rows = Array.isArray(results) ? results : [];
+
+    $("bulkResults").innerHTML = rows.length
+      ? rows.map((row) => {
+          const status = String(row?.status || "");
+          const customers = Array.isArray(row?.customers) ? row.customers : [];
+
+          let pillClass = "slate";
+          let pillText = "غير محدد";
+          let pillIcon = `<circle cx="12" cy="12" r="9"></circle>`;
+
+          if(status === "invalid_phone"){
+            pillClass = "slate";
+            pillText = "رقم غير صالح";
+            pillIcon = `<path d="M12 8v4"></path><path d="M12 16h.01"></path><circle cx="12" cy="12" r="9"></circle>`;
+          }else if(status === "not_found"){
+            pillClass = "warn";
+            pillText = "غير موجود";
+            pillIcon = `<path d="M18 6L6 18"></path><path d="M6 6l12 12"></path>`;
+          }else if(status === "processed"){
+            pillClass = "ok";
+            pillText = "تمت المعالجة";
+            pillIcon = `<path d="M20 6 9 17l-5-5"></path>`;
+          }else if(status === "matched"){
+            pillClass = "ok";
+            pillText = "مطابق";
+            pillIcon = `<path d="M20 6 9 17l-5-5"></path>`;
+          }
+
+          return `
+            <div class="reportItem">
+              <div class="reportHead">
+                <div class="reportPhone">${esc(row?.rawPhone || "—")}</div>
+                <div class="reportPill ${pillClass}">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    ${pillIcon}
+                  </svg>
+                  <span>${pillText}</span>
+                </div>
+              </div>
+
+              ${
+                customers.length
+                  ? `
+                    <div class="reportCustomers">
+                      ${customers.map((c) => {
+                        const action = String(c?.action || "");
+                        const cls =
+                          action === "blacklisted_now" ? "ok" :
+                          action === "already_blacklisted" ? "warn" :
+                          "slate";
+
+                        const txt =
+                          action === "blacklisted_now" ? "تم المنع الآن" :
+                          action === "already_blacklisted" ? "محظور مسبقًا" :
+                          (c?.blacklisted ? "محظور" : "مطابق");
+
+                        return `
+                          <div class="reportCustomer">
+                            <div>
+                              <div class="reportCustomerName">${esc(c?.name || "عميل بدون اسم")}</div>
+                              <div class="reportCustomerSub">${esc(c?.email || prettyPhone(c?.phone || ""))}</div>
+                            </div>
+                            <div class="reportCustomerAction ${cls}">${txt}</div>
+                          </div>
+                        `;
+                      }).join("")}
+                    </div>
+                  `
+                  : ``
+              }
+            </div>
+          `;
+        }).join("")
+      : `<div class="emptyState">قم بعمل معاينة أو نفّذ العملية الجماعية لعرض التقرير هنا.</div>`;
+  }
+
+  async function runBulkPreview(){
+    try{
+      const rawText = String($("bulkPhones")?.value || "").trim();
+      if(!rawText){
+        toast("تنبيه", "الصق الأرقام أولًا", 1600);
+        return;
+      }
+
+      const count = splitPhones(rawText).length;
+      showLoader(`جاري معاينة ${count} رقم…`);
+
+      const data = await postJSON("/api/manage/customers/blacklist/preview", { rawText });
+      state.bulkPreview = data;
+
+      renderBulkSummary(data?.summary || {}, "preview");
+      renderBulkResults(data?.results || []);
+      toast("تم", "اكتملت المعاينة", 1100);
+    }catch(e){
+      renderBulkSummary(null, "preview");
+      renderBulkResults([]);
+      toast("خطأ", e?.message || "فشلت المعاينة", 2200);
+    }finally{
+      hideLoader();
+    }
+  }
+
+  async function runBulkApply(){
+    try{
+      const rawText = String($("bulkPhones")?.value || "").trim();
+      if(!rawText){
+        toast("تنبيه", "الصق الأرقام أولًا", 1600);
+        return;
+      }
+
+      const count = splitPhones(rawText).length;
+      showLoader(`جاري تنفيذ العملية على ${count} رقم…`);
+
+      const data = await postJSON("/api/manage/customers/blacklist/bulk-add", { rawText });
+      state.bulkApply = data;
+
+      renderBulkSummary(data?.summary || {}, "apply");
+      renderBulkResults(data?.results || []);
+      await loadBlacklist();
+
+      if(String($("phoneInput")?.value || "").trim()) {
+        await searchCustomer();
+      }
+
+      toast("تم", "اكتملت العملية الجماعية", 1300);
+    }catch(e){
+      toast("خطأ", e?.message || "فشلت العملية الجماعية", 2200);
+    }finally{
+      hideLoader();
+    }
+  }
+
+async function copyExportPhones(){
+  try{
+    const text = Array.isArray(state.exportAllPhones)
+      ? state.exportAllPhones.join("\n").trim()
+      : "";
+
+    if(!text){
+      toast("تنبيه", "لا توجد أرقام للنسخ", 1500);
+      return;
+    }
+
+    await navigator.clipboard.writeText(text);
+    toast("تم", `تم نسخ ${state.exportAllPhones.length} رقم`, 1200);
+  }catch{
+    const ta = $("exportPhones");
+    if (ta) {
+      const original = ta.value;
+      ta.value = Array.isArray(state.exportAllPhones) ? state.exportAllPhones.join("\n") : "";
+      ta.focus();
+      ta.select();
+      try{ document.execCommand("copy"); }catch{}
+      ta.value = state.exportExpanded
+        ? state.exportAllPhones.join("\n")
+        : state.exportAllPhones.slice(0, state.exportVisibleCount).join("\n");
+    }
+    toast("تم", `تم نسخ ${state.exportAllPhones.length} رقم`, 1200);
+  }
+}
+  
+  $("btnSearch")?.addEventListener("click", searchCustomer);
+
+  $("btnRefreshAll")?.addEventListener("click", async () => {
+    await loadBlacklist();
+    if(String($("phoneInput")?.value || "").trim()) {
+      await searchCustomer();
+    }
+  });
+
+  $("btnReloadBlacklist")?.addEventListener("click", loadBlacklist);
+
+  $("phoneInput")?.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") searchCustomer();
+  });
+
+  $("btnBulkPreview")?.addEventListener("click", runBulkPreview);
+  $("btnBulkApply")?.addEventListener("click", runBulkApply);
+
+  $("btnBulkClear")?.addEventListener("click", () => {
+    $("bulkPhones").value = "";
+    state.bulkPreview = null;
+    state.bulkApply = null;
+    renderBulkSummary(null, "apply");
+    renderBulkResults([]);
+  });
+
+$("btnRefreshExport")?.addEventListener("click", () => {
+  buildBlacklistedPhonesExport(state.blacklist);
+  toast("تم", "تم تحديث قائمة الأرقام", 1200);
+});
+
+$("btnToggleExportView")?.addEventListener("click", () => {
+  state.exportExpanded = !state.exportExpanded;
+  buildBlacklistedPhonesExport(state.blacklist);
+});
+
+$("btnCopyExport")?.addEventListener("click", copyExportPhones);
+
+  
+  document.addEventListener("click", async (e) => {
+    const moreBtn = e.target.closest("#btnShowMoreBlacklist");
+    if (moreBtn) {
+      state.blacklistVisibleCount += 20;
+      renderBlacklistList();
+      setStats();
+      return;
+    }
+
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+
+    const act = String(btn.getAttribute("data-act") || "");
+    const customerId = String(btn.getAttribute("data-id") || "").trim();
+    if(!customerId) return;
+
+    btn.disabled = true;
+    try{
+      if(act === "blacklist") await blacklistCustomer(customerId);
+      if(act === "unblacklist") await unblacklistCustomer(customerId);
+    }finally{
+      btn.disabled = false;
+    }
+  });
+
+  loadBlacklist();
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1410 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | منتجات بدون تاقات</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+
+      --r18:18px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:100%;
+      margin:0;
+      padding:18px 24px 26px;
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow2);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+
+    .leftActions{ display:flex; align-items:center; gap:10px; min-width:0; }
+
+    .iconBtn{
+      width:44px; height:44px; border-radius:14px;
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.85);
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+      cursor:pointer;
+      display:grid; place-items:center;
+      transition:.15s;
+    }
+    .iconBtn:active{ transform:scale(.98); }
+
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandMark{
+      width:44px; height:44px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      display:grid; place-items:center;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+    .brandIcon{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .brandName{
+      font-size:18px;font-weight:900;margin:0;line-height:1.2;letter-spacing:.2px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px; padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+    .label{ font-size:13px; color:var(--muted); font-weight:900; margin:0 0 10px 0; }
+
+.controls{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.controls .box{
+  flex:1 1 320px;
+}
+.controls .btn{
+  width:auto;
+  min-width:140px;
+}
+
+    .box{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px; background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+      position:relative;
+      z-index:60;
+      overflow:visible;
+    }
+    .box input{
+      border:none; outline:none; background:transparent; width:100%;
+      font-size:15px; font-weight:900; color:var(--ink);
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+    .box input::placeholder{ color: rgba(102,112,133,.9); font-weight:800; }
+
+    .btn{
+      border:none; border-radius:14px; padding:12px 12px;
+      cursor:pointer; font-weight:900; font-size:15px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none; width:100%;
+      white-space:nowrap;
+    }
+    .btn:active{ transform:scale(.985); }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff; box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .btnGhost{
+      background:#f2f4f7; color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width:600px){ .stats{ grid-template-columns:1fr; } }
+
+    .stat{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      border-radius:14px;
+      padding:10px 12px;
+    }
+    .statLbl{ font-size:12px; font-weight:950; color:rgba(16,24,40,.55); }
+    .statVal{ margin-top:3px; font-weight:980; color:var(--purpleDark); font-size:16px; }
+
+    .hint{
+      margin-top:10px;
+      font-size:12.5px;
+      font-weight:900;
+      color:rgba(16,24,40,.62);
+      line-height:1.6;
+    }
+
+    .grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+    @media (min-width: 820px){ .grid{ grid-template-columns: repeat(4, minmax(0,1fr)); } }
+    @media (max-width:420px){ .grid{ grid-template-columns:1fr; } }
+
+    .item{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+      border-radius:18px;
+      overflow:hidden;
+      transition:.15s;
+      position:relative;
+    }
+    .item:active{ transform:scale(.99); }
+
+    .imgWrap{
+      position:relative;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, rgba(107,15,166,.08), rgba(241,198,177,.18));
+      overflow:hidden;
+    }
+    .imgWrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .meta{ padding:10px 12px 12px; display:flex; flex-direction:column; gap:8px; }
+    .name{ font-weight:980; font-size:13.5px; line-height:1.45; color:var(--ink); min-height: 42px; }
+    .sub{ font-weight:900; font-size:12.5px; color:rgba(16,24,40,.62); line-height:1.45; }
+    .bottom{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(241,198,177,.35);
+      color: var(--purpleDark);
+      border:1px solid rgba(241,198,177,.65);
+      white-space:nowrap;
+    }
+
+    .rowBtns{ display:flex; gap:8px; flex-wrap:wrap; width:100%; }
+    .mini{
+      border:none; cursor:pointer;
+      padding:7px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(107,15,166,.10);
+      border:1px solid rgba(107,15,166,.18);
+      color:var(--purpleDark);
+      user-select:none;
+      display:inline-flex; align-items:center; gap:8px;
+    }
+    .mini.ghost{
+      background: rgba(16,24,40,.06);
+      border-color: rgba(16,24,40,.14);
+      color: rgba(16,24,40,.80);
+    }
+
+    /* Suggestions */
+    .suggestBox{
+      position:absolute;
+      top: calc(100% + 8px);
+      right: 0; left: 0;
+      z-index: 99999;
+      background: rgba(255,255,255,.98);
+      border: 1px solid rgba(16,24,40,.12);
+      box-shadow: 0 16px 38px rgba(16,24,40,.16);
+      border-radius: 16px;
+      overflow: hidden;
+      display:none;
+      max-height: 320px;
+      overflow-y:auto;
+    }
+    .suggestBox.show{ display:block; }
+    .suggestItem{
+      padding: 10px 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(16,24,40,.08);
+    }
+    .suggestItem:last-child{ border-bottom:none; }
+    .suggestItem:hover{ background: rgba(107,15,166,.06); }
+    .suggestMain{ font-weight:950; font-size:13px; color:#111827; line-height:1.35; }
+    .suggestSub{ margin-top:3px; font-weight:900; font-size:12px; color:rgba(16,24,40,.65); line-height:1.35; }
+    .suggestTag{
+      flex:0 0 auto;
+      font-weight:950;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(241,198,177,.35);
+      border: 1px solid rgba(241,198,177,.65);
+      color: var(--purpleDark);
+      white-space:nowrap;
+    }
+
+    /* Toasts */
+    .toasts{
+      position:fixed; bottom:14px; left:14px; right:14px;
+      z-index:100000; display:flex; flex-direction:column; gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px); opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+    .toast .icon{ width:34px; height:34px; border-radius:12px; display:grid; place-items:center; flex:0 0 auto; color:#fff; }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{ border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px; border-radius:10px; color:rgba(16,24,40,.55); }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+
+    .bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+    .bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+    @keyframes shrink{ to{ transform:scaleX(0); } }
+
+    .qtyBox{
+      display:flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(16,24,40,.12);
+      background:#fff;
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      width:100%;
+    }
+    .qtyBox input{
+      width:100%;
+      border:none;
+      outline:none;
+      font-family:"Cairo",system-ui,sans-serif;
+      font-weight:950;
+      font-size:13px;
+      background:transparent;
+    }
+
+    .videoWrap{
+      margin-top:12px;
+      padding:12px;
+      border-radius:18px;
+      border:1px solid rgba(16,24,40,.12);
+      background:#fff;
+      box-shadow:0 8px 18px rgba(16,24,40,.10);
+    }
+    .videoWrap video{ width:100%; border-radius:14px; }
+
+    /* Pagination */
+    .pager{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .pageInfo{
+      font-weight:950;
+      font-size:12.5px;
+      color:rgba(16,24,40,.70);
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:999px;
+      padding:8px 12px;
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+    }
+    .tagChips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+.chip{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 10px; border-radius:999px;
+  background: rgba(107,15,166,.08);
+  border:1px solid rgba(107,15,166,.18);
+  font-weight:950; font-size:12px; color:var(--purpleDark);
+}
+.chipX{
+  border:none; cursor:pointer;
+  width:22px; height:22px; border-radius:999px;
+  background: rgba(0,0,0,.08);
+  font-weight:999; line-height:1;
+}
+/* ===== Tags Preview + More ===== */
+.chipMore{
+  cursor:pointer;
+  background: rgba(16,24,40,.06);
+  border-color: rgba(16,24,40,.14);
+  color: rgba(16,24,40,.80);
+}
+.chipBtn{
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px; height:22px;
+  border-radius:999px;
+}
+.chipBtn:hover{ background: rgba(0,0,0,.06); }
+.ico16{ width:16px; height:16px; }
+
+/* ===== Tags Modal ===== */
+#tagModal{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.62);
+  display:none;
+  align-items:center; justify-content:center;
+  padding:16px;
+  z-index:90000;
+}
+#tagModal.open{ display:flex; }
+
+.tagBox{
+  width:min(720px,100%);
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 26px 60px rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.18);
+}
+.tagHead{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px;
+  border-bottom:1px solid rgba(16,24,40,.10);
+}
+.tagTitle{
+  font-weight:980;
+  font-size:14px;
+  color:#111827;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.tagClose{
+  border:none;
+  background:rgba(16,24,40,.06);
+  border:1px solid rgba(16,24,40,.10);
+  width:40px;height:40px;border-radius:14px;
+  cursor:pointer;
+  display:grid; place-items:center;
+}
+.tagBody{ padding:12px; }
+.tagInfo{
+  background:rgba(107,15,166,.06);
+  border:1px solid rgba(16,24,40,.10);
+  border-radius:16px;
+  padding:10px 12px;
+  margin-bottom:10px;
+}
+.tagInfoName{ font-weight:980; font-size:13px; color:#111827; line-height:1.5; }
+.tagInfoSub{ margin-top:4px; font-weight:900; font-size:12.5px; color:rgba(16,24,40,.65); }
+
+.tagAllChips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+
+.tagAddRow{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.tagAddRow .boxLike{
+  flex:1 1 260px;
+  display:flex; gap:10px; align-items:center;
+  padding:10px 12px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.08);
+}
+.tagAddRow input{
+  width:100%;
+  border:none; outline:none;
+  font-family:"Cairo",system-ui,sans-serif;
+  font-weight:950;
+}
+.tagActions{
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.tagActions .btn{ width:auto; padding:10px 12px; }
+    #tagModal{ pointer-events: auto; }
+.tagBox{ pointer-events: auto; }
+/* ✅ منع الصفحة الخلفية من التمرير أثناء فتح المنبثقة */
+body.modalOpen { overflow: hidden; }
+
+/* ✅ الصندوق ثابت ومقسم: هيدر ثابت + جسم يتمرّر */
+.tagBox{
+  width:min(720px,100%);
+  max-height: min(82vh, 760px); /* مهم */
+  display:flex;
+  flex-direction:column;
+}
+
+/* ✅ جسم المنبثقة هو اللي يتمرّر */
+.tagBody{
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* ===== Pro Filter Buttons (Tags count) ===== */
+.tagsCountFilter{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.filterBtn{
+  border:none;
+  cursor:pointer;
+  user-select:none;
+
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 12px;
+  border-radius:999px;
+
+  font-family:"Cairo",system-ui,sans-serif;
+  font-weight:950;
+  font-size:12.5px;
+
+  background: rgba(107,15,166,.10);
+  border:1px solid rgba(107,15,166,.18);
+  color:var(--purpleDark);
+
+  box-shadow:0 8px 18px rgba(16,24,40,.08);
+  transition: .15s;
+}
+
+.filterBtn:active{ transform:scale(.985); }
+
+.filterBtn .fIco{
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke: currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.92;
+}
+
+.filterBtn.ghost{
+  background: rgba(16,24,40,.06);
+  border-color: rgba(16,24,40,.14);
+  color: rgba(16,24,40,.80);
+}
+
+/* زر نشط */
+.filterBtn.active{
+  background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+  color:#fff;
+  border-color: transparent;
+  box-shadow:0 12px 26px rgba(107,15,166,.22);
+}
+.filterBtn.active .fIco{ opacity: 1; }
+
+  
+  </style>
+
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="leftActions">
+        <button class="iconBtn" id="btnBack" aria-label="رجوع" title="رجوع">
+          <svg width="22" height="22" viewBox="0 0 24 24"
+               style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <button class="iconBtn" id="btnRefresh" aria-label="تحديث" title="تحديث">
+          <svg width="22" height="22" viewBox="0 0 24 24"
+               style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M21 12a9 9 0 1 1-3-6.7"/>
+            <path d="M21 3v7h-7"/>
+          </svg>
+        </button>
+
+        <div class="brand">
+          <div class="brandMark" aria-hidden="true">
+            <img src="./ico1.png" alt="icon" class="brandIcon">
+          </div>
+          <div style="min-width:0">
+            <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+            <div class="brandSub">إدارة التاقات • هلا بيوتي</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="badge">
+        <svg width="18" height="18" viewBox="0 0 24 24"
+             style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/>
+        </svg>
+        <span id="statusBadge">جاهز</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">بحث المنتجات (Active) بدون تاقات (تظهر النتائج عند البحث أو عند التحميل)</p>
+
+      <div class="controls">
+        <div class="box">
+          <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(60,10,99,.65);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3-3"></path>
+          </svg>
+
+          <input id="qInput" placeholder="ابحث باسم المنتج أو SKU أو باركود..." autocomplete="off">
+          <div id="suggestBox" class="suggestBox"></div>
+        </div>
+
+        <button class="btn btnPrimary" id="btnLoad">
+          <svg width="20" height="20" viewBox="0 0 24 24"
+               style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3-3"></path>
+          </svg>
+          بحث
+        </button>
+<button class="btn btnGhost" id="btnToggleAll">إظهار كل المنتجات</button>
+<button class="btn btnGhost" id="btnClear">
+  <svg width="20" height="20" viewBox="0 0 24 24"
+       style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+    <path d="M6 6l12 12"></path>
+    <path d="M18 6L6 18"></path>
+  </svg>
+  مسح البحث
+</button>
+
+<!-- ✅ فلترة جنب مسح البحث -->
+<div id="tagsCountFilter" class="tagsCountFilter" style="display:none;">
+  <button class="filterBtn" id="btnMostTags" type="button">
+    <svg class="fIco" viewBox="0 0 24 24">
+      <path d="M12 3v18"></path>
+      <path d="M7 8l5-5 5 5"></path>
+      <path d="M5 21h14"></path>
+    </svg>
+    الأكثر
+  </button>
+
+  <button class="filterBtn" id="btnLeastTags" type="button">
+    <svg class="fIco" viewBox="0 0 24 24">
+      <path d="M12 21V3"></path>
+      <path d="M7 16l5 5 5-5"></path>
+      <path d="M5 3h14"></path>
+    </svg>
+    الأقل
+  </button>
+
+  <button class="filterBtn ghost" id="btnClearTagsSort" type="button">
+    <svg class="fIco" viewBox="0 0 24 24">
+      <path d="M6 6l12 12"></path>
+      <path d="M18 6L6 18"></path>
+    </svg>
+    إلغاء
+  </button>
+</div>      </div> 
+    <div class="card">
+      <p class="label">نتائج المنتجات</p>
+      <div id="grid" class="grid"></div>
+
+      <div id="pager" class="pager" style="display:none">
+        <button class="mini ghost" id="btnPrev">السابق</button>
+        <div class="pageInfo" id="pageInfo">صفحة 1</div>
+        <button class="mini ghost" id="btnNext">التالي</button>
+      </div>
+    </div>
+  </div>
+<!-- Tags Manage Modal -->
+<div id="tagModal" aria-hidden="true">
+  <div class="tagBox">
+    <div class="tagHead">
+      <div class="tagTitle" id="tagModalTitle">إدارة التاقات</div>
+
+      <button class="tagClose" id="tagModalClose" type="button" aria-label="إغلاق" title="إغلاق">
+        <svg width="18" height="18" viewBox="0 0 24 24"
+             style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M6 6l12 12"></path>
+          <path d="M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="tagBody">
+      <div class="tagInfo">
+        <div class="tagInfoName" id="tagModalName">—</div>
+        <div class="tagInfoSub">هنا تقدر تضيف/تحذف تاقات بشكل احترافي</div>
+      </div>
+
+      <div class="tagAllChips" id="tagModalChips"></div>
+
+      <div class="tagAddRow">
+        <div class="boxLike">
+          <svg width="18" height="18" viewBox="0 0 24 24"
+               style="fill:none;stroke:rgba(60,10,99,.75);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          <input id="tagModalInput" placeholder="أضف تاق… (تقدر تكتب: كلمة, كلمة2)">
+        </div>
+
+        <div class="tagActions">
+          <button class="btn btnPrimary" id="tagModalAdd" type="button">
+            <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14"></path>
+              <path d="M5 12h14"></path>
+            </svg>
+            إضافة
+          </button>
+
+          <button class="btn btnGhost" id="tagModalDone" type="button">
+            <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 7l-11 11-5-5"></path>
+            </svg>
+            تم
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+  // ✅ نفس نظام تسجيل الدخول الموجود عندك (بدون auth.js)
+  (function guard(){
+    const k = (localStorage.getItem("PRODUCTS_STAFF_KEY") || "").trim();
+    if(!k) window.location.href = "/prod/login-w.html";
+  })();
+
+  function staffKey(){
+    return (localStorage.getItem("PRODUCTS_STAFF_KEY") || "").trim();
+  }
+
+  function staffHeaders(extra = {}){
+    const k = staffKey();
+    return {
+      "x-products-staff-key": k,
+      "Authorization": "Bearer " + k,
+      ...extra
+    };
+  }
+
+  function logout(){
+    localStorage.removeItem("PRODUCTS_STAFF_KEY");
+    window.location.href = "/prod/login-w.html";
+  }
+
+  const $ = (id) => document.getElementById(id);
+
+  const state = {
+    items: [],
+    tagged: 0,
+    page: 1,
+    pageSize: 12,
+    total: 0,
+    q: "",
+    showAll: false,
+
+tagsSort: "none"
+  
+  };
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function getImg(it){
+    let u = it?.image || it?.featuredImage || it?.imageUrl || "";
+    if(u && u.startsWith("//")) u = "https:" + u;
+    return String(u || "").trim();
+  }
+
+  function setStatus(txt){
+    const b = $("statusBadge");
+    if(b) b.textContent = txt;
+  }
+
+  function toast(type, title, msg, ms=2600){
+    const host = $("toasts");
+    if(!host) return alert(title + "\n" + msg);
+
+    const el = document.createElement("div");
+    el.className = `toast ${type}`;
+    el.innerHTML = `
+      <div class="icon">✓</div>
+      <div class="body">
+        <p class="title">${esc(title)}</p>
+        <p class="msg">${esc(msg)}</p>
+        <div class="bar"><i style="animation-duration:${ms}ms"></i></div>
+      </div>
+      <button class="x" aria-label="close">✕</button>
+    `;
+    host.appendChild(el);
+    const kill = () => { el.classList.add("out"); setTimeout(()=>el.remove(), 180); };
+    el.querySelector(".x").addEventListener("click", kill);
+    setTimeout(kill, ms);
+  }
+
+function updateStats(){
+  $("statTotal")  && ($("statTotal").textContent  = String(state.total));
+  $("statShown")  && ($("statShown").textContent  = String(state.items.length));
+  $("statTagged") && ($("statTagged").textContent = String(state.tagged));
+}
+  function setPager(){
+    const pager = $("pager");
+    const info  = $("pageInfo");
+    const prev  = $("btnPrev");
+    const next  = $("btnNext");
+
+    const canPrev = state.page > 1;
+    const canNext = state.items.length === state.pageSize;
+
+    pager.style.display = (state.items.length > 0 || state.page > 1) ? "flex" : "none";
+    info.textContent = `صفحة ${state.page}`;
+
+    prev.disabled = !canPrev;
+    next.disabled = !canNext;
+  }
+
+  // ======================
+  // Icons (SVG)
+  // ======================
+  const ICONS = {
+    x: `
+      <svg class="ico16" viewBox="0 0 24 24" aria-hidden="true"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M6 6l12 12"></path>
+        <path d="M18 6L6 18"></path>
+      </svg>
+    `,
+    plus: `
+      <svg class="ico16" viewBox="0 0 24 24" aria-hidden="true"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M12 5v14"></path>
+        <path d="M5 12h14"></path>
+      </svg>
+    `,
+    check: `
+      <svg class="ico16" viewBox="0 0 24 24" aria-hidden="true"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M20 7l-11 11-5-5"></path>
+      </svg>
+    `
+  };
+
+  // ======================
+  // UI CSS Injection (Chips + Modal)
+  // ======================
+  (function injectUiCss(){
+    const css = `
+      .tagChips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+      .chip{
+        display:inline-flex; align-items:center; gap:8px;
+        padding:6px 10px; border-radius:999px;
+        background: rgba(107,15,166,.08);
+        border:1px solid rgba(107,15,166,.18);
+        font-weight:950; font-size:12px; color: var(--purpleDark);
+      }
+      .chipBtn{
+        border:none; background:transparent; cursor:pointer;
+        padding:0; display:inline-flex; align-items:center; justify-content:center;
+        width:22px; height:22px; border-radius:999px;
+      }
+      .chipBtn:hover{ background: rgba(0,0,0,.06); }
+      .ico16{ width:16px; height:16px; }
+
+      .chipMore{
+        cursor:pointer;
+        background: rgba(16,24,40,.06);
+        border-color: rgba(16,24,40,.14);
+        color: rgba(16,24,40,.80);
+      }
+
+      /* Modal */
+      #tagModal{
+        position:fixed; inset:0;
+        background:rgba(0,0,0,.62);
+        display:none;
+        align-items:center; justify-content:center;
+        padding:16px;
+        z-index:99999;
+      }
+      #tagModal.open{ display:flex; }
+    `;
+    const st = document.createElement("style");
+    st.textContent = css;
+    document.head.appendChild(st);
+  })();
+
+  // ======================
+  // Tags Preview + Modal
+  // ======================
+  const TAGS_PREVIEW = 2;
+
+  function tagsPreviewHtml(tags){
+    const all = Array.isArray(tags) ? tags : [];
+    const shown = all.slice(0, TAGS_PREVIEW);
+    const hiddenCount = Math.max(0, all.length - shown.length);
+
+    if(!all.length){
+      return `
+        <button class="mini ghost" data-action="openTags" type="button">
+          ${ICONS.plus}
+          إضافة تاقات
+        </button>
+      `;
+    }
+
+    return `
+      <div class="tagChips">
+        ${shown.map(t => `
+          <span class="chip">
+            ${esc(t)}
+            <button class="chipBtn" data-action="removeTag" data-tag="${esc(t)}" type="button" title="حذف">
+              ${ICONS.x}
+            </button>
+          </span>
+        `).join("")}
+
+        <button class="chip chipMore" data-action="openTags" type="button" title="إدارة كل التاقات">
+          ${ICONS.plus}
+          ${hiddenCount ? `+${hiddenCount}` : `إدارة`}
+        </button>
+      </div>
+    `;
+  }
+
+  function ensureTagsModal(){
+    const old = document.getElementById("tagModal");
+    if(old) old.remove();
+
+    const svgX = `
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M6 6l12 12"></path><path d="M18 6L6 18"></path>
+      </svg>
+    `;
+    const svgPlus = `
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"
+           style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M12 5v14"></path><path d="M5 12h14"></path>
+      </svg>
+    `;
+
+    const modal = document.createElement("div");
+    modal.id = "tagModal";
+    modal.setAttribute("aria-hidden","true");
+    modal.innerHTML = `
+      <div class="tagBox" role="dialog" aria-modal="true">
+        <div class="tagHead">
+          <div class="tagTitle" id="tagModalTitle">إدارة التاقات</div>
+          <button class="tagClose" id="tagModalClose" type="button" aria-label="إغلاق" title="إغلاق">${svgX}</button>
+        </div>
+
+        <div class="tagBody">
+          <div class="tagInfo">
+            <div class="tagInfoName" id="tagModalName">—</div>
+            <div class="tagInfoSub">هنا تقدر تضيف/تحذف تاقات بشكل احترافي</div>
+          </div>
+
+          <div class="tagAllChips" id="tagModalChips"></div>
+
+          <div class="tagAddRow">
+            <div class="boxLike">
+              ${svgPlus}
+              <input id="tagModalInput" placeholder="أضف تاق… (تقدر تكتب: كلمة, كلمة2)">
+            </div>
+
+            <div class="tagActions">
+              <button class="btn btnPrimary" id="tagModalAdd" type="button">
+                <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5v14"></path><path d="M5 12h14"></path>
+                </svg>
+                إضافة
+              </button>
+
+              <button class="btn btnGhost" id="tagModalDone" type="button">
+                <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 7l-11 11-5-5"></path>
+                </svg>
+                تم
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", (ev) => { if(ev.target === modal) closeTagsModal(); });
+    document.getElementById("tagModalClose").addEventListener("click", closeTagsModal);
+    document.getElementById("tagModalDone").addEventListener("click", closeTagsModal);
+
+    document.getElementById("tagModalAdd").addEventListener("click", async () => {
+      const pid = window.tagUI?.pid;
+      if(!pid) return;
+
+      const input = document.getElementById("tagModalInput");
+      const raw = (input.value || "").trim();
+      if(!raw){
+        toast("warn","تنبيه","اكتب تاق واحد على الأقل.");
+        return;
+      }
+      await addTags(pid, raw, { keepModalOpen: true });
+      input.value = "";
+      input.focus();
+    });
+
+    document.getElementById("tagModalInput").addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        document.getElementById("tagModalAdd").click();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      const m = document.getElementById("tagModal");
+      if(!m || !m.classList.contains("open")) return;
+      if(e.key === "Escape") closeTagsModal();
+    }, { passive: true });
+  }
+
+  function renderTagsModalChips(it){
+    const host = document.getElementById("tagModalChips");
+    if(!host) return;
+
+    const tags = Array.isArray(it.tags) ? it.tags : [];
+    if(!tags.length){
+      host.innerHTML = `
+        <div style="color:rgba(16,24,40,.65);font-weight:900;font-size:12.5px;line-height:1.7;">
+          لا توجد تاقات حالياً. استخدم حقل الإضافة بالأسفل.
+        </div>
+      `;
+      return;
+    }
+
+    host.innerHTML = tags.map(tag => `
+      <span class="chip">
+        ${esc(tag)}
+        <button class="chipBtn"
+                type="button"
+                data-action="removeTag"
+                data-tag="${esc(tag)}"
+                data-scope="modal"
+                title="حذف">
+          ${ICONS.x}
+        </button>
+      </span>
+    `).join("");
+  }
+
+  function openTagsModal(productId){
+    ensureTagsModal();
+
+    const it = state.items.find(x => String(x.productId) === String(productId));
+    if(!it) return;
+
+    if(!window.tagUI) window.tagUI = { pid: null };
+    tagUI.pid = String(productId);
+
+    document.getElementById("tagModalTitle").textContent = "إدارة التاقات";
+    document.getElementById("tagModalName").textContent  = it.title || "—";
+    renderTagsModalChips(it);
+
+    const m = document.getElementById("tagModal");
+    m.classList.add("open");
+    m.setAttribute("aria-hidden","false");
+    document.body.classList.add("modalOpen");
+
+    setTimeout(() => document.getElementById("tagModalInput")?.focus?.(), 0);
+  }
+
+  function closeTagsModal(){
+    const m = document.getElementById("tagModal");
+    if(!m) return;
+
+    if(window.tagUI) tagUI.pid = null;
+    m.classList.remove("open");
+    m.setAttribute("aria-hidden","true");
+    document.body.classList.remove("modalOpen");
+  }
+
+  // ======================
+  // API: add / remove tags
+  // ======================
+  async function addTags(productId, rawTags, opts = {}){
+    const tags = String(rawTags||"")
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    if(!tags.length){
+      toast("warn","تنبيه","اكتب تاقات أولاً (مفصولة بفاصلة).");
+      return;
+    }
+
+    try{
+      const r = await fetch("/pro/products/add-tags", {
+        method:"POST",
+        headers: staffHeaders({ "Content-Type":"application/json" }),
+        body: JSON.stringify({ productId, tags })
+      });
+
+      const d = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل إضافة التاقات");
+
+      state.tagged += 1;
+
+      const item = state.items.find(x => String(x.productId) === String(productId));
+      if(item) item.tags = Array.isArray(d.tags) ? d.tags : (item.tags || []);
+
+      render();
+
+      if(opts.keepModalOpen){
+        const it = state.items.find(x => String(x.productId) === String(productId));
+        if(it) renderTagsModalChips(it);
+      }
+
+      toast("ok","تم","تمت إضافة التاقات بنجاح.");
+      return d;
+    }catch(e){
+      toast("err","خطأ", e?.message || String(e));
+    }
+  }
+
+  async function removeTag(productId, tag, opts = {}){
+    try{
+      const r = await fetch("/pro/products/remove-tag", {
+        method:"POST",
+        headers: staffHeaders({ "Content-Type":"application/json" }),
+        body: JSON.stringify({ productId, tag })
+      });
+
+      const d = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل حذف التاق");
+
+      const item = state.items.find(x => String(x.productId) === String(productId));
+      if(item) item.tags = Array.isArray(d.tags) ? d.tags : (item.tags || []);
+
+      render();
+
+      if(opts.keepModalOpen){
+        const it = state.items.find(x => String(x.productId) === String(productId));
+        if(it) renderTagsModalChips(it);
+      }
+
+      toast("ok","تم","تم حذف التاق.");
+      return d;
+    }catch(e){
+      toast("err","خطأ", e?.message || String(e));
+    }
+  }
+
+
+  // ======================
+  // Data load + render
+  // ======================
+  async function loadPage(page){
+    state.page = Math.max(1, Number(page)||1);
+    setStatus("جاري...");
+    $("grid").innerHTML = `<div style="grid-column:1/-1">جاري التحميل...</div>`;
+
+    const qs = new URLSearchParams({
+      page: String(state.page),
+      limit: String(state.pageSize),
+      q: state.q || "",
+      all: state.showAll ? "1" : "0",
+    });
+
+    try{
+      const r = await fetch("/pro/products/untagged?" + qs.toString(), {
+        method: "GET",
+        headers: staffHeaders(),
+        cache: "no-store"
+      });
+
+      const data = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(data?.error || data?.message || `HTTP ${r.status}`);
+
+      state.items = Array.isArray(data.items) ? data.items : [];
+      applyTagsCountSort();
+syncTagsCountFilterUI();
+      state.total = Number(data.total || 0);
+
+      setStatus("تم");
+      render();
+    }catch(e){
+      setStatus("خطأ");
+      $("grid").innerHTML = `<div style="grid-column:1/-1">فشل التحميل: ${esc(e?.message || e)}</div>`;
+    }
+  }
+
+  function render(){
+    updateStats();
+    setPager();
+
+    const grid = $("grid");
+    if(!state.items.length){
+      grid.innerHTML = `<div style="grid-column:1/-1">لا توجد منتجات.</div>`;
+      return;
+    }
+
+    grid.innerHTML = state.items.map(it => {
+      const title  = it.title || "";
+      const handle = it.handle || "";
+      const vendor = it.vendor || "";
+      const img    = getImg(it);
+      const tags   = Array.isArray(it.tags) ? it.tags : [];
+
+      return `
+        <div class="item" data-pid="${esc(it.productId)}" data-handle="${esc(handle)}">
+          <div class="imgWrap">
+            ${
+              img
+                ? `<img src="${esc(img)}" alt="${esc(title)}" loading="lazy"
+                       onerror="this.onerror=null;this.src='./d.jpg';">`
+                : `<img src="./d.jpg" alt="no image" loading="lazy">`
+            }
+          </div>
+
+          <div class="meta">
+            <div class="name">${esc(title)}</div>
+
+            <div class="sub">
+              ${vendor ? `ماركة: <b>${esc(vendor)}</b><br>` : ``}
+              التاقات:
+              ${tagsPreviewHtml(tags)}
+            </div>
+
+            <div class="rowBtns">
+              ${handle ? `<button class="mini ghost" data-action="view" type="button">شوف في الموقع</button>` : ``}
+              <button class="mini ghost" data-action="hide" type="button">إخفاء</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+function setActiveSort(btnId){
+  ["btnMostTags","btnLeastTags"].forEach(id => {
+    $(id)?.classList.remove("active");
+  });
+  if(btnId) $(btnId)?.classList.add("active");
+}
+  // ======================
+  // Events
+  // ======================
+  $("btnBack")?.addEventListener("click", () => history.back());
+  $("btnRefresh")?.addEventListener("click", () => loadPage(state.page));
+  $("btnPrev")?.addEventListener("click", () => loadPage(state.page - 1));
+  $("btnNext")?.addEventListener("click", () => loadPage(state.page + 1));
+
+
+  // ✅ زر "إظهار كل المنتجات" (بدون أي تكرار)
+  const toggleAllBtn = $("btnToggleAll");
+  function syncTxt(){
+    if(!toggleAllBtn) return;
+    toggleAllBtn.textContent = state.showAll ? "إظهار المنتجات بدون تاقات فقط" : "إظهار كل المنتجات";
+  }
+  syncTxt();
+
+toggleAllBtn?.addEventListener("click", () => {
+  state.showAll = !state.showAll;
+
+  // إذا رجعنا للوضع الأساسي: نلغي ترتيب التاقات
+  if(!state.showAll){
+    state.tagsSort = "none";
+  }
+
+  syncTxt();
+  syncTagsCountFilterUI();   // ✅ إظهار/إخفاء أزرار (الأكثر/الأقل)
+  loadPage(1);
+});
+  let t = null;
+  $("qInput")?.addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      state.q = ($("qInput").value || "").trim();
+      loadPage(1);
+    }, 250);
+  });
+
+  $("btnLoad")?.addEventListener("click", () => {
+    state.q = ($("qInput").value || "").trim();
+    loadPage(1);
+  });
+
+  $("btnClear")?.addEventListener("click", () => {
+    $("qInput").value = "";
+    state.q = "";
+    loadPage(1);
+    setStatus("تم");
+  });
+// ===== فلترة عدد التاقات =====
+$("btnMostTags")?.addEventListener("click", () => {
+  state.tagsSort = "most";
+  setActiveSort("btnMostTags");
+  applyTagsCountSort();
+  render();
+});
+
+$("btnLeastTags")?.addEventListener("click", () => {
+  state.tagsSort = "least";
+  setActiveSort("btnLeastTags");
+  applyTagsCountSort();
+  render();
+});
+
+$("btnClearTagsSort")?.addEventListener("click", () => {
+  state.tagsSort = "none";
+  setActiveSort(null);
+  loadPage(1); // يرجع الترتيب الأصلي
+});
+  
+  // Buttons داخل الكروت + داخل المودال
+  document.addEventListener("click", async (ev) => {
+    const btn = ev.target.closest("[data-action]");
+    if(!btn) return;
+
+    const card = ev.target.closest(".item");
+    const inModal = !!ev.target.closest("#tagModal");
+
+    const action = btn.getAttribute("data-action");
+
+    // removeTag from modal needs pid from tagUI
+    if(action === "removeTag" && inModal){
+      const pid = window.tagUI?.pid;
+      if(!pid) return;
+      const tag = btn.getAttribute("data-tag") || "";
+      return removeTag(pid, tag, { keepModalOpen: true });
+    }
+
+    if(!card && action !== "removeTag") return;
+
+    const productId = card ? card.getAttribute("data-pid") : null;
+
+    if(action === "openTags"){
+      if(!productId) return;
+      return openTagsModal(productId);
+    }
+
+    if(action === "removeTag"){
+      if(!productId) return;
+      const tag = btn.getAttribute("data-tag") || "";
+      return removeTag(productId, tag);
+    }
+
+    if(action === "view"){
+      const handle = card.getAttribute("data-handle") || "";
+      if(handle) window.open("https://halabt.com/products/" + handle, "_blank", "noopener");
+      return;
+    }
+
+    if(action === "hide"){
+      card.remove();
+      state.items = state.items.filter(x => String(x.productId) !== String(productId));
+      updateStats();
+      setPager();
+      return;
+    }
+  });
+  
+function syncTagsCountFilterUI(){
+  const wrap = $("tagsCountFilter");
+  if(!wrap) return;
+
+  // يظهر فقط عند showAll
+  wrap.style.display = state.showAll ? "flex" : "none";
+}
+
+function applyTagsCountSort(){
+  if(state.tagsSort === "most"){
+    state.items.sort((a,b) => (b.tags?.length || 0) - (a.tags?.length || 0));
+  }else if(state.tagsSort === "least"){
+    state.items.sort((a,b) => (a.tags?.length || 0) - (b.tags?.length || 0));
+  }
+}
+  // ✅ منع سكرول الخلفية عند فتح المودال
+  document.addEventListener("wheel", (e) => {
+    const m = document.getElementById("tagModal");
+    if(!m || !m.classList.contains("open")) return;
+
+    const body = m.querySelector(".tagBody");
+    if(body && body.contains(e.target)) return;
+
+    e.preventDefault();
+  }, { passive: false });
+
+window.addEventListener("load", () => {
+  syncTagsCountFilterUI();
+  loadPage(1);
+});
+
+</script>
+    
+</body>
+</html>

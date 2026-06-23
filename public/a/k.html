@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | تقرير المخزون والشراء (Ledger)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+
+      --r14:14px;
+      --r16:16px;
+      --r18:18px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+
+      --chip:#f2f4f7;
+      --chipBorder:rgba(16,24,40,.10);
+      --tableBg:#ffffff;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+    .wrap{ max-width:1120px; margin:0 auto; padding:18px 14px 28px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow2);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandMark{
+      width:44px; height:44px; border-radius:14px; display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      flex:0 0 auto;
+    }
+    .brandText{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .brandName{
+      font-size:18px; font-weight:900; margin:0; line-height:1.2;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; line-height:1.2; }
+
+    .rightTools{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+      text-decoration:none;
+    }
+
+    .card{
+      margin-top:14px; padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+
+    .label{ font-size:13px; color:var(--muted); font-weight:900; margin:0 0 10px 0; }
+    .muted{ color:rgba(16,24,40,.55); font-weight:900; font-size:12.5px; }
+
+    /* Filters */
+    .controls{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap:12px;
+      align-items:end;
+    }
+    .controls > * { min-width:0; }
+    .box{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px; background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+      min-width:0;
+    }
+    .box input, .box select{
+      border:none; outline:none; background:transparent; width:100%;
+      font-size:14.5px; font-weight:900; color:var(--ink);
+      font-family:"Cairo",system-ui,sans-serif;
+      min-width:0;
+    }
+    .box input::placeholder{ color: rgba(102,112,133,.9); font-weight:800; }
+
+    /* Stats */
+    .stats{
+      display:grid; grid-template-columns: repeat(5, 1fr);
+      gap:10px; margin-top:12px;
+    }
+    @media (max-width:1000px){ .stats{ grid-template-columns: 1fr 1fr 1fr; } }
+    @media (max-width:620px){ .stats{ grid-template-columns:1fr 1fr; } }
+    @media (max-width:420px){ .stats{ grid-template-columns:1fr; } }
+
+    .stat{
+      background:#fff; border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      border-radius:14px; padding:10px 12px;
+    }
+    .statLbl{ font-size:12px; font-weight:950; color:rgba(16,24,40,.55); }
+    .statVal{ margin-top:3px; font-weight:980; color:var(--purpleDark); font-size:16px; }
+
+    /* Table wrapper */
+    .tableWrap{
+      width:100%;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      border-radius:16px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      background:var(--tableBg);
+      border-radius:16px;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.08);
+      min-width: 980px;
+    }
+    thead th{
+      text-align:right;
+      padding:12px 10px;
+      font-size:12.5px;
+      color:rgba(16,24,40,.70);
+      background:rgba(107,15,166,.06);
+      border-bottom:1px solid rgba(16,24,40,.10);
+      font-weight:980;
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:12px 10px;
+      border-bottom:1px solid rgba(16,24,40,.08);
+      font-weight:900;
+      font-size:13.5px;
+      vertical-align:top;
+    }
+    tbody tr:last-child td{ border-bottom:none; }
+
+    /* Chips */
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:950; white-space:nowrap;
+      border:1px solid var(--chipBorder);
+      background:var(--chip);
+      color:rgba(16,24,40,.85);
+    }
+    .chip.ok{ background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.20); }
+    .chip.warn{ background:rgba(245,158,11,.14); border-color:rgba(245,158,11,.22); }
+    .chip.err{ background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.20); }
+    .chip.info{ background:rgba(37,99,235,.12); border-color:rgba(37,99,235,.22); }
+    .chip .num{ font-weight:1000; color:var(--purpleDark); }
+
+    /* Product cell */
+    .prodCell{ display:flex; align-items:center; gap:12px; min-width:0; }
+    .prodThumbBtn{
+      border:none;
+      background: linear-gradient(135deg, rgba(107,15,166,.10), rgba(241,198,177,.18));
+      cursor:pointer;
+      flex:0 0 auto;
+      width:56px; height:56px;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+      display:grid; place-items:center;
+      padding:0;
+    }
+    .prodThumbBtn[aria-disabled="true"]{ cursor:default; opacity:.85; }
+    .prodThumbBtn img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .prodPlaceholder{
+      width:100%; height:100%;
+      display:grid; place-items:center;
+      color:rgba(16,24,40,.55);
+      font-weight:1000;
+      font-size:14px;
+    }
+    .prodMeta{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+    .prodName{
+      font-size:14px; font-weight:980; line-height:1.4;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .prodKey{
+      font-size:12px; font-weight:900; color:rgba(16,24,40,.55);
+      direction:ltr; text-align:right;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 420px;
+    }
+
+    /* Details */
+    details{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:14px;
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:950;
+      user-select:none;
+      background: rgba(16,24,40,.02);
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .sumLeft{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .sumPill{
+      padding:6px 10px; border-radius:999px;
+      background:rgba(107,15,166,.10);
+      border:1px solid rgba(107,15,166,.18);
+      color:var(--purpleDark);
+      font-size:12px;
+      font-weight:980;
+      white-space:nowrap;
+    }
+    details[open] .sumPill{
+      background:rgba(239,68,68,.08);
+      border-color:rgba(239,68,68,.16);
+      color:#7f1d1d;
+    }
+    .sumHint{ font-size:12px; color:rgba(16,24,40,.55); font-weight:900; white-space:nowrap; }
+    .moves{ padding:10px 12px 12px; display:flex; flex-direction:column; gap:8px; }
+    .move{
+      display:flex; flex-wrap:wrap; gap:8px;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid rgba(16,24,40,.08);
+      background: rgba(16,24,40,.02);
+      align-items:center;
+    }
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:980; white-space:nowrap;
+      border:1px solid rgba(16,24,40,.12);
+      background:#fff;
+    }
+    .tag.buy{ border-color: rgba(107,15,166,.22); background: rgba(107,15,166,.08); color: var(--purpleDark); }
+    .tag.undo{ border-color: rgba(239,68,68,.20); background: rgba(239,68,68,.10); color:#7f1d1d; }
+    .tag.add{ border-color: rgba(34,197,94,.20); background: rgba(34,197,94,.10); color:#14532d; }
+    .tag.con{ border-color: rgba(245,158,11,.22); background: rgba(245,158,11,.12); color:#7c2d12; }
+    .tag.vendor{ border-color: rgba(37,99,235,.22); background: rgba(37,99,235,.10); color:#1e3a8a; }
+    .move b{ font-weight:1000; }
+    .move .sep{ color:rgba(16,24,40,.35); }
+    .move .note{ color:rgba(16,24,40,.62); font-weight:900; }
+
+    /* Toasts */
+    .toasts{
+      position:fixed; bottom:14px; left:14px; right:14px;
+      z-index:9999; display:flex; flex-direction:column; gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto; display:flex; align-items:flex-start; gap:10px;
+      padding:12px 12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px); opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+    .toast .icon{
+      width:34px; height:34px; border-radius:12px;
+      display:grid; place-items:center; flex:0 0 auto; color:#fff;
+    }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{
+      border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px;
+      border-radius:10px; color:rgba(16,24,40,.55);
+    }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+    .bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+    .bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+    @keyframes shrink{ to{ transform:scaleX(0); } }
+
+    /* Image Modal */
+    .imgModal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:99999;
+    }
+    .imgModal.open{ display:flex; }
+    .imgModalCard{
+      width:min(760px, 100%);
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .imgModalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 12px;
+      border-bottom:1px solid rgba(16,24,40,.10);
+      background:#fff;
+    }
+    .imgModalTitle{
+      font-weight:980;
+      font-size:14px;
+      color:#111827;
+      line-height:1.4;
+    }
+    .imgModalClose{
+      border:none;
+      background:rgba(16,24,40,.06);
+      border:1px solid rgba(16,24,40,.10);
+      width:40px;height:40px;
+      border-radius:14px;
+      cursor:pointer;
+      display:grid;place-items:center;
+    }
+    .imgModalClose svg{ width:18px;height:18px; stroke:#111827; fill:none; stroke-width:2.2; }
+    .imgModalBody{ padding:12px; background:#0b0b0b; }
+    .imgModalBody img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:14px;
+      background:#111;
+    }
+
+    /* Mobile: table -> cards */
+    @media (max-width: 760px){
+      body{ background-attachment:scroll; }
+      .wrap{ padding:14px 10px 22px; }
+
+      .tableWrap{ overflow:visible; }
+      table{ min-width:0; border:none; box-shadow:none; background:transparent; }
+      thead{ display:none; }
+
+      tbody, tr, td{ display:block; width:100%; }
+      tbody tr{
+        background:#fff;
+        border:1px solid rgba(16,24,40,.10);
+        box-shadow:0 10px 22px rgba(16,24,40,.08);
+        border-radius:16px;
+        overflow:hidden;
+        margin-bottom:12px;
+      }
+      tbody td{ border-bottom:1px solid rgba(16,24,40,.08); padding:12px; }
+      tbody td:last-child{ border-bottom:none; }
+
+      td[data-label]::before{
+        content: attr(data-label);
+        display:block;
+        font-size:12px;
+        font-weight:950;
+        color:rgba(16,24,40,.55);
+        margin-bottom:8px;
+      }
+
+      .prodThumbBtn{ width:64px; height:64px; border-radius:16px; }
+      .prodKey{ max-width: 100%; }
+    }
+    .quickBtn{
+  border:none;
+  background:rgba(107,15,166,.10);
+  border:1px solid rgba(107,15,166,.18);
+  padding:8px 14px;
+  border-radius:999px;
+  font-family:"Cairo",system-ui,sans-serif;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.quickBtn:hover{
+  background:rgba(107,15,166,.18);
+}
+    
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Image modal -->
+  <div id="imgModal" class="imgModal" role="dialog" aria-modal="true" aria-label="عرض الصورة">
+    <div class="imgModalCard" role="document">
+      <div class="imgModalTop">
+        <div class="imgModalTitle" id="imgModalTitle">—</div>
+        <button class="imgModalClose" id="imgModalClose" aria-label="إغلاق">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="imgModalBody">
+        <img id="imgModalImg" alt="صورة المنتج" />
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" style="fill:none;stroke:var(--purple);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M12 7v6l4 2"></path>
+            <circle cx="12" cy="12" r="9" style="stroke:var(--peach)"></circle>
+          </svg>
+        </div>
+        <div class="brandText">
+          <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+          <div class="brandSub">تقرير الدفتر (Ledger) • مخزون + شراء + تراجع</div>
+        </div>
+      </div>
+
+      <div class="rightTools">
+        <span class="badge" id="metaBadge">—</span>
+        <a class="badge" href="t.html">الذهاب لصفحة الشراء</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">الفلاتر</p>
+
+      <div class="controls">
+        <div>
+          <div style="grid-column:1/-1">
+  <div class="muted">فترة سريعة</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button type="button" class="quickBtn" data-range="today">اليوم</button>
+    <button type="button" class="quickBtn" data-range="yesterday">أمس</button>
+    <button type="button" class="quickBtn" data-range="week">آخر 7 أيام</button>
+    <button type="button" class="quickBtn" data-range="month">هذا الشهر</button>
+    <button type="button" class="quickBtn" data-range="all">الكل</button>
+  </div>
+</div>
+          <div class="muted">من تاريخ</div>
+          <div class="box">
+            <input id="from" type="date" value="2026-01-25">
+          </div>
+        </div>
+
+        <div>
+          <div class="muted">إلى تاريخ</div>
+          <div class="box">
+            <input id="to" type="date" value="2026-02-19">
+          </div>
+        </div>
+
+        <div>
+          <div class="muted">عرض ماذا؟</div>
+          <div class="box">
+            <select id="mode">
+              <option value="all">الكل</option>
+              <option value="stock">المخزون فقط (إضافة/خصم)</option>
+              <option value="buy">الشراء فقط (شراء/تراجع)</option>
+              <option value="vendor">شراء من تاجر (VENDOR)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <div class="muted">ترتيب</div>
+          <div class="box">
+            <select id="sort">
+              <option value="moves_desc">الأكثر حركة</option>
+              <option value="netbuy_desc">أعلى صافي شراء</option>
+              <option value="add_desc">أعلى إضافة</option>
+              <option value="consume_desc">أعلى خصم</option>
+              <option value="name_asc">الاسم (أ-ي)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <div class="muted">بحث (منتج / رقم طلب / تاجر)</div>
+          <div class="box">
+            <input id="q" placeholder="مثال: سيروم أو #1234 أو دليلي">
+          </div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="statLbl">عدد المنتجات</div>
+          <div class="statVal" id="statProducts">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">إجمالي الإضافة</div>
+          <div class="statVal" id="statAdd">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">إجمالي الخصم</div>
+          <div class="statVal" id="statConsume">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">إجمالي الشراء</div>
+          <div class="statVal" id="statBuy">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">صافي الشراء</div>
+          <div class="statVal" id="statNetBuy">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">النتائج</p>
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:320px">المنتج</th>
+              <th style="min-width:360px">ملخص الفترة</th>
+              <th style="min-width:520px">تفاصيل الحركات</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="3" class="muted" style="text-align:center">جاري التحميل…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+  import { requirePackLogin, authFetch } from "./auth.js";
+  requirePackLogin();
+
+  var lastRows = [];
+  var searchTimer = null;
+
+  function esc(s){
+    return String(s || "").replace(/[&<>"']/g, function(m){
+      return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m];
+    });
+  }
+
+  function toast(type, title, msg, ms){
+    if(ms == null) ms = 2200;
+    var wrap = document.getElementById("toasts");
+    if (!wrap) return;
+
+    var el = document.createElement("div");
+    el.className = "toast " + (type || "info");
+
+    var iconSvg = "";
+    if(type==="ok")   iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 7l-11 11-5-5"/></svg>';
+    if(type==="err")  iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>';
+    if(type==="warn") iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3h3.4L22 20H2z"/></svg>';
+    if(type==="info") iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/></svg>';
+
+    el.innerHTML =
+      '<div class="icon">' + iconSvg + '</div>' +
+      '<div class="body">' +
+        '<p class="title">' + esc(title || "") + '</p>' +
+        '<p class="msg">' + esc(msg || "") + '</p>' +
+        '<div class="bar"><i style="animation-duration:' + ms + 'ms"></i></div>' +
+      '</div>' +
+      '<button class="x" aria-label="اغلاق" title="اغلاق">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(16,24,40,.55);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">' +
+          '<path d="M6 6l12 12"/><path d="M18 6L6 18"/>' +
+        '</svg>' +
+      '</button>';
+
+    function closeToast(){
+      el.classList.add("out");
+      setTimeout(function(){
+        if(el && el.parentNode) el.parentNode.removeChild(el);
+      }, 170);
+    }
+
+    var x = el.querySelector(".x");
+    if(x) x.onclick = closeToast;
+
+    wrap.insertBefore(el, wrap.firstChild);
+    setTimeout(closeToast, ms);
+  }
+
+  function fmtTs(iso){
+    try{
+      var d = new Date(iso);
+      return d.toLocaleString("ar", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+    }catch(e){ return String(iso || ""); }
+  }
+
+  function fmtMs(ms){
+    try{
+      return new Date(ms).toLocaleString("ar", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+    }catch(e){ return "—"; }
+  }
+
+  function typeLabel(t){
+    var map = {
+      BUY_FOR_ORDER:"شراء",
+      BUY_UNDO:"تراجع شراء",
+      STOCK_ADD:"إضافة للمخزون",
+      STOCK_CONSUME:"خصم مخزون",
+      VENDOR_BUY:"شراء من تاجر"
+    };
+    return map[t] || t;
+  }
+
+  function typeClass(t){
+    if(t==="BUY_FOR_ORDER") return "buy";
+    if(t==="BUY_UNDO") return "undo";
+    if(t==="STOCK_ADD") return "add";
+    if(t==="STOCK_CONSUME") return "con";
+    if(t==="VENDOR_BUY") return "vendor";
+    return "";
+  }
+
+  async function fetchLedger(from,to){
+    var url = "/api/ledger/list?from=" + encodeURIComponent(from) + "&to=" + encodeURIComponent(to) + "&limit=20000";
+    var r = await authFetch(url, { cache:"no-store" });
+    var d = await r.json().catch(function(){ return {}; });
+    if(!r.ok) throw new Error((d && d.error) ? d.error : "تعذر جلب دفتر الحركة");
+    return Array.isArray(d.items) ? d.items : [];
+  }
+
+function normalizeKey(m){
+  return (m.product_key || "").toString().trim().toLowerCase();
+}
+  function matchesMode(m, mode){
+    if(mode==="all") return true;
+    if(mode==="stock") return (m.type==="STOCK_ADD" || m.type==="STOCK_CONSUME");
+    if(mode==="buy") return (m.type==="BUY_FOR_ORDER" || m.type==="BUY_UNDO");
+    if(mode==="vendor") return (m.type==="VENDOR_BUY");
+    return true;
+  }
+
+  function getImageFromMove(m){
+    // ✅ عدّل هنا لو اسم الحقل مختلف عندك
+    return (m.image_url || m.product_image || m.image || m.img || "").toString().trim();
+  }
+
+  function pickProductImage(moves){
+    for(var i=0;i<moves.length;i++){
+      var u = getImageFromMove(moves[i]);
+      if(u) return u;
+    }
+    return "";
+  }
+
+  function initials(name){
+    var s = String(name || "").trim();
+    if(!s) return "—";
+    var parts = s.split(/\s+/);
+    var a = (parts[0] && parts[0][0]) ? parts[0][0] : s[0];
+    var b = (parts[1] && parts[1][0]) ? parts[1][0] : "";
+    return (String(a) + String(b)).toUpperCase();
+  }
+
+  function getLastMoveTs(items){
+    if(!items || !items.length) return null;
+    var last = null;
+    for(var i=0;i<items.length;i++){
+      var t = items[i] && items[i].ts ? new Date(items[i].ts).getTime() : NaN;
+      if(!isNaN(t) && (last===null || t>last)) last = t;
+    }
+    return last;
+  }
+
+  function buildReport(moves, q, mode){
+    q = String(q || "").trim().toLowerCase();
+
+    var filtered = [];
+    for(var i=0;i<moves.length;i++){
+      var m = moves[i];
+      if(!matchesMode(m, mode)) continue;
+
+      if(q){
+        var hay = [
+          m.product_name, m.product_key, m.order_id, m.supplier, m.note, m.type
+        ].join(" ").toLowerCase();
+        if(hay.indexOf(q) === -1) continue;
+      }
+      filtered.push(m);
+    }
+
+    var byProd = new Map();
+
+    for(var j=0;j<filtered.length;j++){
+      var mv = filtered[j];
+      var k = normalizeKey(mv);
+      if(!k) continue;
+
+      if(!byProd.has(k)){
+        byProd.set(k, { key:k, name:(mv.product_name || mv.product_key || k), moves:[] });
+      }
+      byProd.get(k).moves.push(mv);
+    }
+
+    byProd.forEach(function(g){
+      g.moves.sort(function(a,b){ return new Date(a.ts) - new Date(b.ts); });
+    });
+
+    var rows = [];
+    byProd.forEach(function(g){
+      var add=0, consume=0, buy=0, undo=0, vendor=0;
+
+      for(var i2=0;i2<g.moves.length;i2++){
+        var m2 = g.moves[i2];
+        var qty = Number(m2.qty || 0) || 0;
+        if(m2.type==="STOCK_ADD") add += qty;
+        if(m2.type==="STOCK_CONSUME") consume += qty;
+        if(m2.type==="BUY_FOR_ORDER") buy += qty;
+        if(m2.type==="BUY_UNDO") undo += qty;
+        if(m2.type==="VENDOR_BUY") vendor += qty;
+      }
+
+      var netBuy = buy - undo;
+      if(netBuy < 0) netBuy = 0;
+
+      rows.push({
+        name: g.name,
+        key: g.key,
+        img: pickProductImage(g.moves),
+        summary: { add:add, consume:consume, buy:buy, undo:undo, netBuy:netBuy, vendor:vendor, count:g.moves.length },
+        moves: g.moves
+      });
+    });
+
+    return { rows: rows, filteredMoves: filtered };
+  }
+
+  function sortRows(rows){
+    var s = String(document.getElementById("sort").value || "moves_desc").trim();
+
+    function byName(a,b){ return String(a.name||"").localeCompare(String(b.name||""), "ar"); }
+    function byCount(a,b){ return (b.summary.count - a.summary.count); }
+    function byNetBuy(a,b){ return (b.summary.netBuy - a.summary.netBuy) || byCount(a,b); }
+    function byAdd(a,b){ return (b.summary.add - a.summary.add) || byCount(a,b); }
+    function byConsume(a,b){ return (b.summary.consume - a.summary.consume) || byCount(a,b); }
+
+    rows.sort(function(a,b){
+      if(s==="name_asc") return byName(a,b);
+      if(s==="netbuy_desc") return byNetBuy(a,b);
+      if(s==="add_desc") return byAdd(a,b);
+      if(s==="consume_desc") return byConsume(a,b);
+      return byCount(a,b);
+    });
+
+    return rows;
+  }
+
+  // Modal
+  var imgModal = document.getElementById("imgModal");
+  var imgModalImg = document.getElementById("imgModalImg");
+  var imgModalTitle = document.getElementById("imgModalTitle");
+  var imgModalClose = document.getElementById("imgModalClose");
+
+  function openImgModal(url, title){
+    if(!url) return;
+    imgModalTitle.textContent = title || "صورة المنتج";
+    imgModalImg.src = url;
+    imgModal.classList.add("open");
+  }
+  function closeImgModal(){
+    imgModal.classList.remove("open");
+    imgModalImg.src = "";
+  }
+
+  imgModalClose.addEventListener("click", closeImgModal);
+  imgModal.addEventListener("click", function(e){
+    if(e.target === imgModal) closeImgModal();
+  });
+  window.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeImgModal();
+  });
+
+  window.__openImg = function(url, title){ openImgModal(url, title); };
+
+  function render(rows, filteredMoves, lastTsMs){
+    lastRows = rows;
+
+    var tb = document.getElementById("tbody");
+    var metaBadge = document.getElementById("metaBadge");
+
+    var lastTxt = lastTsMs ? fmtMs(lastTsMs) : "—";
+    metaBadge.textContent = "منتجات: " + rows.length + " • حركات: " + (filteredMoves ? filteredMoves.length : 0) + " • آخر حركة: " + lastTxt;
+
+    // stats
+    var sum = {add:0,consume:0,buy:0,netBuy:0};
+    for(var i=0;i<rows.length;i++){
+      sum.add += rows[i].summary.add;
+      sum.consume += rows[i].summary.consume;
+      sum.buy += rows[i].summary.buy;
+      sum.netBuy += rows[i].summary.netBuy;
+    }
+    document.getElementById("statProducts").textContent = String(rows.length);
+    document.getElementById("statAdd").textContent = String(sum.add);
+    document.getElementById("statConsume").textContent = String(sum.consume);
+    document.getElementById("statBuy").textContent = String(sum.buy);
+    document.getElementById("statNetBuy").textContent = String(sum.netBuy);
+
+    if(!rows.length){
+      tb.innerHTML = '<tr><td colspan="3" class="muted" style="text-align:center">لا توجد نتائج</td></tr>';
+      return;
+    }
+
+    var html = "";
+    for(var r=0;r<rows.length;r++){
+      var row = rows[r];
+      var s = row.summary;
+
+      var chips =
+        '<div class="chips">' +
+          '<span class="chip ok">إضافة للمخزون: <span class="num">' + s.add + '</span></span>' +
+          '<span class="chip warn">خصم: <span class="num">' + s.consume + '</span></span>' +
+          '<span class="chip info">شراء: <span class="num">' + s.buy + '</span></span>' +
+          '<span class="chip err">تراجع: <span class="num">' + s.undo + '</span></span>' +
+          '<span class="chip" style="background:rgba(107,15,166,.10);border-color:rgba(107,15,166,.18)">' +
+            'صافي شراء: <span class="num">' + s.netBuy + '</span>' +
+          '</span>' +
+          '<span class="chip">حركات: <span class="num">' + s.count + '</span></span>' +
+          (s.vendor ? ('<span class="chip info">Vendor: <span class="num">' + s.vendor + '</span></span>') : '') +
+        '</div>';
+
+      var hasImg = !!row.img;
+      var thumbInner = hasImg
+        ? '<img src="' + esc(row.img) + '" alt="صورة ' + esc(row.name) + '" loading="lazy">'
+        : '<div class="prodPlaceholder">' + esc(initials(row.name)) + '</div>';
+
+      var thumbAttrs = hasImg
+        ? 'onclick="__openImg(\'' + esc(row.img) + '\',\'' + esc(row.name) + '\')"'
+        : 'aria-disabled="true"';
+
+      var productCell =
+        '<div class="prodCell">' +
+          '<button class="prodThumbBtn" ' + thumbAttrs + ' title="' + (hasImg ? 'عرض الصورة' : 'لا توجد صورة') + '">' +
+            thumbInner +
+          '</button>' +
+          '<div class="prodMeta">' +
+            '<div class="prodName" title="' + esc(row.name) + '">' + esc(row.name) + '</div>' +
+          '</div>' +
+        '</div>';
+
+      // details (closed by default)
+      var movesHtml = "";
+      for(var i2=0;i2<row.moves.length;i2++){
+        var m = row.moves[i2];
+        var qty = Number(m.qty || 0) || 0;
+
+        var extra = "";
+        if(m.order_id){
+          extra = ' <span class="sep">•</span> طلب: <b>' + esc(m.order_id) + '</b>';
+        }else if(m.supplier){
+          extra = ' <span class="sep">•</span> تاجر: <b>' + esc(m.supplier) + '</b>';
+        }
+
+        var note = m.note ? (' <span class="sep">•</span> <span class="note">' + esc(m.note) + '</span>') : "";
+
+        movesHtml +=
+          '<div class="move">' +
+            '<span class="tag ' + esc(typeClass(m.type)) + '">' + esc(typeLabel(m.type)) + '</span>' +
+            '<span>' + esc(fmtTs(m.ts)) + '</span>' +
+            '<span class="sep">•</span>' +
+            ' كمية: <b>' + qty + '</b>' +
+            extra +
+            note +
+          '</div>';
+      }
+
+      var detailsHtml =
+        '<details>' +
+          '<summary>' +
+            '<div class="sumLeft">' +
+              '<span class="sumPill">فتح التفاصيل</span>' +
+              '<span class="sumHint">(' + s.count + ' حركة)</span>' +
+            '</div>' +
+            '<span class="muted">اضغط للفتح/الإغلاق</span>' +
+          '</summary>' +
+          '<div class="moves">' + movesHtml + '</div>' +
+        '</details>';
+
+      html +=
+        '<tr>' +
+          '<td data-label="المنتج">' + productCell + '</td>' +
+          '<td data-label="ملخص الفترة">' + chips + '</td>' +
+          '<td data-label="تفاصيل الحركات">' + detailsHtml + '</td>' +
+        '</tr>';
+    }
+
+    tb.innerHTML = html;
+
+    // تحديث نص زر التفاصيل حسب الحالة
+    var allDetails = tb.querySelectorAll("details");
+    for(var d=0; d<allDetails.length; d++){
+      (function(det){
+        var pill = det.querySelector(".sumPill");
+        function sync(){
+          if(!pill) return;
+          pill.textContent = det.open ? "إغلاق التفاصيل" : "فتح التفاصيل";
+        }
+        sync();
+        det.addEventListener("toggle", sync);
+      })(allDetails[d]);
+    }
+  }
+
+  async function loadReportAuto(){
+    var from = document.getElementById("from").value || "2026-01-25";
+    var to   = document.getElementById("to").value || "2026-02-19";
+    var mode = document.getElementById("mode").value || "all";
+    var q    = document.getElementById("q").value || "";
+
+    var tb = document.getElementById("tbody");
+    tb.innerHTML = '<tr><td colspan="3" class="muted" style="text-align:center">جاري التحميل…</td></tr>';
+
+    try{
+      var moves = await fetchLedger(from, to);
+
+      var built = buildReport(moves, q, mode);
+      var rows0 = built.rows;
+      var filteredMoves = built.filteredMoves;
+
+      var rows = sortRows(rows0);
+
+      var lastTs = getLastMoveTs(filteredMoves);
+      render(rows, filteredMoves, lastTs);
+    }catch(e){
+      tb.innerHTML = '<tr><td colspan="3" class="muted" style="text-align:center">فشل: ' + esc(e && e.message ? e.message : String(e)) + '</td></tr>';
+      toast("err","فشل", (e && e.message) ? e.message : String(e), 2600);
+    }
+  }
+
+  function debounceLoad(){
+    if(searchTimer) clearTimeout(searchTimer);
+    searchTimer = setTimeout(function(){ loadReportAuto(); }, 320);
+  }
+function getOmanToday(){
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Muscat",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(new Date());
+
+  const year  = parts.find(p => p.type === "year").value;
+  const month = parts.find(p => p.type === "month").value;
+  const day   = parts.find(p => p.type === "day").value;
+
+  return `${year}-${month}-${day}`; // yyyy-mm-dd
+}
+
+function getOmanDateOffset(days){
+  const now = new Date();
+  const omanNow = new Date(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Muscat",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric"
+    }).format(now)
+  );
+
+  omanNow.setDate(omanNow.getDate() + days);
+
+  const yyyy = omanNow.getFullYear();
+  const mm = String(omanNow.getMonth() + 1).padStart(2, "0");
+  const dd = String(omanNow.getDate()).padStart(2, "0");
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function setQuickRange(type){
+  var fromInput = document.getElementById("from");
+  var toInput   = document.getElementById("to");
+
+  if(type === "today"){
+    const today = getOmanToday();
+    fromInput.value = today;
+    toInput.value = today;
+  }
+
+  if(type === "yesterday"){
+    const y = getOmanDateOffset(-1);
+    fromInput.value = y;
+    toInput.value = y;
+  }
+
+  if(type === "week"){
+    fromInput.value = getOmanDateOffset(-6);
+    toInput.value = getOmanToday();
+  }
+
+  if(type === "month"){
+    const today = getOmanToday();
+    const [y,m] = today.split("-");
+    fromInput.value = `${y}-${m}-01`;
+    toInput.value = today;
+  }
+
+  if(type === "all"){
+    fromInput.value = "2026-01-01"; // غيرها حسب بداية بياناتك
+    toInput.value = getOmanToday();
+  }
+
+  loadReportAuto();
+}
+document.querySelectorAll(".quickBtn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    setQuickRange(this.dataset.range);
+  });
+});
+  // Auto-load + auto-refresh on filter changes
+  window.addEventListener("load", function(){ loadReportAuto(); });
+
+  document.getElementById("from").addEventListener("change", function(){ loadReportAuto(); });
+  document.getElementById("to").addEventListener("change", function(){ loadReportAuto(); });
+  document.getElementById("mode").addEventListener("change", function(){ loadReportAuto(); });
+  document.getElementById("sort").addEventListener("change", function(){ loadReportAuto(); });
+
+  document.getElementById("q").addEventListener("input", function(){ debounceLoad(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | المنتجات المخلصة</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+
+      --r18:18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:100%;
+      margin:0;
+      padding:18px 24px 26px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px;
+      border-radius:var(--r18);
+      background:var(--card);
+      box-shadow:var(--shadow2);
+      border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+
+    .leftActions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .iconBtn{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.85);
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      transition:.15s;
+    }
+
+    .iconBtn:active{ transform:scale(.98); }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brandMark{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+
+    .brandIcon{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .brandName{
+      font-size:18px;
+      font-weight:900;
+      margin:0;
+      line-height:1.2;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+
+    .brandSub{
+      font-size:12.5px;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px;
+      padding:14px;
+      border-radius:var(--r18);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      backdrop-filter: blur(6px);
+    }
+
+    .label{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:900;
+      margin:0 0 10px 0;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns: 1.2fr auto auto auto auto;
+      gap:12px;
+    }
+
+    @media (max-width:1100px){
+      .controls{ grid-template-columns:1fr 1fr; }
+    }
+
+    @media (max-width:700px){
+      .controls{ grid-template-columns:1fr; }
+    }
+
+    .box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+      position:relative;
+      overflow:visible;
+    }
+
+    .box input{
+      border:none;
+      outline:none;
+      background:transparent;
+      width:100%;
+      font-size:15px;
+      font-weight:900;
+      color:var(--ink);
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+
+    .box input::placeholder{
+      color: rgba(102,112,133,.9);
+      font-weight:800;
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 12px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:15px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      transition:.15s;
+      user-select:none;
+      width:100%;
+      white-space:nowrap;
+    }
+
+    .btn:active{ transform:scale(.985); }
+
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff;
+      box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+
+    .btnGhost{
+      background:#f2f4f7;
+      color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    @media (max-width:700px){
+      .stats{ grid-template-columns:1fr; }
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      border-radius:14px;
+      padding:10px 12px;
+    }
+
+    .statLbl{
+      font-size:12px;
+      font-weight:950;
+      color:rgba(16,24,40,.55);
+    }
+
+    .statVal{
+      margin-top:3px;
+      font-weight:980;
+      color:var(--purpleDark);
+      font-size:16px;
+    }
+
+    .hint{
+      margin-top:10px;
+      font-size:12.5px;
+      font-weight:900;
+      color:rgba(16,24,40,.62);
+      line-height:1.7;
+    }
+
+    .grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+
+    @media (min-width: 820px){
+      .grid{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+    }
+
+    @media (max-width:420px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
+    .item{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+      border-radius:18px;
+      overflow:hidden;
+      transition:.15s;
+      position:relative;
+    }
+
+    .item:active{ transform:scale(.99); }
+
+    .itemHot{
+      border:2px solid rgba(107,15,166,.26);
+      box-shadow:0 14px 28px rgba(107,15,166,.14);
+    }
+
+    .imgWrap{
+      position:relative;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, rgba(107,15,166,.08), rgba(241,198,177,.18));
+      overflow:hidden;
+    }
+
+    .imgWrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .meta{
+      padding:10px 12px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .name{
+      font-weight:980;
+      font-size:13.5px;
+      line-height:1.45;
+      color:var(--ink);
+      min-height:42px;
+    }
+
+    .sub{
+      font-weight:900;
+      font-size:12.5px;
+      color:rgba(16,24,40,.62);
+      line-height:1.55;
+    }
+
+    .bottom{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      background: rgba(241,198,177,.35);
+      color: var(--purpleDark);
+      border:1px solid rgba(241,198,177,.65);
+      white-space:nowrap;
+    }
+
+    .rowBtns{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      width:100%;
+    }
+
+    .mini{
+      border:none;
+      cursor:pointer;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      background: rgba(107,15,166,.10);
+      border:1px solid rgba(107,15,166,.18);
+      color:var(--purpleDark);
+      user-select:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .mini.ghost{
+      background: rgba(16,24,40,.06);
+      border-color: rgba(16,24,40,.14);
+      color: rgba(16,24,40,.80);
+    }
+
+    .mini:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+
+    .qtyBox{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(16,24,40,.12);
+      background:#fff;
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      width:100%;
+    }
+
+    .qtyBox input{
+      width:100%;
+      border:none;
+      outline:none;
+      font-family:"Cairo",system-ui,sans-serif;
+      font-weight:950;
+      font-size:13px;
+      background:transparent;
+    }
+
+    .videoWrap{
+      margin-top:12px;
+      padding:12px;
+      border-radius:18px;
+      border:1px solid rgba(16,24,40,.12);
+      background:#fff;
+      box-shadow:0 8px 18px rgba(16,24,40,.10);
+    }
+
+    .videoWrap video{
+      width:100%;
+      border-radius:14px;
+      background:#000;
+      min-height:220px;
+    }
+
+    .pager{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .pageInfo{
+      font-weight:950;
+      font-size:12.5px;
+      color:rgba(16,24,40,.70);
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:999px;
+      padding:8px 12px;
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+    }
+
+    .suggestBox{
+      position:absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      left: 0;
+      z-index: 99999;
+      background: rgba(255,255,255,.98);
+      border: 1px solid rgba(16,24,40,.12);
+      box-shadow: 0 16px 38px rgba(16,24,40,.16);
+      border-radius: 16px;
+      overflow: hidden;
+      display:none;
+      max-height: 320px;
+      overflow-y:auto;
+    }
+
+    .suggestBox.show{ display:block; }
+
+    .emptyState{
+      grid-column:1/-1;
+      background:#fff;
+      border:1px dashed rgba(16,24,40,.14);
+      border-radius:18px;
+      padding:18px;
+      text-align:center;
+      font-weight:900;
+      color:rgba(16,24,40,.65);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="leftActions">
+        <button class="iconBtn" id="btnBack" aria-label="رجوع" title="رجوع">
+          <svg width="22" height="22" viewBox="0 0 24 24"
+               style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <button class="iconBtn" id="btnRefresh" aria-label="تحديث" title="تحديث">
+          <svg width="22" height="22" viewBox="0 0 24 24"
+               style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+            <path d="M21 3v7h-7"></path>
+          </svg>
+        </button>
+
+        <div class="brand">
+          <div class="brandMark" aria-hidden="true">
+            <img src="/a/ico1.png" alt="icon" class="brandIcon">
+          </div>
+          <div style="min-width:0">
+            <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+            <div class="brandSub">المنتجات المخلصة • هلا بيوتي</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="badge">
+        <svg width="18" height="18" viewBox="0 0 24 24"
+             style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M12 8h.01"></path>
+          <path d="M11 12h1v6h1"></path>
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span id="statusBadge">جاهز</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">بحث المنتجات المخلصة (تظهر النتائج فقط عند البحث)</p>
+
+      <div class="controls">
+        <div class="box">
+          <svg width="18" height="18" viewBox="0 0 24 24"
+               style="fill:none;stroke:rgba(60,10,99,.65);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3-3"></path>
+          </svg>
+
+          <input id="qInput" placeholder="ابحث باسم المنتج أو SKU أو باركود..." autocomplete="off">
+          <div id="suggestBox" class="suggestBox"></div>
+        </div>
+
+        <button class="btn btnGhost" id="btnScan" style="padding:12px 12px; gap:8px">
+          <svg width="20" height="20" viewBox="0 0 24 24"
+               style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+            <circle cx="12" cy="13" r="3.2"></circle>
+          </svg>
+          مسح بالكاميرا
+        </button>
+
+        <button class="btn btnPrimary" id="btnLoad">
+          <svg width="20" height="20" viewBox="0 0 24 24"
+               style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3-3"></path>
+          </svg>
+          بحث
+        </button>
+
+        <button class="btn btnGhost" id="btnClear">
+          <svg width="20" height="20" viewBox="0 0 24 24"
+               style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6L6 18"></path>
+          </svg>
+          مسح البحث
+        </button>
+
+<a href="notice.html" class="btn btnGhost" id="btnProducts">
+  المنتجات المطلوبة
+</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="statLbl">عدد المنتجات المخلصة</div>
+          <div class="statVal" id="statTotal">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">المعروض في الصفحة</div>
+          <div class="statVal" id="statShown">0</div>
+        </div>
+        <div class="stat">
+          <div class="statLbl">تم تعديل المخزون (هذه الجلسة)</div>
+          <div class="statVal" id="statRestocked">0</div>
+        </div>
+      </div>
+
+      <div id="scanArea" class="card" style="display:none">
+        <p class="label" style="margin:0 0 10px 0">وجّه الكاميرا نحو الباركود…</p>
+        <div class="videoWrap" style="margin-top:0">
+          <video id="video" playsinline></video>
+        </div>
+
+        <button class="btn btnGhost" id="btnStopScan" style="margin-top:10px">
+          إيقاف المسح
+        </button>
+      </div>
+
+    </div>
+
+    <div class="card">
+      <p class="label">نتائج المنتجات المخلصة</p>
+      <div id="grid" class="grid"></div>
+
+      <div id="pager" class="pager" style="display:none">
+        <button class="mini ghost" id="btnPrev">السابق</button>
+        <div class="pageInfo" id="pageInfo">صفحة 1</div>
+        <button class="mini ghost" id="btnNext">التالي</button>
+      </div>
+    </div>
+  </div>
+<script type="module">
+  import { requirePackLogin, authFetch } from "./auth.js";
+  requirePackLogin();
+
+  const $ = (id) => document.getElementById(id);
+
+  const state = {
+    items: [],
+    restocked: 0,
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    q: ""
+  };
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[m]));
+  }
+
+  function getImg(it){
+    let u =
+      it?.image ||
+      it?.imageUrl ||
+      it?.img ||
+      it?.featuredImage ||
+      it?.productImage ||
+      it?.variantImage ||
+      "";
+
+    if(!u && it?.image && typeof it.image === "object"){
+      u = it.image.src || it.image.url || it.image.originalSrc || "";
+    }
+
+    if(!u && Array.isArray(it?.images)){
+      const first = it.images[0];
+      u = (typeof first === "string")
+        ? first
+        : (first?.src || first?.url || "");
+    }
+
+    if(u && String(u).startsWith("//")) u = "https:" + u;
+    return String(u || "").trim();
+  }
+
+  function setStatus(txt){
+    const el = $("statusBadge");
+    if (el) el.textContent = txt;
+  }
+
+  function updateStats(){
+    if ($("statTotal")) $("statTotal").textContent = String(state.total);
+    if ($("statShown")) $("statShown").textContent = String(state.items.length);
+    if ($("statRestocked")) $("statRestocked").textContent = String(state.restocked);
+  }
+
+  function setPager(){
+    const pager = $("pager");
+    const info  = $("pageInfo");
+    const prev  = $("btnPrev");
+    const next  = $("btnNext");
+
+    if (!pager || !info || !prev || !next) return;
+
+    const pages = Math.max(1, Math.ceil((Number(state.total) || 0) / state.pageSize));
+    const canPrev = state.page > 1;
+    const canNext = state.page < pages;
+
+    pager.style.display = (state.total > 0 || state.page > 1) ? "flex" : "none";
+    info.textContent = `صفحة ${state.page} من ${pages}`;
+
+    prev.disabled = !canPrev;
+    next.disabled = !canNext;
+
+    prev.classList.toggle("ghost", !canPrev);
+    next.classList.toggle("ghost", !canNext);
+  }
+
+  async function loadPage(page){
+    state.page = Math.max(1, Number(page) || 1);
+    setStatus("جاري...");
+
+    const grid = $("grid");
+    if (grid){
+      grid.innerHTML = `<div style="grid-column:1/-1">جاري التحميل...</div>`;
+    }
+
+    const qs = new URLSearchParams({
+      page: String(state.page),
+      limit: String(state.pageSize),
+      q: state.q || ""
+    });
+
+    try{
+      const r = await authFetch("/pro/inventory/soldout-ranked?" + qs.toString(), {
+        cache: "no-store"
+      });
+
+      let data = null;
+      let text = "";
+
+      try { data = await r.json(); }
+      catch { text = await r.text().catch(() => ""); }
+
+      if(!r.ok){
+        const msg = (data && (data.error || data.message)) || text || `HTTP ${r.status}`;
+        throw new Error(msg);
+      }
+
+      state.items = Array.isArray(data?.items) ? data.items : [];
+      state.total = Number(data?.total || 0);
+
+      setStatus("تم");
+      render();
+    }catch(e){
+      setStatus("خطأ");
+      if (grid){
+        grid.innerHTML = `<div style="grid-column:1/-1">فشل التحميل: ${esc(e?.message || e)}</div>`;
+      }
+    }
+  }
+
+  async function setQty(inventoryItemId, qty){
+    const n = Math.max(0, Number(qty) || 0);
+
+    try{
+      const r = await authFetch("/pro/inventory/set-qty", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ inventoryItemId, qty: n })
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل تحديث المخزون");
+
+      state.restocked += 1;
+      await loadPage(state.page);
+    }catch(e){
+      alert(e?.message || e);
+    }
+  }
+
+  async function saveQtyFromInput(inventoryItemId, raw){
+    const s = String(raw || "").trim();
+    if(!s) return;
+
+    try{
+      if(s.startsWith("+") || s.startsWith("-")){
+        const delta = Number(s);
+        if(!Number.isFinite(delta) || delta === 0) return;
+
+        const r = await authFetch("/pro/inventory/restock", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ inventoryItemId, delta })
+        });
+
+        const d = await r.json().catch(() => ({}));
+        if(!r.ok) throw new Error(d?.error || "فشل تعديل المخزون");
+
+        state.restocked += 1;
+        await loadPage(state.page);
+        return;
+      }
+
+      const n = Number(s);
+      if(!Number.isFinite(n) || n < 0) return;
+
+      await setQty(inventoryItemId, n);
+    }catch(e){
+      alert(e?.message || e);
+    }
+  }
+
+  async function setDraft(productId, productTitle = ""){
+    const title = String(productTitle || "").trim() || "هذا المنتج";
+    const ok = confirm(`هل تريد تحويل المنتج إلى Draft؟\n\n${title}`);
+    if (!ok) return;
+
+    try{
+      const r = await authFetch("/pro/inventory/set-draft", {
+        method: "POST",
+        headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ productId })
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل تحويل المنتج إلى Draft");
+
+      alert(`تم تحويل المنتج إلى Draft:\n${d?.title || title}`);
+      await loadPage(state.page);
+    }catch(e){
+      alert(e?.message || e);
+    }
+  }
+
+  function render(){
+    updateStats();
+    setPager();
+
+    const grid = $("grid");
+    if(!grid) return;
+
+    if(!state.items.length){
+      grid.innerHTML = `<div style="grid-column:1/-1">لا توجد منتجات مخلصة.</div>`;
+      return;
+    }
+
+    grid.innerHTML = state.items.map((it) => {
+      const title = it.productTitle || "";
+      const variant = it.variantTitle && it.variantTitle !== "Default Title" ? it.variantTitle : "";
+      const sku = it.sku || "";
+      const barcode = it.barcode || "";
+      const img = getImg(it);
+      const queueCount = Number(it.queueCount || 0) || 0;
+      const hotClass = it.hasAlertQueue ? " itemHot" : "";
+
+      return `
+        <div class="item${hotClass}" data-ii="${esc(it.inventoryItemId || "")}" data-pid="${esc(it.productId || "")}">
+          <div class="imgWrap">
+            ${
+              img
+                ? `<img src="${esc(img)}" alt="${esc(title)}" loading="lazy"
+                       onerror="this.onerror=null;this.src='/a/d.jpg';">`
+                : `<img src="/a/d.jpg" alt="no image" loading="lazy">`
+            }
+          </div>
+
+          <div class="meta">
+            <div class="name">${esc(title)}</div>
+
+            <div class="sub">
+              ${variant ? `المتغير: <b>${esc(variant)}</b><br>` : ``}
+              ${sku ? `SKU: <b>${esc(sku)}</b><br>` : ``}
+              ${barcode ? `باركود: <b>${esc(barcode)}</b><br>` : ``}
+              الحالة: <b style="color:#b42318">خلص</b>
+            </div>
+
+            <div class="bottom">
+              <div class="pill">المخزون: 0</div>
+              ${
+                queueCount > 0
+                  ? `<div class="pill" style="background:rgba(107,15,166,.10);border:1px solid rgba(107,15,166,.22);color:#3C0A63;">
+                       🔔 عليه ${esc(queueCount)} تنبيه
+                     </div>`
+                  : ``
+              }
+            </div>
+
+            <div class="rowBtns">
+              <button class="mini" data-action="available">متوفر</button>
+              <button class="mini ghost" data-action="soldout">خلص</button>
+              <button class="mini" data-action="draft" style="background:#fff1f3;border:1px solid #fecdd3;color:#b42318;">
+                حذف
+              </button>
+            </div>
+
+            <div class="qtyBox">
+              <input inputmode="numeric" placeholder="كمية نهائية (0/15) أو تغيير (+5/-3)" data-qty>
+              <button class="mini" data-action="saveQty" style="margin-inline-start:auto">حفظ</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  $("btnRefresh")?.addEventListener("click", () => loadPage(state.page));
+  $("btnPrev")?.addEventListener("click", () => loadPage(state.page - 1));
+  $("btnNext")?.addEventListener("click", () => loadPage(state.page + 1));
+
+  let t = null;
+  $("qInput")?.addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      state.q = ($("qInput").value || "").trim();
+      loadPage(1);
+    }, 250);
+  });
+
+  $("btnLoad")?.addEventListener("click", () => {
+    state.q = ($("qInput").value || "").trim();
+    loadPage(1);
+  });
+
+  $("btnClear")?.addEventListener("click", () => {
+    if ($("qInput")) $("qInput").value = "";
+    state.q = "";
+    loadPage(1);
+    setStatus("تم");
+  });
+
+  document.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("[data-action]");
+    if(!btn) return;
+
+    const card = ev.target.closest(".item");
+    if(!card) return;
+
+    const inventoryItemId = card.getAttribute("data-ii");
+    const productId = card.getAttribute("data-pid");
+    const productTitle = card.querySelector(".name")?.textContent || "";
+    const action = btn.getAttribute("data-action");
+
+    if(action === "available" && inventoryItemId) return setQty(inventoryItemId, 999);
+    if(action === "soldout" && inventoryItemId)   return setQty(inventoryItemId, 0);
+
+    if(action === "draft"){
+      if(!productId) return alert("هذا المنتج لا يحتوي productId");
+      return setDraft(productId, productTitle);
+    }
+
+    if(action === "saveQty"){
+      if(!inventoryItemId) return;
+      const inp = card.querySelector("input[data-qty]");
+      return saveQtyFromInput(inventoryItemId, inp?.value);
+    }
+  });
+
+  window.addEventListener("load", () => {
+    setStatus("جاري...");
+    loadPage(1);
+  });
+</script>
+
+</body>
+</html>

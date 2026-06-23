@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>طباعة الطلبات</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <style>
+    body{
+      font-family:'Almarai',sans-serif;
+      margin:0;
+      padding:0;
+      background:#fff;
+    }
+
+    @page{
+      size: 100mm 150mm;
+      margin: 0;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+    }
+
+    #root{
+      margin:0;
+      padding:0;
+    }
+
+    .container{
+      width:100mm;
+      height:150mm;
+      border:1px solid #000;
+      padding:5mm;
+      box-sizing:border-box;
+      overflow:hidden;
+      page-break-before:auto;
+      background:#fff;
+    }
+
+    @media print{
+      html, body{
+        margin:0 !important;
+        padding:0 !important;
+        width:100mm;
+      }
+
+      #root{
+        margin:0 !important;
+        padding:0 !important;
+      }
+
+      .container{
+        width:100mm !important;
+        height:150mm !important;
+        margin:0 !important;
+        page-break-inside:avoid;
+        break-inside:avoid;
+        page-break-after:always;
+      }
+    }
+
+    .logo-container{
+      border:2px dashed #000;
+      padding:10px;
+      margin-bottom:10px;
+      text-align:center;
+    }
+
+    .logo{
+      max-height:2cm;
+      max-width:100%;
+      filter:grayscale(100%);
+    }
+
+    .contact-row{
+      display:flex;
+      justify-content:space-between;
+      gap:6px;
+      margin-bottom:5px;
+    }
+
+    .contact-item{
+      display:flex;
+      align-items:center;
+      font-weight:bold;
+      font-size:15px;
+      white-space:nowrap;
+    }
+
+    .large-icon{
+      font-size:24px;
+      line-height:1;
+    }
+
+    .info-title{
+      font-size:14px;
+      font-weight:bold;
+      text-align:center;
+      margin:10px 0;
+      border-top:1px solid #000;
+      padding-top:5px;
+      line-height:1.25;
+    }
+
+    .table-section{
+      width:100%;
+      border-collapse:collapse;
+      table-layout:fixed;
+      font-size:12px;
+      margin-bottom:5px;
+    }
+
+    .table-section td{
+      border:1px dashed #000;
+      padding:4px 6px;
+      vertical-align:middle;
+      width:50%;
+      line-height:1.1;
+      box-sizing:border-box;
+    }
+
+    .section-title{
+      background:#f0f0f0;
+      font-weight:bold;
+      text-align:center;
+    }
+
+    .table-section tr:nth-child(2) td{
+      height:28px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .table-section i,
+    .contact-row i{
+      line-height:1;
+      display:inline-block;
+      vertical-align:middle;
+    }
+
+    .order-number{
+      font-size:12px;
+      font-weight:bold;
+      text-align:center;
+      margin-top:5px;
+      word-break:break-word;
+    }
+
+    .qr-code img{
+      height:20mm;
+      width:20mm;
+      object-fit:contain;
+    }
+
+    .barcode-img{
+      height:10mm;
+      max-width:100%;
+      object-fit:contain;
+    }
+
+    .error-box{
+      font-family:'Almarai',sans-serif;
+      padding:20px;
+      border:1px solid #d00;
+      margin:20px;
+      color:#900;
+      background:#fff5f5;
+      line-height:1.8;
+    }
+
+    .muted{
+      color:#555;
+      font-size:13px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script>
+(async () => {
+  const root = document.getElementById("root");
+
+  function money(n){
+    return Number(n || 0).toFixed(3);
+  }
+
+  function esc(s){
+    return String(s || "").replace(/[&<>"']/g, m => (
+      { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m]
+    ));
+  }
+
+  function oneLine(s){
+    return String(s || "").replace(/\s+/g, " ").trim();
+  }
+
+  function clampChars(s, max){
+    const v = oneLine(s);
+    if (!v) return "";
+    return v.length > max ? (v.slice(0, max - 1) + "…") : v;
+  }
+
+  function clampLines(lines){
+    return `display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:${lines};overflow:hidden;`;
+  }
+
+  function normTags(tags){
+    if (Array.isArray(tags)) {
+      return tags.map(x => String(x).trim()).filter(Boolean);
+    }
+    return String(tags || "")
+      .split(",")
+      .map(x => x.trim())
+      .filter(Boolean);
+  }
+
+  function hasTag(o, t){
+    return normTags(o.tags).includes(String(t).trim());
+  }
+
+  function isArabic(o){
+    return hasTag(o, "ar");
+  }
+
+  function isGinacomOffice(o){
+    const shippingMethod = String(o.shipping_method || "").toLowerCase();
+    return shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
+  }
+
+  function cleanName(name){
+    const v = oneLine(name);
+    if (!v) return "";
+
+    const parts = v.split(" ").filter(Boolean);
+
+    if (parts.length === 2 && parts[0].toLowerCase() === parts[1].toLowerCase()) {
+      return parts[0];
+    }
+
+    const tooLong = v.length > 18 || parts.length > 2;
+    if (tooLong) return parts[0];
+
+    return v;
+  }
+
+  function cleanPhone(p){
+    let v = oneLine(p).replace(/\s+/g, "");
+    if (v.length > 8) {
+      v = v.replace(/^(\+968|968)/, "");
+    }
+    return v;
+  }
+
+  function cleanAddress(shippingText){
+    const s = oneLine(shippingText);
+    if (!s) return "";
+
+    const parts = s.split(/,|\n|-/).map(x => x.trim()).filter(Boolean);
+    if (parts.length < 2) return s;
+
+    const a1 = parts[0].replace(/\s+/g, "").toLowerCase();
+    const city = parts[1].replace(/\s+/g, "").toLowerCase();
+
+    let out = parts;
+    if (a1 === city) {
+      out = [parts[0], ...parts.slice(2)];
+    }
+
+    return out.join(" - ");
+  }
+
+  function getOutstanding(o){
+    const v = o.outstanding ?? o.amountDue ?? o.total_outstanding ?? 0;
+    return Number(v || 0) || 0;
+  }
+
+  function getFinancialStatus(o){
+    return String(o.financial_status || "").toLowerCase().trim();
+  }
+
+  function statusLabel(o, f, unpaid){
+    const ar = isArabic(o);
+
+    if (f === "pending") return ar ? "انتظار الدفع" : "Unpaid";
+    if (f === "paid") return ar ? "مدفوع" : "Paid";
+    if (f === "partially_paid") return ar ? "مدفوع جزئياً" : "Part-paid";
+    if (f === "authorized") return ar ? "بانتظار التحصيل" : "Authorized";
+    if (f === "partially_refunded") return ar ? "مسترجع جزئياً" : "Part-refunded";
+    if (f === "refunded") return ar ? "مسترجع" : "Refunded";
+
+    return unpaid > 0
+      ? (ar ? "انتظار الدفع" : "Pending payment")
+      : (ar ? "مدفوع" : "Paid");
+  }
+
+  function paidGatewayIcon(o){
+    const tx = Array.isArray(o.transactions) ? o.transactions : [];
+
+    for (const t of tx) {
+      const g = String(t.gateway || "").toLowerCase();
+      if (g.includes("bank") || g.includes("deposit")) return "bi-bank";
+      if (g.includes("amwal")) return "bi-credit-card";
+      if (g.includes("cod") || g.includes("cash")) return "bi-bank2";
+    }
+
+    return "bi-check-circle";
+  }
+
+  function statusIcon(o, f, unpaid){
+    if (f === "pending") return "bi-clock-history";
+    if (f === "paid") return paidGatewayIcon(o);
+    if (f === "partially_paid") return "bi-cash-stack";
+    if (f === "authorized") return "bi-hourglass-split";
+    if (f === "partially_refunded") return "bi-arrow-counterclockwise";
+    if (f === "refunded") return "bi-arrow-counterclockwise";
+
+    return unpaid > 0 ? "bi-clock-history" : "bi-check-circle";
+  }
+
+  function getCountryDialCode(o){
+    let c =
+      o.billingAddress?.countryCodeV2 ||
+      o.billing_country_code ||
+      o.billingCountryCode ||
+      o.shippingAddress?.countryCodeV2 ||
+      o.shipping_country_code ||
+      o.shippingCountryCode ||
+      "";
+
+    c = String(c).toUpperCase();
+
+    const map = {
+      OM: "968",
+      AE: "971",
+      SA: "966",
+      QA: "974",
+      KW: "965",
+      BH: "973"
+    };
+
+    return map[c] || "968";
+  }
+
+  function formatDate(v){
+    const s = String(v || "").trim();
+    return s ? s.slice(0, 10) : "";
+  }
+
+  function buildError(message, extra = ""){
+    root.innerHTML = `
+      <div class="error-box">
+        <div><b>تعذر تحميل بيانات الطباعة</b></div>
+        <div>${esc(message)}</div>
+        ${extra ? `<div class="muted">${esc(extra)}</div>` : ""}
+      </div>
+    `;
+  }
+
+  let data;
+  let orders = [];
+
+  try {
+    const url = "/api/print/orders?limit=250&t=" + Date.now();
+    const res = await fetch(url, { cache: "no-store" });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`HTTP ${res.status} - ${txt || "Request failed"}`);
+    }
+
+    data = await res.json();
+    orders = Array.isArray(data?.orders) ? data.orders : [];
+  } catch (err) {
+    buildError("حدث خطأ أثناء جلب الطلبات.", err?.message || String(err));
+    return;
+  }
+
+  const mode = (new URLSearchParams(location.search).get("mode") || "all").toLowerCase();
+
+  if (mode === "muscat") {
+    orders = orders.filter(o => hasTag(o, "مسقط"));
+  } else if (mode === "office") {
+    orders = orders.filter(o => hasTag(o, "مكتب"));
+  } else {
+    orders = orders.filter(o => hasTag(o, "مسقط") || hasTag(o, "مكتب"));
+  }
+
+  if (!orders.length) {
+    root.innerHTML = `
+      <div class="error-box" style="border-color:#999;color:#333;background:#fafafa;">
+        <div><b>لا توجد طلبات للطباعة</b></div>
+        <div class="muted">تحقق من الفلاتر أو من البيانات القادمة من المسار.</div>
+      </div>
+    `;
+    return;
+  }
+
+  orders.forEach(o => {
+    const ar = isArabic(o);
+    const dir = ar ? "rtl" : "ltr";
+    const align = ar ? "right" : "left";
+
+    const unpaid = getOutstanding(o);
+    const f = getFinancialStatus(o);
+
+    const showAmountBox = (f !== "paid" && unpaid > 0);
+    const showWWW = (f === "paid" || (unpaid <= 0 && f !== "pending" && f !== "partially_paid"));
+
+    const ginacom = isGinacomOffice(o);
+    const addressText = cleanAddress(o.shipping || "");
+    const noteText = String(o.note || "").trim();
+    const customerText = cleanName(o.customer) || "غير معروف";
+    const phoneText = cleanPhone(o.phone);
+    const dateText = formatDate(o.createdAt);
+
+    const qrUrl = ginacom
+      ? "https://api.qrserver.com/v1/create-qr-code/?data=https://halabt.com/app&size=150x150"
+      : `https://api.qrserver.com/v1/create-qr-code/?data=https://wa.me/${getCountryDialCode(o)}${cleanPhone(o.phone)}&size=150x150`;
+
+    root.insertAdjacentHTML("beforeend", `
+<div class="container" style="direction:${dir};text-align:${align}">
+  <div class="logo-container">
+    <img
+      src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/bt.jpg?v=1739274499"
+      class="logo"
+      alt="Hala Beauty">
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-item"><i class="bi bi-whatsapp large-icon"></i>&nbsp;77255566</div>
+    <div class="contact-item"><i class="bi bi-instagram large-icon"></i>&nbsp;halabt.com</div>
+    <div class="contact-item"><i class="bi bi-link-45deg large-icon"></i>&nbsp;halabt.com</div>
+  </div>
+
+  <div class="info-title">
+    ${ar ? "مع هلا بيوتي، جمالك يبدأ الآن! طلبك جاهز" : "Your Hala Beauty order is ready! Your order is ready"}
+  </div>
+
+  <table class="table-section">
+    <tr>
+      <td class="section-title" colspan="2">${ar ? "معلومات التوصيل" : "Delivery Information"}</td>
+    </tr>
+
+    <tr>
+      <td style="font-size:16px;font-weight:bold;text-align:center">
+        <i class="bi bi-person-circle" style="float:${ar ? "right" : "left"};font-size:20px;margin-${ar ? "left" : "right"}:8px"></i>
+        ${esc(customerText)}
+      </td>
+
+      <td style="font-size:16px;font-weight:bold;text-align:center">
+        <i class="bi bi-whatsapp" style="float:${ar ? "right" : "left"};font-size:20px;margin-${ar ? "left" : "right"}:8px"></i>
+        ${esc(phoneText)}
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2" style="text-align:${align};font-size:16px;height:90px;font-weight:bold;overflow:hidden;">
+        <i class="bi bi-geo-alt-fill" style="float:${ar ? "right" : "left"};font-size:20px;margin-${ar ? "left" : "right"}:8px;"></i>
+
+        <div style="${clampLines(3)} line-height:1.15; margin:0; padding:0;">
+          ${esc(addressText)}
+        </div>
+
+        ${ginacom ? `
+          <div style="text-align:center;margin:2px 0 0 0;padding:0;font-size:14px;${clampLines(1)}">
+            <i class="bi bi-shop-window"></i>
+            ${ar ? "مكتب جيناكم" : "Ginacom Office"}
+          </div>
+        ` : ""}
+
+        ${noteText ? `
+          <div style="text-align:center;margin:2px 0 0 0;padding:0;font-size:14px;${clampLines(1)}">
+            <i class="bi bi-journal-text"></i> ${esc(clampChars(noteText, 45))}
+          </div>
+        ` : ""}
+      </td>
+    </tr>
+  </table>
+
+  <div style="border:2px dashed #000;padding:10px;border-radius:5px">
+    ${showAmountBox ? `
+      <div style="text-align:center;border-bottom:2px dashed #000;padding-bottom:10px;margin-bottom:10px">
+        <span style="font-size:22px;font-weight:bold">${money(unpaid)}</span>
+        <i class="material-icons-outlined" style="vertical-align:middle;font-size:18px">payments</i>
+      </div>
+    ` : ""}
+
+    <div style="display:flex">
+      <div style="flex:1;border-inline-end:2px dashed #000;text-align:center;font-size:16px">
+        <i class="bi ${statusIcon(o, f, unpaid)}"></i>
+        <b>${statusLabel(o, f, unpaid)}</b>
+      </div>
+
+      <div style="flex:1;text-align:center;font-size:16px">
+        <i class="bi bi-calendar-event"></i>
+        ${esc(dateText)}
+      </div>
+    </div>
+  </div>
+
+  <table class="table-section">
+    <tr>
+      <td style="text-align:center">
+        <img
+          class="barcode-img"
+          alt="barcode"
+          src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(o.name || "")}&scale=2&height=7&includetext=false">
+        <div class="order-number">${esc(o.name || "")}</div>
+      </td>
+
+      <td class="qr-code" style="text-align:center">
+        <img alt="qr" src="${qrUrl}">
+      </td>
+    </tr>
+  </table>
+
+  ${showWWW ? `
+    <div style="display:flex;align-items:center;margin:15px 0;">
+      <div style="flex:1;height:1px;background:linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);"></div>
+      <span style="margin:0 2px;font-size:8px;letter-spacing:4px;color:#000;text-transform:uppercase;">halabt.com</span>
+      <div style="flex:1;height:1px;background:linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);"></div>
+    </div>
+  ` : ""}
+</div>
+    `);
+  });
+
+  function waitImagesAndPrint(){
+    const imgs = Array.from(document.images);
+    let loaded = 0;
+
+    if (imgs.length === 0) {
+      window.print();
+      return;
+    }
+
+    imgs.forEach(img => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === imgs.length) window.print();
+      } else {
+        img.onload = img.onerror = () => {
+          loaded++;
+          if (loaded === imgs.length) window.print();
+        };
+      }
+    });
+  }
+
+  waitImagesAndPrint();
+})();
+</script>
+
+</body>
+</html>

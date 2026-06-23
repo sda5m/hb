@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | دخول المندوب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --purple:#6B0FA6; --purpleDark:#3C0A63; --peach:#F1C6B1;
+      --ink:#101828;
+      --shadow:0 18px 60px rgba(16,24,40,.22);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.65), rgba(241,198,177,.40)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      display:flex;align-items:center;justify-content:center;
+      padding:18px;color:var(--ink);
+    }
+    .card{
+      width:min(460px, 100%);
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(16,24,40,.12);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .head{
+      padding:16px 16px 12px;
+      display:flex;align-items:center;gap:12px;
+      border-bottom:1px solid rgba(16,24,40,.08);
+    }
+    .mark{
+      width:44px;height:44px;border-radius:14px;
+      display:grid;place-items:center;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      flex:0 0 auto;
+    }
+    .title{margin:0;font-weight:980;font-size:16px;color:var(--purpleDark)}
+    .sub{margin:4px 0 0 0;font-weight:900;font-size:12.5px;color:rgba(16,24,40,.60)}
+    .body{padding:14px 16px 16px}
+    .hint{margin:0 0 12px 0;font-weight:900;color:rgba(16,24,40,.62);font-size:12.5px}
+    .box{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:14px;
+      background:#fff;border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+    }
+    input{
+      border:none;outline:none;width:100%;
+      font-family:"Cairo";font-weight:900;background:transparent;
+    }
+    .actions{display:flex;gap:10px;margin-top:12px}
+    .btn{
+      flex:1;border:none;border-radius:14px;padding:12px 12px;
+      cursor:pointer;font-weight:900;font-size:14px;font-family:"Cairo";
+      transition:.15s;
+    }
+    .btn:active{transform:scale(.985)}
+    .primary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff; box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .ghost{
+      background:#f2f4f7;color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+    .err{
+      margin-top:10px;padding:10px 12px;border-radius:14px;
+      background:rgba(239,68,68,.10);
+      border:1px solid rgba(239,68,68,.18);
+      color:#991b1b;font-weight:950;font-size:12.5px;display:none;
+    }
+    .svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="head">
+      <div class="mark" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" class="svg" style="stroke:var(--purple);">
+          <path d="M3 7h11v10H3z"></path>
+          <path d="M14 10h4l3 3v4h-7z"></path>
+          <circle cx="7" cy="19" r="1.8"></circle>
+          <circle cx="18" cy="19" r="1.8"></circle>
+        </svg>
+      </div>
+      <div>
+        <p class="title">Hala Beauty • دخول المندوب</p>
+        <p class="sub">تسجيل دخول آمن لعرض طلبات التوصيل</p>
+      </div>
+    </div>
+
+    <div class="body">
+      <p class="hint">أدخل كلمة سر المندوب للمتابعة</p>
+
+      <div class="box">
+        <svg class="svg" viewBox="0 0 24 24" style="color:rgba(60,10,99,.65)">
+          <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+          <path d="M6 11h12v10H6z"></path>
+        </svg>
+        <input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password">
+      </div>
+
+      <div id="err" class="err">كلمة السر غير صحيحة</div>
+
+      <div class="actions">
+        <button id="btnLogin" class="btn primary" type="button">دخول</button>
+        <button class="btn ghost" type="button" onclick="clearSaved()">مسح</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function getDriverKey(){ return (localStorage.getItem("DRIVER_KEY") || "").trim(); }
+  function setDriverKey(v){ localStorage.setItem("DRIVER_KEY", (v || "").trim()); }
+
+  function showErr(msg){
+    const el = document.getElementById("err");
+    if(!msg){ el.style.display="none"; el.textContent=""; return; }
+    el.style.display="block"; el.textContent=msg;
+  }
+
+  function clearSaved(){
+    localStorage.removeItem("DRIVER_KEY");
+    const pwEl = document.getElementById("pw");
+    if(pwEl) pwEl.value = "";
+    showErr("");
+    pwEl?.focus();
+  }
+
+  async function tryLogin(){
+    const pw = (document.getElementById("pw").value || "").trim();
+    if(!pw){ showErr("اكتب كلمة السر"); return; }
+
+    setDriverKey(pw);
+
+    try{
+      const r = await fetch("/api/driver/ping", {
+        headers: { "x-driver-key": getDriverKey() },
+        cache: "no-store"
+      });
+
+      if(!r.ok){
+        localStorage.removeItem("DRIVER_KEY");
+        showErr("كلمة السر غير صحيحة");
+        return;
+      }
+
+      // ✅ نجاح: حول لصفحة المندوب
+      window.location.href = "./index.html"; // داخل /d/
+    }catch(e){
+      localStorage.removeItem("DRIVER_KEY");
+      showErr("تعذر الاتصال بالسيرفر");
+    }
+  }
+
+  document.getElementById("btnLogin").addEventListener("click", tryLogin);
+  document.getElementById("pw").addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryLogin(); });
+
+  (function init(){
+    const saved = getDriverKey();
+    if(saved){
+      document.getElementById("pw").value = saved;
+      // لا تعمل tryLogin تلقائي إذا كنت تبي، بس هذا عادي
+      tryLogin();
+    }else{
+      document.getElementById("pw").focus();
+    }
+  })();
+</script>
+
+
+</body>
+</html>

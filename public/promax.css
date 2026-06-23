@@ -1,0 +1,506 @@
+/* =========================================================
+   Hala Beauty - One CSS File (Scoped by body class)
+   ضع class على body لكل صفحة عشان ما يصير تعارض
+   ========================================================= */
+
+/* ========== Base / Tokens ========== */
+:root{
+  --purple:#6B0FA6;
+  --purpleDark:#3C0A63;
+  --peach:#F1C6B1;
+  --ink:#101828;
+  --muted:#667085;
+
+  --btMain:#6b0083;
+  --btSoft:#fdd8c2;
+
+  --card:rgba(255,255,255,.92);
+  --line:rgba(16,24,40,.10);
+
+  --shadow:0 12px 30px rgba(16,24,40,.12);
+  --shadow2:0 8px 18px rgba(16,24,40,.10);
+
+  --r16:16px;
+  --r18:18px;
+
+  --ok:#16a34a;
+  --warn:#f59e0b;
+  --err:#ef4444;
+  --info:#2563eb;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; margin:0; }
+body{ font-family:"Cairo",system-ui,sans-serif; }
+
+/* ========== Shared pieces (used in many pages) ========== */
+.brandMark{
+  width:44px;height:44px;border-radius:14px;
+  background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+  border:1px solid rgba(107,15,166,.18);
+  display:grid; place-items:center;
+  overflow:hidden;
+}
+.brandIcon{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.btn{
+  border:none; border-radius:14px; padding:12px 12px;
+  cursor:pointer; font-weight:900; font-size:15px;
+  font-family:"Cairo",system-ui,sans-serif;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  transition:.15s; user-select:none;
+}
+.btn:active{ transform:scale(.985); }
+
+.btnPrimary{
+  background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+  color:#fff; box-shadow:0 10px 22px rgba(107,15,166,.22);
+}
+.btnGhost{
+  background:#f2f4f7; color:var(--purpleDark);
+  border:1px dashed rgba(60,10,99,.30);
+}
+
+/* Toasts (مشتركة) */
+.toasts{
+  position:fixed; bottom:14px; left:14px; right:14px;
+  z-index:9999; display:flex; flex-direction:column; gap:10px;
+  pointer-events:none;
+}
+.toast{
+  pointer-events:auto;
+  display:flex; align-items:flex-start; gap:10px;
+  padding:12px; border-radius:18px;
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(16,24,40,.10);
+  box-shadow:0 14px 32px rgba(16,24,40,.18);
+  backdrop-filter: blur(8px);
+  transform: translateY(12px); opacity:0;
+  animation: toastIn .22s ease-out forwards;
+}
+@keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+.toast.out{ animation: toastOut .18s ease-in forwards; }
+@keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+.toast .icon{ width:34px; height:34px; border-radius:12px; display:grid; place-items:center; flex:0 0 auto; color:#fff; }
+.toast .body{ min-width:0; flex:1 1 auto; }
+.toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+.toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+.toast .x{ border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px; border-radius:10px; color:rgba(16,24,40,.55); }
+.toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+.toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+.toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+.toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+.bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+.bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+@keyframes shrink{ to{ transform:scaleX(0); } }
+
+/* =========================================================
+   1) صفحة LOGIN  (ضع: <body class="page-login">)
+   ========================================================= */
+body.page-login{
+  background:
+    linear-gradient(180deg, rgba(60,10,99,.65), rgba(241,198,177,.40)),
+    url("d.jpg");
+  background-size:cover;
+  background-position:center;
+  color:var(--ink);
+}
+.page-login .loginView{
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.page-login .loginCard{
+  width:min(460px,100%);
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(16,24,40,.12);
+  border-radius:22px;
+  box-shadow:0 22px 60px rgba(16,24,40,.22);
+  backdrop-filter: blur(10px);
+  overflow:hidden;
+}
+.page-login .loginHead{
+  padding:16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid rgba(16,24,40,.08);
+}
+.page-login .loginTitle{ margin:0; font-weight:980; font-size:16px; color:var(--purpleDark); }
+.page-login .loginSub{ margin:4px 0 0 0; font-weight:900; font-size:12.5px; color:rgba(16,24,40,.60); }
+.page-login .loginBody{ padding:14px 16px 16px; }
+.page-login .box{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:14px; background:#fff;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.08);
+}
+.page-login .box input{
+  border:none; outline:none; width:100%;
+  font-family:"Cairo"; font-weight:900; background:transparent;
+}
+.page-login .btns{ display:flex; gap:10px; margin-top:12px; }
+.page-login .btn{ flex:1; }
+.page-login .primary{
+  background:linear-gradient(135deg,var(--purple),var(--purpleDark));
+  color:#fff;
+}
+.page-login .ghost{
+  background:#f2f4f7;
+  color:var(--purpleDark);
+  border:1px dashed rgba(60,10,99,.30);
+}
+.page-login .err{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(239,68,68,.10);
+  border:1px solid rgba(239,68,68,.18);
+  color:#991b1b;
+  font-weight:950;
+  font-size:12.5px;
+  display:none;
+}
+
+/* =========================================================
+   2) صفحات الواجهة البنفسجي (بحث/منتجات/تجهيز)  
+   ضع: <body class="page-ui">
+   (يناسب صفحاتك اللي فيها topbar/card/box/controls/grid/item)
+   ========================================================= */
+body.page-ui{
+  color:var(--ink);
+  background:
+    linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+    url("d.jpg");
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+}
+.page-ui .wrap{ width:100%; max-width:100%; margin:0; padding:18px 24px 26px; }
+.page-ui .topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px; border-radius:var(--r18);
+  background:var(--card); box-shadow:var(--shadow2);
+  border:1px solid var(--line); backdrop-filter: blur(6px);
+}
+.page-ui .leftActions{ display:flex; align-items:center; gap:10px; min-width:0; }
+.page-ui .iconBtn{
+  width:44px; height:44px; border-radius:14px;
+  border:1px solid rgba(16,24,40,.10);
+  background:rgba(255,255,255,.85);
+  box-shadow:0 8px 18px rgba(16,24,40,.08);
+  cursor:pointer;
+  display:grid; place-items:center;
+  transition:.15s;
+}
+.page-ui .iconBtn:active{ transform:scale(.98); }
+.page-ui .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+.page-ui .brandName{
+  font-size:18px;font-weight:900;margin:0;line-height:1.2;letter-spacing:.2px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.page-ui .brandName .b1{ color:var(--purple); }
+.page-ui .brandName .b2{ color:var(--peach); }
+.page-ui .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+.page-ui .badge{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 10px; border-radius:999px;
+  font-size:12px; font-weight:900;
+  background: rgba(107,15,166,.10);
+  color: var(--purpleDark);
+  border:1px solid rgba(107,15,166,.18);
+  white-space:nowrap;
+}
+.page-ui .card{
+  margin-top:14px; padding:14px; border-radius:var(--r18);
+  background:var(--card); box-shadow:var(--shadow);
+  border:1px solid var(--line); backdrop-filter: blur(6px);
+}
+.page-ui .label{ font-size:13px; color:var(--muted); font-weight:900; margin:0 0 10px 0; }
+
+.page-ui .controls{ display:grid; gap:12px; }
+.page-ui .box{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:14px; background:#fff;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 6px 14px rgba(16,24,40,.08);
+  position:relative; z-index:60; overflow:visible;
+}
+.page-ui .box input{
+  border:none; outline:none; background:transparent; width:100%;
+  font-size:15px; font-weight:900; color:var(--ink);
+  font-family:"Cairo",system-ui,sans-serif;
+}
+.page-ui .box input::placeholder{ color: rgba(102,112,133,.9); font-weight:800; }
+
+.page-ui .grid{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:12px;
+}
+@media (min-width: 820px){ .page-ui .grid{ grid-template-columns: repeat(4, minmax(0,1fr)); } }
+@media (max-width:420px){ .page-ui .grid{ grid-template-columns:1fr; } }
+
+.page-ui .item{
+  background:#fff;
+  border:1px solid rgba(16,24,40,.10);
+  box-shadow:0 10px 22px rgba(16,24,40,.10);
+  border-radius:18px;
+  overflow:hidden;
+  transition:.15s;
+  position:relative;
+}
+.page-ui .item:active{ transform:scale(.99); }
+
+.page-ui .imgWrap{
+  position:relative;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, rgba(107,15,166,.08), rgba(241,198,177,.18));
+  overflow:hidden;
+}
+.page-ui .imgWrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.page-ui .meta{ padding:10px 12px 12px; display:flex; flex-direction:column; gap:8px; }
+.page-ui .name{ font-weight:980; font-size:13.5px; line-height:1.45; color:var(--ink); min-height: 42px; }
+.page-ui .sub{ font-weight:900; font-size:12.5px; color:rgba(16,24,40,.62); line-height:1.45; }
+.page-ui .bottom{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+
+.page-ui .pill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:7px 10px; border-radius:999px;
+  font-size:12px; font-weight:950;
+  background: rgba(241,198,177,.35);
+  color: var(--purpleDark);
+  border:1px solid rgba(241,198,177,.65);
+  white-space:nowrap;
+}
+.page-ui .rowBtns{ display:flex; gap:8px; flex-wrap:wrap; width:100%; }
+.page-ui .mini{
+  border:none; cursor:pointer;
+  padding:7px 10px; border-radius:999px;
+  font-size:12px; font-weight:950;
+  background: rgba(107,15,166,.10);
+  border:1px solid rgba(107,15,166,.18);
+  color:var(--purpleDark);
+  user-select:none;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.page-ui .mini.ghost{
+  background: rgba(16,24,40,.06);
+  border-color: rgba(16,24,40,.14);
+  color: rgba(16,24,40,.80);
+}
+
+/* Suggestions */
+.page-ui .suggestBox{
+  position:absolute;
+  top: calc(100% + 8px);
+  right: 0; left: 0;
+  z-index: 99999;
+  background: rgba(255,255,255,.98);
+  border: 1px solid rgba(16,24,40,.12);
+  box-shadow: 0 16px 38px rgba(16,24,40,.16);
+  border-radius: 16px;
+  overflow: hidden;
+  display:none;
+  max-height: 320px;
+  overflow-y:auto;
+}
+.page-ui .suggestBox.show{ display:block; }
+.page-ui .suggestItem{
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(16,24,40,.08);
+}
+.page-ui .suggestItem:last-child{ border-bottom:none; }
+.page-ui .suggestItem:hover{ background: rgba(107,15,166,.06); }
+.page-ui .suggestMain{ font-weight:950; font-size:13px; color:#111827; line-height:1.35; }
+.page-ui .suggestSub{ margin-top:3px; font-weight:900; font-size:12px; color:rgba(16,24,40,.65); line-height:1.35; }
+.page-ui .suggestTag{
+  flex:0 0 auto;
+  font-weight:950;
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(241,198,177,.35);
+  border: 1px solid rgba(241,198,177,.65);
+  color: var(--purpleDark);
+  white-space:nowrap;
+}
+
+/* (اختياري) لرفع الاقتراحات فوق كل شيء */
+.page-ui .searchCard{ position:relative; z-index:5000; }
+.page-ui .productsCard{ position:relative; z-index:1; }
+.page-ui .topbar, .page-ui .card{ position:relative; }
+
+/* =========================================================
+   3) صفحة بسيطة جداً (body أبيض + كارد)  (ضع: page-simple)
+   هذا يغطي CSS اللي عندك: body f6f7fb + wrap 720 + card + btn أسود
+   ========================================================= */
+body.page-simple{ background:#f6f7fb; color:#111; }
+.page-simple .wrap{ max-width:720px; margin:40px auto; padding:16px; }
+.page-simple .card{
+  background:#fff;border:1px solid #e5e7eb;border-radius:18px;
+  padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+.page-simple .h{ font-size:18px;font-weight:800;margin:0 0 10px; }
+.page-simple .p{ margin:0 0 14px;color:#444;font-weight:700;line-height:1.6; }
+.page-simple .row{ display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px; }
+.page-simple .inp{
+  flex:1;min-width:220px;padding:12px 12px;border-radius:14px;border:1px solid #e5e7eb;
+  font-family:"Cairo";font-weight:800;
+}
+.page-simple .btn{
+  padding:12px 14px;border-radius:14px;border:1px solid #111;background:#111;color:#fff;
+  font-weight:900; cursor:pointer; width:auto;
+}
+.page-simple .btn2{ background:#fff;color:#111; }
+.page-simple .mini{ font-size:12px;color:#555;font-weight:800;margin-top:10px; }
+.page-simple .ok{ color:#0f766e; }
+.page-simple .err{ color:#b91c1c; }
+
+/* =========================================================
+   4) صفحة متجر/سلة بسيطة (ضع: page-cart)
+   ========================================================= */
+body.page-cart{ background:#f6f7fb; color:#111; }
+.page-cart .wrap{ max-width:980px;margin:0 auto;padding:16px; }
+.page-cart .card{ background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px;margin-top:12px; }
+.page-cart .row{ display:flex;gap:10px;flex-wrap:wrap; }
+.page-cart input,.page-cart textarea{
+  padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;font-family:inherit;font-weight:800;
+}
+.page-cart textarea{ width:100%;min-height:70px; }
+.page-cart .btn{ padding:10px 14px;border:none;border-radius:12px;background:#6B0FA6;color:#fff;font-weight:900;cursor:pointer; width:auto; }
+.page-cart .btn2{ background:#111827; }
+.page-cart .btnG{ background:#f3f4f6;color:#111;border:1px solid #e5e7eb; }
+.page-cart .grid{ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+@media(min-width:900px){ .page-cart .grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+.page-cart .item{ border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;background:#fff; }
+.page-cart .item img{ width:100%;height:150px;object-fit:cover;display:block;background:#f3f4f6; }
+.page-cart .p{ padding:10px; }
+.page-cart .t{ font-weight:900;font-size:13px;line-height:1.35;margin:0 0 6px; }
+.page-cart .m{ font-size:12px;font-weight:800;color:#6b7280;margin:0 0 8px; }
+.page-cart .bar{ display:flex;align-items:center;justify-content:space-between;gap:8px; }
+.page-cart .qty{ width:70px; }
+.page-cart .cartRow{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin-top:8px;
+}
+.page-cart .small{ font-size:12px;font-weight:800;color:#6b7280; }
+.page-cart .ok{ color:#16a34a;font-weight:900; }
+.page-cart .err{ color:#ef4444;font-weight:900; }
+.page-cart .warn{ color:#f59e0b;font-weight:900; }
+.page-cart .link{ word-break:break-all; }
+.page-cart .muted{ opacity:.85; }
+.page-cart .pill{
+  display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border:1px solid #e5e7eb;
+  border-radius:999px;font-size:12px;font-weight:900;background:#f9fafb;
+}
+
+/* =========================================================
+   5) صفحة طباعة ملصق/ورقة (ضع: page-print-label)
+   ========================================================= */
+body.page-print-label{
+  font-family:'Almarai',sans-serif;
+  margin:0; padding:0;
+}
+@page{ size: 100mm 150mm; margin: 0; }
+.page-print-label html, .page-print-label body{ margin:0; padding:0; }
+.page-print-label .container{
+  width:100mm; height:150mm; border:1px solid #000;
+  padding:5mm; box-sizing:border-box; overflow:hidden;
+  page-break-before:auto;
+}
+@media print{
+  body.page-print-label{ width:100mm; height:150mm; }
+  .page-print-label .container{
+    width:100mm !important; height:150mm !important; margin:0 !important;
+    page-break-inside: avoid;
+    page-break-after: always;
+  }
+}
+.page-print-label .logo-container{ border:2px dashed #000; padding:10px; margin-bottom:10px; text-align:center; }
+.page-print-label .logo{ max-height:2cm; filter:grayscale(100%); }
+.page-print-label .contact-row{ display:flex; justify-content:space-between; margin-bottom:5px; }
+.page-print-label .contact-item{ display:flex; align-items:center; font-weight:bold; font-size:15px; }
+.page-print-label .large-icon{ font-size:24px; }
+.page-print-label .info-title{
+  font-size:14px; font-weight:bold; text-align:center;
+  margin:10px 0; border-top:1px solid #000; padding-top:5px;
+}
+.page-print-label .table-section{ width:100%; border-collapse:collapse; font-size:12px; margin-bottom:5px; table-layout:fixed; }
+.page-print-label .table-section td{
+  border:1px dashed #000; padding:4px 6px; vertical-align:middle; width:50%;
+  line-height:1.1;
+}
+.page-print-label .table-section tr:nth-child(2) td{
+  height:28px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.page-print-label .section-title{ background:#f0f0f0; font-weight:bold; text-align:center; }
+.page-print-label .order-number{ font-size:12px; font-weight:bold; text-align:center; margin-top:5px; }
+.page-print-label .table-section i,
+.page-print-label .contact-row i{ line-height:1; display:inline-block; vertical-align:middle; }
+.page-print-label .qr-code img{ height:20mm; }
+.page-print-label .barcode-img{ height:10mm; }
+
+/* =========================================================
+   6) أزرار Tags Bar (تستخدمها صفحة الصور/التصنيفات)
+   (تشتغل داخل page-ui أو غيره)
+   ========================================================= */
+.tagsBar{ margin-top:12px; display:flex; flex-wrap:wrap; gap:10px; }
+:root{ --btnH: 40px; --btnPadX: 12px; --btnGap: 8px; --btnR: 14px; --ico: 18px; }
+
+.segBtn, .linkBtn{
+  height: var(--btnH);
+  min-height: var(--btnH);
+  padding: 0 var(--btnPadX);
+  border-radius: var(--btnR);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: var(--btnGap);
+  font-family:"Cairo",system-ui,sans-serif;
+  font-weight:950;
+  font-size:13.5px;
+  line-height:1;
+  cursor:pointer;
+  user-select:none;
+  white-space:nowrap;
+  text-decoration:none;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 10px 22px rgba(16,24,40,.10);
+  transition: transform .15s, box-shadow .15s, background .15s, color .15s, border-color .15s;
+}
+.segBtn:active, .linkBtn:active{ transform:scale(.985); }
+.segBtn svg, .linkBtn svg{
+  width: var(--ico);
+  height: var(--ico);
+  flex: 0 0 var(--ico);
+  stroke: currentColor;
+  fill:none;
+  stroke-width:2.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.segBtn{ background:#fff; color:var(--purpleDark); }
+.segBtn.small{ padding: 0 10px; font-size:13px; }
+.segBtn.active{
+  background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+  color:#fff;
+  border-color: rgba(107,15,166,.22);
+  box-shadow:0 12px 24px rgba(107,15,166,.18);
+}
+.linkBtn{
+  background: linear-gradient(135deg, rgba(241,198,177,.55), rgba(107,15,166,.10));
+  color: var(--purpleDark);
+}
+.linkBtn:hover{ transform: translateY(-1px); }
+.linkBtn.stock{ background: linear-gradient(135deg, rgba(107,15,166,.14), rgba(255,255,255,.92)); border-color: rgba(107,15,166,.18); }
+.linkBtn.done{ background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(255,255,255,.92)); border-color: rgba(34,197,94,.22); }

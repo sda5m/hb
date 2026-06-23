@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Hala Beauty | دخول تجهيز الطلبات</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/a/promax.css?v=1">
+</head>
+
+<body>
+  <body class="page-login">
+
+<div class="loginView">
+  <div class="loginCard">
+
+    <div class="loginHead">
+      <div class="brandMark">🔒</div>
+      <div>
+        <p class="loginTitle">Hala Beauty • تجهيز الطلبات</p>
+        <p class="loginSub">تسجيل دخول للوصول إلى اللوحة</p>
+      </div>
+    </div>
+
+    <div class="loginBody">
+      <div class="box">
+        <span style="opacity:.7">🔑</span>
+        <input id="pw" type="password" placeholder="كلمة السر">
+      </div>
+
+      <div id="err" class="err">كلمة السر غير صحيحة</div>
+
+      <div class="btns">
+<button class="btn primary" id="loginBtn" type="button">دخول</button>
+        <button class="btn ghost" id="clearBtn" type="button">مسح</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import { saveKey, clearPackKey } from "./auth.js";
+
+  const input = document.getElementById("pw");
+  const err = document.getElementById("err");
+
+  function showErr(msg) {
+    err.textContent = msg;
+    err.style.display = "block";
+  }
+  function hideErr() {
+    err.style.display = "none";
+  }
+
+  async function doLogin() {
+    hideErr();
+
+    const key = input.value.trim();
+    if (!key) return showErr("اكتب كلمة السر");
+
+    saveKey(key);
+
+    try {
+      const r = await fetch("/api/pack/ping", {
+        method: "GET",
+        headers: { "x-pack-key": key },
+        cache: "no-store"
+      });
+
+      const text = await r.text().catch(() => "");
+      console.log("PING STATUS:", r.status, "BODY:", text);
+
+      if (r.ok) {
+        const params = new URLSearchParams(location.search);
+        const next = params.get("next") || "/a/index.html";
+        location.href = next;
+        return;
+      }
+
+      clearPackKey();
+      showErr(`كلمة السر غير صحيحة (Status: ${r.status})`);
+
+    } catch (e) {
+      clearPackKey();
+      showErr("تعذر الاتصال بالسيرفر");
+    }
+  }
+
+  document.getElementById("loginBtn").onclick = doLogin;
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") doLogin();
+  });
+
+  document.getElementById("clearBtn").onclick = () => {
+    input.value = "";
+    clearPackKey();
+    hideErr();
+    input.focus();
+  };
+</script>
+</body>
+</html>

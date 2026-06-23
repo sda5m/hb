@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>ربط واتساب عبر Meta</title>
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_US/sdk.js"></script>
+</head>
+<body>
+  <h2>ربط واتساب الحالي</h2>
+  <button id="startBtn">ابدأ الربط</button>
+
+  <pre id="log"></pre>
+
+  <script>
+    const log = (msg) => {
+      document.getElementById("log").textContent +=
+        (typeof msg === "string" ? msg : JSON.stringify(msg, null, 2)) + "\n";
+    };
+
+    async function loadConfig() {
+      const r = await fetch("/api/meta/config");
+      return await r.json();
+    }
+
+    window.fbAsyncInit = async function () {
+      const conf = await loadConfig();
+
+      if (!conf?.appId) {
+        log("META_APP_ID غير موجود");
+        return;
+      }
+
+      window.__META_CONF__ = conf;
+
+      FB.init({
+        appId: conf.appId,
+        cookie: true,
+        xfbml: false,
+        version: "v25.0"
+      });
+
+      log("FB SDK جاهز");
+    };
+
+    document.getElementById("startBtn").addEventListener("click", async () => {
+      const conf = window.__META_CONF__;
+      if (!conf?.configId) {
+        log("META_EMBEDDED_SIGNUP_CONFIG_ID غير موجود");
+        return;
+      }
+
+      try {
+        FB.login(function(response) {
+          log(response);
+        }, {
+          config_id: conf.configId,
+          response_type: "code",
+          override_default_response_type: true,
+          extras: {
+            setup: {},
+            feature: "whatsapp_embedded_signup"
+          }
+        });
+      } catch (e) {
+        log(e.message || String(e));
+      }
+    });
+
+    window.addEventListener("message", (event) => {
+      log({
+        origin: event.origin,
+        data: event.data
+      });
+    });
+  </script>
+</body>
+</html>

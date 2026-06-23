@@ -1,0 +1,1330 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدارة التقييمات | Hala Beauty</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f3ff;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e9d5ff;
+      --primary: #7c3aed;
+      --primary-dark: #5b21b6;
+      --danger: #dc2626;
+      --success: #059669;
+      --star: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Cairo, system-ui, sans-serif;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 22px; }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 22px;
+      color: #fff;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 14px 34px rgba(124, 58, 237, .22);
+      margin-bottom: 18px;
+    }
+    .hero h1 { margin: 0; font-size: 22px; }
+    .hero p { margin: 4px 0 0; opacity: .88; font-size: 13px; }
+    .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      flex: 0 0 auto;
+    }
+    .icon svg { width: 100%; height: 100%; display: block; }
+    .icon-star { color: var(--star); }
+    .icon-success { color: var(--success); }
+    .icon-danger { color: var(--danger); }
+    .icon-warn { color: #f59e0b; }
+    .icon-muted { color: var(--muted); }
+    .icon-btn {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 8px 22px rgba(31, 41, 55, .05);
+      margin-bottom: 14px;
+    }
+    .grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 14px; }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 12px; font-weight: 800; color: var(--muted); margin: 12px 0 5px; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 11px 12px;
+      font: inherit;
+      outline: none;
+      background: #fff;
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,.10); }
+    button {
+      border: 0;
+      border-radius: 11px;
+      padding: 10px 15px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+    }
+    button:hover { background: var(--primary-dark); }
+    button.ghost { background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.34); }
+    button.light { background: #f5f3ff; color: var(--primary-dark); border: 1px solid var(--line); }
+    button.danger { background: var(--danger); }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    .btn-sm {
+      min-height: 34px;
+      padding: 7px 12px !important;
+      border-radius: 10px !important;
+      font-size: 12px !important;
+      line-height: 1.1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .login { max-width: 390px; margin: 70px auto; text-align: center; }
+    .row { display: flex; gap: 9px; align-items: center; }
+    .row > * { flex: 1; }
+    .small { font-size: 12px; color: var(--muted); }
+    .results { display: grid; gap: 8px; margin-top: 12px; max-height: 440px; overflow: auto; }
+    .product {
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 9px;
+      background: #fff;
+    }
+    .product img, .review img.thumb {
+      width: 54px;
+      height: 54px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #f3f4f6;
+    }
+    .product strong { display: block; font-size: 13px; line-height: 1.35; }
+    .product span { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; direction: ltr; text-align: start; }
+    .selected {
+      display: none;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid #bbf7d0;
+      background: #ecfdf5;
+      color: #065f46;
+      border-radius: 13px;
+      padding: 10px;
+      margin-top: 12px;
+    }
+    .selected.show { display: flex; }
+    .stars { display: flex; gap: 4px; direction: ltr; justify-content: flex-end; }
+    .stars button {
+      padding: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: #fff7ed;
+      color: var(--star);
+      border: 1px solid #fed7aa;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .reviews { display: grid; gap: 9px; }
+    .review {
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 11px;
+      background: #fff;
+      cursor: pointer;
+      transition: .15s border-color,.15s box-shadow,.15s transform;
+    }
+    .review:hover { border-color: var(--primary); box-shadow: 0 6px 18px rgba(124,58,237,.10); transform: translateY(-1px); }
+    .review-top { display: flex; justify-content: space-between; gap: 10px; }
+    .review-title { font-weight: 800; font-size: 13px; }
+    .review-meta { color: var(--muted); font-size: 11px; }
+    .review-comment { margin-top: 8px; font-size: 13px; line-height: 1.7; }
+    .review-photos, .edit-photos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .review-photos img, .edit-photo img {
+      width: 66px;
+      height: 66px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #f3f4f6;
+      cursor: pointer;
+    }
+    .review-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .edit-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(17, 24, 39, .52);
+      z-index: 30;
+    }
+    .edit-modal.show { display: flex; }
+    .edit-panel {
+      width: min(520px, 100%);
+      max-height: 88vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 50px rgba(17, 24, 39, .20);
+    }
+    .edit-photo { position: relative; }
+    .edit-photo button {
+      position: absolute;
+      top: -7px;
+      inset-inline-end: -7px;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border-radius: 50%;
+      background: var(--danger);
+      line-height: 24px;
+    }
+    .toast {
+      position: fixed;
+      inset-inline-start: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .18s;
+      z-index: 20;
+      font-size: 13px;
+    }
+    .toast.show { opacity: 1; }
+    .empty { color: var(--muted); text-align: center; padding: 24px 8px; }
+    /* ── تبويبات ── */
+    nav.tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    nav.tabs button {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      padding:9px 20px !important;
+      border-radius:24px !important;
+      font-size:13px !important;
+      font-weight:700 !important;
+      background:#fff !important;
+      color:var(--muted) !important;
+      border:1.5px solid var(--line) !important;
+      cursor:pointer;
+      transition:.15s;
+    }
+    nav.tabs button:hover {
+      background:#f5f0ff !important;
+      color:var(--primary) !important;
+      border-color:var(--primary) !important;
+    }
+    nav.tabs button.active {
+      background:var(--primary) !important;
+      color:#fff !important;
+      border-color:var(--primary) !important;
+      box-shadow:0 4px 12px rgba(124,58,237,.28);
+    }
+    .tab-pane { display:none; }
+    .tab-pane.active { display:block; }
+    /* ── كروت المنتجات ── */
+    .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; }
+    .prod-card {
+      background:var(--card); border:1px solid var(--line); border-radius:14px;
+      padding:14px 12px; cursor:pointer; transition:.15s;
+    }
+    .prod-card:hover { border-color:var(--primary); box-shadow:0 4px 14px rgba(124,58,237,.12); transform:translateY(-1px); }
+    .prod-card-name { font-weight:700; font-size:13px; margin-bottom:8px; line-height:1.45; }
+    .prod-card-meta { font-size:12px; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+    .prod-avg { color:var(--star); font-size:13px; letter-spacing:1px; }
+    .prod-count { background:var(--bg); border-radius:8px; padding:2px 7px; font-weight:700; }
+    .section-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+    .section-head h2 { margin:0; font-size:18px; line-height:1.35; }
+    .scrape-summary {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .scrape-toolbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaff;
+      flex-wrap: wrap;
+    }
+    .scrape-counts {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .stat-pill {
+      display:inline-flex;
+      align-items:center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background:#f5f3ff;
+      color: var(--primary-dark);
+      border: 1px solid var(--line);
+    }
+    .stat-pill.ok { background:#ecfdf5; color:#047857; border-color:#bbf7d0; }
+    .stat-pill.muted { background:#f8fafc; color:#64748b; border-color:#e2e8f0; }
+    .scrape-actions { display:flex; gap:7px; flex-wrap:wrap; }
+    .scrape-list {
+      display:grid;
+      gap:8px;
+      max-height: 460px;
+      overflow-y:auto;
+      padding: 10px;
+      background:#fff;
+    }
+    .scrape-card {
+      display:grid;
+      grid-template-columns: 34px 1fr;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px;
+      cursor:pointer;
+      background:#fff;
+      transition:.14s border-color,.14s background,.14s box-shadow;
+    }
+    .scrape-card:hover { border-color:var(--primary); background:#faf7ff; box-shadow:0 6px 18px rgba(124,58,237,.08); }
+    .scrape-card.duplicate { opacity:.62; background:#f8fafc; }
+    .scrape-check {
+      width:24px !important;
+      height:24px;
+      margin:2px 0 0 !important;
+      accent-color: var(--primary);
+      cursor:pointer;
+    }
+    .scrape-main { min-width:0; }
+    .scrape-row {
+      display:flex;
+      align-items:center;
+      gap:7px;
+      flex-wrap:wrap;
+      margin-bottom:5px;
+    }
+    .scrape-author { font-size:13px; font-weight:900; color:var(--text); }
+    .scrape-stars { color:var(--star); direction:ltr; font-size:13px; letter-spacing:1px; }
+    .scrape-date { color:var(--muted); font-size:11px; }
+    .scrape-dup {
+      font-size:11px;
+      background:#eef2ff;
+      color:#4338ca;
+      padding:2px 7px;
+      border-radius:999px;
+      font-weight:900;
+    }
+    .scrape-comment {
+      font-size:13px;
+      line-height:1.65;
+      color:#334155;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .scrape-photo-count {
+      margin-top:6px;
+      font-size:12px;
+      color:#2563eb;
+      font-weight:800;
+    }
+    .result-item {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 8px;
+      align-items: center;
+      min-height: 46px;
+      padding: 7px 9px;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .result-item:hover { border-color: var(--primary); background: #faf7ff; }
+    .result-item img {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+      object-fit: cover;
+      background: #f3f4f6;
+      margin: 0 !important;
+    }
+    .result-item span {
+      min-width: 0;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    #scrapeResult > div {
+      margin-top: 12px !important;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+    #scrapeResult > div > div:first-child {
+      padding: 11px 12px;
+      margin: 0 !important;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaff;
+    }
+    #scrapeResult > div > div:first-child > span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 13px !important;
+      font-weight: 900;
+      color: var(--muted);
+    }
+    #scrapeResult > div > div:first-child > span > b,
+    #scrapeResult > div > div:first-child > span > span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #f5f3ff;
+      border: 1px solid var(--line);
+      color: var(--primary-dark) !important;
+      line-height: 1;
+    }
+    #scrapeResult > div > div:first-child button {
+      min-height: 34px;
+      padding: 7px 12px !important;
+      border-radius: 10px !important;
+      font-size: 12px !important;
+      line-height: 1.1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    #scrapeResult > div > div:nth-child(2) {
+      display: grid !important;
+      flex-direction: initial !important;
+      gap: 8px !important;
+      padding: 10px;
+      max-height: 460px !important;
+      background: #fff;
+    }
+    #scrapeResult label {
+      display: grid !important;
+      grid-template-columns: 34px 1fr !important;
+      gap: 10px !important;
+      align-items: flex-start !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 12px !important;
+      padding: 10px !important;
+      background: #fff !important;
+      cursor: pointer;
+      transition: .14s border-color,.14s background,.14s box-shadow;
+    }
+    #scrapeResult label:hover {
+      border-color: var(--primary) !important;
+      background: #faf7ff !important;
+      box-shadow: 0 6px 18px rgba(124,58,237,.08);
+    }
+    #scrapeResult label input[type="checkbox"] {
+      width: 24px !important;
+      height: 24px !important;
+      min-width: 24px;
+      margin: 2px 0 0 !important;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div id="app">
+      <div class="hero">
+        <div>
+          <h1>إدارة التقييمات</h1>
+          <p style="margin:4px 0 0;opacity:.88;font-size:13px" id="heroSub">لوحة إدارة تقييمات المنتجات</p>
+        </div>
+        <div class="hero-actions">
+          <button class="ghost" onclick="toggleLang()" id="langBtn">EN</button>
+          <button class="ghost" onclick="repairProductNames()">إصلاح أسماء</button>
+        </div>
+      </div>
+
+      <!-- تبويبات -->
+      <nav class="tabs">
+        <button class="tab-btn active" onclick="switchTab('products')"><span class="icon icon-muted" data-icon="box"></span> المنتجات</button>
+        <button class="tab-btn" onclick="switchTab('recent')"><span class="icon icon-star" data-icon="star"></span> آخر التقييمات</button>
+        <button class="tab-btn" onclick="switchTab('add')"><span class="icon" data-icon="plus"></span> إضافة</button>
+        <button class="tab-btn" onclick="switchTab('import')"><span class="icon" data-icon="search"></span> استيراد</button>
+      </nav>
+
+      <!-- ── تبويب: المنتجات ── -->
+      <div class="tab-pane active" id="tab-products">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <h2 style="margin:0">المنتجات ذات التقييمات</h2>
+            <button class="light" onclick="loadProducts()" style="font-size:12px;padding:6px 12px">تحديث</button>
+          </div>
+          <div id="productsGrid" class="products-grid"><div class="empty">...</div></div>
+        </div>
+        <!-- تقييمات المنتج المختار -->
+        <div id="productReviewsSection" style="display:none">
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+              <button class="light" onclick="closeProductReviews()" style="padding:5px 12px">← رجوع</button>
+              <h2 style="margin:0;flex:1" id="productReviewsTitle"></h2>
+            </div>
+            <div id="productReviews" class="reviews"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── تبويب: آخر التقييمات ── -->
+      <div class="tab-pane" id="tab-recent">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <h2 style="margin:0">آخر التقييمات</h2>
+            <button class="light" onclick="loadReviews()" style="font-size:12px;padding:6px 12px">تحديث</button>
+          </div>
+          <div id="reviews" class="reviews"></div>
+        </div>
+      </div>
+
+      <!-- ── تبويب: إضافة ── -->
+      <div class="tab-pane" id="tab-add">
+        <div class="grid">
+          <section class="card">
+            <h2>بحث المنتجات</h2>
+            <p class="small">اكتب اسم المنتج أو البراند أو جزء من العنوان.</p>
+            <div class="row">
+              <input id="productSearch" placeholder="ابحث عن منتج...">
+              <button onclick="searchProducts()">بحث</button>
+            </div>
+            <div id="selectedProduct" class="selected"></div>
+            <div id="productResults" class="results"></div>
+          </section>
+          <section class="card">
+            <h2>إضافة تقييم يدوي</h2>
+            <p class="small" id="selectedHint">اختر منتجاً أولاً من نتائج البحث.</p>
+            <form id="reviewForm" onsubmit="submitReview(event)">
+              <label>التقييم</label>
+              <div class="stars" id="stars"></div>
+              <label>اسم العميل</label>
+              <input id="author" required>
+              <label>الإيميل (اختياري)</label>
+              <input id="email" type="email">
+              <label>التعليق</label>
+              <textarea id="comment"></textarea>
+              <label>صور التقييم (اختياري)</label>
+              <input id="images" type="file" accept="image/*" multiple>
+              <div style="height:14px"></div>
+              <button type="submit">حفظ التقييم</button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <!-- ── تبويب: استيراد ── -->
+      <div class="tab-pane" id="tab-import">
+        <section class="card">
+          <h2>استيراد تقييمات خارجية</h2>
+          <div class="field">
+            <label>ابحث عن منتج</label>
+            <input id="scrapeProductSearch" type="search" placeholder="ابحث عن منتج..." oninput="scrapeSearchProducts()" />
+            <div id="scrapeProductResults"></div>
+            <div id="scrapeSelectedInfo" style="display:none;padding:6px 10px;background:var(--card);border:1px solid var(--line);border-radius:8px;margin-top:6px;font-size:.85rem"></div>
+          </div>
+          <div class="field">
+            <label>رابط صفحة المنتج (Amazon / niceonesa.com / Noon / أي موقع)</label>
+            <input id="scrapeUrl" type="url" placeholder="https://www.amazon.sa/dp/B0XXX  أو  niceonesa.com/ar/..." style="width:100%;box-sizing:border-box" />
+          </div>
+          <div class="field">
+            <label>عدد التقييمات: <strong id="scrapeCountLabel">20</strong></label>
+            <input id="scrapeCount" type="range" min="5" max="50" value="20" style="width:100%"
+              oninput="document.getElementById('scrapeCountLabel').textContent=this.value" />
+          </div>
+          <button id="scrapeBtn" class="icon-btn" onclick="runScrape()" style="width:100%"><span class="icon" data-icon="search"></span> سحب التقييمات للمعاينة</button>
+          <div id="scrapeResult" style="margin-top:10px;font-size:.9rem"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <div id="editModal" class="edit-modal">
+    <div class="edit-panel">
+      <h2 data-i18n="editTitle">تعديل التقييم</h2>
+      <label data-i18n="rating">التقييم</label>
+      <div class="stars" id="editStars"></div>
+
+      <label data-i18n="productName">اسم المنتج</label>
+      <input id="editProductName">
+
+      <label data-i18n="author">اسم العميل</label>
+      <input id="editAuthor">
+
+      <label data-i18n="comment">التعليق</label>
+      <textarea id="editComment"></textarea>
+
+      <label data-i18n="images">صور التقييم اختياري</label>
+      <div id="editPhotos" class="edit-photos"></div>
+      <input id="editImages" type="file" accept="image/*" multiple>
+      <p class="small" data-i18n="photosHint">يمكنك حذف الصور الحالية أو إضافة صور جديدة حتى 4 صور.</p>
+
+      <div class="row" style="margin-top:14px">
+        <button type="button" class="light" onclick="closeEdit()" data-i18n="cancel">إلغاء</button>
+        <button type="button" style="color:#ef4444;border:1px solid #ef4444;background:none" onclick="deleteReview(editing&&editing.id,true)" data-i18n="del">حذف</button>
+        <button type="button" onclick="saveEdit()" data-i18n="save">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const I18N = {
+      ar: {
+        title: 'إدارة التقييمات',
+        subtitle: 'ابحث عن أي منتج، حتى لو لم يكن عليه تقييم، وأضف تقييمًا يدويًا.',
+        loginHint: 'أدخل مفتاح الإدارة للمتابعة',
+        loginBtn: 'دخول',
+        refresh: 'تحديث',
+        repairNames: 'إصلاح أسماء المنتجات',
+        repairDone: 'تم إصلاح أسماء المنتجات',
+        logout: 'خروج',
+        searchTitle: 'بحث المنتجات',
+        searchHint: 'اكتب اسم المنتج أو البراند أو جزء من العنوان.',
+        searchPlaceholder: 'ابحث عن منتج...',
+        searchBtn: 'بحث',
+        addTitle: 'إضافة تقييم يدوي',
+        selectFirst: 'اختر منتجًا أولًا من نتائج البحث.',
+        selected: 'المنتج المحدد',
+        productName: 'اسم المنتج',
+        rating: 'التقييم',
+        author: 'اسم العميل',
+        email: 'الإيميل اختياري',
+        comment: 'التعليق',
+        images: 'صور التقييم اختياري',
+        saveReview: 'حفظ التقييم',
+        reviewsTitle: 'آخر التقييمات',
+        noProducts: 'لا توجد منتجات',
+        noReviews: 'لا توجد تقييمات حتى الآن',
+        choose: 'اختيار',
+        saved: 'تم حفظ التقييم',
+        updated: 'تم تحديث التقييم',
+        edit: 'تعديل',
+        editTitle: 'تعديل التقييم',
+        save: 'حفظ',
+        cancel: 'إلغاء',
+        photosHint: 'يمكنك حذف الصور الحالية أو إضافة صور جديدة حتى 4 صور.',
+        removePhoto: 'حذف الصورة',
+        tooManyPhotos: 'الحد الأقصى 4 صور لكل تقييم',
+        needProduct: 'اختر المنتج أولًا',
+        del: 'حذف',
+        confirmDelete: 'هل أنت متأكد من حذف هذا التقييم؟',
+        deleted: 'تم حذف التقييم',
+        wrongKey: 'المفتاح غير صحيح',
+        error: 'حدث خطأ'
+      },
+      en: {
+        title: 'Reviews Manager',
+        subtitle: 'Search any product, even with no reviews, and add a manual review.',
+        loginHint: 'Enter admin key to continue',
+        loginBtn: 'Login',
+        refresh: 'Refresh',
+        repairNames: 'Repair names',
+        repairDone: 'Product names repaired',
+        logout: 'Logout',
+        searchTitle: 'Product Search',
+        searchHint: 'Type product name, brand, or part of the title.',
+        searchPlaceholder: 'Search products...',
+        searchBtn: 'Search',
+        addTitle: 'Add Manual Review',
+        selectFirst: 'Select a product from search results first.',
+        selected: 'Selected product',
+        productName: 'Product name',
+        rating: 'Rating',
+        author: 'Customer name',
+        email: 'Email optional',
+        comment: 'Comment',
+        images: 'Review images optional',
+        saveReview: 'Save review',
+        reviewsTitle: 'Latest Reviews',
+        noProducts: 'No products found',
+        noReviews: 'No reviews yet',
+        choose: 'Select',
+        saved: 'Review saved',
+        updated: 'Review updated',
+        edit: 'Edit',
+        editTitle: 'Edit Review',
+        save: 'Save',
+        cancel: 'Cancel',
+        photosHint: 'You can remove current photos or add new photos, up to 4 total.',
+        removePhoto: 'Remove photo',
+        tooManyPhotos: 'Maximum 4 photos per review',
+        needProduct: 'Select a product first',
+        del: 'Delete',
+        confirmDelete: 'Are you sure you want to delete this review?',
+        deleted: 'Review deleted',
+        wrongKey: 'Invalid key',
+        error: 'Error'
+      }
+    };
+
+    let LANG = localStorage.getItem('bt_reviews_lang') || 'ar';
+    let KEY = localStorage.getItem('PACK_KEY_A') || localStorage.getItem('bt_pack_key') || '';
+    let selected = null;
+    let rating = 5;
+    let currentReviews = [];
+    let currentProduct = null;
+    let editing = null;
+    let editRating = 5;
+    let editPhotos = [];
+    let productsCache = [];
+    let scrapeProductsCache = [];
+    const t = (key) => I18N[LANG][key] || key;
+    const ICONS = {
+      box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-9-5-9 5 9 5 9-5Z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>',
+      star: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="m12 2.8 2.85 5.78 6.38.93-4.62 4.5 1.09 6.36L12 17.37l-5.7 3 1.09-6.36-4.62-4.5 6.38-.93L12 2.8Z"></path></svg>',
+      starLine: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="m12 2.8 2.85 5.78 6.38.93-4.62 4.5 1.09 6.36L12 17.37l-5.7 3 1.09-6.36-4.62-4.5 6.38-.93L12 2.8Z"></path></svg>',
+      plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>',
+      search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.4-3.4"></path></svg>',
+      check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>',
+      alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path></svg>',
+      x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>',
+      image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><circle cx="8.5" cy="9" r="1.5"></circle><path d="m21 16-5-5L5 20"></path></svg>',
+      save: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>',
+      loader: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 0 1-9 9"></path><path d="M3 12a9 9 0 0 1 9-9"></path></svg>'
+    };
+
+    function icon(name, className = '') {
+      return '<span class="icon ' + className + '">' + (ICONS[name] || '') + '</span>';
+    }
+
+    function ratingIcons(value) {
+      const ratingValue = Math.max(0, Math.min(5, Math.round(Number(value) || 0)));
+      return Array.from({ length: 5 }, (_, i) => icon(i < ratingValue ? 'star' : 'starLine', 'icon-star')).join('');
+    }
+
+    function hydrateIcons(root = document) {
+      root.querySelectorAll('[data-icon]').forEach((el) => {
+        el.innerHTML = ICONS[el.dataset.icon] || '';
+      });
+    }
+
+    function applyLang() {
+      document.documentElement.lang = LANG;
+      document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+      document.getElementById('langBtn').textContent = LANG === 'ar' ? 'EN' : 'AR';
+      document.querySelectorAll('[data-i18n]').forEach((el) => el.textContent = t(el.dataset.i18n));
+      document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => el.placeholder = t(el.dataset.i18nPlaceholder));
+      renderStars();
+    }
+
+    function toggleLang() {
+      LANG = LANG === 'ar' ? 'en' : 'ar';
+      localStorage.setItem('bt_reviews_lang', LANG);
+      applyLang();
+    }
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    function logout() {
+      localStorage.removeItem('PACK_KEY_A');
+      localStorage.removeItem('bt_pack_key');
+      const next = encodeURIComponent(location.pathname + location.search);
+      location.replace('/a/login.html?next=' + next);
+    }
+
+    // ── تبديل التبويبات ──
+    function switchTab(name) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      const idx = ['products','recent','add','import'].indexOf(name);
+      document.querySelectorAll('.tab-btn')[idx]?.classList.add('active');
+      if (name === 'products') loadProducts();
+      if (name === 'recent')   loadReviews();
+    }
+
+    // ── تحميل المنتجات ذات التقييمات ──
+    async function loadProducts() {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '<div class="empty">...</div>';
+      try {
+        const data = await api('/api/bt-reviews/admin/products-with-reviews');
+        const products = (data.products || []).sort((a, b) => {
+          const countDiff = Number(b.count || 0) - Number(a.count || 0);
+          if (countDiff) return countDiff;
+          const avgDiff = Number(b.average || 0) - Number(a.average || 0);
+          if (avgDiff) return avgDiff;
+          return String(a.productName || a.productId || '').localeCompare(String(b.productName || b.productId || ''), LANG === 'ar' ? 'ar' : 'en');
+        });
+        productsCache = products;
+        if (!products.length) { grid.innerHTML = '<div class="empty">لا توجد منتجات بتقييمات</div>'; return; }
+        grid.innerHTML = products.map((p, index) => `
+          <div class="prod-card" role="button" tabindex="0" data-product-index="${index}">
+            <div class="prod-card-name">${escapeHtml(p.productName || p.productId)}</div>
+            <div class="prod-card-meta">
+              <span class="prod-avg">${ratingIcons(Math.round(p.average))}</span>
+              <span>${p.average} · ${p.count} تقييم</span>
+            </div>
+          </div>`).join('');
+        bindProductCardClicks(grid);
+      } catch(e) { grid.innerHTML = '<div class="empty">'+escapeHtml(e.message)+'</div>'; }
+    }
+
+    function bindProductCardClicks(root) {
+      root.querySelectorAll('.prod-card[data-product-index]').forEach((card) => {
+        const openCard = () => openProductReviews(productsCache[Number(card.dataset.productIndex)]);
+        card.onclick = openCard;
+        card.onkeydown = (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          openCard();
+        };
+      });
+    }
+
+    async function openProductReviews(product) {
+      const p = typeof product === 'string' ? JSON.parse(product) : product;
+      if (!p) return;
+      currentProduct = p;
+      document.getElementById('productReviewsTitle').textContent = p.productName || p.productId;
+      document.getElementById('productsGrid').style.display = 'none';
+      document.getElementById('productReviewsSection').style.display = 'block';
+      await refreshProductReviews();
+    }
+
+    async function refreshProductReviews() {
+      const p = currentProduct;
+      if (!p) return;
+      const el = document.getElementById('productReviews');
+      el.innerHTML = '<div class="empty">...</div>';
+      try {
+        const data = await api('/api/bt-reviews/admin/all?productId=' + encodeURIComponent(p.productId) + '&limit=100');
+        const reviews = (data.reviews || []).sort((a, b) => Date.parse(b.createdAt || 0) - Date.parse(a.createdAt || 0));
+        currentReviews = reviews;
+        if (!reviews.length) { el.innerHTML = '<div class="empty">لا تقييمات</div>'; return; }
+        el.innerHTML = reviews.map((r, i) => renderReviewCard(r, i)).join('');
+        bindReviewCardClicks(el);
+      } catch(e) { el.innerHTML = '<div class="empty">'+escapeHtml(e.message)+'</div>'; }
+    }
+
+    function closeProductReviews() {
+      currentProduct = null;
+      document.getElementById('productsGrid').style.display = '';
+      document.getElementById('productReviewsSection').style.display = 'none';
+    }
+
+    async function api(path, options = {}) {
+      const headers = { 'x-pack-key': KEY, ...(options.headers || {}) };
+      if (options.body && !(options.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(options.body);
+      }
+      const url = path + (path.includes('?') ? '&' : '?') + 'lang=' + LANG;
+      const response = await fetch(url, { ...options, headers });
+      const body = await response.json().catch(() => ({}));
+      if (response.status === 401) {
+        toast(t('wrongKey'));
+        logout();
+        throw new Error('unauthorized');
+      }
+      if (!response.ok) throw new Error(body.error || t('error'));
+      return body;
+    }
+
+    function renderStars() {
+      const el = document.getElementById('stars');
+      if (!el) return;
+      el.innerHTML = Array.from({ length: 5 }, (_, i) =>
+        `<button type="button" aria-label="${i + 1}" onclick="rating=${i + 1};renderStars()">${icon(i < rating ? 'star' : 'starLine', 'icon-star')}</button>`
+      ).join('');
+    }
+
+    function renderEditStars() {
+      const el = document.getElementById('editStars');
+      if (!el) return;
+      el.innerHTML = Array.from({ length: 5 }, (_, i) =>
+        `<button type="button" aria-label="${i + 1}" onclick="editRating=${i + 1};renderEditStars()">${icon(i < editRating ? 'star' : 'starLine', 'icon-star')}</button>`
+      ).join('');
+    }
+
+    async function searchProducts() {
+      const q = document.getElementById('productSearch').value.trim();
+      const box = document.getElementById('productResults');
+      if (q.length < 2) return;
+      box.innerHTML = '<div class="empty">...</div>';
+      try {
+        const data = await api('/api/bt-reviews/admin/products/search?q=' + encodeURIComponent(q));
+        const items = data.products || [];
+        if (!items.length) {
+          box.innerHTML = `<div class="empty">${t('noProducts')}</div>`;
+          return;
+        }
+        box.innerHTML = items.map((p) => `
+          <div class="product">
+            <img src="${escapeHtml(p.imageUrl || '')}" onerror="this.style.visibility='hidden'">
+            <div>
+              <strong>${escapeHtml(p.title)}</strong>
+              <span>${escapeHtml(p.vendor || '')} · ${escapeHtml(p.id)}</span>
+            </div>
+            <button class="light" onclick='selectProduct(${JSON.stringify(p).replace(/'/g, '&#39;')})'>${t('choose')}</button>
+          </div>
+        `).join('');
+      } catch (e) {
+        box.innerHTML = `<div class="empty">${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    function selectProduct(product) {
+      selected = product;
+      const el = document.getElementById('selectedProduct');
+      el.classList.add('show');
+      el.innerHTML = `<strong>${t('selected')}:</strong> <span>${escapeHtml(product.title)}</span> <span class="small">${escapeHtml(product.id)}</span>`;
+      document.getElementById('selectedHint').textContent = product.title;
+    }
+
+    async function submitReview(event) {
+      event.preventDefault();
+      if (!selected) {
+        toast(t('needProduct'));
+        return;
+      }
+      const form = new FormData();
+      form.append('productId', selected.id);
+      form.append('productName', selected.title);
+      form.append('rating', String(rating));
+      form.append('author', document.getElementById('author').value.trim());
+      form.append('email', document.getElementById('email').value.trim());
+      form.append('comment', document.getElementById('comment').value.trim());
+      form.append('lang', LANG);
+      form.append('verified', 'true'); // الإدارة دائماً مؤثقة
+      for (const file of document.getElementById('images').files) {
+        form.append('images', file);
+      }
+      try {
+        await api('/api/bt-reviews', { method: 'POST', body: form });
+        toast(t('saved'));
+        event.target.reset();
+        rating = 5;
+        renderStars();
+        if (currentProduct) refreshProductReviews();
+        else loadReviews();
+      } catch (e) {
+        toast(e.message || t('error'));
+      }
+    }
+
+    async function repairProductNames() {
+      try {
+        const data = await api('/api/bt-reviews/admin/repair-product-names', { method: 'POST', body: {} });
+        toast(`${t('repairDone')}: ${data.updated || 0}`);
+        if (currentProduct) refreshProductReviews();
+        else loadReviews();
+      } catch (e) {
+        toast(e.message || t('error'));
+      }
+    }
+
+    function renderReviewCard(r, index) {
+      const photos = (r.photos || []).map(p =>
+        `<img src="${escapeHtml(p.url||'')}" data-photo-url="${escapeHtml(p.url||'')}">`
+      ).join('');
+      return `<div class="review" role="button" tabindex="0" data-review-index="${index}">
+        <div class="review-top">
+          <div>
+            <div class="review-title">${escapeHtml(r.productName || r.productId)}</div>
+            <div class="review-meta">
+              ${escapeHtml(r.author || '')}
+              ${r.verified ? '<span style="display:inline-flex;align-items:center;gap:2px;background:#0a7c3e1a;color:#0a7c3e;font-size:.7rem;padding:1px 6px;border-radius:20px;margin-inline-start:4px">'+icon('check','icon-success')+' مؤثق</span>' : ''}
+              · ${new Date(r.createdAt).toLocaleDateString(LANG==='ar'?'ar-OM':'en-GB')}
+            </div>
+          </div>
+          <div style="color:var(--star);direction:ltr">${ratingIcons(r.rating || 0)}</div>
+        </div>
+        ${r.comment ? `<div class="review-comment">${escapeHtml(r.comment)}</div>` : ''}
+        ${photos ? `<div class="review-photos">${photos}</div>` : ''}
+        <div class="review-actions">
+          <button class="light" type="button" data-review-edit>تعديل</button>
+          <button class="light" type="button" style="color:#ef4444;border-color:#ef4444" data-review-delete>حذف</button>
+        </div>
+      </div>`;
+    }
+
+    function bindReviewCardClicks(root) {
+      root.querySelectorAll('.review[data-review-index]').forEach((card) => {
+        const reviewIndex = Number(card.dataset.reviewIndex);
+        const openCard = (event) => {
+          if (event.target.closest('[data-review-delete]')) {
+            deleteReview(currentReviews[reviewIndex]?.id);
+            return;
+          }
+          if (event.target.closest('[data-review-edit]')) {
+            openEdit(reviewIndex);
+            return;
+          }
+          const photo = event.target.closest('[data-photo-url]');
+          if (photo) {
+            viewImg(photo.dataset.photoUrl);
+            return;
+          }
+          openEdit(reviewIndex);
+        };
+        card.onclick = openCard;
+        card.onkeydown = (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          openCard(event);
+        };
+      });
+    }
+
+    async function loadReviews() {
+      const el = document.getElementById('reviews');
+      if (!el) return;
+      el.innerHTML = '<div class="empty">...</div>';
+      try {
+        const data = await api('/api/bt-reviews/admin/all?limit=80');
+        const reviews = (data.reviews || []).sort((a, b) => Date.parse(b.createdAt || 0) - Date.parse(a.createdAt || 0));
+        currentReviews = reviews;
+        if (!reviews.length) { el.innerHTML = '<div class="empty">لا توجد تقييمات</div>'; return; }
+        el.innerHTML = reviews.map((r, i) => renderReviewCard(r, i)).join('');
+        bindReviewCardClicks(el);
+      } catch(e) { el.innerHTML = `<div class="empty">${escapeHtml(e.message)}</div>`; }
+    }
+
+    function renderEditPhotos() {
+      const el = document.getElementById('editPhotos');
+      el.innerHTML = editPhotos.map((p, index) => `
+        <div class="edit-photo">
+          <img src="${escapeHtml(p.url || '')}" onclick="viewImg('${escapeHtml(p.url || '')}')">
+          <button type="button" title="${t('removePhoto')}" onclick="removeEditPhoto(${index})">×</button>
+        </div>
+      `).join('');
+    }
+
+    function openEdit(index) {
+      const review = currentReviews[index];
+      if (!review) return;
+      editing = review;
+      editRating = review.rating || 5;
+      editPhotos = Array.isArray(review.photos) ? [...review.photos] : [];
+      document.getElementById('editProductName').value = review.productName || '';
+      document.getElementById('editAuthor').value = review.author || '';
+      document.getElementById('editComment').value = review.comment || '';
+      document.getElementById('editImages').value = '';
+      renderEditStars();
+      renderEditPhotos();
+      document.getElementById('editModal').classList.add('show');
+    }
+
+    function removeEditPhoto(index) {
+      editPhotos.splice(index, 1);
+      renderEditPhotos();
+    }
+
+    function closeEdit() {
+      editing = null;
+      editPhotos = [];
+      document.getElementById('editImages').value = '';
+      document.getElementById('editModal').classList.remove('show');
+    }
+
+    async function saveEdit() {
+      if (!editing) return;
+      const files = Array.from(document.getElementById('editImages').files || []);
+      if (editPhotos.length + files.length > 4) {
+        toast(t('tooManyPhotos'));
+        return;
+      }
+      const form = new FormData();
+      form.append('rating', String(editRating));
+      form.append('productName', document.getElementById('editProductName').value.trim());
+      form.append('author', document.getElementById('editAuthor').value.trim());
+      form.append('comment', document.getElementById('editComment').value.trim());
+      form.append('existingPhotos', JSON.stringify(editPhotos));
+      form.append('lang', LANG);
+      files.forEach((file) => form.append('images', file));
+      try {
+        await api('/api/bt-reviews/admin/' + editing.id, { method: 'PATCH', body: form });
+        toast(t('updated'));
+        closeEdit();
+        loadReviews();
+      } catch (e) {
+        toast(e.message || t('error'));
+      }
+    }
+
+    async function deleteReview(id, fromModal = false) {
+      if (!id) return;
+      if (!confirm(t('confirmDelete'))) return;
+      try {
+        await api('/api/bt-reviews/admin/' + id, { method: 'DELETE' });
+        toast(t('deleted'));
+        if (fromModal) closeEdit();
+        loadReviews();
+      } catch(e) {
+        toast(e.message || t('error'));
+      }
+    }
+
+    function viewImg(url) {
+      if (!url) return;
+      window.open(url, '_blank', 'noopener');
+    }
+
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    // ── Scrape section ──
+    let scrapeSelected = null;
+
+    async function scrapeSearchProducts() {
+      const q = document.getElementById('scrapeProductSearch').value.trim();
+      const box = document.getElementById('scrapeProductResults');
+      if (q.length < 2) { box.innerHTML = ''; return; }
+      box.innerHTML = '<div class="empty">...</div>';
+      try {
+        const data = await api('/api/bt-reviews/admin/products/search?q=' + encodeURIComponent(q));
+        const items = data.products || [];
+        scrapeProductsCache = items;
+        if (!items.length) { box.innerHTML = '<div class="empty">' + t('noProducts') + '</div>'; return; }
+        box.innerHTML = items.map((p, index) =>
+          '<div class="result-item" role="button" tabindex="0" data-scrape-product-index="' + index + '">' +
+          (p.imageUrl ? '<img src="' + escapeHtml(p.imageUrl) + '">' : '<span></span>') +
+          '<span>' + escapeHtml(p.title) + '</span></div>'
+        ).join('');
+        bindScrapeProductClicks(box);
+      } catch(e) { box.innerHTML = '<div class="empty">' + escapeHtml(e.message) + '</div>'; }
+    }
+
+    function bindScrapeProductClicks(root) {
+      root.querySelectorAll('[data-scrape-product-index]').forEach((card) => {
+        const selectCard = () => selectScrapeProduct(scrapeProductsCache[Number(card.dataset.scrapeProductIndex)]);
+        card.onclick = selectCard;
+        card.onkeydown = (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          selectCard();
+        };
+      });
+    }
+
+    function selectScrapeProduct(product) {
+      try {
+        scrapeSelected = typeof product === 'string' ? JSON.parse(product) : product;
+        document.getElementById('scrapeProductResults').innerHTML = '';
+        document.getElementById('scrapeProductSearch').value = '';
+        const el = document.getElementById('scrapeSelectedInfo');
+        el.style.display = 'block';
+        el.innerHTML = '<strong>' + escapeHtml(scrapeSelected.title) + '</strong>' +
+          ' <button onclick="scrapeSelected=null;document.getElementById(\'scrapeSelectedInfo\').style.display=\'none\'" ' +
+          'style="float:inline-end;background:none;border:none;cursor:pointer;font-size:1rem">&#x2715;</button>';
+      } catch {}
+    }
+
+    let scrapePreviewData = []; // التقييمات المسحوبة قبل الحفظ
+
+    async function runScrape() {
+      if (!scrapeSelected) { toast('اختر منتجاً أولاً'); return; }
+      const url = document.getElementById('scrapeUrl').value.trim();
+      if (!url) { toast('أدخل رابط المنتج'); return; }
+      const maxCount = parseInt(document.getElementById('scrapeCount').value) || 20;
+      const btn = document.getElementById('scrapeBtn');
+      btn.disabled = true;
+      btn.innerHTML = icon('loader') + (LANG==='ar' ? ' جاري السحب...' : ' Fetching...');
+      document.getElementById('scrapeResult').innerHTML = '';
+      scrapePreviewData = [];
+      try {
+        const data = await api('/api/bt-reviews/admin/scrape', {
+          method: 'POST',
+          body: { productId: scrapeSelected.id, productName: scrapeSelected.title, url, maxCount }
+        });
+        const reviews = data.reviews || [];
+        if (!reviews.length) {
+          // عرض debug
+          const dbg = data.debug || {};
+          let dbgHtml = '<div style="background:#1e293b;padding:10px;border-radius:6px;font-size:.78rem;margin-top:8px;text-align:left;direction:ltr;overflow:auto;max-height:280px;white-space:pre-wrap;word-break:break-all">';
+          dbgHtml += '<b style="color:#f59e0b">debug:</b>\n';
+          Object.entries(dbg).forEach(([k,v]) => {
+            if (k==='htmlSnippet') return;
+            dbgHtml += '<b>'+escapeHtml(k)+':</b> '+escapeHtml(String(Array.isArray(v)?v.join(', '):v??'').slice(0,300))+'\n';
+          });
+          if (dbg.htmlSnippet) dbgHtml += '\n<b>htmlSnippet:</b>\n'+escapeHtml(dbg.htmlSnippet);
+          dbgHtml += '</div>';
+          document.getElementById('scrapeResult').innerHTML = '<span class="icon-btn" style="color:#f59e0b">'+icon('alert','icon-warn')+' لم يُعثر على تقييمات</span>'+dbgHtml;
+          return;
+        }
+        scrapePreviewData = reviews;
+        renderScrapePreview(reviews);
+      } catch(e) {
+        document.getElementById('scrapeResult').innerHTML =
+          '<span class="icon-btn" style="color:#ef4444">'+icon('x','icon-danger')+' '+escapeHtml(e.message)+'</span>';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = icon('search') + (LANG==='ar' ? ' سحب التقييمات' : ' Fetch Reviews');
+      }
+    }
+
+    function renderScrapePreview(reviews) {
+      const newCount  = reviews.filter(r => !r.duplicate).length;
+      const dupCount  = reviews.filter(r =>  r.duplicate).length;
+      let html = `<div style="margin-top:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <span style="font-size:.9rem">
+            <b>${reviews.length}</b> تقييم —
+            <span style="color:#22c55e">${newCount} جديد</span>
+            ${dupCount ? ' · <span style="color:#94a3b8">'+dupCount+' مكرر</span>' : ''}
+          </span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button onclick="selectAllScrape(true)"  style="font-size:.8rem;padding:4px 10px">تحديد الكل</button>
+            <button onclick="selectAllScrape(false)" style="font-size:.8rem;padding:4px 10px">إلغاء الكل</button>
+            <button onclick="saveScrapeSelected()" id="saveScrapeBtn"
+              style="font-size:.85rem;padding:4px 12px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer">
+              ${icon('save')} حفظ المحدد
+            </button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;max-height:420px;overflow-y:auto">`;
+
+      reviews.forEach((rv, i) => {
+        const stars = ratingIcons(rv.rating || 5);
+        const dateStr = rv.dateTimestamp ? new Date(rv.dateTimestamp).toLocaleDateString(LANG==='ar'?'ar-OM':'en-GB') : '';
+        const dupBadge = rv.duplicate
+          ? '<span style="font-size:.7rem;background:#334155;color:#94a3b8;padding:1px 6px;border-radius:10px;margin-inline-start:6px">مكرر</span>'
+          : '';
+        html += `<label style="display:flex;align-items:flex-start;gap:8px;background:${rv.duplicate?'#1a2030':'var(--card)'};border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:pointer;opacity:${rv.duplicate?'.6':'1'}">
+          <input type="checkbox" data-idx="${i}" ${rv.duplicate?'':'checked'} style="margin-top:3px;flex-shrink:0">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:2px">
+              <span style="font-size:.85rem;font-weight:600">${escapeHtml(rv.author)}</span>
+              ${dupBadge}
+              <span style="color:var(--star);font-size:.85rem;direction:ltr">${stars}</span>
+              ${dateStr?'<span style="color:var(--muted);font-size:.75rem">'+dateStr+'</span>':''}
+            </div>
+            <div style="font-size:.82rem;color:var(--text);opacity:.85;white-space:pre-wrap;word-break:break-word">${escapeHtml((rv.comment||'').slice(0,300))}</div>
+            ${rv.images&&rv.images.length?'<div class="icon-btn" style="margin-top:4px;font-size:.75rem;color:#60a5fa;justify-content:flex-start">'+icon('image')+' '+rv.images.length+' صورة</div>':''}
+          </div>
+        </label>`;
+      });
+
+      html += '</div></div>';
+      document.getElementById('scrapeResult').innerHTML = html;
+    }
+
+    function selectAllScrape(val) {
+      document.querySelectorAll('#scrapeResult input[type=checkbox]').forEach(cb => cb.checked = val);
+    }
+
+    async function saveScrapeSelected() {
+      const checks = [...document.querySelectorAll('#scrapeResult input[type=checkbox]')];
+      const selected = checks
+        .filter(cb => cb.checked)
+        .map(cb => scrapePreviewData[parseInt(cb.dataset.idx)])
+        .filter(Boolean);
+      if (!selected.length) { toast('لم تحدد أي تقييم'); return; }
+      const btn = document.getElementById('saveScrapeBtn');
+      btn.disabled = true; btn.innerHTML = icon('loader') + '...';
+      try {
+        const data = await api('/api/bt-reviews/admin/scrape/save', {
+          method: 'POST',
+          body: { productId: scrapeSelected.id, productName: scrapeSelected.title, reviews: selected }
+        });
+        toast((LANG==='ar'?'تم حفظ ':'Saved ') + data.saved + (LANG==='ar'?' تقييم':' reviews'));
+        scrapePreviewData = [];
+        document.getElementById('scrapeResult').innerHTML = '';
+        loadReviews();
+      } catch(e) {
+        toast(e.message);
+      } finally {
+        btn.disabled = false; btn.innerHTML = icon('save') + ' حفظ المحدد';
+      }
+    }
+
+    document.getElementById('productSearch').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') searchProducts();
+    });
+    applyLang();
+    hydrateIcons();
+    renderStars();
+    // auto-login: KEY مخزّن من index.html
+    if (!KEY) {
+      logout();
+      document.getElementById('heroSub').textContent = 'لا يوجد مفتاح — ادخل من لوحة التحكم الرئيسية';
+    } else {
+      loadProducts();
+    }
+  </script>
+</body>
+</html>
+
+
+
+

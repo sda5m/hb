@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Hala Beauty | فاتورة صورة</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900;1000&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+    :root{
+      --purple:#6b0083;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+      --line:rgba(16,24,40,.12);
+      --bg:#f6f4fb;
+      --card:#fff;
+      --shadow:0 20px 60px rgba(16,24,40,.14);
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+      margin:0;
+      min-height:100%;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(107,0,131,.16), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(241,198,177,.42), transparent 34%),
+        var(--bg);
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+    }
+
+    button{
+      font-family:inherit;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    button:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+    }
+
+    .page{
+      width:min(100%, 980px);
+      margin:0 auto;
+      padding:12px;
+    }
+
+    .tools{
+      position:sticky;
+      top:0;
+      z-index:50;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      padding:8px 0 12px;
+      background:linear-gradient(180deg,var(--bg),rgba(246,244,251,.78));
+      backdrop-filter:blur(10px);
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--purpleDark);
+      min-height:44px;
+      border-radius:16px;
+      padding:10px 12px;
+      font-weight:1000;
+      font-size:13px;
+      box-shadow:0 10px 24px rgba(16,24,40,.08);
+    }
+
+    .btn.primary{
+      border:0;
+      color:#fff;
+      background:linear-gradient(135deg,var(--purple),var(--purpleDark));
+      box-shadow:0 14px 32px rgba(107,0,131,.25);
+    }
+
+    .status{
+      margin-bottom:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.82);
+      border-radius:18px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+      line-height:1.7;
+      box-shadow:0 10px 24px rgba(16,24,40,.06);
+    }
+
+    .stage{
+      width:100%;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border-radius:22px;
+      background:#fff;
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+    }
+
+    iframe{
+      display:block;
+      width:100%;
+      min-height:760px;
+      border:0;
+      background:#fff;
+    }
+
+    .empty{
+      padding:28px 16px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:900;
+      line-height:1.9;
+    }
+
+    .hideTools .tools,
+    .hideTools .status{
+      display:none;
+    }
+
+    @media(max-width:560px){
+      .page{
+        padding:9px;
+      }
+
+      .tools{
+        grid-template-columns:1fr;
+      }
+
+      .btn{
+        min-height:42px;
+        font-size:12.5px;
+      }
+
+      iframe{
+        min-height:720px;
+      }
+    }
+
+    @media print{
+      .tools,
+      .status{
+        display:none !important;
+      }
+
+      body{
+        background:#fff !important;
+      }
+
+      .page{
+        width:100%;
+        max-width:100%;
+        padding:0;
+      }
+
+      .stage{
+        border:0;
+        box-shadow:none;
+        border-radius:0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="tools">
+      <button class="btn" id="btnBack" type="button">رجوع</button>
+      <button class="btn primary" id="btnCapture" type="button">مشاركة كصورة</button>
+      <button class="btn" id="btnPrint" type="button">طباعة / PDF</button>
+    </div>
+
+    <div class="status" id="statusBox">
+      جاري تجهيز الفاتورة بنفس تصميم فاتورة الطلب...
+    </div>
+
+    <section class="stage">
+      <iframe id="invoiceFrame" title="invoice"></iframe>
+    </section>
+  </main>
+
+  <script type="module">
+    import { requirePackLogin, authFetch as _authFetch } from "./auth.js";
+
+    requirePackLogin();
+
+    const $ = (s) => document.querySelector(s);
+
+    const params = new URLSearchParams(location.search);
+
+    const orderId =
+      params.get("id") ||
+      params.get("orderId") ||
+      params.get("order") ||
+      "";
+
+    const frame = $("#invoiceFrame");
+    const statusBox = $("#statusBox");
+    const btnCapture = $("#btnCapture");
+
+    function setStatus(msg){
+      if(statusBox) statusBox.textContent = msg || "";
+    }
+
+    function esc(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    async function wait(ms){
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function waitForFrameReady(){
+      const doc = frame.contentDocument;
+      if(!doc) return;
+
+      const imgs = Array.from(doc.querySelectorAll("img"));
+
+      await Promise.all(
+        imgs.map((img) => {
+          if(img.complete) return Promise.resolve();
+
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        })
+      );
+
+      if(doc.fonts && doc.fonts.ready){
+        try{
+          await doc.fonts.ready;
+        }catch{}
+      }
+    }
+
+    function resizeFrame(){
+      const doc = frame.contentDocument;
+      if(!doc) return;
+
+      const html = doc.documentElement;
+      const body = doc.body;
+
+      const h = Math.max(
+        html?.scrollHeight || 0,
+        body?.scrollHeight || 0,
+        760
+      );
+
+      frame.style.height = h + "px";
+    }
+
+function applyInvoiceImageTweaks(){
+  const doc = frame.contentDocument;
+  if(!doc || !doc.body) return;
+
+  const style = doc.createElement("style");
+
+  style.textContent = `
+    /* إخفاء روابط تهمك فقط بدون حذف ملخص الفاتورة */
+    a[href*="halabt.com/app"],
+    a[href*="play.google.com"],
+    a[href*="apps.apple.com"],
+    a[href*="instagram.com"],
+    a[href*="api.whatsapp.com"],
+    a[href*="wa.me"],
+    a[href*="whatsapp"]{
+      display:none !important;
+      visibility:hidden !important;
+      height:0 !important;
+      min-height:0 !important;
+      max-height:0 !important;
+      padding:0 !important;
+      margin:0 !important;
+      overflow:hidden !important;
+    }
+
+    /* ضبط شعار Hala Beauty داخل مربعه */
+img[src*="loogo.svg"],
+img[src*="loogo"],
+img[src*="logo"] {
+  width: 170px !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+  margin: auto !important;
+}
+`;
+
+  doc.head.appendChild(style);
+
+  /*
+    نخفي عنوان روابط تهمك فقط.
+    لا نحذف الأب أو السكشن حتى لا يختفي الإجمالي أو الملخص.
+  */
+  const headingWords = [
+    "روابط تهمك",
+    "روابط مهمة",
+    "Important Links"
+  ];
+
+  const all = Array.from(doc.body.querySelectorAll("*"));
+
+  all.forEach((el) => {
+    const txt = String(el.textContent || "").replace(/\s+/g, " ").trim();
+
+    if(!txt) return;
+
+    const isHeading = headingWords.some((w) => txt === w || txt.includes(w));
+
+    if(isHeading && txt.length < 80){
+      el.style.display = "none";
+      el.style.visibility = "hidden";
+      el.style.height = "0";
+      el.style.margin = "0";
+      el.style.padding = "0";
+      el.style.overflow = "hidden";
+    }
+  });
+
+  /*
+    نخفي فقط كروت الروابط الصغيرة إذا كانت تحتوي على رابط خارجي من روابط التطبيقات.
+    مع حماية: لا نخفي أي كرت فيه إجمالي / subtotal / total.
+  */
+  const badLinkSelectors = [
+    'a[href*="halabt.com/app"]',
+    'a[href*="play.google.com"]',
+    'a[href*="apps.apple.com"]',
+    'a[href*="instagram.com"]',
+    'a[href*="api.whatsapp.com"]',
+    'a[href*="wa.me"]',
+    'a[href*="whatsapp"]'
+  ];
+
+  const protectWords = [
+    "الإجمالي",
+    "الإجمالي النهائي",
+    "الملخص المالي",
+    "الشحن",
+    "المدفوع",
+    "المجموع",
+    "Subtotal",
+    "Grand Total",
+    "Financial Summary",
+    "Shipping",
+    "Paid",
+    "Total"
+  ];
+
+  badLinkSelectors.forEach((sel) => {
+    doc.querySelectorAll(sel).forEach((a) => {
+      let box =
+        a.closest(".linkItem") ||
+        a.closest(".linkBox") ||
+        a.closest(".socialItem") ||
+        a.closest("li") ||
+        a.parentElement;
+
+      if(!box || box === doc.body || box === doc.documentElement){
+        a.style.display = "none";
+        return;
+      }
+
+      const boxText = String(box.textContent || "").replace(/\s+/g, " ").trim();
+      const isProtected = protectWords.some((w) => boxText.includes(w));
+
+      if(isProtected){
+        a.style.display = "none";
+      }else{
+        box.style.display = "none";
+        box.style.visibility = "hidden";
+        box.style.height = "0";
+        box.style.margin = "0";
+        box.style.padding = "0";
+        box.style.overflow = "hidden";
+      }
+    });
+  });
+
+  /*
+    ضبط مكان الشعار فعليًا داخل المربع.
+    نأخذ صورة الشعار ونضبط الأب المباشر فقط.
+  */
+const LOGO_URL = "https://halabt.com/cdn/shop/files/loogo.svg";
+
+const logoImg =
+  doc.querySelector('img[src*="loogo.svg"]') ||
+  doc.querySelector('img[src*="loogo"]') ||
+  doc.querySelector('img[src*="logo"]') ||
+  doc.querySelector('img[src*="Beauty"]');
+
+if (logoImg) {
+  const parent = logoImg.parentElement;
+
+  logoImg.src = LOGO_URL;
+  logoImg.removeAttribute("srcset");
+  logoImg.setAttribute("crossorigin", "anonymous");
+
+if (parent && parent !== doc.body) {
+  parent.style.width = "190px";
+  parent.style.height = "72px";
+  parent.style.minWidth = "190px";
+  parent.style.minHeight = "72px";
+  parent.style.maxWidth = "190px";
+  parent.style.maxHeight = "72px";
+
+  parent.style.display = "flex";
+  parent.style.alignItems = "center";
+  parent.style.justifyContent = "center";
+  parent.style.overflow = "visible"; // مهم حتى لا يقص الشعار
+  parent.style.textAlign = "center";
+  parent.style.borderRadius = "18px";
+  parent.style.background = "#fff";
+  parent.style.padding = "8px 10px";
+  parent.style.boxSizing = "border-box";
+}
+
+logoImg.style.display = "block";
+logoImg.style.margin = "auto";
+logoImg.style.objectFit = "contain";
+logoImg.style.objectPosition = "center";
+logoImg.style.width = "170px";
+logoImg.style.height = "auto";
+logoImg.style.maxWidth = "100%";
+logoImg.style.maxHeight = "100%";
+logoImg.style.minWidth = "0";
+logoImg.style.minHeight = "0";
+logoImg.style.transform = "none";
+}
+}
+    
+    async function loadInvoice(){
+      if(!orderId){
+        setStatus("رقم الطلب غير موجود في الرابط.");
+        frame.srcdoc = `<div style="font-family:Cairo,sans-serif;padding:28px;text-align:center">رقم الطلب غير موجود</div>`;
+        return;
+      }
+
+      try{
+        setStatus("جاري تحميل بيانات الفاتورة...");
+
+        const r = await _authFetch(
+          `/api/manage/order/${encodeURIComponent(orderId)}/invoice-pdf?html=1`,
+          { cache:"no-store" }
+        );
+
+        const html = await r.text();
+
+        if(!r.ok){
+          throw new Error(html || "فشل تحميل الفاتورة");
+        }
+
+        frame.srcdoc = html;
+
+frame.onload = async () => {
+  await waitForFrameReady();
+  await wait(250);
+
+  applyInvoiceImageTweaks();
+
+  await waitForFrameReady();
+  await wait(150);
+
+  resizeFrame();
+  setStatus("الفاتورة جاهزة. اضغط مشاركة كصورة لإرسالها بسرعة.");
+};
+      }catch(e){
+        setStatus("خطأ: " + (e?.message || String(e)));
+        frame.srcdoc = `
+          <div style="font-family:Cairo,sans-serif;padding:28px;text-align:center;line-height:1.9;color:#667085">
+            تعذر تحميل الفاتورة<br>
+            ${esc(e?.message || String(e))}
+          </div>
+        `;
+      }
+    }
+
+    async function captureInvoice(){
+      const oldText = btnCapture?.textContent || "مشاركة كصورة";
+
+      try{
+        if(typeof html2canvas !== "function"){
+          throw new Error("مكتبة إنشاء الصورة لم تتحمل. تأكد من الإنترنت وحاول مرة أخرى.");
+        }
+
+        if(btnCapture){
+          btnCapture.disabled = true;
+          btnCapture.textContent = "جاري تجهيز الصورة...";
+        }
+
+        document.body.classList.add("hideTools");
+
+applyInvoiceImageTweaks();
+
+await waitForFrameReady();
+resizeFrame();
+await wait(700);
+        const doc = frame.contentDocument;
+
+        if(!doc || !doc.body){
+          throw new Error("الفاتورة غير جاهزة");
+        }
+
+        const target =
+          doc.querySelector("#invoiceShot") ||
+          doc.querySelector(".invoice") ||
+          doc.querySelector(".page") ||
+          doc.body;
+
+        const canvas = await html2canvas(target, {
+          backgroundColor:"#ffffff",
+          useCORS:true,
+          allowTaint:false,
+          logging:false,
+          scale:Math.min(3, window.devicePixelRatio || 2),
+          scrollX:0,
+          scrollY:0,
+          windowWidth:Math.max(
+            doc.documentElement.scrollWidth,
+            target.scrollWidth,
+            900
+          ),
+          windowHeight:Math.max(
+            doc.documentElement.scrollHeight,
+            target.scrollHeight,
+            1200
+          )
+        });
+
+        const blob = await new Promise((resolve) => {
+          canvas.toBlob(resolve, "image/png", 1);
+        });
+
+        if(!blob){
+          throw new Error("تعذر إنشاء الصورة");
+        }
+
+        const fileName = `halabeauty-invoice-${String(orderId).replace(/[^a-zA-Z0-9_-]/g,"")}-${Date.now()}.png`;
+        const file = new File([blob], fileName, { type:"image/png" });
+
+        if(navigator.canShare && navigator.canShare({ files:[file] })){
+          await navigator.share({
+            files:[file],
+            title:"فاتورة Hala Beauty",
+            text:"فاتورة الطلب"
+          });
+        }else{
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          setTimeout(() => URL.revokeObjectURL(url), 3000);
+        }
+      }catch(e){
+        alert(e?.message || "فشل إنشاء صورة الفاتورة");
+      }finally{
+        document.body.classList.remove("hideTools");
+
+        if(btnCapture){
+          btnCapture.disabled = false;
+          btnCapture.textContent = oldText;
+        }
+      }
+    }
+
+    $("#btnBack").onclick = () => {
+      if(history.length > 1) history.back();
+      else window.close();
+    };
+
+    $("#btnPrint").onclick = () => {
+      const w = frame.contentWindow;
+      if(w) w.print();
+      else window.print();
+    };
+
+    $("#btnCapture").onclick = captureInvoice;
+
+    window.addEventListener("resize", () => {
+      resizeFrame();
+    });
+
+    loadInvoice();
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "منتجات هلا بيوتي",
+  "short_name": "اضافة المنتجات",
+  "start_url": "/prod/",
+    "scope": "/prod/",
+  "display": "standalone",
+  "background_color": "#6b0083",
+  "theme_color": "#fdd8c2",
+  "icons": [
+    { "src": "/prod/ico1.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/prod/ico2.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

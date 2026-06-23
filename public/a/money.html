@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>مصروفات</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --purple:#6B0FA6; --purpleDark:#3C0A63; --peach:#F1C6B1;
+      --ink:#101828; --muted:#667085;
+      --card:rgba(255,255,255,.98); --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12); --shadow2:0 8px 18px rgba(16,24,40,.10);
+      --r18:18px; --ok:#16a34a; --warn:#f59e0b; --err:#ef4444; --info:#2563eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:"Cairo",system-ui,sans-serif; color:var(--ink);
+      background: transparent; /* ✅ بدون خلفية */
+    }
+
+    /* ✅ بس المربع اللي بالوسط */
+    .wrap{
+      width:100%;
+      max-width:780px;
+      height:100%;
+      margin:0 auto;
+      padding:14px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .card{
+      width:100%;
+      padding:14px; border-radius:var(--r18);
+      background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow);
+    }
+
+    .label{margin:0 0 8px 0; font-size:13px; font-weight:900; color:var(--muted)}
+    .hint{margin:6px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.60); line-height:1.5}
+
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+
+    .field{
+      background:#fff; border:1px solid rgba(16,24,40,.12); box-shadow:0 6px 14px rgba(16,24,40,.08);
+      border-radius:14px; padding:10px 12px; display:flex; gap:10px; align-items:center; min-width:220px; flex:1;
+    }
+    .field input, .field textarea{
+      border:none; outline:none; width:100%;
+      font-size:15px; font-weight:900; font-family:"Cairo",system-ui,sans-serif;
+      background:transparent; color:var(--ink);
+    }
+    .field textarea{min-height:92px; resize:vertical; line-height:1.6}
+
+    .icon{
+      width:34px;height:34px;border-radius:12px; display:grid; place-items:center;
+      background: rgba(107,15,166,.10); border:1px solid rgba(107,15,166,.18);
+      color: var(--purpleDark); flex:0 0 auto;
+    }
+    .icon svg{width:18px;height:18px; stroke:currentColor; fill:none; stroke-width:2.2}
+
+    .file{ position:relative; flex:1; min-width:240px; }
+    .file input[type="file"]{ position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+    .filePick{
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      width:100%;
+      border-radius:14px;
+      padding:12px 12px;
+      cursor:pointer;
+      font-weight:950;
+      background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      color:rgba(60,10,99,.85);
+      user-select:none;
+    }
+    .filePick:active{ transform:scale(.99); }
+    .fileHint{ margin-top:6px; font-size:12px; font-weight:900; color:rgba(16,24,40,.55); }
+    .fileName{ margin-top:6px; font-size:12px; font-weight:900; color:rgba(16,24,40,.72); word-break:break-word; }
+
+    .uploader{
+      margin-top:10px;
+      padding:12px;
+      border-radius:18px;
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(242,244,247,.55);
+      display:grid;
+      gap:10px;
+    }
+
+    .miniPreview{
+      margin-top:10px;
+      display:none;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+      background:#fff;
+    }
+    .miniPreview img{ width:100%; height:auto; display:block; max-height:320px; object-fit:cover; }
+
+    .btn{
+      border:none; border-radius:14px; padding:12px 12px; cursor:pointer;
+      font-weight:900; font-size:15px; font-family:"Cairo",system-ui,sans-serif;
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none;
+    }
+    .btn:active{transform:scale(.985)}
+    .btnPrimary{background:linear-gradient(135deg,var(--purple),var(--purpleDark)); color:#fff; box-shadow:0 10px 22px rgba(107,15,166,.22)}
+    .btnGhost{background:#f2f4f7; color:var(--purpleDark); border:1px dashed rgba(60,10,99,.30)}
+
+    /* توست مثل صفحتك */
+    .toasts{position:fixed; bottom:14px; left:14px; right:14px; z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none;}
+    .toast{
+      pointer-events:auto; display:flex; gap:10px; align-items:flex-start;
+      padding:12px; border-radius:18px; background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10); box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px); transform: translateY(12px); opacity:0; animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{to{transform:translateY(0);opacity:1}}
+    .toast.out{animation: toastOut .18s ease-in forwards}
+    @keyframes toastOut{to{transform:translateY(12px);opacity:0}}
+    .toast .iconBox{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:0 0 auto}
+    .toast.ok .iconBox{background:linear-gradient(135deg,#22c55e,#16a34a)}
+    .toast.err .iconBox{background:linear-gradient(135deg,#f87171,#ef4444)}
+    .toast.warn .iconBox{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+    .toast.info .iconBox{background:linear-gradient(135deg,#60a5fa,#2563eb)}
+    .toast .body{min-width:0; flex:1 1 auto}
+    .toast .t{margin:0; font-size:13px; font-weight:950; line-height:1.2}
+    .toast .m{margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45}
+    .toast .x{border:none;background:transparent;cursor:pointer;padding:4px;margin-top:-2px;border-radius:10px;color:rgba(16,24,40,.55)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <p class="label" style="margin-bottom:4px">تسجيل صرفية جديدة</p>
+      <div class="hint">اكتب المبلغ والسبب. إذا عندك فاتورة ارفعها كصورة.</div>
+
+      <div class="uploader">
+        <div class="row">
+          <div class="field" style="flex:0.9; min-width:220px">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 1v22"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 1 1 0 7H6"></path></svg>
+            </div>
+            <input id="amountInput" inputmode="decimal" placeholder="المبلغ (مثال: ١٢٫٥ أو 12.5)">
+          </div>
+
+          <div class="file" style="flex:1; min-width:240px">
+            <label class="filePick" for="receiptInput">
+              <svg width="18" height="18" viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:2.2">
+                <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+                <circle cx="12" cy="13" r="3.2"></circle>
+              </svg>
+              رفع صورة الفاتورة (اختياري)
+            </label>
+            <!-- بدون capture عشان يختار كاميرا/صور -->
+            <input id="receiptInput" type="file" accept="image/*">
+            <div class="fileHint">تصوير مباشر أو اختيار من الجهاز</div>
+            <div id="receiptName" class="fileName"></div>
+          </div>
+        </div>
+
+        <div class="field" style="align-items:flex-start">
+          <div class="icon" aria-hidden="true" style="margin-top:2px">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M4 12h10"></path><path d="M4 18h14"></path></svg>
+          </div>
+          <textarea id="reasonInput" placeholder="سبب الصرفية (مثال: شراء تغليف / بنزين / أدوات...)"></textarea>
+        </div>
+
+        <div id="miniPreview" class="miniPreview" title="معاينة الفاتورة">
+          <img id="miniImg" alt="">
+        </div>
+
+        <div class="row" style="justify-content:space-between">
+          <button class="btn btnGhost" id="btnRemove" type="button">حذف الفاتورة</button>
+          <button class="btn btnPrimary" id="btnSubmit" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2.2">
+              <path d="M12 5v14"></path><path d="M5 12h14"></path>
+            </svg>
+            تسجيل الصرفية
+          </button>
+        </div>
+
+        <div id="statusLine" class="hint" style="min-height:18px;margin-top:2px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+<script type="module">
+  import { authFetch } from "./auth.js";
+
+  // عناصر DOM (✅ لا تعتمد على IDs كمتغيرات تلقائية)
+  const amountInput = document.getElementById("amountInput");
+  const reasonInput = document.getElementById("reasonInput");
+  const receiptInput = document.getElementById("receiptInput");
+  const receiptName  = document.getElementById("receiptName");
+  const miniPreview  = document.getElementById("miniPreview");
+  const miniImg      = document.getElementById("miniImg");
+  const statusLine   = document.getElementById("statusLine");
+  const btnRemove    = document.getElementById("btnRemove");
+  const btnSubmit    = document.getElementById("btnSubmit");
+  const toastsHost   = document.getElementById("toasts");
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function toast(type, title, msg, ms=2200){
+    const el = document.createElement("div");
+    el.className = "toast " + (type || "info");
+    el.innerHTML = `
+      <div class="iconBox" aria-hidden="true"></div>
+      <div class="body">
+        <p class="t">${escapeHtml(title||"")}</p>
+        <p class="m">${escapeHtml(msg||"")}</p>
+      </div>
+      <button class="x" type="button" aria-label="إغلاق">✕</button>
+    `;
+    el.querySelector(".x").onclick = ()=> el.remove();
+    toastsHost.appendChild(el);
+    setTimeout(()=>{ el.classList.add("out"); setTimeout(()=>el.remove(), 220); }, ms);
+  }
+
+  function setStatus(msg){ statusLine.textContent = msg || ""; }
+
+  // ✅ أرقام عربية/فارسية + فواصل عربية
+  function normalizeNumber(s){
+    const map = {
+      "٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9",
+      "۰":"0","۱":"1","۲":"2","۳":"3","۴":"4","۵":"5","۶":"6","۷":"7","۸":"8","۹":"9",
+      "٫":".","،":"."
+    };
+    return String(s || "")
+      .trim()
+      .replace(/[٠-٩۰-۹٫،]/g, ch => map[ch] ?? ch)
+      .replace(/,/g, ".")
+      .replace(/\s+/g, "");
+  }
+
+  // file UI + preview
+  receiptInput.addEventListener("change", ()=>{
+    const f = receiptInput.files && receiptInput.files[0] ? receiptInput.files[0] : null;
+    if(!f){
+      receiptName.textContent = "";
+      miniImg.removeAttribute("src");
+      miniPreview.style.display = "none";
+      return;
+    }
+    receiptName.textContent = "تم اختيار: " + (f.name || "صورة");
+    miniImg.src = URL.createObjectURL(f);
+    miniPreview.style.display = "block";
+  });
+
+  function removeReceipt(){
+    receiptInput.value = "";
+    receiptName.textContent = "";
+    miniImg.removeAttribute("src");
+    miniPreview.style.display = "none";
+    toast("info","تم","تم حذف الفاتورة من النموذج",1400);
+  }
+  btnRemove.addEventListener("click", removeReceipt);
+
+  async function submitExpense(){
+    const amountStr = normalizeNumber(amountInput.value);
+    const reason = (reasonInput.value || "").trim();
+    const amount = Number(amountStr);
+
+    if(!(amount > 0)){
+      toast("warn","تنبيه","المبلغ غير صحيح");
+      setStatus("اكتب مبلغ صحيح (يدعم ١٢٫٥ / 12.5)");
+      amountInput.focus();
+      return;
+    }
+    if(!reason){
+      toast("warn","تنبيه","اكتب سبب الصرفية");
+      setStatus("السبب مطلوب قبل الحفظ");
+      reasonInput.focus();
+      return;
+    }
+
+    const fd = new FormData();
+    fd.append("amount", String(amount));
+    fd.append("reason", reason);
+
+    const f = receiptInput.files && receiptInput.files[0] ? receiptInput.files[0] : null;
+    if(f) fd.append("receipt", f, f.name || "receipt.jpg");
+
+    btnSubmit.disabled = true;
+    setStatus("جاري حفظ الصرفية...");
+
+    try{
+      const r = await authFetch("/api/money/expenses/add", { method:"POST", body: fd });
+      const d = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(d?.error || ("HTTP " + r.status));
+
+      toast("ok","تم","تم تسجيل الصرفية بنجاح");
+
+      // ✅ أرسل للأب: نجاح + بيانات (اختياري)
+      window.parent?.postMessage({ type:"money:success", amount, reason }, "*");
+
+    }catch(e){
+      const msg = e?.message || String(e);
+      toast("err","فشل","لم يتم الحفظ: " + msg);
+      setStatus("فشل الحفظ — تحقق من الاتصال/الصلاحية");
+    }finally{
+      btnSubmit.disabled = false;
+    }
+  }
+
+  btnSubmit.addEventListener("click", submitExpense);
+  amountInput.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter"){ e.preventDefault(); submitExpense(); }
+  });
+</script>
+</body>
+</html>

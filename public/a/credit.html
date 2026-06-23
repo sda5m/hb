@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Hala Beauty | رصيد العملاء</title>
+  <link rel="manifest" href="/a/promaxa.json">
+  <meta name="theme-color" content="#123A7A">
+  <link rel="apple-touch-icon" href="/a/ico1.png">
+  <link rel="icon" href="/a/ico2.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --blue:#123A7A;
+      --blue2:#1D56A8;
+      --ink:#172033;
+      --muted:#6E7A91;
+      --bg:#F4F7FB;
+      --card:#FFFFFF;
+      --line:#E4EAF3;
+      --soft:#EAF2FF;
+      --ok:#15865A;
+      --danger:#C9385A;
+      --shadow:0 14px 34px rgba(18,58,122,.10);
+      --r:20px;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink)}
+    body{
+      font-family:"Cairo",system-ui,sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(29,86,168,.12), transparent 26%),
+        linear-gradient(180deg,#fff 0%,var(--bg) 100%);
+    }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .page{width:min(1060px,calc(100% - 18px));margin:10px auto 28px}
+    .top{
+      position:sticky;top:8px;z-index:10;
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      padding:12px;
+    }
+    .head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .logo{width:46px;height:46px;border-radius:16px;background:#fff;border:1px solid var(--line);overflow:hidden}
+    .logo img{width:100%;height:100%;display:block;object-fit:cover}
+    h1{margin:0;font-size:20px;line-height:1.1;font-weight:950}
+    .sub{margin-top:4px;color:var(--muted);font-size:12px;font-weight:800}
+    .status{
+      min-height:38px;padding:0 12px;border-radius:999px;
+      display:inline-flex;align-items:center;gap:7px;
+      background:var(--soft);color:var(--blue);font-size:12px;font-weight:900;
+      border:1px solid #D8E7FF;white-space:nowrap;
+    }
+    .search{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:1fr 116px;
+      gap:8px;
+    }
+    .field{
+      min-height:50px;background:#fff;border:1px solid var(--line);
+      border-radius:16px;padding:0 12px;display:flex;align-items:center;gap:8px;
+    }
+    .field input,.field select{
+      border:none;outline:none;background:transparent;width:100%;
+      min-width:0;color:var(--ink);font-weight:850;
+    }
+    .field input::placeholder{color:#A3ADBF}
+    .btn{
+      min-height:50px;border:none;border-radius:16px;padding:0 14px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      background:#EEF4FF;color:var(--blue);font-weight:950;
+    }
+    .btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+    .btn.danger{background:linear-gradient(135deg,#9F1239,#E11D48);color:#fff}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-top:14px}
+    .card{
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--r);box-shadow:var(--shadow);padding:14px;
+    }
+    .empty{
+      min-height:260px;display:grid;place-items:center;text-align:center;
+      color:var(--muted);font-weight:850;
+    }
+    .list{display:grid;gap:10px}
+    .customer{
+      border:1px solid var(--line);border-radius:18px;padding:12px;
+      display:grid;gap:8px;background:#fff;
+    }
+    .customer.selected{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(29,86,168,.12)}
+    .customerTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .name{font-size:16px;font-weight:950}
+    .meta{display:flex;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:12px;font-weight:800}
+    .pill{padding:5px 8px;border-radius:999px;background:#F3F6FA;border:1px solid var(--line)}
+    .balance{font-size:18px;font-weight:950;color:var(--ok)}
+    .small{font-size:12px;color:var(--muted);font-weight:800}
+    .formTitle{margin:0 0 10px;font-size:17px;font-weight:950}
+    .formGrid{display:grid;gap:10px}
+    label{display:grid;gap:5px;font-size:12px;color:var(--muted);font-weight:900}
+    label input,label select{
+      min-height:48px;border:1px solid var(--line);border-radius:15px;
+      padding:0 12px;background:#fff;color:var(--ink);font-weight:850;
+    }
+    .check{
+      min-height:44px;display:flex;align-items:center;gap:8px;
+      border:1px solid var(--line);border-radius:15px;padding:0 12px;
+      background:#fff;color:var(--ink);font-size:13px;font-weight:900;
+    }
+    .check input{width:18px;height:18px;accent-color:var(--blue)}
+    .msg{margin-top:10px;border-radius:16px;padding:10px 12px;font-size:13px;font-weight:850;display:none}
+    .msg.ok{display:block;background:#ECFBF5;color:var(--ok);border:1px solid #BEEBD9}
+    .msg.err{display:block;background:#FFF1F4;color:var(--danger);border:1px solid #FFD1DA}
+    .tx{border-top:1px solid var(--line);padding-top:8px;margin-top:4px;display:grid;gap:5px}
+    .txRow{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);font-weight:800}
+    @media(max-width:760px){
+      .grid{grid-template-columns:1fr}
+      .search{grid-template-columns:1fr}
+      .status{display:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="top">
+      <div class="head">
+        <div class="brand">
+          <div class="logo"><img src="/a/ico1.png" alt=""></div>
+          <div>
+            <h1>رصيد العملاء</h1>
+            <div class="sub">عملاء التطبيق أولاً، والرصيد يظهر في المقدمة</div>
+          </div>
+        </div>
+        <div class="status" id="status">جاهز</div>
+      </div>
+      <div class="search">
+        <div class="field">
+          <input id="q" type="search" placeholder="ابحث بالإيميل، رقم الهاتف، رقم الطلب، أو اسم العميل">
+        </div>
+        <button class="btn primary" id="searchBtn" type="button">بحث</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div id="results" class="empty">جاري تحميل العملاء المسجلين من التطبيق</div>
+      </div>
+
+      <aside class="card">
+        <h2 class="formTitle">إضافة / استرجاع رصيد</h2>
+        <div id="selectedHint" class="small">اختر عميل من نتائج البحث أولاً.</div>
+        <div class="formGrid" style="margin-top:12px">
+          <label>
+            المبلغ
+            <input id="amount" type="number" inputmode="decimal" step="0.001" min="0" placeholder="مثال 5.000">
+          </label>
+          <label>
+            العملة
+            <select id="currency">
+              <option value="OMR">OMR</option>
+              <option value="SAR">SAR</option>
+              <option value="AED">AED</option>
+              <option value="QAR">QAR</option>
+              <option value="KWD">KWD</option>
+              <option value="BHD">BHD</option>
+            </select>
+          </label>
+          <label>
+            تاريخ انتهاء اختياري
+            <input id="expiresAt" type="datetime-local">
+          </label>
+          <label class="check">
+            <input id="notify" type="checkbox">
+            إرسال إشعار هلا بيوتي للعميل
+          </label>
+          <button class="btn primary" id="creditBtn" type="button" disabled>إضافة الرصيد</button>
+          <button class="btn danger" id="debitBtn" type="button" disabled>استرجاع الرصيد</button>
+          <div id="msg" class="msg"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module">
+    import { requirePackLogin, authFetch } from "./auth.js";
+
+    if (!requirePackLogin()) throw new Error("login required");
+
+    const $ = (id) => document.getElementById(id);
+    const state = { selected: null, selectedIds: new Set(), customers: [] };
+
+    function setStatus(text){ $("status").textContent = text; }
+    function moneyText(m){ return m?.balanceText || "0.000"; }
+    function escapeHtml(v){
+      return String(v || "").replace(/[&<>"']/g, (m) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[m]));
+    }
+    function showMsg(text, ok = false){
+      const el = $("msg");
+      el.className = "msg " + (ok ? "ok" : "err");
+      el.textContent = text;
+    }
+    function clearMsg(){
+      const el = $("msg");
+      el.className = "msg";
+      el.textContent = "";
+    }
+    function customerBalance(c){
+      const account = c.storeCreditAccounts?.[0];
+      return account?.balanceText || "0.000";
+    }
+    function renderTransactions(c){
+      const txs = c.storeCreditAccounts?.flatMap((a) => a.transactions || []) || [];
+      if (!txs.length) return "";
+      return `
+        <div class="tx">
+          ${txs.slice(0,3).map((tx) => `
+            <div class="txRow">
+              <span>${escapeHtml(new Date(tx.createdAt).toLocaleString("ar-OM"))}</span>
+              <strong>${escapeHtml(tx.amountText)}</strong>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+    function renderCustomerStats(c){
+      const stats = [];
+      if (c.appInstalled) stats.push(`<span class="pill">مستخدم التطبيق</span>`);
+      if (c.deliveredOrders) stats.push(`<span class="pill">استلم ${escapeHtml(c.deliveredOrders)} طلب</span>`);
+      if (c.deliveredSpentText) stats.push(`<span class="pill">مبالغ مستلمة: ${escapeHtml(c.deliveredSpentText)}</span>`);
+      if (c.rewards?.points) stats.push(`<span class="pill">نقاط: ${escapeHtml(c.rewards.points)}</span>`);
+      if (c.lastDeliveredOrderName) stats.push(`<span class="pill">آخر استلام: ${escapeHtml(c.lastDeliveredOrderName)}</span>`);
+      return stats.length ? `<div class="meta">${stats.join("")}</div>` : "";
+    }
+    function render(){
+      const root = $("results");
+      if (!state.customers.length) {
+        root.className = "empty";
+        root.textContent = "لا توجد نتائج";
+        return;
+      }
+      root.className = "list";
+      root.innerHTML = `<div class="small">يمكنك اختيار أكثر من عميل لإضافة الرصيد لهم مرة واحدة. الاسترجاع يبقى لعميل واحد فقط.</div>` + state.customers.map((c, i) => `
+        <button class="customer ${state.selectedIds.has(c.id) ? "selected" : ""}" data-i="${i}" type="button">
+          <div class="customerTop">
+            <div>
+              <div class="name">${escapeHtml(c.displayName || "عميل بدون اسم")}</div>
+              <div class="meta">
+                ${c.email ? `<span class="pill">${escapeHtml(c.email)}</span>` : ""}
+                ${c.phone ? `<span class="pill">${escapeHtml(c.phone)}</span>` : ""}
+                ${c.matchedOrder?.name ? `<span class="pill">طلب ${escapeHtml(c.matchedOrder.name)}</span>` : ""}
+              </div>
+            </div>
+            <div class="balance">${escapeHtml(customerBalance(c))}</div>
+          </div>
+          <div class="small">طلبات: ${escapeHtml(c.numberOfOrders)} · مشتريات: ${escapeHtml(c.amountSpentText)}</div>
+          ${renderCustomerStats(c)}
+          ${renderTransactions(c)}
+        </button>
+      `).join("");
+      root.querySelectorAll(".customer").forEach((btn) => {
+        btn.onclick = () => selectCustomer(state.customers[Number(btn.dataset.i)]);
+      });
+    }
+    function selectedCustomers(){
+      return state.customers.filter((c) => state.selectedIds.has(c.id));
+    }
+    function updateSelectionUi(){
+      const selected = selectedCustomers();
+      $("creditBtn").disabled = !selected.length;
+      $("debitBtn").disabled = !state.selected;
+      if (!selected.length) {
+        $("selectedHint").textContent = "اختر عميل من القائمة أولاً.";
+      } else if (selected.length === 1) {
+        const c = selected[0];
+        $("selectedHint").textContent = `${c.displayName || "عميل"} · ${c.email || c.phone || c.id}`;
+      } else {
+        $("selectedHint").textContent = `تم اختيار ${selected.length} عملاء لإضافة الرصيد`;
+      }
+    }
+    function selectCustomer(c){
+      state.selected = c;
+      if (state.selectedIds.has(c.id)) {
+        state.selectedIds.delete(c.id);
+        if (state.selected?.id === c.id) {
+          state.selected = selectedCustomers()[0] || null;
+        }
+      } else {
+        state.selectedIds.add(c.id);
+      }
+      updateSelectionUi();
+      clearMsg();
+      render();
+    }
+    async function search(){
+      const q = $("q").value.trim();
+      if (!q) return;
+      clearMsg();
+      $("searchBtn").disabled = true;
+      setStatus("جاري البحث...");
+      $("results").className = "empty";
+      $("results").textContent = "جاري البحث في هلا بيوتي";
+      try {
+        const r = await authFetch("/pro/customer-credit/search?q=" + encodeURIComponent(q), { cache:"no-store" });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.error || "فشل البحث");
+        state.customers = data.customers || [];
+        state.selected = null;
+        state.selectedIds.clear();
+        $("creditBtn").disabled = true;
+        $("debitBtn").disabled = true;
+        $("selectedHint").textContent = "اختر عميل من نتائج البحث أولاً.";
+        setStatus(`نتائج: ${state.customers.length}`);
+        render();
+        if (state.customers.length === 1) {
+          selectCustomer(state.customers[0]);
+        }
+        if (!state.customers.length && data.warnings?.length) {
+          showMsg(data.warnings[0], false);
+        }
+      } catch (e) {
+        setStatus("خطأ");
+        $("results").className = "empty";
+        $("results").textContent = "تعذر البحث";
+        showMsg(e.message || "فشل البحث", false);
+      } finally {
+        $("searchBtn").disabled = false;
+      }
+    }
+    async function loadAppCustomers(){
+      clearMsg();
+      state.selected = null;
+      state.selectedIds.clear();
+      $("creditBtn").disabled = true;
+      $("debitBtn").disabled = true;
+      $("selectedHint").textContent = "اختر عميل من القائمة أولاً.";
+      setStatus("جاري تحميل عملاء التطبيق...");
+      $("results").className = "empty";
+      $("results").textContent = "جاري تحميل العملاء المسجلين من التطبيق";
+      try {
+        const r = await authFetch("/pro/customer-credit/top-customers?limit=120", { cache:"no-store" });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.error || "فشل تحميل العملاء");
+        state.customers = data.customers || [];
+        setStatus(`أفضل العملاء: ${state.customers.length}`);
+        render();
+      } catch (e) {
+        setStatus("خطأ");
+        $("results").className = "empty";
+        $("results").textContent = "تعذر تحميل عملاء التطبيق";
+        showMsg(e.message || "فشل تحميل العملاء", false);
+      }
+    }
+
+    async function refreshCurrentList(){
+      if ($("q").value.trim()) {
+        await search();
+      } else {
+        await loadAppCustomers();
+      }
+    }
+
+    async function addCredit(){
+      const targets = selectedCustomers();
+      if (!targets.length) return;
+      const amount = Number($("amount").value || 0);
+      const currencyCode = $("currency").value;
+      const expiresAt = $("expiresAt").value;
+      const notify = $("notify").checked;
+      if (!Number.isFinite(amount) || amount <= 0) {
+        showMsg("اكتب مبلغ أكبر من صفر", false);
+        return;
+      }
+      clearMsg();
+      $("creditBtn").disabled = true;
+      $("debitBtn").disabled = true;
+      setStatus(targets.length > 1 ? `جاري إضافة الرصيد لـ ${targets.length} عملاء...` : "جاري إضافة الرصيد...");
+      try {
+        const results = [];
+        for (const customer of targets) {
+          const r = await authFetch("/pro/customer-credit/credit", {
+            method:"POST",
+            headers:{ "Content-Type":"application/json" },
+            body: JSON.stringify({
+              customerId: customer.id,
+              amount,
+              currencyCode,
+              expiresAt,
+              notify
+            })
+          });
+          const data = await r.json().catch(() => ({}));
+          if (!r.ok) {
+            results.push({ ok:false, customer, error:data.error || "فشل إضافة الرصيد" });
+          } else {
+            results.push({ ok:true, customer, data });
+          }
+        }
+        const okCount = results.filter((x) => x.ok).length;
+        const failCount = results.length - okCount;
+        if (failCount) {
+          const firstError = results.find((x) => !x.ok);
+          showMsg(`تمت الإضافة لـ ${okCount} عميل، وفشل ${failCount}. ${firstError?.customer?.displayName || ""}: ${firstError?.error || ""}`, okCount > 0);
+        } else {
+          showMsg(targets.length > 1 ? `تمت إضافة الرصيد لـ ${okCount} عملاء بنجاح.` : `تمت الإضافة. الرصيد الجديد: ${results[0]?.data?.balanceText || ""}`, true);
+        }
+        setStatus(`تمت الإضافة: ${okCount}/${results.length}`);
+        await refreshCurrentList();
+        showMsg(targets.length > 1 ? `تمت إضافة الرصيد لـ ${okCount} عملاء.` : "تمت إضافة الرصيد.", true);
+      } catch (e) {
+        setStatus("خطأ");
+        showMsg(e.message || "فشل إضافة الرصيد", false);
+      } finally {
+        updateSelectionUi();
+      }
+    }
+    async function debitCredit(){
+      if (!state.selected) return;
+      if (state.selectedIds.size > 1) {
+        showMsg("استرجاع الرصيد متاح لعميل واحد فقط. اترك عميل واحد محدد ثم حاول مرة أخرى.", false);
+        return;
+      }
+      const amount = Number($("amount").value || 0);
+      const currencyCode = $("currency").value;
+      if (!Number.isFinite(amount) || amount <= 0) {
+        showMsg("اكتب مبلغ أكبر من صفر", false);
+        return;
+      }
+      const ok = confirm(`سيتم استرجاع ${amount.toFixed(3)} ${currencyCode} من رصيد العميل. هل أنت متأكد؟`);
+      if (!ok) return;
+      clearMsg();
+      $("creditBtn").disabled = true;
+      $("debitBtn").disabled = true;
+      setStatus("جاري استرجاع الرصيد...");
+      try {
+        const r = await authFetch("/pro/customer-credit/debit", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({
+            customerId: state.selected.id,
+            amount,
+            currencyCode
+          })
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.error || "فشل استرجاع الرصيد");
+        showMsg(`تم استرجاع الرصيد. الرصيد الجديد: ${data.balanceText || ""}`, true);
+        setStatus("تم الاسترجاع");
+        await refreshCurrentList();
+      } catch (e) {
+        setStatus("خطأ");
+        showMsg(e.message || "فشل استرجاع الرصيد", false);
+      } finally {
+        $("creditBtn").disabled = !state.selected;
+        $("debitBtn").disabled = !state.selected;
+      }
+    }
+
+    $("searchBtn").onclick = search;
+    $("creditBtn").onclick = addCredit;
+    $("debitBtn").onclick = debitCredit;
+    $("q").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") search();
+    });
+    loadAppCustomers();
+  </script>
+</body>
+</html>

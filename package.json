@@ -1,0 +1,24 @@
+{
+  "name": "driver-panel",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "bootstrap.js",
+  "scripts": {
+    "start": "node bootstrap.js",
+    "postinstall": "npx puppeteer browsers install chrome"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "cloudinary": "^2.5.1",
+    "redis": "^4.7.0",
+    "node-fetch": "^3.3.2",
+    "better-sqlite3": "^9.0.0",
+    "xlsx": "^0.18.5",
+    "pdfkit": "^0.15.0",
+    "puppeteer": "^24.7.1",
+    "@erikmichelson/open-location-code-ts": "^1.0.1",
+    "web-push": "^3.6.7",
+        "firebase-admin": "^13.0.0"
+  }
+}

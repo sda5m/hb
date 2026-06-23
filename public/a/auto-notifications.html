@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hala Beauty | الاشعارات التلقائية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--brand:#6B0083;--peach:#FDD8C2;--ink:#25102d;--muted:#76657b;--line:#eadff0;--bg:#fbf7fb;--ok:#16845c;--danger:#c43757}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at top left,#fff0f5,transparent 34%),linear-gradient(180deg,#fff,var(--bg));font-family:Cairo,system-ui,sans-serif;color:var(--ink)}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .page{width:min(1120px,calc(100% - 20px));margin:12px auto 32px}
+    .top,.card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 34px rgba(107,0,131,.075)}
+    .top{position:sticky;top:8px;z-index:3;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    h1{margin:0;font-size:22px;font-weight:950}
+    .sub{margin-top:4px;color:var(--muted);font-size:13px;font-weight:800;line-height:1.7}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .btn{border:0;border-radius:12px;min-height:40px;padding:0 14px;font-weight:950;background:#f3e8f7;color:var(--brand);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    .btn.primary{background:linear-gradient(135deg,var(--brand),#9d36b1);color:#fff}
+    .btn.danger{background:#fff0f4;color:var(--danger)}
+    .templates{display:grid;gap:12px;margin-top:12px}
+    .card{padding:15px}
+    .head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:12px}
+    .name{font-size:17px;font-weight:950}
+    .key{direction:ltr;display:inline-flex;border-radius:999px;padding:4px 9px;background:#f8eefb;color:var(--brand);font-weight:900;font-size:12px}
+    .desc{color:var(--muted);font-weight:800;font-size:13px;line-height:1.8;margin-top:5px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    label{display:grid;gap:5px;color:var(--muted);font-size:12px;font-weight:900}
+    input,textarea{width:100%;border:1px solid var(--line);border-radius:13px;padding:10px 11px;background:#fff;color:var(--ink);font-weight:800;outline:none}
+    textarea{min-height:94px;resize:vertical;line-height:1.7}
+    input:focus,textarea:focus{border-color:rgba(107,0,131,.45);box-shadow:0 0 0 3px rgba(107,0,131,.08)}
+    .msg{display:none;margin-top:10px;border-radius:14px;padding:10px;font-weight:850}
+    .msg.ok{display:block;background:#eafaf3;color:var(--ok)}
+    .msg.err{display:block;background:#fff0f4;color:var(--danger)}
+    .hint{margin-top:12px;border:1px dashed var(--line);border-radius:16px;padding:12px;background:#fffafc;color:var(--muted);font-size:13px;font-weight:800;line-height:1.8}
+    code{direction:ltr;unicode-bidi:bidi-override;color:var(--brand);font-weight:950}
+    @media(max-width:760px){.top{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.actions{width:100%}.actions .btn{flex:1}}
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="top">
+    <div>
+      <h1>قوالب الاشعارات التلقائية</h1>
+      <div class="sub">تعديل نصوص الاشعارات التي يرسلها السيرفر تلقائيا. اكتب العربي والانجليزي، واترك المتغيرات مثل <code>{{order_number}}</code> كما هي.</div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="app.html">لوحة التطبيق</a>
+      <button class="btn danger" id="resetBtn" type="button">استعادة الافتراضي</button>
+    </div>
+  </section>
+
+  <div class="hint">
+    كل بطاقة توضح متى يستخدم الاشعار. الحقول الانجليزية تصل لمن لغة تطبيقه انجليزي، والعربية تصل لمن لغة تطبيقه عربي. المتغيرات المدعومة تختلف حسب نوع الاشعار، واهمها:
+    <code>{{order_number}}</code>، <code>{{customer_name}}</code>، <code>{{points}}</code>، <code>{{amount}}</code>، <code>{{reason}}</code>، <code>{{product_title}}</code>.
+  </div>
+
+  <section class="templates" id="templates"></section>
+  <div class="msg" id="msg"></div>
+</main>
+
+<script type="module">
+  import { requirePackLogin, authFetch } from "./auth.js";
+  if (!requirePackLogin()) throw new Error("login required");
+
+  const labels = {
+    order_created: "طلب جديد",
+    order_shipped: "تم الشحن",
+    out_for_delivery: "خرج للتوصيل",
+    delivered: "استلام الطلب",
+    order_cancelled: "الغاء الطلب",
+    wallet_credit_added: "اضافة رصيد",
+    reward_points_added: "اضافة نقاط",
+    reward_points_deducted: "خصم نقاط",
+    review_reward: "نقاط التقييم"
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (v) => String(v || "").replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+  const msg = (text, ok = true) => {
+    $("msg").className = "msg " + (ok ? "ok" : "err");
+    $("msg").textContent = text;
+  };
+
+  async function load() {
+    const res = await authFetch("/pro/auto-notifications/templates");
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || "تعذر تحميل القوالب");
+    render(data.templates || []);
+  }
+
+  function render(rows) {
+    $("templates").innerHTML = rows.map((item) => `
+      <article class="card" data-key="${esc(item.key)}">
+        <div class="head">
+          <div>
+            <div class="name">${esc(labels[item.key] || item.key)}</div>
+            <div class="desc">${esc(item.descriptionAr)}</div>
+          </div>
+          <span class="key">${esc(item.key)}</span>
+        </div>
+        <div class="grid">
+          <label>العنوان العربي<input data-field="titleAr" value="${esc(item.titleAr)}"></label>
+          <label>English title<input dir="ltr" data-field="titleEn" value="${esc(item.titleEn)}"></label>
+          <label>النص العربي<textarea data-field="bodyAr">${esc(item.bodyAr)}</textarea></label>
+          <label>English body<textarea dir="ltr" data-field="bodyEn">${esc(item.bodyEn)}</textarea></label>
+        </div>
+        <div class="actions" style="margin-top:12px">
+          <button class="btn primary save" type="button">حفظ هذا الاشعار</button>
+        </div>
+      </article>
+    `).join("");
+
+    document.querySelectorAll(".save").forEach((button) => {
+      button.addEventListener("click", () => save(button.closest(".card")));
+    });
+  }
+
+  async function save(card) {
+    const key = card.dataset.key;
+    const payload = {};
+    card.querySelectorAll("[data-field]").forEach((field) => {
+      payload[field.dataset.field] = field.value;
+    });
+    const res = await authFetch(`/pro/auto-notifications/templates/${encodeURIComponent(key)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || "تعذر الحفظ");
+    msg("تم حفظ الاشعار بنجاح");
+  }
+
+  $("resetBtn").addEventListener("click", async () => {
+    if (!confirm("هل تريد استعادة النصوص الافتراضية؟")) return;
+    const res = await authFetch("/pro/auto-notifications/templates/reset", { method: "POST" });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || "تعذر الاستعادة");
+    render(data.templates || []);
+    msg("تمت استعادة القوالب الافتراضية");
+  });
+
+  load().catch((e) => msg(e.message || String(e), false));
+</script>
+</body>
+</html>

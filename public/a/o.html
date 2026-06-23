@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>تجهيز طلب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Cairo,system-ui;background:#f6f7fb;color:#111}
+    .wrap{max-width:980px;margin:0 auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px;margin-top:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    input,textarea{padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;font-family:inherit;font-weight:800}
+    textarea{width:100%;min-height:70px}
+    .btn{padding:10px 14px;border:none;border-radius:12px;background:#6B0FA6;color:#fff;font-weight:900;cursor:pointer}
+    .btn2{background:#111827}
+    .btnG{background:#f3f4f6;color:#111;border:1px solid #e5e7eb}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    @media(min-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+    .item{border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;background:#fff}
+    .item img{width:100%;height:150px;object-fit:cover;display:block;background:#f3f4f6}
+    .p{padding:10px}
+    .t{font-weight:900;font-size:13px;line-height:1.35;margin:0 0 6px}
+    .m{font-size:12px;font-weight:800;color:#6b7280;margin:0 0 8px}
+    .bar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .qty{width:70px}
+    .cartRow{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin-top:8px}
+    .small{font-size:12px;font-weight:800;color:#6b7280}
+    .ok{color:#16a34a;font-weight:900}
+    .err{color:#ef4444;font-weight:900}
+    .warn{color:#f59e0b;font-weight:900}
+    .link{word-break:break-all}
+    .muted{opacity:.85}
+    .pill{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border:1px solid #e5e7eb;border-radius:999px;font-size:12px;font-weight:900;background:#f9fafb}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card">
+    <h3 style="margin:0;font-weight:950">تجهيز طلب (طلب عادي)</h3>
+    <p class="small" style="margin:6px 0 0">
+      ابحث عن المنتج (اسم/وصف/تاق/vendor/SKU/barcode) → أضفه للسلة → أدخل بيانات العميل → إنشاء طلب عادي
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <input id="q" style="flex:1" placeholder="اكتب أي شيء: اسم/وصف/تاق/vendor/SKU..." />
+      <button class="btn" onclick="search()">بحث</button>
+      <button class="btnG" onclick="clearAll()">تفريغ</button>
+      <span class="pill">النتائج: <b id="count">0</b></span>
+    </div>
+    <p class="small muted" style="margin:10px 0 0">
+      نصيحة: جرب كلمة قصيرة (حرفين-ثلاثة) أو جزء من SKU أو تاق.
+    </p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin:0 0 10px;font-weight:950">نتائج البحث</h4>
+    <div id="results" class="grid"></div>
+  </div>
+
+  <div class="card">
+    <h4 style="margin:0 0 10px;font-weight:950">السلة</h4>
+    <div id="cart"></div>
+  </div>
+
+<div class="card">
+  <h4 style="margin:0 0 10px;font-weight:950">بيانات العميل</h4>
+
+  <div class="row">
+    <input id="customerName" style="flex:1" placeholder="اسم العميل *" />
+    <input id="phone" style="flex:1" placeholder="رقم الهاتف *" />
+  </div>
+
+  <div class="row" style="margin-top:10px">
+    <input id="address1" style="flex:2" placeholder="العنوان *" />
+    <input id="city" style="flex:1" placeholder="المدينة *" />
+  </div>
+
+  <div class="row" style="margin-top:10px">
+    <button class="btn2 btn" onclick="createOrder()">إنشاء طلب</button>
+    <div id="msg" class="small"></div>
+  </div>
+
+  <div id="out" style="margin-top:10px"></div>
+</div>
+
+
+</div>
+
+<script type="module">
+  import { requirePackLogin, authFetch } from "./auth.js";
+  requirePackLogin();
+
+  let found = [];
+  let cart = []; // [{variantId, title, price, image, qty, sku, available}]
+
+  function esc(s){
+    return String(s||"").replace(/[&<>"']/g,m=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function setMsg(text, type=""){
+    const el = document.getElementById("msg");
+    el.className = "small " + (type || "");
+    el.textContent = text || "";
+  }
+
+  window.clearAll = function(){
+    found = [];
+    cart = [];
+    document.getElementById("results").innerHTML = "";
+    document.getElementById("count").textContent = "0";
+    renderCart();
+    document.getElementById("out").innerHTML = "";
+    setMsg("");
+    document.getElementById("q").value = "";
+  }
+
+  window.search = async function(){
+    const q = document.getElementById("q").value.trim();
+    if(!q) return setMsg("اكتب كلمة بحث", "err");
+
+    setMsg("جاري البحث...", "");
+    document.getElementById("count").textContent = "0";
+
+    try{
+      const r = await authFetch("/api/prep/search?q=" + encodeURIComponent(q) + "&limit=60", { cache:"no-store" });
+      const d = await r.json().catch(()=>({}));
+      if(!r.ok) return setMsg(d.error || "فشل البحث", "err");
+
+      found = Array.isArray(d.items) ? d.items : [];
+      document.getElementById("count").textContent = String(found.length);
+      renderResults();
+
+      if(found.length === 0){
+        setMsg("تم العثور على: 0 (جرّب كلمة أقصر أو جزء من SKU أو تاق)", "warn");
+      }else{
+        setMsg("تم العثور على: " + found.length, "ok");
+      }
+    }catch(e){
+      setMsg(e?.message || String(e), "err");
+    }
+  }
+
+  function renderResults(){
+    const box = document.getElementById("results");
+    if(!found.length){
+      box.innerHTML = `<div style="grid-column:1/-1" class="small">لا يوجد نتائج</div>`;
+      return;
+    }
+
+    box.innerHTML = found.map((x,idx)=>{
+      const img = x.image ? `<img src="${esc(x.image)}" alt="">` : `<img alt="">`;
+      const title = `${x.productTitle} — ${x.variantTitle}`;
+      const info = `${x.price || "-"} | SKU:${x.sku||"-"} | ${x.available ? "متاح" : "غير متاح"}`;
+      const vendor = x.vendor ? `المورد: ${x.vendor}` : "";
+      const tags = Array.isArray(x.tags) && x.tags.length ? ("تاقات: " + x.tags.slice(0,6).join(", ")) : "";
+
+      return `
+        <div class="item">
+          ${img}
+          <div class="p">
+            <p class="t">${esc(title)}</p>
+            <p class="m">${esc(info)}</p>
+            ${vendor ? `<p class="small" style="margin:0 0 6px">${esc(vendor)}</p>` : ""}
+            ${tags ? `<p class="small" style="margin:0 0 8px">${esc(tags)}</p>` : ""}
+
+            <div class="bar">
+              <input class="qty" id="qty_${idx}" type="number" min="1" value="1">
+              <button class="btn" onclick="addToCart(${idx})">إضافة</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  window.addToCart = function(i){
+    const x = found[i];
+    if(!x) return;
+
+    const q = Math.max(1, Number(document.getElementById("qty_"+i).value||1)||1);
+    const k = x.variantId;
+
+    const ex = cart.find(z => z.variantId === k);
+    if(ex) ex.qty += q;
+    else cart.push({
+      variantId: x.variantId,
+      title: `${x.productTitle} — ${x.variantTitle}`,
+      price: x.price,
+      image: x.image,
+      sku: x.sku,
+      available: x.available,
+      qty: q
+    });
+
+    renderCart();
+    setMsg("تمت الإضافة للسلة ✅", "ok");
+  }
+
+  function renderCart(){
+    const box = document.getElementById("cart");
+    if(!cart.length){
+      box.innerHTML = `<div class="small">السلة فارغة</div>`;
+      return;
+    }
+
+    box.innerHTML = cart.map((x,idx)=>`
+      <div class="cartRow">
+        <div style="min-width:0">
+          <div style="font-weight:950">${esc(x.title)}</div>
+          <div class="small">${esc(x.price || "-")} | ${esc(x.sku || "-")}</div>
+        </div>
+        <div class="row">
+          <input style="width:70px" type="number" min="1" value="${x.qty}"
+                 onchange="setCartQty(${idx}, this.value)">
+          <button class="btnG" onclick="removeCart(${idx})">حذف</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  window.setCartQty = function(i, v){
+    const n = Math.max(1, Number(v||1)||1);
+    if(cart[i]) cart[i].qty = n;
+  }
+
+  window.removeCart = function(i){
+    cart.splice(i,1);
+    renderCart();
+  }
+
+  window.createOrder = async function(){
+    if(!cart.length) return setMsg("السلة فارغة", "err");
+
+const payload = {
+  customerName: document.getElementById("customerName").value.trim(),
+  phone: document.getElementById("phone").value.trim(),
+  address1: document.getElementById("address1").value.trim(),
+  city: document.getElementById("city").value.trim(),
+  items: cart.map(x => ({ variantId: x.variantId, quantity: x.qty }))
+};
+
+if(!payload.customerName) return setMsg("اسم العميل مطلوب", "err");
+if(!payload.phone) return setMsg("رقم الهاتف مطلوب", "err");
+if(!payload.address1) return setMsg("العنوان مطلوب", "err");
+if(!payload.city) return setMsg("المدينة مطلوبة", "err");
+
+    setMsg("جاري إنشاء الطلب...", "");
+    document.getElementById("out").innerHTML = "";
+
+    try{
+      const r = await authFetch("/api/prep/order", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json().catch(()=>({}));
+      if(!r.ok) return setMsg(d.error || "فشل إنشاء الطلب", "err");
+
+      setMsg("تم إنشاء الطلب ✅", "ok");
+
+      document.getElementById("out").innerHTML = `
+        <div class="card" style="margin-top:0">
+          <div style="font-weight:950">Order: ${esc(d.orderName || "-")}</div>
+          <div class="small">Financial: ${esc(d.financialStatus || "-")}</div>
+          <div class="small">ID: <span class="link">${esc(d.orderId || "-")}</span></div>
+          <div class="small">Created: ${esc(d.createdAt || "-")}</div>
+        </div>
+      `;
+
+      // تفريغ السلة بعد النجاح
+      cart = [];
+      renderCart();
+
+    }catch(e){
+      setMsg(e?.message || String(e), "err");
+    }
+  }
+
+  // Enter = search
+  document.getElementById("q").addEventListener("keydown", (e)=>{
+    if(e.key === "Enter") window.search();
+  });
+</script>
+</body>
+</html>

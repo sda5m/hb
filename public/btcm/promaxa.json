@@ -1,0 +1,13 @@
+{
+  "name": "طلبات هلا بيوتي",
+  "short_name": "طلبات هلا بيوتي",
+  "start_url": "/btcm/",
+  "scope": "/btcm/",
+  "display": "standalone",
+  "background_color": "#6b0083",
+  "theme_color": "#fdd8c2",
+  "icons": [
+    { "src": "/btcm/ico2.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/btcm/ico1.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

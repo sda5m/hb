@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head> 
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>تحميل ملف الشحن</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:"Cairo",sans-serif;margin:0;background:#f6f7fb;color:#111}
+    .wrap{max-width:720px;margin:40px auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:18px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
+    .h{font-size:18px;font-weight:800;margin:0 0 10px}
+    .p{margin:0 0 14px;color:#444;font-weight:700;line-height:1.6}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+    .inp{flex:1;min-width:220px;padding:12px 12px;border-radius:14px;border:1px solid #e5e7eb;font-family:"Cairo";font-weight:800}
+    .btn{padding:12px 14px;border-radius:14px;border:1px solid #111;background:#111;color:#fff;font-family:"Cairo";font-weight:900;cursor:pointer}
+    .btn2{background:#fff;color:#111}
+    .mini{font-size:12px;color:#555;font-weight:800;margin-top:10px}
+    .ok{color:#0f766e}
+    .err{color:#b91c1c}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <p class="h">📦 تحميل ملف (تاكيد بدون مسقط) — غير مشحون</p>
+      <p class="p">
+        يقوم بتنزيل Excel للطلبات التي عليها تاق <b>تاكيد/تأكيد</b> وبدون تاق <b>مسقط</b> وحالتها <b>غير مشحونة</b>.
+      </p>
+
+      <div class="row">
+        <input id="from" class="inp" type="date" placeholder="from">
+        <input id="limit" class="inp" type="number" min="1" max="250" value="250" placeholder="limit">
+      </div>
+
+      <div class="row">
+        <button class="btn" onclick="download()">تحميل Excel</button>
+        <button class="btn btn2" onclick="ping()">اختبار اتصال</button>
+      </div>
+
+      <div id="msg" class="mini"></div>
+    </div>
+  </div>
+
+<script>
+function qs(){
+  const p = new URLSearchParams();
+  const from = document.getElementById("from").value;
+  const limit = document.getElementById("limit").value;
+  if(from) p.set("from", from);
+  if(limit) p.set("limit", limit);
+  p.set("t", Date.now());
+  return p.toString();
+}
+
+function setMsg(txt, cls){
+  const el = document.getElementById("msg");
+  el.className = "mini " + (cls || "");
+  el.textContent = txt;
+}
+
+async function ping(){
+  try{
+    setMsg("جاري الاختبار...", "");
+    const r = await fetch("/api/export/ping?t=" + Date.now(), { cache:"no-store" });
+    const d = await r.json().catch(()=> ({}));
+    if(!r.ok) throw new Error(d.error || "Ping failed");
+    setMsg("✅ الاتصال شغال: " + (d.time || ""), "ok");
+  }catch(e){
+    setMsg("❌ فشل الاتصال: " + (e.message || e), "err");
+  }
+}
+
+function download(){
+  // تنزيل مباشر كملف
+  window.location.href = "/api/export/dalilee?" + qs();
+}
+
+ping();
+</script>
+</body>
+</html>

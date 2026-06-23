@@ -1,0 +1,2257 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hala Beauty | تجهيز الطلبات</title>
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#6b0083">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="تجهيز الطلبات">
+  <link rel="apple-touch-icon" href="/ico1.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@zxing/library@0.20.0/umd/index.min.js"></script>
+
+  <style>
+    :root{
+      --purple:#6B0FA6;
+      --purpleDark:#3C0A63;
+      --peach:#F1C6B1;
+      --ink:#101828;
+      --muted:#667085;
+
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 12px 30px rgba(16,24,40,.12);
+      --shadow2:0 8px 18px rgba(16,24,40,.10);
+
+      --r18:18px;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#ef4444;
+      --info:#2563eb;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Cairo",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(180deg, rgba(60,10,99,.55), rgba(241,198,177,.35)),
+        url("d.jpg");
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+    }
+
+    .wrap{ max-width:980px; margin:0 auto; padding:18px 14px 26px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow2);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+
+    .leftActions{ display:flex; align-items:center; gap:10px; }
+
+    .backBtn{
+      width:44px; height:44px; border-radius:14px;
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.85);
+      box-shadow:0 8px 18px rgba(16,24,40,.08);
+      cursor:pointer;
+      display:grid; place-items:center;
+      transition:.15s;
+    }
+    .backBtn:active{ transform:scale(.98); }
+
+    .brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+    .brandMark{
+      width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+      background: linear-gradient(135deg, rgba(107,15,166,.16), rgba(241,198,177,.22));
+      border:1px solid rgba(107,15,166,.18);
+      flex:0 0 auto;
+    }
+    .brandName{
+      font-size:18px;font-weight:900;margin:0;line-height:1.2;letter-spacing:.2px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brandName .b1{ color:var(--purple); }
+    .brandName .b2{ color:var(--peach); }
+    .brandSub{ font-size:12.5px; color:var(--muted); font-weight:800; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      font-size:12px; font-weight:900;
+      background: rgba(107,15,166,.10);
+      color: var(--purpleDark);
+      border:1px solid rgba(107,15,166,.18);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-top:14px; padding:14px; border-radius:var(--r18);
+      background:var(--card); box-shadow:var(--shadow);
+      border:1px solid var(--line); backdrop-filter: blur(6px);
+    }
+    .label{ font-size:13px; color:var(--muted); font-weight:900; margin:0 0 10px 0; }
+
+    .controls{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width:800px){ .controls{ grid-template-columns:1fr; } }
+
+    .box{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px; background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+    }
+    .box input{
+      border:none; outline:none; background:transparent; width:100%;
+      font-size:15px; font-weight:900; color:var(--ink);
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+    .box input::placeholder{ color: rgba(102,112,133,.9); font-weight:800; }
+
+    .btn{
+      border:none; border-radius:14px; padding:12px 12px;
+      cursor:pointer; font-weight:900; font-size:15px;
+      font-family:"Cairo",system-ui,sans-serif;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:.15s; user-select:none; width:100%;
+    }
+    .btn:active{ transform:scale(.985); }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--purple), var(--purpleDark));
+      color:#fff; box-shadow:0 10px 22px rgba(107,15,166,.22);
+    }
+    .btnGhost{
+      background:#f2f4f7; color:var(--purpleDark);
+      border:1px dashed rgba(60,10,99,.30);
+    }
+
+    .tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .tab{
+      border:none; cursor:pointer;
+      padding:10px 12px; border-radius:999px;
+      font-weight:950; font-size:13px;
+      background: rgba(255,255,255,.9);
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.06);
+      display:inline-flex; align-items:center; gap:8px;
+    }
+    .tab.active{
+      background: rgba(107,15,166,.12);
+      border-color: rgba(107,15,166,.22);
+      color: var(--purpleDark);
+    }
+    .tab svg{ width:18px;height:18px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+
+    .layout{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:12px;
+    }
+    @media (max-width:900px){ .layout{ grid-template-columns:1fr; } }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r18);
+      box-shadow:var(--shadow2);
+      backdrop-filter: blur(6px);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(16,24,40,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .panelTitle{ font-weight:980; font-size:14px; color:#111827; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(241,198,177,.35);
+      color: var(--purpleDark);
+      border:1px solid rgba(241,198,177,.65);
+      white-space:nowrap;
+    }
+
+    .list{ padding:12px; display:grid; gap:10px; }
+    .empty{
+      background:#fff; border:1px dashed rgba(16,24,40,.18);
+      border-radius:16px; padding:14px;
+      text-align:center; font-weight:900; color:rgba(16,24,40,.62);
+    }
+
+    .orderCard{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.08);
+      border-radius:16px;
+      padding:12px;
+      cursor:pointer;
+      transition:.15s;
+    }
+    .orderCard:active{ transform:scale(.99); }
+    .orderTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .orderId{ font-weight:980; color:var(--purpleDark); font-size:13.5px; }
+    .orderMeta{ font-weight:900; color:rgba(16,24,40,.70); font-size:12.5px; margin-top:6px; line-height:1.5; }
+    .progress{ margin-top:10px; height:8px; border-radius:999px; background: rgba(16,24,40,.08); overflow:hidden; }
+    .progress > i{
+      display:block; height:100%;
+      background: linear-gradient(135deg, rgba(107,15,166,.75), rgba(60,10,99,.85));
+      width:0%;
+    }
+
+    .detailBody{ padding:12px; }
+    .itemsGrid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+    @media (min-width: 820px){ .itemsGrid{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+    @media (max-width:420px){ .itemsGrid{ grid-template-columns:1fr; } }
+
+    .item{
+      background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 10px 22px rgba(16,24,40,.10);
+      border-radius:18px;
+      overflow:hidden;
+      transition:.15s;
+      cursor:pointer;
+      position:relative;
+    }
+    .item:active{ transform:scale(.99); }
+
+    .imgWrap{
+      position:relative;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, rgba(107,15,166,.08), rgba(241,198,177,.18));
+      overflow:hidden;
+    }
+    .imgWrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .meta{ padding:10px 12px 12px; display:flex; flex-direction:column; gap:8px; }
+    .name{ font-weight:980; font-size:13.5px; line-height:1.45; color:var(--ink); min-height: 42px; }
+
+    .bottom{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .qty{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(241,198,177,.35);
+      color: var(--purpleDark);
+      border:1px solid rgba(241,198,177,.65);
+      white-space:nowrap;
+    }
+    .btnMini{
+      border:none; cursor:pointer;
+      padding:7px 10px; border-radius:999px;
+      font-size:12px; font-weight:950;
+      background: rgba(107,15,166,.10);
+      border:1px solid rgba(107,15,166,.18);
+      color:var(--purpleDark);
+      user-select:none;
+    }
+
+    .item.done{ opacity:.78; border-color: rgba(16,24,40,.12); }
+    .item.done .imgWrap img{ filter: grayscale(1) contrast(1) brightness(.95); opacity:.9; }
+    .item.done .name{ text-decoration: line-through; color: rgba(16,24,40,.55); }
+
+    .detailActions{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr 1fr;
+      gap:10px;
+    }
+    @media (max-width:700px){
+      .detailActions{ grid-template-columns:1fr; }
+    }
+
+    .barcodeBox{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:14px; background:#fff;
+      border:1px solid rgba(16,24,40,.12);
+      box-shadow:0 6px 14px rgba(16,24,40,.08);
+    }
+    .barcodeBox input{
+      border:none; outline:none; width:100%;
+      font-size:15px; font-weight:900;
+      font-family:"Cairo",system-ui,sans-serif;
+    }
+
+    /* Toasts */
+    .toasts{
+      position:fixed; bottom:14px; left:14px; right:14px;
+      z-index:9999; display:flex; flex-direction:column; gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px; border-radius:18px;
+      background:rgba(255,255,255,.96);
+      border:1px solid rgba(16,24,40,.10);
+      box-shadow:0 14px 32px rgba(16,24,40,.18);
+      backdrop-filter: blur(8px);
+      transform: translateY(12px); opacity:0;
+      animation: toastIn .22s ease-out forwards;
+    }
+    @keyframes toastIn{ to { transform: translateY(0); opacity:1; } }
+    .toast.out{ animation: toastOut .18s ease-in forwards; }
+    @keyframes toastOut{ to { transform: translateY(12px); opacity:0; } }
+    .toast .icon{ width:34px; height:34px; border-radius:12px; display:grid; place-items:center; flex:0 0 auto; color:#fff; }
+    .toast .body{ min-width:0; flex:1 1 auto; }
+    .toast .title{ margin:0; font-size:13px; font-weight:950; line-height:1.2; }
+    .toast .msg{ margin:3px 0 0 0; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.72); line-height:1.45; }
+    .toast .x{ border:none; background:transparent; cursor:pointer; padding:4px; margin-top:-2px; border-radius:10px; color:rgba(16,24,40,.55); }
+    .toast.ok   .icon{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.err  .icon{ background:linear-gradient(135deg,#f87171,#ef4444); }
+    .toast.warn .icon{ background:linear-gradient(135deg,#fbbf24,#f59e0b); }
+    .toast.info .icon{ background:linear-gradient(135deg,#60a5fa,#2563eb); }
+
+    .bar{ margin-top:10px; height:3px; border-radius:999px; background:rgba(16,24,40,.10); overflow:hidden; direction:rtl; }
+    .bar > i{ display:block; height:100%; width:100%; background:rgba(16,24,40,.25); transform-origin:right center; animation: shrink linear forwards; }
+    @keyframes shrink{ to{ transform:scaleX(0); } }
+
+    /* Scan Modal */
+    #scanModal{
+      position:fixed; inset:0; background:rgba(0,0,0,.62);
+      display:none; align-items:center; justify-content:center;
+      padding:16px; z-index:99999;
+    }
+    .scanBox{
+      width:min(720px,100%);
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .scanHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px; border-bottom:1px solid rgba(16,24,40,.10);
+    }
+    .scanHeadTitle{ font-weight:980;font-size:14px;color:#111827; }
+    .scanClose{
+      border:none; background:rgba(16,24,40,.06);
+      border:1px solid rgba(16,24,40,.10);
+      width:40px;height:40px;border-radius:14px;cursor:pointer;
+      display:grid; place-items:center;
+    }
+    .scanBody{ padding:12px; background:#0b0b0b; }
+    #scanVideo{
+      width:100%; height:auto; display:block;
+      border-radius:14px; background:#111;
+    }
+    .scanHint{
+      margin-top:10px;color:rgba(255,255,255,.85);
+      font-weight:900;font-size:12.5px;line-height:1.6;
+    }
+    .scanBtns{ margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; }
+
+    .barcodeBadge{
+  position:absolute; left:10px; top:10px;
+  width:38px; height:38px; border-radius:14px;
+  display:grid; place-items:center;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 8px 18px rgba(16,24,40,.10);
+  background:rgba(255,255,255,.92);
+  cursor:pointer; z-index:5;
+}
+.barcodeBadge.missing{ opacity:.35; background:rgba(255,255,255,.65); box-shadow:none; }
+.barcodeBadge svg{
+  width:24px;height:24px;
+  fill: rgba(60,10,99,.75);
+  stroke: none;
+}
+/* مهم: خلي صندوق البحث مرجع للاقتراحات */
+.controls .box{
+  position: relative;
+  overflow: visible;     /* مهم عشان الاقتراحات ما تنقص */
+  z-index: 60;           /* فوق الكروت */
+}
+
+/* صندوق الاقتراحات */
+.suggestBox{
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  z-index: 99999;
+
+  background: rgba(255,255,255,.98);
+  border: 1px solid rgba(16,24,40,.12);
+  box-shadow: 0 16px 38px rgba(16,24,40,.16);
+  border-radius: 16px;
+  overflow: hidden;
+
+  display: none;         /* مخفي افتراضيًا */
+  max-height: 320px;     /* ما تكبر زيادة */
+  overflow-y: auto;      /* تمرير */
+}
+
+/* لما يكون فيه نتائج */
+.suggestBox.show{
+  display: block;
+}
+
+/* عناصر الاقتراح */
+.suggestItem{
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(16,24,40,.08);
+}
+.suggestItem:last-child{ border-bottom: none; }
+.suggestItem:hover{ background: rgba(107,15,166,.06); }
+
+.suggestMain{
+  font-weight: 950;
+  font-size: 13px;
+  color: #111827;
+  line-height: 1.35;
+}
+.suggestSub{
+  margin-top: 3px;
+  font-weight: 900;
+  font-size: 12px;
+  color: rgba(16,24,40,.65);
+  line-height: 1.35;
+}
+
+.suggestTag{
+  flex: 0 0 auto;
+  font-weight: 950;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(241,198,177,.35);
+  border: 1px solid rgba(241,198,177,.65);
+  color: var(--purpleDark);
+  white-space: nowrap;
+}
+/* معاينة صورة المنتج فوق زر الباركود */
+.bcPop{
+  position:absolute;
+  left:10px;
+  top:-10px;
+  transform: translateY(-100%);
+  width:140px;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid rgba(16,24,40,.12);
+  box-shadow:0 16px 38px rgba(16,24,40,.18);
+  z-index:20;
+  display:none;
+}
+.bcPop.show{ display:block; }
+
+.bcPop img{
+  width:100%;
+  height:110px;
+  object-fit:cover;
+  display:block;
+}
+
+.bcPop .cap{
+  padding:8px 10px;
+  font-weight:950;
+  font-size:12px;
+  color:rgba(16,24,40,.75);
+  line-height:1.4;
+}
+.btnIcon{
+  width:18px;
+  height:18px;
+  stroke:currentColor;
+  stroke-width:2.2;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.btnPrimary .btnIcon{
+  stroke:#fff;
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+<!-- Barcode Edit Modal -->
+<div id="bcModal" aria-hidden="true" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.62); z-index:99999; padding:16px; align-items:center; justify-content:center;">
+  <div style="width:min(520px,100%); background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 26px 60px rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.18);">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px; border-bottom:1px solid rgba(16,24,40,.10);">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:rgba(107,15,166,.10);border:1px solid rgba(107,15,166,.18);">
+          <svg viewBox="0 0 13 13" style="width:20px;height:20px;fill:rgba(60,10,99,.75);stroke:none">
+            <path d="M1 1.5v13h1v-13H1zm2 0v13h2v-13H3zm3 0v13h1v-13H6zm2 0v13h2v-13H8zm3 0v13h1v-13h-1zm2 0v13h1v-13h-1z"/>
+          </svg>
+        </div>
+        <div style="font-weight:980;font-size:14px;color:#111827;">تعديل باركود المنتج</div>
+      </div>
+
+      <button id="bcClose" type="button" style="border:none;background:rgba(16,24,40,.06);border:1px solid rgba(16,24,40,.10);width:40px;height:40px;border-radius:14px;cursor:pointer;">✕</button>
+    </div>
+
+    <div style="padding:12px;">
+        <div id="bcPreview" style="
+    display:flex; gap:10px; align-items:center;
+    padding:10px; border-radius:16px;
+    background:rgba(107,15,166,.06);
+    border:1px solid rgba(16,24,40,.10);
+    margin-bottom:10px;
+  ">
+    <img id="bcPreviewImg" alt="" style="
+      width:70px; height:70px; border-radius:14px;
+      object-fit:cover; background:#fff;
+      border:1px solid rgba(16,24,40,.10);
+      display:none;
+    ">
+    <div style="min-width:0">
+      <div id="bcPreviewName" style="font-weight:980; font-size:13px; color:#111827; line-height:1.4;"></div>
+      <div id="bcPreviewHint" style="margin-top:4px; font-weight:900; font-size:12px; color:rgba(16,24,40,.65);">
+        تعديل/إضافة باركود المنتج
+      </div>
+    </div>
+  </div>
+
+
+      <div class="barcodeBox" style="margin:0;">
+        <svg width="18" height="18" viewBox="0 0 13 13" >
+          <path d="M1 1.5v13h1v-13H1zm2 0v13h2v-13H3zm3 0v13h1v-13H6zm2 0v13h2v-13H8zm3 0v13h1v-13h-1zm2 0v13h1v-13h-1z"/>
+        </svg>
+        <input id="bcValue" placeholder="اكتب الباركود..." inputmode="numeric">
+      </div>
+
+<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+
+  <!-- حفظ -->
+  <button id="bcSave" class="btn btnPrimary" type="button">
+    <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 6L9 17l-5-5"/>
+    </svg>
+    حفظ
+  </button>
+
+  <!-- مسح بالكاميرا -->
+  <button id="bcScan" class="btn btnGhost" type="button">
+    <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 7h4l2-2h6l2 2h4v12H3z"/>
+      <circle cx="12" cy="13" r="3"/>
+    </svg>
+    مسح بالكاميرا
+  </button>
+
+  <!-- إلغاء -->
+  <button id="bcCancel" class="btn btnGhost" type="button">
+    <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 6l12 12"/>
+      <path d="M18 6L6 18"/>
+    </svg>
+    إلغاء
+  </button>
+
+</div>
+
+      <div style="margin-top:10px; font-size:12.5px; font-weight:900; color:rgba(16,24,40,.70); line-height:1.6;">
+        تلميح: تقدر تمسح/تلصق أو تستخدم ماسح USB وسيتم إدخال الرقم داخل الحقل.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="leftActions">
+
+      <button class="backBtn" id="btnRefresh" aria-label="تحديث" title="تحديث">
+        <svg width="22" height="22" viewBox="0 0 24 24"
+             style="fill:none;stroke:rgba(16,24,40,.75);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M21 12a9 9 0 1 1-3-6.7"/>
+          <path d="M21 3v7h-7"/>
+        </svg>
+      </button>
+
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24"
+               style="fill:none;stroke:var(--purple);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M12 7v6l4 2"></path>
+            <circle cx="12" cy="12" r="9" style="stroke:var(--peach)"></circle>
+          </svg>
+        </div>
+        <div>
+          <p class="brandName"><span class="b1">Beauty</span><span class="b2">time</span></p>
+          <div class="brandSub">تجهيز الطلبات • طلبات في انتظار التجهيز</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="badge">
+      <span id="statusBadge">جاهز</span>
+    </div>
+  </div>
+
+  <!-- باقي الصفحة (card + layout ...) يكمل داخل نفس wrap -->
+
+    <div class="card">
+      <p class="label">بحث عن طلب</p>
+      <div class="controls">
+<div class="box" style="position:relative">
+  <svg width="18" height="18" viewBox="0 0 24 24" >
+    <circle cx="11" cy="11" r="7"></circle>
+    <path d="M20 20l-3-3"></path>
+  </svg>
+
+  <input id="qInput" placeholder="ابحث عن رقم الطلب او الرقم او الاسم ....">
+
+  <!-- اقتراحات البحث -->
+<div id="suggestBox" class="suggestBox"></div>
+</div>
+
+        <button class="btn btnPrimary" id="btnLoad">جلب الطلبات</button>
+
+        <button class="btn btnGhost" id="btnReset">تصفير التقدم (هذا الجهاز)</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-sec="dalili">
+          <svg viewBox="0 0 24 24"><path d="M20 7l-11 11-5-5"/></svg>
+          دليلي
+        </button>
+        <button class="tab" data-sec="muscat">
+          <svg viewBox="0 0 24 24"><path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>
+          مسقط
+        </button>
+        <button class="tab" data-sec="office">
+          <svg viewBox="0 0 24 24"><path d="M4 21V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"></path><path d="M9 21V9h6v12"></path></svg>
+          مكتب
+        </button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="panelHead">
+          <div class="panelTitle" id="ordersTitle">طلبات: دليلي</div>
+          <div class="pill" id="ordersCount">0 طلب</div>
+        </div>
+        <div class="list" id="ordersList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panelHead">
+          <div class="panelTitle" id="detailTitle">اختر طلب لعرض المنتجات</div>
+          <div class="pill" id="detailPill">—</div>
+        </div>
+        <div class="detailBody" id="detailBody">
+          <div class="empty">اضغط على أي طلب من القائمة عشان يفتح لك المنتجات للتجهيز.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scan Modal -->
+  <div id="scanModal" aria-hidden="true">
+    <div class="scanBox">
+      <div class="scanHead">
+        <div class="scanHeadTitle">مسح باركود الشحن بالكاميرا</div>
+        <button class="scanClose" id="scanCloseBtn" aria-label="إغلاق" title="إغلاق">✕</button>
+      </div>
+      <div class="scanBody">
+        <video id="scanVideo" playsinline></video>
+        <div class="scanBtns">
+          <button id="scanStartBtn" class="btn btnPrimary" type="button">تشغيل الكاميرا</button>
+          <button id="scanStopBtn" class="btn btnGhost" type="button">إيقاف</button>
+          <button id="scanPhotoBtn" class="btn btnGhost" type="button">تصوير سريع (بديل)</button>
+        </div>
+        <div id="scanHint" class="scanHint">وجّه الكاميرا على الباركود… سيتم إدخاله تلقائيًا.</div>
+      </div>
+    </div>
+  </div>
+
+  <input id="scanFileInput" type="file" accept="image/*" capture="environment" style="display:none" />
+
+<script>
+(() => {
+  // ======================
+  // Settings
+  // ======================
+  const API_URL = "/api/pack/orders?limit=1000";
+
+  // حفظ آخر صفحة (يفيد زر الرجوع)
+  localStorage.setItem("lastPage", "pack");
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch(()=>{});
+  }
+
+  const $ = (id) => document.getElementById(id);
+
+  const state = {
+    orders: [],
+    section: "dalili",
+    selectedId: null
+  };
+
+  // وضع المسح: قبل اكتمال المنتجات = product ، بعد اكتمالها = shipping
+  const scanState = { mode: "product" };
+
+  // ======================
+  // Utils
+  // ======================
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function toast(type, title, msg, ms = 2200){
+    const wrap = $("toasts");
+    if (!wrap) return;
+
+    const el = document.createElement("div");
+    el.className = `toast ${type}`;
+
+    const iconSvg = {
+      ok:   `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 7l-11 11-5-5"/></svg>`,
+      err:  `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>`,
+      warn: `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3h3.4L22 20H2z"/></svg>`,
+      info: `<svg width="20" height="20" viewBox="0 0 24 24" style="fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 8h.01"/><path d="M11 12h1v6h1"/><circle cx="12" cy="12" r="10"/></svg>`
+    }[type] || "";
+
+    el.innerHTML = `
+      <div class="icon">${iconSvg}</div>
+      <div class="body">
+        <p class="title">${esc(title || "")}</p>
+        <p class="msg">${esc(msg || "")}</p>
+        <div class="bar"><i style="animation-duration:${ms}ms"></i></div>
+      </div>
+      <button class="x" aria-label="إغلاق" title="إغلاق">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="fill:none;stroke:rgba(16,24,40,.55);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">
+          <path d="M6 6l12 12"/><path d="M18 6L6 18"/>
+        </svg>
+      </button>
+    `;
+    const close = () => { el.classList.add("out"); setTimeout(()=> el.remove(), 170); };
+    el.querySelector(".x").onclick = close;
+    wrap.prepend(el);
+    setTimeout(close, ms);
+  }
+
+  // ======================
+  // Storage (مستقل)
+  // ======================
+  function storeKey(orderGid){ return "bt_pack_v2__" + String(orderGid); }
+
+  function loadProg(orderGid){
+    try{
+      const obj = JSON.parse(localStorage.getItem(storeKey(orderGid)) || "{}") || {};
+      if(!obj.picked) obj.picked = {};
+      if(typeof obj.packed !== "boolean") obj.packed = false;
+      if(typeof obj.barcode !== "string") obj.barcode = "";
+      return obj;
+    }catch(e){
+      return { picked:{}, packed:false, barcode:"" };
+    }
+  }
+
+  function saveProg(orderGid, obj){
+    localStorage.setItem(storeKey(orderGid), JSON.stringify(obj||{}));
+  }
+
+  function resetAll(){
+    const keys = [];
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if(k && (k.startsWith("bt_pack_v1__") || k.startsWith("bt_pack_v2__"))) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+  }
+
+  // ======================
+  // Internal Classify
+  // ======================
+  function normTags(tags){
+    if(Array.isArray(tags)) return tags.map(x=>String(x).trim()).filter(Boolean);
+    return String(tags||"").split(",").map(x=>x.trim()).filter(Boolean);
+  }
+
+  function classify(o){
+    const tags = normTags(o.tags);
+    const hasMuscat = tags.includes("مسقط");
+    const hasOffice = tags.includes("مكتب");
+    const hasConfirm = tags.includes("تاكيد") || tags.includes("تأكيد");
+    if(hasMuscat) return "muscat";
+    if(hasOffice) return "office";
+    if(hasConfirm && !hasMuscat) return "dalili";
+    return "dalili";
+  }
+
+  function isOnlyConfirmTag(o){
+    const tags = normTags(o.tags);
+    const hasConfirm = tags.includes("تاكيد") || tags.includes("تأكيد");
+    const hasMuscat = tags.includes("مسقط");
+    const hasOffice = tags.includes("مكتب");
+    return hasConfirm && !hasMuscat && !hasOffice;
+  }
+
+  function itemKey(it){
+    // أفضل: variantId (ثابت)، وإلا fallback للاسم
+    return String(it.variantId || it.name || "").trim().toLowerCase();
+  }
+
+  function totalsFor(o){
+    const total = (o.items||[]).reduce((s,it)=> s + Math.max(0, Number(it.qty||0)||0), 0);
+    const prog = loadProg(o.id);
+    const picked = (o.items||[]).reduce((s,it)=>{
+      const k = itemKey(it);
+      return s + Math.max(0, Number(prog.picked?.[k]||0)||0);
+    }, 0);
+    const p2 = Math.min(total, picked);
+    return { total, picked: p2, left: Math.max(0, total - p2), packed: !!prog.packed };
+  }
+
+  function isOrderAllDone(order){
+    const t = totalsFor(order);
+    return (t.left === 0 && t.total > 0);
+  }
+
+  function updateScanModeUI(){
+    if(!state.selectedId) return;
+    const o = state.orders.find(x => String(x.id) === String(state.selectedId));
+    if(!o) return;
+
+    const allDone = isOrderAllDone(o);
+    scanState.mode = allDone ? "shipping" : "product";
+
+    const btn = $("btnScanBarcode");
+    if(btn){
+btn.innerHTML = allDone
+  ? `
+    <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21 16V8a2 2 0 0 0-1-1.7L12 2 4 6.3A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7L12 22l8-4.3a2 2 0 0 0 1-1.7z"/>
+      <path d="M3.3 7L12 12l8.7-5"/>
+      <path d="M12 22V12"/>
+    </svg>
+    مسح باركود الشحن
+  `
+  : `
+    <svg class="btnIcon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h2v10H4zM8 7h1v10H8zM11 7h2v10h-2zM15 7h1v10h-1zM18 7h2v10h-2z"/>
+    </svg>
+    مسح باركود المنتجات
+  `;
+    }
+
+    const headTitle = document.querySelector(".scanHeadTitle");
+    if(headTitle){
+      headTitle.textContent = allDone ? "مسح باركود الشحن بالكاميرا" : "مسح باركود المنتج بالكاميرا";
+    }
+
+    const hint = $("scanHint");
+    if(hint){
+      hint.textContent = allDone
+        ? "وجّه الكاميرا على باركود الشحن… سيتم حفظه في رقم التتبع."
+        : "وجّه الكاميرا على باركود المنتج… سيتم احتساب قطعة تلقائيًا.";
+    }
+  }
+
+  function findMatchItemKeyByBarcode(order, barcode){
+    const s = String(barcode || "").trim();
+    if(!s) return null;
+
+    const prog = loadProg(order.id);
+
+    for(const it of (order.items || [])){
+      const bc = String(it.barcode || "").trim();
+      if(!bc) continue;
+      if(bc === s){
+        const k = itemKey(it);
+        const total = Math.max(0, Number(it.qty||0)||0);
+        const picked = Math.max(0, Number(prog.picked?.[k]||0)||0);
+        if(picked < total) return k;
+      }
+    }
+    return null;
+  }
+
+  // ======================
+  // Load Orders
+  // ======================
+  async function loadOrders(keepSelected=true){
+    const prevSel = state.selectedId;
+
+    $("statusBadge").textContent = "جاري...";
+    toast("info","جاري","جلب الطلبات...", 1100);
+
+    try{
+      const r = await fetch(API_URL, { cache:"no-store" });
+      const d = await r.json();
+      if(!r.ok) throw new Error(d?.error || "تعذر الجلب");
+
+      state.orders = Array.isArray(d.orders) ? d.orders : [];
+      state.orders.sort((a,b)=> totalsFor(b).left - totalsFor(a).left);
+
+      if(keepSelected && prevSel){
+        const still = state.orders.some(x => String(x.id) === String(prevSel));
+        state.selectedId = still ? prevSel : null;
+      }
+
+      $("statusBadge").textContent = "تم";
+      toast("ok","تم","تم جلب " + state.orders.length + " طلب", 1100);
+
+      renderOrders();
+      renderDetail();
+    }catch(e){
+      $("statusBadge").textContent = "خطأ";
+      toast("err","فشل", e.message || String(e), 2600);
+    }
+  }
+
+  function setSection(sec){
+    state.section = sec;
+
+    const titleMap = {
+      dalili:"طلبات: دليلي",
+      muscat:"طلبات: مسقط",
+      office:"طلبات: مكتب"
+    };
+
+    $("ordersTitle").textContent = titleMap[sec] || "طلبات";
+
+    document.querySelectorAll(".tab").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.sec === sec);
+    });
+
+    if(state.selectedId){
+      const o = state.orders.find(x => String(x.id) === String(state.selectedId));
+      if(o && classify(o) !== sec) state.selectedId = null;
+    }
+
+    renderOrders();
+    renderDetail();
+  }
+
+  function renderOrders(){
+    const q = ($("qInput").value || "").trim().toLowerCase();
+    const listEl = $("ordersList");
+
+    let list = state.orders.filter(o => classify(o) === state.section);
+    if(q){
+      list = list.filter(o => {
+return orderHay(o).includes(q);
+      });
+    }
+
+    $("ordersCount").textContent = list.length + " طلب";
+
+    if(!list.length){
+      listEl.innerHTML = `<div class="empty">لا توجد طلبات في هذا القسم.</div>`;
+      return;
+    }
+
+    listEl.innerHTML = list.map(o => {
+      const t = totalsFor(o);
+      const pct = t.total>0 ? Math.round((t.picked/t.total)*100) : 0;
+      const active = String(state.selectedId)===String(o.id);
+      const style = active ? `style="border-color: rgba(107,15,166,.35); box-shadow:0 12px 30px rgba(107,15,166,.16)"` : "";
+
+      const rightPill = t.packed ? "✅ تم الشحن" : (t.left===0 && t.total>0 ? "جاهز للشحن" : ("متبقي: "+t.left));
+
+      const shipLine = (o.shipping || "").trim();
+      const showMuscatBtn = isOnlyConfirmTag(o); // تاق تأكيد فقط
+
+      return `
+        <div class="orderCard" data-oid="${esc(o.id)}" ${style}>
+          <div class="orderTop">
+            <div class="orderId">${esc(o.name || "")}</div>
+            <div class="pill">${esc(rightPill)}</div>
+          </div>
+
+          <div class="orderMeta">
+            ${o.customer ? ("الاسم: <b>"+esc(o.customer)+"</b><br>") : ""}
+            ${shipLine ? ("العنوان: <b>"+esc(shipLine)+"</b><br>") : ""}
+              ${o.phone ? ("الرقم: <b>"+esc(o.phone)+"</b><br>") : ""}
+
+            ${showMuscatBtn ? `
+              <button class="btnMini" type="button" data-add-muscat="1" data-oid="${esc(o.id)}">
+                العنوان في مسقط
+              </button><br>
+            ` : ""}
+
+            المنتجات: <b>${t.total}</b> • تم تجميع: <b>${t.picked}</b>
+          </div>
+
+          <div class="progress"><i style="width:${pct}%;"></i></div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openOrder(orderId){
+    state.selectedId = orderId;
+    renderOrders();
+    renderDetail();
+  }
+
+function renderDetail(){
+  const body = $("detailBody");
+  const ttl  = $("detailTitle");
+  const pill = $("detailPill");
+
+  if(!state.selectedId){
+    ttl.textContent  = "اختر طلب لعرض المنتجات";
+    pill.textContent = "—";
+    body.innerHTML   = `<div class="empty">اضغط على أي طلب من القائمة عشان يفتح لك المنتجات للتجهيز.</div>`;
+    return;
+  }
+
+  const o = state.orders.find(x => String(x.id) === String(state.selectedId));
+  if(!o){
+    ttl.textContent  = "الطلب غير موجود";
+    pill.textContent = "—";
+    body.innerHTML   = `<div class="empty">تعذر العثور على الطلب.</div>`;
+    return;
+  }
+
+  const prog = loadProg(o.id);
+  const t    = totalsFor(o);
+  const pct  = t.total>0 ? Math.round((t.picked/t.total)*100) : 0;
+
+  ttl.textContent  = `تفاصيل ${o.name || "طلب"}`;
+  pill.textContent = `تجميع ${t.picked}/${t.total} (${pct}%)`;
+
+  if(!o.items || !o.items.length){
+    body.innerHTML = `<div class="empty">لا توجد منتجات في هذا الطلب.</div>`;
+    return;
+  }
+
+  const itemsHtml = `
+    <div class="itemsGrid">
+      ${(o.items||[]).map(it => {
+        const total  = Math.max(0, Number(it.qty||0)||0);
+        const k      = itemKey(it);
+        const picked = Math.max(0, Number(prog.picked?.[k]||0)||0);
+        const rem    = Math.max(0, total - picked);
+        const done   = total>0 && rem===0;
+
+        const img = String(it.image||"");
+        const imgTag = img
+          ? `<img src="${esc(img)}" alt="${esc(it.name||"")}" loading="lazy">`
+          : `<div style="width:100%;height:100%;display:grid;place-items:center;color:rgba(60,10,99,.65);font-weight:950">لا توجد صورة</div>`;
+
+        const barcode   = String(it.barcode || "").trim();
+        const variantId = String(it.variantId || "").trim();
+
+        const safeImg  = img ? esc(img) : "";
+        const safeName = esc(it.name || "");
+
+        // ✅ نبني popHtml خارج الـ return عشان ما نخرب الـ backticks
+        const popHtml = `
+          <div class="bcPop" data-bc-pop="1">
+            ${
+              safeImg
+                ? `<img src="${safeImg}" alt="${safeName}">`
+                : `<div style="height:110px;display:grid;place-items:center;font-weight:950;color:rgba(16,24,40,.55)">لا توجد صورة</div>`
+            }
+            <div class="cap">${safeName}</div>
+          </div>
+        `;
+
+        return `
+          <div class="item ${done ? "done":""}" data-item="${esc(k)}">
+            <div class="imgWrap">
+
+              ${imgTag}
+
+              <button
+                class="barcodeBadge ${barcode ? "" : "missing"}"
+                type="button"
+                data-bc-btn="1"
+                data-img="${esc(img)}"
+data-name="${esc(it.name||"")}"
+                data-vid="${esc(variantId)}"
+                data-bc="${esc(barcode)}"
+                title="${barcode ? "تعديل باركود" : "إضافة باركود"}">
+                <svg viewBox="0 0 13 13" aria-hidden="true">
+                  <path d="M1 1.5v13h1v-13H1zm2 0v13h2v-13H3zm3 0v13h1v-13H6zm2 0v13h2v-13H8zm3 0v13h1v-13h-1zm2 0v13h1v-13h-1z"/>
+                </svg>
+              </button>
+
+              ${popHtml}
+
+            </div>
+
+            <div class="meta">
+              <div class="name">${esc(it.name||"")}</div>
+              <div class="bottom">
+                <div class="qty">المتبقي: <b>${rem}</b> / ${total}</div>
+                <button class="btnMini" data-undo="${esc(k)}" type="button">تراجع 1</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  const allDone = (t.left===0 && t.total>0);
+
+  const actionsHtml = `
+    <div class="detailActions">
+      <div class="barcodeBox">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M4 7h2v10H4zM8 7h1v10H8zM11 7h2v10h-2zM15 7h1v10h-1zM18 7h2v10h-2z"/>
+        </svg>
+        <input
+          id="barcodeInput"
+          placeholder="${allDone ? "رقم التتبع (اختياري)" : "امسح باركود المنتج واضغط Enter"}"
+          value="${allDone ? esc(prog.barcode||"") : ""}"
+          inputmode="numeric"
+          autocomplete="off"
+        />
+      </div>
+
+      <button class="btn btnGhost" id="btnScanBarcode" type="button">
+        ${allDone ? "📦 مسح باركود الشحن" : "🧴 مسح باركود المنتجات"}
+      </button>
+
+      <button class="btn ${allDone ? "btnPrimary":"btnGhost"}" id="btnPack" type="button">
+        ${prog.packed ? "✅ تم شحن الطلب" : (allDone ? "شحن الطلب + حفظ التتبع" : "أكمل التجميع أولاً")}
+      </button>
+    </div>
+  `;
+
+  body.innerHTML = itemsHtml + actionsHtml;
+  updateScanModeUI();
+}
+
+
+  function pickOne(orderGid, itemK){
+    const o = state.orders.find(x => String(x.id)===String(orderGid));
+    if(!o) return;
+
+    const it = (o.items||[]).find(x => itemKey(x)===itemK);
+    if(!it) return;
+
+    const total = Math.max(0, Number(it.qty||0)||0);
+    const prog = loadProg(orderGid);
+    const cur = Math.max(0, Number(prog.picked?.[itemK]||0)||0);
+
+    if(cur >= total){
+      toast("warn","تنبيه","هذا المنتج مكتمل بالفعل.", 1400);
+      return;
+    }
+
+    prog.picked[itemK] = cur + 1;
+    prog.packed = false;
+    saveProg(orderGid, prog);
+
+    toast("ok","تم","تم إضافة المنتج ✅", 1100);
+    renderOrders();
+    renderDetail();
+  }
+
+  function undoOne(orderGid, itemK){
+    const prog = loadProg(orderGid);
+    const cur = Math.max(0, Number(prog.picked?.[itemK]||0)||0);
+    if(cur <= 0){
+      toast("info","معلومة","لا يوجد شيء للتراجع.", 1100);
+      return;
+    }
+
+    const next = cur - 1;
+    if(next <= 0) delete prog.picked[itemK];
+    else prog.picked[itemK] = next;
+
+    prog.packed = false;
+    saveProg(orderGid, prog);
+
+    toast("info","تم","تم التراجع عن قطعة.", 1100);
+    renderOrders();
+    renderDetail();
+  }
+
+  async function packOrder(){
+    if(!state.selectedId) return;
+    const o = state.orders.find(x => String(x.id)===String(state.selectedId));
+    if(!o) return;
+
+    const t = totalsFor(o);
+    if(!(t.left===0 && t.total>0)){
+      toast("warn","تنبيه","لا يمكن شحن الطلب قبل إكمال كل المنتجات.", 1700);
+      return;
+    }
+
+    const prog = loadProg(o.id);
+    const tracking = ($("barcodeInput")?.value || "").trim();
+
+    prog.barcode = tracking;
+    prog.packed = true;
+    saveProg(o.id, prog);
+
+    try {
+      const r = await fetch("/api/pack/ship", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: o.id,
+          trackingNumber: tracking,
+          trackingCompany: "",
+          notifyCustomer: false
+        })
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(d?.error || "فشل شحن الطلب");
+
+      await fetch("/api/tag", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: o.id, tag: "مغلف" })
+      }).catch(()=>{});
+
+      toast("ok","تم","تم شحن الطلب ✅" + (tracking ? " • تم حفظ رقم التتبع" : ""), 1800);
+    } catch (e) {
+      toast("warn","تنبيه","تم الحفظ محليًا لكن فشل شحن الطلب: " + (e.message || e), 2600);
+    }
+
+    renderOrders();
+    renderDetail();
+  }
+
+  // ======================
+  // Back Button
+  // ======================
+  function goBackSmart(){
+    if(window.history.length > 1){
+      window.history.back();
+      return;
+    }
+    const last = localStorage.getItem("lastPageBeforePack") || localStorage.getItem("lastPage");
+    if(last === "driver") { window.location.href = "/driver"; return; }
+    if(last === "admin")  { window.location.href = "/admin"; return; }
+    window.location.href = "/";
+  }
+
+$("btnRefresh").addEventListener("click", async () => {
+  await loadOrders(true);
+  toast("ok","تم","تم تحديث الطلبات ✅", 1100);
+});
+
+// ======================
+// USB Barcode Scanner Support (Keyboard Wedge) - Fixed
+// يدعم: كاميرا (عندك) + ماسح USB تلقائي بدون Enter + كتابة يدوية مع Enter فقط
+// ======================
+let kbBuf = "";
+let kbTimer = null;
+let kbStartAt = 0;
+
+// إعدادات تمييز “الماسح” عن الكتابة اليدوية
+const SCAN_MIN_LEN = 6;        // أقل طول يعتبر باركود (عدّلها لو عندك باركودات أقصر)
+const SCAN_MAX_MS  = 900;      // أقصى مدة لإدخال الماسح (سريعة عادة)
+const SCAN_IDLE_MS = 120;      // بعد توقف بسيط نعتبر الإدخال انتهى (للمسّاح بدون Enter)
+
+function finalizeKbScan(reason){
+  const code = String(kbBuf || "").trim();
+  const dur  = kbStartAt ? (Date.now() - kbStartAt) : 999999;
+
+  // صفّر البفر دائماً
+  kbBuf = "";
+  kbStartAt = 0;
+  clearTimeout(kbTimer);
+  kbTimer = null;
+
+  if(!code) return;
+
+  // إذا جاء Enter: اعتبره مقصود (يدوي أو ماسح)
+  if(reason === "enter"){
+    handleScannedText(code);
+    return;
+  }
+
+  // إذا جاء من “توقف” بدون Enter: اعتبره ماسح فقط بشرط السرعة والطول
+  if(code.length >= SCAN_MIN_LEN && dur <= SCAN_MAX_MS){
+    handleScannedText(code);
+  }
+}
+
+function handleScannedText(text){
+  const code = String(text || "").trim();
+  if(!code) return;
+
+  if(!state.selectedId){
+    toast("warn","تنبيه","اختر طلب أولاً.", 1400);
+    return;
+  }
+
+  const o = state.orders.find(x => String(x.id) === String(state.selectedId));
+  if(!o) return;
+
+  updateScanModeUI();
+
+  // قبل الاكتمال: باركود منتج
+  if(scanState.mode === "product"){
+    const k = findMatchItemKeyByBarcode(o, code);
+    if(k){
+      pickOne(o.id, k);
+      toast("ok","تم","تم احتساب المنتج ✅", 1200);
+
+      // لو المستخدم يكتب داخل خانة barcodeInput (يدوي) فضّيها للتالي
+      const inp = $("barcodeInput");
+      if(inp && document.activeElement === inp) inp.value = "";
+    }else{
+      toast("err","غير مطابق","الباركود غير موجود في منتجات الطلب أو المنتج مكتمل.", 1600);
+    }
+    return;
+  }
+
+  // بعد الاكتمال: رقم تتبع الشحن
+  const input = $("barcodeInput");
+  if(input) input.value = code;
+  toast("ok","تم","تم حفظ رقم التتبع ✅", 1400);
+}
+
+// ✅ Enter للكتابة اليدوية داخل خانة barcodeInput (منتج/تتبع حسب الحالة)
+document.addEventListener("keydown", (e) => {
+  if(e.key !== "Enter") return;
+
+  const ae = document.activeElement;
+  if(ae && ae.id === "barcodeInput"){
+    e.preventDefault();
+    const v = String(ae.value || "").trim();
+    if(v) handleScannedText(v);
+    return; // لا تكمل wedge
+  }
+});
+
+// ✅ Keyboard wedge (للمساح USB)
+// - لو المساح يرسل Enter: نلتقطه
+// - لو ما يرسل Enter: نعتمد على توقف 120ms + سرعة الإدخال
+document.addEventListener("keydown", (e) => {
+  const ae = document.activeElement;
+  const aeId = ae?.id || "";
+
+  // لا تتدخل إذا المستخدم يكتب في أي input/textarea
+  // (نستثني فقط qInput للبحث عشان ما يخرب)
+  // و barcodeInput handled above manually
+  const typing =
+    ae && (ae.tagName === "INPUT" || ae.tagName === "TEXTAREA") &&
+    aeId !== "qInput" && aeId !== "barcodeInput";
+
+  if(typing) return;
+
+  // Enter = إنهاء فوري
+  if(e.key === "Enter"){
+    if(kbBuf.trim()) finalizeKbScan("enter");
+    return;
+  }
+
+  // اجمع أحرف
+  if(e.key && e.key.length === 1){
+    if(!kbStartAt) kbStartAt = Date.now();
+    kbBuf += e.key;
+
+    clearTimeout(kbTimer);
+    kbTimer = setTimeout(() => finalizeKbScan("idle"), SCAN_IDLE_MS);
+  }
+});
+
+// ======================
+// Confirm Muscat Transfer Modal
+// ======================
+function confirmMuscatTransfer({ address, orderName, customerName, phone, orderId }) {
+  return new Promise((resolve) => {
+
+    const overlay = document.createElement("div");
+    overlay.style.cssText = `
+      position:fixed; inset:0; z-index:999999;
+      background:rgba(0,0,0,.62);
+      display:flex; align-items:center; justify-content:center;
+      padding:16px;
+    `;
+
+    overlay.innerHTML = `
+      <div style="
+        width:min(560px,100%);
+        background:#fff;
+        border-radius:18px;
+        overflow:hidden;
+        box-shadow:0 26px 60px rgba(0,0,0,.35);
+        border:1px solid rgba(255,255,255,.18);
+        font-family:'Cairo',system-ui,sans-serif;
+      ">
+        <!-- Header -->
+        <div style="
+          display:flex; align-items:center; justify-content:space-between;
+          padding:12px 14px;
+          border-bottom:1px solid rgba(16,24,40,.10);
+        ">
+          <div style="font-weight:980; font-size:14px; color:#111827;">
+            تأكيد نقل الشحنة إلى مسقط
+          </div>
+          <button data-close style="
+            width:40px;height:40px;border-radius:14px;
+            border:1px solid rgba(16,24,40,.10);
+            background:rgba(16,24,40,.06);
+            cursor:pointer;
+          ">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div style="padding:14px;">
+          <div style="
+            font-weight:950;
+            font-size:13.5px;
+            line-height:1.8;
+            color:rgba(16,24,40,.80);
+          ">
+            عند الضغط على زر <b>تأكيد</b> سيتم نقل هذا الطلب إلى قسم <b>مسقط</b>.
+            <br>
+            <span style="color:rgba(16,24,40,.65)">
+              ملاحظة مهمة: لن يعود الطلب إلى <b>دليلي</b> إلا بعد <b>موافقة عامر</b>.
+            </span>
+          </div>
+
+          <!-- Info Box -->
+          <div style="
+            margin-top:12px;
+            background:rgba(241,198,177,.35);
+            border:1px solid rgba(241,198,177,.65);
+            border-radius:14px;
+            padding:10px 12px;
+            font-weight:900;
+            font-size:12.5px;
+            color:rgba(60,10,99,.92);
+            line-height:1.7;
+          ">
+            ${address ? `العنوان: <b>${esc(address)}</b><br>` : ""}
+            ${orderName ? `رقم الطلب: <b>${esc(orderName)}</b><br>` : ""}
+            ${customerName ? `العميل: <b>${esc(customerName)}</b><br>` : ""}
+            ${phone ? `الرقم: <b>${esc(phone)}</b><br>` : ""}
+          </div>
+
+          <!-- Actions -->
+          <div style="display:flex; gap:10px; margin-top:14px;">
+            <button data-confirm class="btn btnPrimary" style="flex:1">
+              ✅ تأكيد
+            </button>
+            <button data-cancel class="btn btnGhost" style="flex:1">
+              إلغاء
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const close = (val) => {
+      overlay.remove();
+      resolve(val);
+    };
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) close(false);
+    });
+
+    overlay.querySelector("[data-close]").onclick   = () => close(false);
+    overlay.querySelector("[data-cancel]").onclick  = () => close(false);
+    overlay.querySelector("[data-confirm]").onclick = () => close(true);
+
+    document.body.appendChild(overlay);
+  });
+}
+
+// ======================
+// Events (UI)
+// ======================
+document.addEventListener("click", async (ev) => {
+
+  // ✅ التابات (دليلي/مسقط/مكتب)
+  const tabBtn = ev.target.closest(".tab");
+  if (tabBtn) {
+    setSection(tabBtn.dataset.sec);
+    return;
+  }
+
+  // ✅ زر "العنوان في مسقط" (لتاق تأكيد فقط) + رسالة تأكيد
+  const musBtn = ev.target.closest('button[data-add-muscat="1"]');
+  if (musBtn) {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const oid = (musBtn.getAttribute("data-oid") || "").trim();
+    if (!oid) {
+      toast("err","خطأ","لم يتم العثور على رقم الطلب.", 2000);
+      return;
+    }
+
+    const o = state.orders.find(x => String(x.id) === String(oid));
+
+    const ok = await confirmMuscatTransfer({
+      address: (o?.shipping || "").trim(),
+      orderName: o?.name || "",
+      customerName: o?.customer || "",
+      phone: o?.phone || "",
+      orderId: o?.id || ""
+    });
+
+    if (!ok) {
+      toast("info","تم الإلغاء","لم يتم نقل الطلب.", 1200);
+      return;
+    }
+
+    try {
+      toast("info","جاري","نقل الطلب إلى مسقط...", 1200);
+
+      const r = await fetch("/api/tag", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: oid, tag: "مسقط" })
+      });
+
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل نقل الطلب إلى مسقط");
+
+      toast("ok","تم","تم نقل الطلب إلى مسقط ✅", 1400);
+      await loadOrders(true);
+
+    } catch (e) {
+      toast("err","فشل", e?.message || String(e), 2400);
+    }
+    return;
+  }
+
+  // ✅ تراجع قطعة
+  const undoBtn = ev.target.closest('button[data-undo]');
+  if (undoBtn && state.selectedId) {
+    const k = undoBtn.getAttribute("data-undo");
+    undoOne(state.selectedId, k);
+    return;
+  }
+
+  // ✅ فتح الطلب (إلا إذا الضغط على زر)
+  const orderCard = ev.target.closest(".orderCard");
+  if (orderCard) {
+    if (ev.target.closest("button")) return;
+    openOrder(orderCard.getAttribute("data-oid"));
+    return;
+  }
+
+  // ✅ أيقونة الباركود على المنتج
+const bcBtn = ev.target.closest('button[data-bc-btn]');
+if (bcBtn && state.selectedId) {
+  const variantId = (bcBtn.getAttribute("data-vid") || "").trim();
+  const current   = (bcBtn.getAttribute("data-bc") || "").trim();
+  const imgUrl    = (bcBtn.getAttribute("data-img") || "").trim();
+  const nameTxt   = (bcBtn.getAttribute("data-name") || "").trim();
+
+  if (!variantId) {
+    toast("err","خطأ","لا يوجد variantId لهذا المنتج", 2000);
+    return;
+  }
+
+  openBcModal(variantId, current, imgUrl, nameTxt);
+  return;
+}
+
+  // ✅ الضغط على المنتج = احتساب قطعة
+  const itemEl = ev.target.closest(".item");
+  if (itemEl && state.selectedId) {
+    if (ev.target.closest("button")) return;
+    const k = itemEl.getAttribute("data-item");
+    pickOne(state.selectedId, k);
+    return;
+  }
+
+  // ✅ شحن الطلب
+  if (ev.target && ev.target.id === "btnPack") {
+    packOrder();
+    return;
+  }
+
+  // ✅ فتح ماسح الباركود
+  if (ev.target && ev.target.id === "btnScanBarcode") {
+    openScanModal();
+    return;
+  }
+
+});
+
+// Camera Barcode Scanner (Dual Mode)
+// ======================
+let scanStream = null;
+let scanTimer  = null;
+
+function isBarcodeDetectorSupported(){
+  return ("BarcodeDetector" in window);
+}
+
+function openScanModal(){
+  const modal = $("scanModal");
+  if(!modal) return;
+
+  modal.style.display = "flex";
+  modal.setAttribute("aria-hidden","false");
+  updateScanModeUI();
+}
+
+function closeScanModal(){
+  stopScanner();
+  const modal = $("scanModal");
+  if(modal){
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden","true");
+  }
+}
+
+async function startScanner(){
+  const video = $("scanVideo");
+  const hint  = $("scanHint");
+  if(!video) return;
+
+  if(!navigator.mediaDevices?.getUserMedia){
+    toast("err","خطأ","الكاميرا غير متاحة في هذا المتصفح.", 2500);
+    return;
+  }
+
+  // لو فيه جلسة سابقة شغالة اقفلها قبل
+  stopScanner();
+
+  try{
+    if(hint) hint.textContent = "جاري تشغيل الكاميرا...";
+    scanStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: "environment" } },
+      audio: false
+    });
+
+    video.srcObject = scanStream;
+    await video.play();
+
+    updateScanModeUI();
+
+    if(!isBarcodeDetectorSupported()){
+      if(hint) hint.textContent = "المسح المباشر غير مدعوم هنا. استخدم (تصوير سريع).";
+      return;
+    }
+
+    const detector = new BarcodeDetector({
+      formats: ["ean_13","ean_8","code_128","code_39","qr_code","upc_a","upc_e"]
+    });
+
+    scanTimer = setInterval(async () => {
+      try{
+        if(video.readyState < 2) return;
+
+        const codes = await detector.detect(video);
+        if(!codes || !codes.length) return;
+
+        const raw = String(codes[0].rawValue || "").trim();
+        if(!raw) return;
+
+        // ✅ إذا المسح داخل مودال تعديل باركود المنتج
+        if (window.__bcPhotoMode === true) {
+          window.__bcPhotoMode = false;
+          if (typeof bcValue !== "undefined" && bcValue) {
+            bcValue.value = raw; // استبدال فقط
+            toast("ok","تم","تم إدخال الباركود ✅", 1200);
+          }
+          const m = document.getElementById("bcScanModal");
+          if (m) m.style.display = "none";
+          closeScanModal();
+          if (typeof bcValue !== "undefined" && bcValue) bcValue.focus();
+          return;
+        }
+
+        // ✅ الوضع الطبيعي (منتج/شحن) لازم طلب مختار
+        if(!state.selectedId){
+          toast("warn","تنبيه","اختر طلب أولاً.", 1400);
+          return;
+        }
+
+        const o = state.orders.find(x => String(x.id) === String(state.selectedId));
+        if(!o) return;
+
+        updateScanModeUI();
+
+        if(scanState.mode === "product"){
+          const k = findMatchItemKeyByBarcode(o, raw);
+          if(k){
+            pickOne(o.id, k);
+            toast("ok","تم","تم احتساب المنتج ✅", 1200);
+            closeScanModal();
+          }else{
+            toast("err","غير مطابق","الباركود غير موجود في منتجات الطلب أو المنتج مكتمل.", 1600);
+          }
+          return;
+        }
+
+        // shipping mode
+        const input = $("barcodeInput");
+        if(input) input.value = raw;
+        toast("ok","تم","تم حفظ رقم التتبع ✅", 1400);
+        closeScanModal();
+      }catch(_e){}
+    }, 220);
+
+  }catch(e){
+    toast("err","خطأ","فشل تشغيل الكاميرا: " + (e.message || e), 2800);
+    if(hint) hint.textContent = "فشل تشغيل الكاميرا.";
+  }
+}
+
+function stopScanner(){
+  if(scanTimer){
+    clearInterval(scanTimer);
+    scanTimer = null;
+  }
+
+  const video = $("scanVideo");
+  if(video){
+    try{ video.pause(); }catch(_e){}
+    video.srcObject = null;
+  }
+
+  if(scanStream){
+    scanStream.getTracks().forEach(t => t.stop());
+    scanStream = null;
+  }
+}
+
+async function scanByPhoto(){
+  const fileInput = $("scanFileInput");
+  if(!fileInput) return;
+  fileInput.value = "";
+  fileInput.click();
+}
+
+async function zxingDecodeFromFile(file){
+  if(!window.ZXing) throw new Error("ZXing غير متوفر");
+
+  const dataUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload  = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("فشل قراءة الصورة"));
+    reader.readAsDataURL(file);
+  });
+
+  const img = new Image();
+  img.src = dataUrl;
+
+  await new Promise((res, rej) => {
+    img.onload  = () => res();
+    img.onerror = () => rej(new Error("فشل تحميل الصورة"));
+  });
+
+  const canvas = document.createElement("canvas");
+  canvas.width  = img.naturalWidth || img.width;
+  canvas.height = img.naturalHeight || img.height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+
+  const codeReader = new ZXing.BrowserMultiFormatReader();
+  const result = await codeReader.decodeFromCanvas(canvas);
+  return (result?.text || "").trim();
+}
+
+// ======================
+// Buttons / Modal Events
+// ======================
+$("scanCloseBtn")?.addEventListener("click", closeScanModal);
+
+$("scanStartBtn")?.addEventListener("click", startScanner);
+
+$("scanStopBtn")?.addEventListener("click", () => {
+  stopScanner();
+  toast("info","تم","تم إيقاف الكاميرا.", 1200);
+});
+
+$("scanPhotoBtn")?.addEventListener("click", async () => {
+  toast("info","معلومة","افتح الكاميرا وصوّر الباركود بوضوح.", 1400);
+  await scanByPhoto();
+});
+
+// إغلاق عند الضغط خارج الصندوق
+$("scanModal")?.addEventListener("click", (ev) => {
+  if(ev.target && ev.target.id === "scanModal") closeScanModal();
+});
+
+// استقبال الصورة وتحليلها (تصوير سريع) ✅ (نسخة واحدة فقط)
+$("scanFileInput")?.addEventListener("change", async (ev) => {
+  const file = ev.target.files?.[0];
+  if(!file) return;
+
+  try{
+    toast("info","جاري","تحليل الباركود من الصورة...", 1600);
+    const text = await zxingDecodeFromFile(file);
+
+    if(!text){
+      toast("warn","لم يتم","لم يتم العثور على باركود واضح. حاول مرة ثانية.", 2600);
+      return;
+    }
+
+    // ✅ إذا التصوير السريع جاي من مودال تعديل الباركود
+    if (window.__bcPhotoMode === true) {
+      window.__bcPhotoMode = false;
+      if (typeof bcValue !== "undefined" && bcValue) {
+        bcValue.value = text; // استبدال فقط
+        toast("ok","تم","تم إدخال الباركود ✅", 1400);
+      }
+      const m = document.getElementById("bcScanModal");
+      if (m) m.style.display = "none";
+      if (typeof bcValue !== "undefined" && bcValue) bcValue.focus();
+      return;
+    }
+
+    // ✅ الوضع الطبيعي (منتج/شحن)
+    if(!state.selectedId){
+      toast("warn","تنبيه","اختر طلب أولاً.", 1400);
+      return;
+    }
+
+    const o = state.orders.find(x => String(x.id) === String(state.selectedId));
+    if(!o) return;
+
+    updateScanModeUI();
+
+    if(scanState.mode === "product"){
+      const k = findMatchItemKeyByBarcode(o, text);
+      if(k){
+        pickOne(o.id, k);
+        toast("ok","تم","تم احتساب المنتج ✅", 1400);
+        closeScanModal();
+      }else{
+        toast("err","غير مطابق","الباركود غير موجود في منتجات الطلب أو المنتج مكتمل.", 1800);
+      }
+      return;
+    }
+
+    // shipping mode
+    const input = $("barcodeInput");
+    if(input) input.value = text;
+    toast("ok","تم","تم حفظ رقم التتبع ✅", 1600);
+    closeScanModal();
+
+  }catch(e){
+    toast("err","فشل","تعذر قراءة الباركود: " + (e.message || e), 2800);
+  }
+});
+
+// ======================
+// Buttons: Load + Reset
+// ======================
+$("btnLoad").addEventListener("click", () => loadOrders(true));
+
+$("btnReset").addEventListener("click", () => {
+  resetAll();
+  toast("ok","تم","تم تصفير التقدم على هذا الجهاز ✅", 1600);
+  renderOrders();
+  renderDetail();
+});
+
+// ======================
+// Smart search + suggestions (داخل IIFE)
+// ======================
+function orderHay(o){
+  return [o.name, o.customer, o.phone, o.id, o.shipping]
+    .map(x => String(x || ""))
+    .join(" ")
+    .toLowerCase();
+}
+
+function sectionLabelFromOrder(o){
+  const sec = classify(o);
+  return sec === "dalili" ? "دليلي" : (sec === "muscat" ? "مسقط" : "مكتب");
+}
+
+function showSuggestions(list){
+  const box = $("suggestBox");
+  if(!box) return;
+
+  if(!list.length){
+    box.classList.add("show");
+    box.innerHTML = `
+      <div class="suggestItem" style="cursor:default">
+        <div>
+          <div class="suggestMain">لا توجد نتائج</div>
+          <div class="suggestSub">جرّب رقم طلب أو اسم أو هاتف</div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  box.classList.add("show");
+  box.innerHTML = list.slice(0,8).map(o => `
+    <div class="suggestItem" data-sug-oid="${esc(o.id)}">
+      <div>
+        <div class="suggestMain">${esc(o.name||"")}${o.customer ? " — " + esc(o.customer) : ""}</div>
+        <div class="suggestSub">
+          ${o.phone ? ("📞 " + esc(o.phone) + " • ") : ""}
+          ${o.shipping ? ("📍 " + esc(String(o.shipping).slice(0,60))) : ""}
+        </div>
+      </div>
+      <div class="suggestTag">${sectionLabelFromOrder(o)}</div>
+    </div>
+  `).join("");
+}
+
+function closeSuggestions(){
+  const box = $("suggestBox");
+  if(!box) return;
+  box.classList.remove("show");
+  box.innerHTML = "";
+}
+
+// ✅ عدّل renderOrders نفسه: إذا فيه بحث -> ابحث في كل الأقسام
+const _renderOrdersOriginal = renderOrders;
+renderOrders = function(){
+  const q = ($("qInput").value || "").trim().toLowerCase();
+  const listEl = $("ordersList");
+
+  let list = state.orders.slice();
+  if(q){
+    list = list.filter(o => orderHay(o).includes(q));
+    $("ordersTitle").textContent = "نتائج البحث";
+  }else{
+    list = list.filter(o => classify(o) === state.section);
+    const titleMap = { dalili:"طلبات: دليلي", muscat:"طلبات: مسقط", office:"طلبات: مكتب" };
+    $("ordersTitle").textContent = titleMap[state.section] || "طلبات";
+  }
+
+  $("ordersCount").textContent = list.length + " طلب";
+
+  if(!list.length){
+    listEl.innerHTML = `<div class="empty">لا توجد طلبات مطابقة.</div>`;
+    return;
+  }
+
+  // نفس كودك السابق لعرض الطلبات (من renderOrders الأصلي)
+  listEl.innerHTML = list.map(o => {
+    const t = totalsFor(o);
+    const pct = t.total>0 ? Math.round((t.picked/t.total)*100) : 0;
+    const active = String(state.selectedId)===String(o.id);
+    const style = active ? `style="border-color: rgba(107,15,166,.35); box-shadow:0 12px 30px rgba(107,15,166,.16)"` : "";
+    const rightPill = t.packed ? "✅ تم الشحن" : (t.left===0 && t.total>0 ? "جاهز للشحن" : ("متبقي: "+t.left));
+    const shipLine = (o.shipping || "").trim();
+    const showMuscatBtn = isOnlyConfirmTag(o);
+
+    return `
+      <div class="orderCard" data-oid="${esc(o.id)}" ${style}>
+        <div class="orderTop">
+          <div class="orderId">${esc(o.name || "")}</div>
+          <div class="pill">${esc(rightPill)}</div>
+        </div>
+
+        <div class="orderMeta">
+          ${o.customer ? ("الاسم: <b>"+esc(o.customer)+"</b><br>") : ""}
+          ${shipLine ? ("العنوان: <b>"+esc(shipLine)+"</b><br>") : ""}
+          ${o.phone ? ("الرقم: <b>"+esc(o.phone)+"</b><br>") : ""}
+
+          ${showMuscatBtn ? `
+            <button class="btnMini" type="button" data-add-muscat="1" data-oid="${esc(o.id)}">
+              العنوان في مسقط
+            </button><br>
+          ` : ""}
+
+          ${q ? (`القسم: <b>${esc(sectionLabelFromOrder(o))}</b><br>`) : ""}
+          المنتجات: <b>${t.total}</b> • تم تجميع: <b>${t.picked}</b>
+        </div>
+
+        <div class="progress"><i style="width:${pct}%;"></i></div>
+      </div>
+    `;
+  }).join("");
+};
+
+// ✅ أحداث البحث
+$("qInput").addEventListener("input", () => {
+  const q = ($("qInput").value || "").trim().toLowerCase();
+
+  renderOrders();
+
+  if(!q){ closeSuggestions(); return; }
+
+  const matches = state.orders.filter(o => orderHay(o).includes(q));
+  showSuggestions(matches);
+});
+
+// اختيار اقتراح
+document.addEventListener("click", (ev) => {
+  const sug = ev.target.closest("[data-sug-oid]");
+  if(!sug) return;
+
+  const oid = sug.getAttribute("data-sug-oid");
+  closeSuggestions();
+  $("qInput").blur();
+
+  // يفتح الطلب
+  openOrder(oid);
+});
+
+// إغلاق عند الضغط خارج البحث
+document.addEventListener("click", (ev) => {
+  const box = $("suggestBox");
+  if(!box) return;
+  const inside = ev.target.closest(".box") && (ev.target.closest("#suggestBox") || ev.target.id === "qInput");
+  if(!inside && box.classList.contains("show")) closeSuggestions();
+});
+// ===== Barcode Edit Modal helpers =====
+const bcModal = $("bcModal");
+const bcValue = $("bcValue");
+let bcVariantId = "";
+
+function openBcModal(variantId, currentValue, imgUrl = "", nameTxt = ""){
+  bcVariantId = String(variantId || "").trim();
+  if(!bcVariantId){
+    toast("err","خطأ","لا يوجد variantId لهذا المنتج", 2000);
+    return;
+  }
+
+  // قيمة الباركود
+  bcValue.value = String(currentValue || "").trim();
+
+  // ✅ تعبئة المعاينة داخل المودال
+  const pImg  = document.getElementById("bcPreviewImg");
+  const pName = document.getElementById("bcPreviewName");
+
+  if(pName) pName.textContent = nameTxt || "";
+
+  if(pImg){
+    if(imgUrl){
+      pImg.src = imgUrl;
+      pImg.style.display = "block";
+    }else{
+      pImg.removeAttribute("src");
+      pImg.style.display = "none";
+    }
+  }
+
+  // فتح المودال
+  bcModal.style.display = "flex";
+  bcModal.setAttribute("aria-hidden","false");
+  setTimeout(()=> bcValue.focus(), 50);
+}
+
+function closeBcModal(){
+  bcVariantId = "";
+  bcModal.style.display = "none";
+  bcModal.setAttribute("aria-hidden","true");
+}
+
+$("bcClose").addEventListener("click", closeBcModal);
+$("bcCancel").addEventListener("click", closeBcModal);
+// ======================
+// Camera scan for Barcode Edit Modal (fills bcValue)
+// ======================
+let bcScanStream = null;
+let bcScanTimer = null;
+
+function stopBcScanner(){
+  if (bcScanTimer){
+    clearInterval(bcScanTimer);
+    bcScanTimer = null;
+  }
+  const v = document.getElementById("bcScanVideo");
+  if (v){
+    v.pause();
+    v.srcObject = null;
+  }
+  if (bcScanStream){
+    bcScanStream.getTracks().forEach(t => t.stop());
+    bcScanStream = null;
+  }
+}
+
+function ensureBcScanModal(){
+  if (document.getElementById("bcScanModal")) return;
+
+  const modal = document.createElement("div");
+  modal.id = "bcScanModal";
+  modal.style.cssText = `
+    position:fixed; inset:0; background:rgba(0,0,0,.62);
+    display:none; align-items:center; justify-content:center;
+    padding:16px; z-index:100000;
+  `;
+
+  modal.innerHTML = `
+    <div style="width:min(720px,100%); background:#fff; border-radius:18px; overflow:hidden;
+                box-shadow:0 26px 60px rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.18);">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;
+                  padding:12px;border-bottom:1px solid rgba(16,24,40,.10);">
+        <div style="font-weight:980;font-size:14px;color:#111827;">مسح باركود المنتج (تعديل)</div>
+        <button id="bcScanClose" type="button"
+          style="border:none;background:rgba(16,24,40,.06);border:1px solid rgba(16,24,40,.10);
+                 width:40px;height:40px;border-radius:14px;cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:12px; background:#0b0b0b;">
+        <video id="bcScanVideo" playsinline style="width:100%;height:auto;display:block;border-radius:14px;background:#111;"></video>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button id="bcScanStart" class="btn btnPrimary" type="button">تشغيل الكاميرا</button>
+          <button id="bcScanStop" class="btn btnGhost" type="button">إيقاف</button>
+          <button id="bcScanPhoto" class="btn btnGhost" type="button">تصوير سريع</button>
+        </div>
+
+        <div id="bcScanHint" style="margin-top:10px;color:rgba(255,255,255,.85);
+             font-weight:900;font-size:12.5px;line-height:1.6;">
+          وجّه الكاميرا على الباركود… سيتم إدخاله داخل الحقل واستبدال الموجود فقط.
+        </div>
+      </div>
+    </div>
+  `;
+
+  // اغلاق عند الضغط على الخلفية
+  modal.addEventListener("click", (ev) => {
+    if (ev.target === modal) {
+      stopBcScanner();
+      modal.style.display = "none";
+    }
+  });
+
+  document.body.appendChild(modal);
+
+  // أزرار
+  document.getElementById("bcScanClose").onclick = () => {
+    stopBcScanner();
+    modal.style.display = "none";
+  };
+  document.getElementById("bcScanStop").onclick = () => {
+    stopBcScanner();
+    toast("info","تم","تم إيقاف الكاميرا.", 1200);
+  };
+  document.getElementById("bcScanStart").onclick = startBcScanner;
+  document.getElementById("bcScanPhoto").onclick = async () => {
+    toast("info","معلومة","افتح الكاميرا وصوّر الباركود بوضوح.", 1400);
+    // نستخدم نفس input حق التصوير السريع الموجود عندك
+    await scanByPhoto();
+    // نخلي قراءة الصورة تروح لحقل bcValue بدل تتبع/منتج:
+    window.__bcPhotoMode = true;
+  };
+}
+
+async function startBcScanner(){
+  const hint = document.getElementById("bcScanHint");
+  const video = document.getElementById("bcScanVideo");
+
+  if(!navigator.mediaDevices?.getUserMedia){
+    toast("err","خطأ","الكاميرا غير متاحة في هذا المتصفح.", 2500);
+    return;
+  }
+
+  try{
+    if(hint) hint.textContent = "جاري تشغيل الكاميرا...";
+    bcScanStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: "environment" } },
+      audio: false
+    });
+
+    video.srcObject = bcScanStream;
+    await video.play();
+
+    if(!("BarcodeDetector" in window)){
+      if(hint) hint.textContent = "المسح المباشر غير مدعوم هنا. استخدم (تصوير سريع).";
+      return;
+    }
+
+    const detector = new BarcodeDetector({
+      formats: ["ean_13","ean_8","code_128","code_39","qr_code","upc_a","upc_e"]
+    });
+
+    bcScanTimer = setInterval(async () => {
+      try{
+        if(video.readyState < 2) return;
+        const codes = await detector.detect(video);
+        if(!codes || !codes.length) return;
+
+        const raw = (codes[0].rawValue || "").trim();
+        if(!raw) return;
+
+        // ✅ المطلوب: لا يمسح إلا يستبدل فقط
+        bcValue.value = raw;
+        toast("ok","تم","تم إدخال الباركود ✅", 1200);
+
+        stopBcScanner();
+        document.getElementById("bcScanModal").style.display = "none";
+        bcValue.focus();
+      }catch(_e){}
+    }, 220);
+
+  }catch(e){
+    toast("err","خطأ","فشل تشغيل الكاميرا: " + (e.message || e), 2800);
+    if(hint) hint.textContent = "فشل تشغيل الكاميرا.";
+  }
+}
+
+// زر فتح المسح من مودال التعديل
+document.getElementById("bcScan")?.addEventListener("click", () => {
+  ensureBcScanModal();
+  window.__bcPhotoMode = false;
+  const m = document.getElementById("bcScanModal");
+  m.style.display = "flex";
+});
+
+// حفظ
+$("bcSave").addEventListener("click", async () => {
+  const barcode = String(bcValue.value || "").trim();
+  try{
+    toast("info","جاري","تحديث باركود المنتج...", 1200);
+    const r = await fetch("/api/pack/product/barcode", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ variantId: bcVariantId, barcode })
+    });
+    const d = await r.json().catch(() => ({}));
+    if(!r.ok) throw new Error(d?.error || "فشل تحديث الباركود");
+
+    toast("ok","تم","تم حفظ باركود المنتج ✅", 1500);
+    closeBcModal();
+    await loadOrders(true);
+  }catch(e){
+    toast("err","فشل", e.message || String(e), 2500);
+  }
+});
+
+// اغلاق عند الضغط على الخلفية
+bcModal.addEventListener("click", (ev) => {
+  if(ev.target && ev.target.id === "bcModal") closeBcModal();
+});
+
+  // ======================
+  // Boot
+  // ======================
+  setSection("dalili");
+  loadOrders(true);
+})();
+
+
+</script>
+
+
+</body>
+</html>
