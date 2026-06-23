@@ -5,6 +5,7 @@ import puppeteer from "puppeteer";
 import { v2 as cloudinary } from "cloudinary";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { readFileSync, existsSync } from "fs";
 
 import customerRoutes from "./routes/customer.routes.js";
 import packRoutes from "./routes/pack.routes.js";
@@ -42,6 +43,7 @@ import { createClient } from "redis";
 const SHOPIFY_TOKEN_BOOTSTRAPPED = process.env.SHOPIFY_TOKEN_BOOTSTRAPPED === "1";
 const SERVER_ENTRY = fileURLToPath(new URL("./server.js", import.meta.url));
 const SERVER_DIR = fileURLToPath(new URL(".", import.meta.url));
+const HB_LOGO_DATA_URL = `data:image/png;base64,${readFileSync(new URL("./public/hb-logo.png", import.meta.url)).toString("base64")}`;
 
 async function issueShopifyAccessToken() {
   const shop = String(process.env.SHOPIFY_SHOP || "0pprf1-jj.myshopify.com")
@@ -161,7 +163,6 @@ cloudinary.config({
 });
 
 // ── Firebase Admin SDK — FCM push notifications ──
-import { readFileSync, existsSync } from "fs";
 import { createRequire } from "module";
 const _require = createRequire(import.meta.url);
 
@@ -379,7 +380,7 @@ function getCountryDialCode(o){
 
 function isGinacomOffice(o){
   const shippingMethod = String(o.shipping_method || "").toLowerCase();
-  return shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
+  return hasTag(o, "مكتب") || hasTag(o, "office") || shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
 }
 
 function renderShipmentLabelHtml(o){
@@ -445,7 +446,7 @@ function renderShipmentLabelHtml(o){
   .label{
     width:100mm;
     min-height:150mm;
-    background:#fff;
+    background:#f9f9f9;
     border:1px solid #9b9b9b;
     border-radius:10px;
     box-shadow:0 2px 6px rgba(0,0,0,0.12);
@@ -455,8 +456,8 @@ function renderShipmentLabelHtml(o){
   }
 
   .logo-container{
-    border:2px dashed #000;
-    padding:10px;
+    border-bottom:2px solid #000;
+    padding:0 0 10px 0;
     margin-bottom:10px;
     text-align:center;
   }
@@ -634,7 +635,7 @@ function renderShipmentLabelHtml(o){
     <div class="label" style="direction:${dir};text-align:${align}">
 
       <div class="logo-container">
-        <img src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/bt.jpg?v=1739274499" class="logo">
+        <img src="${HB_LOGO_DATA_URL}" class="logo" alt="Hala Beauty">
       </div>
 
       <div class="contact-row">
@@ -879,7 +880,7 @@ app.get(["/invite/:code", "/en/invite/:code", "/ar/invite/:code"], (req, res) =>
   const fallback = isEn ? "Continue to store" : "\u0627\u0644\u0645\u062a\u0627\u0628\u0639\u0629 \u0644\u0644\u0645\u062a\u062c\u0631";
   const ogDescription = isEn
     ? "Join Hala Beauty from this invite link."
-    : "\u0627\u0646\u0636\u0645\u064a \u0625\u0644\u0649 \u0628\u064a\u0648\u062a\u064a \u062a\u0627\u064a\u0645 \u0639\u0628\u0631 \u0631\u0627\u0628\u0637 \u0627\u0644\u062f\u0639\u0648\u0629.";
+    : "\u0627\u0646\u0636\u0645\u064a \u0625\u0644\u0649 \u0647\u0644\u0627 \u0628\u064a\u0648\u062a\u064a \u0639\u0628\u0631 \u0631\u0627\u0628\u0637 \u0627\u0644\u062f\u0639\u0648\u0629.";
 
   res.set("Cache-Control", "no-store");
   res.type("html").send(`<!doctype html>

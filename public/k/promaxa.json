@@ -1,13 +1,21 @@
 {
-  "name": "ترحيل المبالغ",
-  "short_name": "لوحة الادارة المالية",
+  "name": "ترحيل المبالغ HB",
+  "short_name": "مالية HB",
   "start_url": "/k/",
   "scope": "/k/",
   "display": "standalone",
   "background_color": "#6b0083",
   "theme_color": "#fdd8c2",
   "icons": [
-    { "src": "/k/ico2.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/k/ico1.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/k/ico2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/k/ico1.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }

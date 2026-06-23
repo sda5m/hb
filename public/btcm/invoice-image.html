@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <title>Hala Beauty | فاتورة صورة</title>
+  <title>HB | Hala Beauty | فاتورة صورة</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900;1000&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -294,8 +294,7 @@ function applyInvoiceImageTweaks(){
     }
 
     /* ضبط شعار Hala Beauty داخل مربعه */
-img[src*="loogo.svg"],
-img[src*="loogo"],
+img[src*="hb-logo"],
 img[src*="logo"] {
   width: 170px !important;
   height: auto !important;
@@ -402,11 +401,10 @@ img[src*="logo"] {
     ضبط مكان الشعار فعليًا داخل المربع.
     نأخذ صورة الشعار ونضبط الأب المباشر فقط.
   */
-const LOGO_URL = "https://halabt.com/cdn/shop/files/loogo.svg";
+const LOGO_URL = "/hb-logo.png";
 
 const logoImg =
-  doc.querySelector('img[src*="loogo.svg"]') ||
-  doc.querySelector('img[src*="loogo"]') ||
+  doc.querySelector('img[src*="hb-logo"]') ||
   doc.querySelector('img[src*="logo"]') ||
   doc.querySelector('img[src*="Beauty"]');
 

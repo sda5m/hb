@@ -1,13 +1,21 @@
 {
-  "name": "توصيل الطلبات",
-  "short_name": "توصيل الطلبات",
+  "name": "توصيل الطلبات HB",
+  "short_name": "توصيل HB",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#6b0083",
   "theme_color": "#fdd8c2",
   "icons": [
-    { "src": "/ico2.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/ico1.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/ico2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/ico1.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }

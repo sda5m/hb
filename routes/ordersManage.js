@@ -1403,7 +1403,7 @@ const APP_URL = "https://app.halabt.com";
 const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.btime.app";
 const APPLE_STORE_URL = "https://halabt.com";
 const INSTAGRAM_URL = "https://halabt.com";
-const LOGO_URL = "https://halabt.com/cdn/shop/files/loogo.svg";
+const LOGO_URL = `${APP_URL}/hb-logo.png`;
 const WHATSAPP_NUMBER = "96877255566";
 const WHATSAPP_URL = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&app_absent=0`;
 

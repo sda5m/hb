@@ -28,9 +28,11 @@ html, body{
   width:100mm;
   height:150mm;
   border:1px solid #000;
-  padding:5mm;
+  padding:8mm;
   box-sizing:border-box;
   overflow:hidden;
+  border-radius:10px;
+  background:#f9f9f9;
 
   /* لا تفرض page-break هنا */
   page-break-before: auto;
@@ -58,15 +60,17 @@ html, body{
   width:10cm;
   height:15cm;
   border:1px solid #000;
-  padding:5mm;
+  padding:8mm;
   box-sizing:border-box;
   overflow:hidden;
+  border-radius:10px;
+  background:#f9f9f9;
   page-break-before:auto;
 }
 
 .logo-container{
-  border:2px dashed #000;
-  padding:10px;
+  border-bottom:2px solid #000;
+  padding:0 0 10px 0;
   margin-bottom:10px;
   text-align:center;
 }
@@ -108,9 +112,10 @@ html, body{
 }
 
 .table-section td{
-  border:1px dashed #000;
+  border:2px solid #000;
   padding:6px;
   vertical-align:middle;
+  background:#fff;
 }
 
 .section-title{
@@ -185,7 +190,7 @@ html, body{
 
   function isGinacomOffice(o){
     const shippingMethod = String(o.shipping_method||"").toLowerCase();
-    return shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
+    return hasTag(o, "مكتب") || hasTag(o, "office") || shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
   }
 
   // ======================
@@ -353,7 +358,7 @@ function getCountryDialCode(o){
 <div class="container" style="direction:${dir};text-align:${align}">
 
   <div class="logo-container">
-    <img src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/bt.jpg?v=1739274499" class="logo">
+    <img src="/hb-logo.png" class="logo" alt="Hala Beauty">
   </div>
 
   <div class="contact-row">

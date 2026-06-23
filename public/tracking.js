@@ -178,7 +178,7 @@
       key: "btime",
       nameAr: "هلا بيوتي المحليه",
       nameEn: "Hala Beauty Local",
-      logo: "https://halabt.com/favicon.ico",
+      logo: "/hb-logo.png",
       bg: "#ffffff"
     }
   };

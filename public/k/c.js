@@ -3816,7 +3816,7 @@ async function openLocalStockInvoice(customer){
           </div>
 
           <div class="localInvoiceLogo">
-            <img src="https://halabt.com/favicon.ico" alt="">
+            <img src="/hb-logo.png" alt="">
           </div>
         </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Hala Beauty | دخول طلبات هلا بيوتي</title>
+<title>HB | Hala Beauty | دخول طلبات هلا بيوتي</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 
@@ -519,7 +519,7 @@ body.page-print-label{
     <div class="loginHead">
       <div class="brandMark">🔒</div>
       <div>
-        <p class="loginTitle">Hala Beauty • 'طلبات هلا بيوتي</p>
+        <p class="loginTitle">Hala Beauty HB • طلبات هلا بيوتي</p>
         <p class="loginSub">تسجيل دخول للوصول إلى اللوحة</p>
       </div>
     </div>
@@ -575,7 +575,7 @@ import { saveKey, clearPackKey } from "./auth.js";
 
       if (r.ok) {
         const params = new URLSearchParams(location.search);
-        const next = params.get("next") || "/a/index.html";
+        const next = params.get("next") || "/btcm/index.html";
         location.href = next;
         return;
       }

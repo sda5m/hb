@@ -1,6 +1,6 @@
 {
-  "name": "طلبات هلا بيوتي",
-  "short_name": "طلبات هلا بيوتي",
+  "name": "طلبات هلا بيوتي HB",
+  "short_name": "طلبات HB",
   "start_url": "/btcm/",
   "scope": "/btcm/",
   "display": "standalone",

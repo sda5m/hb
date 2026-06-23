@@ -1,5 +1,5 @@
 // /btcm/auth.js  (لوحة التجهيز)
-const KEY = "PACK_KEY_A";
+const KEY = "PACK_KEY_BTCM";
 
 export function getPackKey(){
   return localStorage.getItem(KEY) || "";

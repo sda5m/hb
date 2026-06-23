@@ -35,11 +35,12 @@
       width:100mm;
       height:150mm;
       border:1px solid #000;
-      padding:5mm;
+      padding:8mm;
       box-sizing:border-box;
       overflow:hidden;
       page-break-before:auto;
-      background:#fff;
+      background:#f9f9f9;
+      border-radius:10px;
     }
 
     @media print{
@@ -65,8 +66,8 @@
     }
 
     .logo-container{
-      border:2px dashed #000;
-      padding:10px;
+      border-bottom:2px solid #000;
+      padding:0 0 10px 0;
       margin-bottom:10px;
       text-align:center;
     }
@@ -116,12 +117,13 @@
     }
 
     .table-section td{
-      border:1px dashed #000;
+      border:2px solid #000;
       padding:4px 6px;
       vertical-align:middle;
       width:50%;
       line-height:1.1;
       box-sizing:border-box;
+      background:#fff;
     }
 
     .section-title{
@@ -232,7 +234,7 @@
 
   function isGinacomOffice(o){
     const shippingMethod = String(o.shipping_method || "").toLowerCase();
-    return shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
+    return hasTag(o, "مكتب") || hasTag(o, "office") || shippingMethod.includes("جيناكم") || shippingMethod.includes("ginacom");
   }
 
   function cleanName(name){
@@ -429,7 +431,7 @@
 <div class="container" style="direction:${dir};text-align:${align}">
   <div class="logo-container">
     <img
-      src="https://cdn.shopify.com/s/files/1/0619/3915/5027/files/bt.jpg?v=1739274499"
+      src="/hb-logo.png"
       class="logo"
       alt="Hala Beauty">
   </div>
