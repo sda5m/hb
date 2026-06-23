@@ -390,12 +390,11 @@ function renderShipmentLabelHtml(o){
 
   const unpaid = getOutstanding(o);
   const f = getFinancialStatus(o);
-  const showAmountBox = (f !== "paid");
-  const showWWW = (f === "paid");
   const ginacom = isGinacomOffice(o);
 
   const addressText = cleanAddress(o.shipping || "");
   const noteText = String(o.note || "").trim();
+  const amountText = f === "paid" ? statusLabel(o, f, unpaid) : money(unpaid);
 
   return `
 <!DOCTYPE html>
@@ -575,14 +574,83 @@ function renderShipmentLabelHtml(o){
     border-inline-start:2px dashed #000;
   }
 
+  .combined-box{
+    border:2px dashed #000;
+    padding:10px;
+    border-radius:8px;
+    background:#fff;
+    margin-top:15px;
+  }
+
+  .details-section{
+    display:flex;
+    gap:10px;
+    justify-content:flex-start;
+    align-items:center;
+  }
+
+  .details-box{
+    padding:10px;
+    background:#f9f9f9;
+    border:1px solid #ddd;
+    text-align:center;
+    font-size:14px;
+    font-weight:bold;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-width:0;
+  }
+
+  .address-box{
+    padding:20px;
+    border:2px solid #000;
+    margin-top:10px;
+    border-radius:8px;
+    background:#fff;
+    height:80px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    font-weight:bold;
+    flex-direction:column;
+    text-align:center;
+    overflow:hidden;
+  }
+
+  .amount-box{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    font-size:18px;
+    font-weight:bold;
+    background:#fff;
+    border:2px solid #000;
+    height:60px;
+    margin-top:20px;
+    border-radius:8px;
+  }
+
+  .barcode-section,
+  .qr-code{
+    width:48%;
+    text-align:center;
+    margin:0 auto;
+  }
+
   .barcode-img{
-    height:10mm;
-    max-width:100%;
+    width:35mm;
+    height:35mm;
+    object-fit:contain;
   }
 
   .qr-code img{
-    height:20mm;
-    width:20mm;
+    height:35mm;
+    width:35mm;
     object-fit:contain;
   }
 
@@ -638,112 +706,46 @@ function renderShipmentLabelHtml(o){
         <img src="${HB_LOGO_DATA_URL}" class="logo" alt="Hala Beauty">
       </div>
 
-      <div class="contact-row">
-        <div class="contact-item">
-          <i class="bi bi-whatsapp large-icon"></i>&nbsp;77255566
-        </div>
-        <div class="contact-item">
-          <i class="bi bi-instagram large-icon"></i>&nbsp;halabt.com
-        </div>
-        <div class="contact-item">
-          <i class="bi bi-link-45deg large-icon"></i>&nbsp;halabt.com
-        </div>
-      </div>
-
-      <div class="info-title">
-        ${ar ? "مع هلا بيوتي، جمالك يبدأ الآن! طلبك جاهز" : "Your Hala Beauty order is ready! Your order is ready"}
-      </div>
-
-      <table class="table-section">
-        <tr>
-          <td class="section-title" colspan="2">${ar ? "معلومات التوصيل" : "Delivery Information"}</td>
-        </tr>
-
-        <tr>
-          <td style="font-size:16px;font-weight:bold;text-align:center">
-            <i class="bi bi-person-circle" style="float:${ar ? "right" : "left"};font-size:20px;margin-${ar ? "left" : "right"}:8px"></i>
-            ${esc(cleanName(o.customer) || "غير معروف")}
-          </td>
-
-          <td style="font-size:16px;font-weight:bold;text-align:center">
-            <i class="bi bi-whatsapp" style="float:${ar ? "right" : "left"};font-size:20px;margin-${ar ? "left" : "right"}:8px"></i>
-            ${esc(cleanPhone(o.phone))}
-          </td>
-        </tr>
-
-        <tr>
-          <td colspan="2" style="text-align:${align}; font-size:16px; height:90px; font-weight:bold; overflow:hidden;">
-            <i class="bi bi-geo-alt-fill" style="float:${ar ? "right" : "left"};font-size:20px;margin-${ar ? "left" : "right"}:8px;"></i>
-
-            <div class="address-wrap" style="${clampLines(3)}">
-              ${esc(addressText)}
-            </div>
-
-            ${ginacom ? `
-              <div class="sub-line" style="${clampLines(1)}">
-                <i class="bi bi-shop-window"></i>
-                ${ar ? "مكتب جيناكم" : "Ginacom Office"}
-              </div>
-            ` : ""}
-
-            ${noteText ? `
-              <div class="sub-line" style="${clampLines(1)}">
-                <i class="bi bi-journal-text"></i>
-                ${esc(clampChars(noteText, 45))}
-              </div>
-            ` : ""}
-          </td>
-        </tr>
-      </table>
-
-      <div class="status-box">
-        ${showAmountBox ? `
-          <div class="money-box">
-            <span class="money-value">${money(unpaid)}</span>
-            <i class="material-icons-outlined" style="vertical-align:middle;font-size:18px">payments</i>
-          </div>
-        ` : ""}
-
-        <div class="status-row">
-          <div class="status-col">
-            <i class="bi ${statusIcon(o, f)}"></i>
-            <b>${statusLabel(o, f, unpaid)}</b>
+      <div class="combined-box">
+        <div class="details-section">
+          <div class="details-box" style="flex-grow:1;">
+            <i class="bi bi-person-circle" style="font-size:24px;"></i>
+            <div>${esc(cleanName(o.customer) || (ar ? "غير معروف" : "Unknown"))}</div>
           </div>
 
-          <div class="status-col">
-            <i class="bi bi-calendar-event"></i>
-            ${String(o.createdAt || "").slice(0,10)}
+          <div class="details-box" style="flex-grow:1;">
+            <i class="bi bi-phone" style="font-size:24px;"></i>
+            <div>${esc(cleanPhone(o.phone))}</div>
           </div>
         </div>
       </div>
 
-      <table class="table-section" style="margin-top:5px;">
-        <tr>
-          <td style="text-align:center">
-            <img
-              class="barcode-img"
-              src="https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(o.name)}&scale=2&height=7&includetext=false"
-            >
-            <div class="order-number">${esc(o.name)}</div>
-          </td>
+      <div class="address-box">
+        <i class="bi bi-geo-alt-fill" style="font-size:24px;"></i>
+        <div style="${clampLines(2)}">${esc(addressText)}</div>
+        ${ginacom ? `<div style="font-size:14px;font-weight:bold;margin-top:8px;"><i class="bi bi-geo-alt" style="font-size:20px;"></i> ${ar ? "مكتب جيناكم" : "Ginacom Office"}</div>` : ""}
+        ${noteText ? `<div style="font-size:14px;font-weight:bold;margin-top:8px;${clampLines(1)}"><i class="bi bi-chat-square-text" style="font-size:20px;"></i> ${esc(clampChars(noteText,45))}</div>` : ""}
+      </div>
 
-          <td class="qr-code" style="text-align:center">
-            ${
-              ginacom
-                ? `<img src="https://api.qrserver.com/v1/create-qr-code/?data=https://halabt.com/app&size=150x150">`
-                : `<img src="https://api.qrserver.com/v1/create-qr-code/?data=https://wa.me/${getCountryDialCode(o)}${cleanPhone(o.phone)}&size=150x150">`
-            }
-          </td>
-        </tr>
-      </table>
+      <div class="amount-box">
+        <i class="bi bi-wallet2" style="font-size:24px;"></i>
+        <span>${esc(amountText)}</span>
+      </div>
 
-      ${showWWW ? `
-        <div class="www-row">
-          <div class="www-line"></div>
-          <span class="www-text">halabt.com</span>
-          <div class="www-line"></div>
+      <div class="combined-box" style="display:flex;justify-content:space-between;gap:10px;">
+        <div class="barcode-section">
+          <img class="barcode-img" src="https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(o.name)}&code=Code128" alt="Order Barcode">
+          <div class="order-number">${esc(o.name)}</div>
         </div>
-      ` : ""}
+
+        <div class="qr-code">
+          ${
+            ginacom
+              ? `<img src="https://api.qrserver.com/v1/create-qr-code/?data=https://halabt.com/app&size=150x150" alt="QR Code">`
+              : `<img src="https://api.qrserver.com/v1/create-qr-code/?data=https://wa.me/${getCountryDialCode(o)}${cleanPhone(o.phone)}&size=150x150" alt="QR Code">`
+          }
+        </div>
+      </div>
 
     </div>
   </div>
