@@ -178,35 +178,40 @@ html, body{
   min-width:0;
 }
 .address-box{
-  padding:12px;
+  padding:8px 10px;
   border:2px solid #000;
   margin-top:8px;
   border-radius:8px;
   background:#fff;
-  height:72px;
+  min-height:72px;
+  height:auto;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   font-size:16px;
   font-weight:bold;
   flex-direction:column;
   text-align:center;
   overflow:hidden;
+  box-sizing:border-box;
 }
-.address-text{
+  
+  .address-text{
   max-width:100%;
 }
 .office-line{
-  font-size:14px;
+  font-size:13px;
   font-weight:bold;
-  margin-top:8px;
+  margin-top:4px;
 }
+
 .note-line{
-  font-size:14px;
+  font-size:13px;
   font-weight:bold;
-  margin-top:8px;
+  margin-top:4px;
 }
-.amount-box{
+  
+  .amount-box{
   display:flex;
   justify-content:center;
   align-items:center;
@@ -325,33 +330,33 @@ html, body{
     return out.join(" - ");
   }
 
-  function getAddressText(o){
-    const direct = cleanAddress(
-      o.shipping ||
-      o.address ||
-      [o.addressLine, o.cityName || o.city].filter(Boolean).join(", ") ||
-      o.shipping_address ||
-      ""
-    );
-    if (direct) return direct;
+function getAddressText(o){
+  const src =
+    o.shippingAddress ||
+    o.shipping_address_obj ||
+    o.restShippingAddress ||
+    o.rest_shipping_address ||
+    {};
 
-    const src =
-      o.shippingAddress ||
-      o.shipping_address ||
-      o.shipping_address_obj ||
-      o.restShippingAddress ||
-      o.rest_shipping_address ||
-      {};
-    const parts = [
-      src.address1,
-      src.address2,
-      src.city,
-      src.province,
-      src.zip
-    ].map(oneLine).filter(Boolean);
+  const fromShippingAddress = cleanAddress([
+    src.city,
+    src.address1,
+    src.address2,
+    src.province,
+    src.zip
+  ].map(oneLine).filter(Boolean).join(", "));
 
-    return cleanAddress(parts.join(", "));
-  }
+  if (fromShippingAddress) return fromShippingAddress;
+
+  const fromFlatFields = cleanAddress([
+    o.cityName || o.city,
+    o.addressLine,
+    o.shipping,
+    o.address
+  ].map(oneLine).filter(Boolean).join(", "));
+
+  return fromFlatFields;
+}
 
   function clampLines(lines){
     return `display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:${lines};overflow:hidden;`;
@@ -433,7 +438,7 @@ function getCountryDialCode(o){
 
     const ginacom = isGinacomOffice(o);
 
-    const addressText = getAddressText(o);
+    const addressText = getAddressText(o) || (ar ? "لا يوجد عنوان شحن" : "No shipping address");
     const noteText = String(o.note || "").trim();
     const amountText = f === "paid" ? statusLabel(o, f, unpaid) : money(unpaid);
 
