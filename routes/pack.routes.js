@@ -86,6 +86,7 @@ export default function packRoutes({
           shipping_method: o?.shipping_lines?.[0]?.title || "",
           note: o.note || "",
           billing_phone: o?.billing_address?.phone || "",
+          billingAddress: o?.billing_address || {},
           transactions: []
         });
       }
@@ -303,7 +304,7 @@ export default function packRoutes({
         batchSize: 50,
         delayMs: 350,
         includeShippingLines: true,
-        includeBillingAddress: false,
+        includeBillingAddress: true,
         includeNote: true
       });
 
@@ -327,20 +328,29 @@ export default function packRoutes({
           o?.customer?.lastName
         );
 
+        const shippingSource = o?.shippingAddress || {};
+        const billingSource = extra?.billingAddress || {};
+        const addressSource = (
+          String(shippingSource.address1 || shippingSource.address2 || shippingSource.city || "").trim()
+            ? shippingSource
+            : billingSource
+        );
+
         const phone =
-          String(o?.shippingAddress?.phone || "").trim() ||
+          String(shippingSource.phone || "").trim() ||
+          String(billingSource.phone || "").trim() ||
           String(o?.customer?.phone || "").trim();
 
         const shipping = buildShippingAddress(
-          o?.shippingAddress?.address1,
-          o?.shippingAddress?.address2,
-          o?.shippingAddress?.city
+          addressSource.address1,
+          addressSource.address2,
+          addressSource.city
         );
         const addressLine = [
-          o?.shippingAddress?.address1,
-          o?.shippingAddress?.address2
+          addressSource.address1,
+          addressSource.address2
         ].map(x => String(x || "").trim()).filter(Boolean).join(" - ");
-        const cityName = String(o?.shippingAddress?.city || "").trim();
+        const cityName = String(addressSource.city || "").trim();
 
         const items = (o?.lineItems?.nodes || [])
           .map(li => ({
@@ -378,7 +388,9 @@ export default function packRoutes({
           addressLine,
           cityName,
           city: cityName,
-          shippingAddress: o?.shippingAddress || {},
+          shippingAddress: addressSource || {},
+          originalShippingAddress: shippingSource,
+          billingAddress: billingSource,
           items,
           financial_status: finalFinancialStatus,
           outstanding: finalOutstanding,
