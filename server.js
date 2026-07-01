@@ -613,39 +613,42 @@ function renderShipmentLabelHtml(o){
     min-width:0;
   }
 
-  .address-box{
-    padding:12px;
-    border:2px solid #000;
-    margin-top:8px;
-    border-radius:8px;
-    background:#fff;
-    height:72px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:16px;
-    font-weight:bold;
-    flex-direction:column;
-    text-align:center;
-    overflow:hidden;
-  }
-
+.address-box{
+  padding:8px 10px;
+  border:2px solid #000;
+  margin-top:8px;
+  border-radius:8px;
+  background:#fff;
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  font-weight:bold;
+  flex-direction:column;
+  text-align:center;
+  overflow:hidden;
+  box-sizing:border-box;
+}
   .address-text{
     max-width:100%;
   }
 
-  .office-line{
-    font-size:14px;
-    font-weight:bold;
-    margin-top:8px;
-  }
+.office-line{
+  font-size:13px;
+  font-weight:bold;
+  margin-top:4px;
+}
 
-  .note-line{
-    font-size:14px;
-    font-weight:bold;
-    margin-top:8px;
-  }
+.note-line{
+  font-size:13px;
+  font-weight:bold;
+  margin-top:4px;
+}
 
+.address-box{
+  justify-content:flex-start;
+}
   .amount-box{
     display:flex;
     justify-content:center;
