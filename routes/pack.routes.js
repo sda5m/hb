@@ -324,6 +324,8 @@ export default function packRoutes({
           o?.shippingAddress?.address1,
           o?.shippingAddress?.city
         );
+        const addressLine = String(o?.shippingAddress?.address1 || "").trim();
+        const cityName = String(o?.shippingAddress?.city || "").trim();
 
         const items = (o?.lineItems?.nodes || [])
           .map(li => ({
@@ -357,6 +359,11 @@ export default function packRoutes({
           customer: customerName,
           phone,
           shipping,
+          address: shipping,
+          addressLine,
+          cityName,
+          city: cityName,
+          shippingAddress: o?.shippingAddress || {},
           items,
           financial_status: finalFinancialStatus,
           outstanding: finalOutstanding,
