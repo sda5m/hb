@@ -681,6 +681,7 @@ function renderShipmentLabelHtml(o){
     font-weight:bold;
     text-align:center;
     margin-top:5px;
+    display:none;
   }
 
   .address-wrap{
@@ -757,7 +758,6 @@ function renderShipmentLabelHtml(o){
       <div class="combined-box" style="display:flex;justify-content:space-between;gap:8px;">
         <div class="barcode-section">
           <img class="barcode-img" src="https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(o.name)}&code=Code128" alt="Order Barcode">
-          <div class="order-number">${esc(o.name)}</div>
         </div>
 
         <div class="qr-code">
@@ -3438,7 +3438,10 @@ const q =
       total_outstanding: Number(order?.totalOutstandingSet?.shopMoney?.amount || 0) || 0,
       customer: customerName,
       phone: customerPhone,
-      shipping: [addressLine, shipping.city || ""].filter(Boolean).join(", "),
+      shipping: [shipping.city || "", addressLine].filter(Boolean).join(", "),
+      addressLine,
+      cityName: (shipping.city || "").toString().trim(),
+      city: (shipping.city || "").toString().trim(),
       shipping_method: shippingMethod,
       shippingAddress: shipping,
       customerObj: customer
