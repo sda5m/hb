@@ -399,11 +399,7 @@ html, body{
   }
 function getCountryDialCode(o){
 
-  // أولوية الفوترة
   let c =
-    o.billingAddress?.countryCodeV2 ||
-    o.billing_country_code ||
-    o.billingCountryCode ||
     o.shippingAddress?.countryCodeV2 ||
     o.shipping_country_code ||
     o.shippingCountryCode ||
