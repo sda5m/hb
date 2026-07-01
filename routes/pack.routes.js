@@ -148,11 +148,21 @@ export default function packRoutes({
     return [fn, ln].filter(Boolean).join(" ").trim();
   }
 
-  function buildShippingAddress(address1, city) {
+  function buildShippingAddress(address1, address2, city) {
     const a1 = String(address1 || "").trim();
+    const a2 = String(address2 || "").trim();
     const c = String(city || "").trim();
+    const parts = [c, a1, a2].filter(Boolean);
+    const unique = [];
 
-    return [a1, c].filter(Boolean).join(" - ");
+    for (const part of parts) {
+      const key = part.replace(/\s+/g, "").toLowerCase();
+      if (!unique.some(x => x.replace(/\s+/g, "").toLowerCase() === key)) {
+        unique.push(part);
+      }
+    }
+
+    return unique.join(" - ");
   }
 
   function buildAddress(address1, city) {
@@ -250,6 +260,7 @@ export default function packRoutes({
               }
               shippingAddress {
                 address1
+                address2
                 city
                 phone
                 countryCodeV2
@@ -322,9 +333,13 @@ export default function packRoutes({
 
         const shipping = buildShippingAddress(
           o?.shippingAddress?.address1,
+          o?.shippingAddress?.address2,
           o?.shippingAddress?.city
         );
-        const addressLine = String(o?.shippingAddress?.address1 || "").trim();
+        const addressLine = [
+          o?.shippingAddress?.address1,
+          o?.shippingAddress?.address2
+        ].map(x => String(x || "").trim()).filter(Boolean).join(" - ");
         const cityName = String(o?.shippingAddress?.city || "").trim();
 
         const items = (o?.lineItems?.nodes || [])
