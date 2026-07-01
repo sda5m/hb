@@ -302,7 +302,13 @@ function getAddressText(o){
   );
   if (direct) return direct;
 
-  const src = o.shippingAddress || o.shipping_address || o.shipping_address_obj || {};
+  const src =
+    o.shippingAddress ||
+    o.shipping_address ||
+    o.shipping_address_obj ||
+    o.billingAddress ||
+    o.billing_address ||
+    {};
   const parts = [
     src.address1,
     src.address2,
