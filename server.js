@@ -306,8 +306,8 @@ function getAddressText(o){
     o.shippingAddress ||
     o.shipping_address ||
     o.shipping_address_obj ||
-    o.billingAddress ||
-    o.billing_address ||
+    o.restShippingAddress ||
+    o.rest_shipping_address ||
     {};
   const parts = [
     src.address1,
@@ -384,9 +384,6 @@ function statusIcon(o, f){
 
 function getCountryDialCode(o){
   let c =
-    o.billingAddress?.countryCodeV2 ||
-    o.billing_country_code ||
-    o.billingCountryCode ||
     o.shippingAddress?.countryCodeV2 ||
     o.shipping_country_code ||
     o.shippingCountryCode ||
