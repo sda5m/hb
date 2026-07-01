@@ -152,6 +152,7 @@
       text-align:center;
       margin-top:5px;
       word-break:break-word;
+      display:none;
     }
 
     .combined-box{
@@ -568,7 +569,6 @@
   <div class="combined-box" style="display:flex;justify-content:space-between;gap:8px;">
     <div class="barcode-section">
       <img class="barcode-img" alt="barcode" src="https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(o.name || "")}&code=Code128">
-      <div class="order-number">${esc(o.name || "")}</div>
     </div>
     <div class="qr-code">
       <img alt="qr" src="${qrUrl}">

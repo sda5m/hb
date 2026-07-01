@@ -117,6 +117,7 @@ html, body{
   font-weight:bold;
   text-align:center;
   margin-top:5px;
+  display:none;
 }
 /* يثبت القياسات ويمنع تمدد الخانات بسبب المحتوى */
 .table-section{
@@ -472,7 +473,6 @@ function getCountryDialCode(o){
   <div class="combined-box" style="display:flex;justify-content:space-between;gap:8px;">
     <div class="barcode-section">
       <img src="https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(o.name)}&code=Code128" alt="Order Barcode" style="display:block;margin:auto;">
-      <div class="order-number">${esc(o.name)}</div>
     </div>
     <div class="qr-code">
       ${
