@@ -50,6 +50,7 @@ export default function packRoutes({
       batchSize = 50,
       delayMs = 350,
       includeShippingLines = true,
+      includeShippingAddress = false,
       includeBillingAddress = false,
       includeNote = true
     } = options;
@@ -64,6 +65,7 @@ export default function packRoutes({
     ];
 
     if (includeShippingLines) fields.push("shipping_lines");
+    if (includeShippingAddress) fields.push("shipping_address");
     if (includeNote) fields.push("note");
     if (includeBillingAddress) fields.push("billing_address");
 
@@ -86,7 +88,7 @@ export default function packRoutes({
           shipping_method: o?.shipping_lines?.[0]?.title || "",
           note: o.note || "",
           billing_phone: o?.billing_address?.phone || "",
-          billingAddress: o?.billing_address || {},
+          shippingAddress: o?.shipping_address || {},
           transactions: []
         });
       }
@@ -304,7 +306,8 @@ export default function packRoutes({
         batchSize: 50,
         delayMs: 350,
         includeShippingLines: true,
-        includeBillingAddress: true,
+        includeShippingAddress: true,
+        includeBillingAddress: false,
         includeNote: true
       });
 
@@ -328,17 +331,17 @@ export default function packRoutes({
           o?.customer?.lastName
         );
 
-        const shippingSource = o?.shippingAddress || {};
-        const billingSource = extra?.billingAddress || {};
+        const graphqlShippingSource = o?.shippingAddress || {};
+        const restShippingSource = extra?.shippingAddress || {};
         const addressSource = (
-          String(shippingSource.address1 || shippingSource.address2 || shippingSource.city || "").trim()
-            ? shippingSource
-            : billingSource
+          String(graphqlShippingSource.address1 || graphqlShippingSource.address2 || graphqlShippingSource.city || "").trim()
+            ? graphqlShippingSource
+            : restShippingSource
         );
 
         const phone =
-          String(shippingSource.phone || "").trim() ||
-          String(billingSource.phone || "").trim() ||
+          String(graphqlShippingSource.phone || "").trim() ||
+          String(restShippingSource.phone || "").trim() ||
           String(o?.customer?.phone || "").trim();
 
         const shipping = buildShippingAddress(
@@ -389,8 +392,8 @@ export default function packRoutes({
           cityName,
           city: cityName,
           shippingAddress: addressSource || {},
-          originalShippingAddress: shippingSource,
-          billingAddress: billingSource,
+          originalShippingAddress: graphqlShippingSource,
+          restShippingAddress: restShippingSource,
           items,
           financial_status: finalFinancialStatus,
           outstanding: finalOutstanding,
