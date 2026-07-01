@@ -292,6 +292,28 @@ function cleanAddress(shippingText){
   return out.join(" - ");
 }
 
+function getAddressText(o){
+  const direct = cleanAddress(
+    o.shipping ||
+    o.address ||
+    [o.addressLine, o.cityName || o.city].filter(Boolean).join(", ") ||
+    o.shipping_address ||
+    ""
+  );
+  if (direct) return direct;
+
+  const src = o.shippingAddress || o.shipping_address || o.shipping_address_obj || {};
+  const parts = [
+    src.address1,
+    src.address2,
+    src.city,
+    src.province,
+    src.zip
+  ].map(oneLine).filter(Boolean);
+
+  return cleanAddress(parts.join(", "));
+}
+
 function clampChars(s, max){
   const v = oneLine(s);
   if (!v) return "";
@@ -392,7 +414,7 @@ function renderShipmentLabelHtml(o){
   const f = getFinancialStatus(o);
   const ginacom = isGinacomOffice(o);
 
-  const addressText = cleanAddress(o.shipping || "");
+  const addressText = getAddressText(o);
   const noteText = String(o.note || "").trim();
   const amountText = f === "paid" ? statusLabel(o, f, unpaid) : money(unpaid);
 
@@ -422,34 +444,18 @@ function renderShipmentLabelHtml(o){
 
   .canvas{
     display:inline-block;
-    padding:14px;
+    padding:0;
     box-sizing:border-box;
-
-    background-color:#c69a6b;
-    background-image:
-      radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px),
-      radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-      linear-gradient(rgba(255,255,255,0.03), rgba(0,0,0,0.03));
-    background-size:
-      18px 18px,
-      18px 18px,
-      100% 100%;
-    background-position:
-      0 0,
-      9px 9px,
-      0 0;
-
-    border-radius:6px;
   }
 
   .label{
     width:100mm;
-    min-height:150mm;
+    height:150mm;
     background:#f9f9f9;
     border:1px solid #9b9b9b;
     border-radius:10px;
     box-shadow:0 2px 6px rgba(0,0,0,0.12);
-    padding:5mm;
+    padding:8mm;
     box-sizing:border-box;
     overflow:hidden;
   }
@@ -576,10 +582,10 @@ function renderShipmentLabelHtml(o){
 
   .combined-box{
     border:2px dashed #000;
-    padding:10px;
+    padding:8px;
     border-radius:8px;
     background:#fff;
-    margin-top:15px;
+    margin-top:8px;
   }
 
   .details-section{
@@ -605,12 +611,12 @@ function renderShipmentLabelHtml(o){
   }
 
   .address-box{
-    padding:20px;
+    padding:12px;
     border:2px solid #000;
-    margin-top:10px;
+    margin-top:8px;
     border-radius:8px;
     background:#fff;
-    height:80px;
+    height:72px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -619,6 +625,22 @@ function renderShipmentLabelHtml(o){
     flex-direction:column;
     text-align:center;
     overflow:hidden;
+  }
+
+  .address-text{
+    max-width:100%;
+  }
+
+  .office-line{
+    font-size:14px;
+    font-weight:bold;
+    margin-top:8px;
+  }
+
+  .note-line{
+    font-size:14px;
+    font-weight:bold;
+    margin-top:8px;
   }
 
   .amount-box{
@@ -630,8 +652,8 @@ function renderShipmentLabelHtml(o){
     font-weight:bold;
     background:#fff;
     border:2px solid #000;
-    height:60px;
-    margin-top:20px;
+    height:46px;
+    margin-top:8px;
     border-radius:8px;
   }
 
@@ -643,14 +665,14 @@ function renderShipmentLabelHtml(o){
   }
 
   .barcode-img{
-    width:35mm;
-    height:35mm;
+    width:28mm;
+    height:28mm;
     object-fit:contain;
   }
 
   .qr-code img{
-    height:35mm;
-    width:35mm;
+    height:28mm;
+    width:28mm;
     object-fit:contain;
   }
 
@@ -722,9 +744,9 @@ function renderShipmentLabelHtml(o){
 
       <div class="address-box">
         <i class="bi bi-geo-alt-fill" style="font-size:24px;"></i>
-        <div style="${clampLines(2)}">${esc(addressText)}</div>
-        ${ginacom ? `<div style="font-size:14px;font-weight:bold;margin-top:8px;"><i class="bi bi-geo-alt" style="font-size:20px;"></i> ${ar ? "مكتب جيناكم" : "Ginacom Office"}</div>` : ""}
-        ${noteText ? `<div style="font-size:14px;font-weight:bold;margin-top:8px;${clampLines(1)}"><i class="bi bi-chat-square-text" style="font-size:20px;"></i> ${esc(clampChars(noteText,45))}</div>` : ""}
+        <div class="address-text" style="${clampLines(ginacom ? 2 : 3)}">${esc(addressText)}</div>
+        ${ginacom ? `<div class="office-line"><i class="bi bi-geo-alt" style="font-size:20px;"></i> ${ar ? "مكتب جيناكم" : "Ginacom Office"}</div>` : ""}
+        ${noteText ? `<div class="note-line" style="${clampLines(1)}"><i class="bi bi-chat-square-text" style="font-size:20px;"></i> ${esc(clampChars(noteText,45))}</div>` : ""}
       </div>
 
       <div class="amount-box">
@@ -732,7 +754,7 @@ function renderShipmentLabelHtml(o){
         <span>${esc(amountText)}</span>
       </div>
 
-      <div class="combined-box" style="display:flex;justify-content:space-between;gap:10px;">
+      <div class="combined-box" style="display:flex;justify-content:space-between;gap:8px;">
         <div class="barcode-section">
           <img class="barcode-img" src="https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(o.name)}&code=Code128" alt="Order Barcode">
           <div class="order-number">${esc(o.name)}</div>
